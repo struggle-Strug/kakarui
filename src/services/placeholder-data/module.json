@@ -1,0 +1,131 @@
+{
+    "message": "get modules information success.",
+    "module": [
+        {
+            "create_date": "2024-06-10T12:22:34.024",
+            "create_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "description": "arm setting description 1",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx1",
+            "latest_tag": "v2.0",
+            "name": "arm 1",
+            "organization_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_name": "repo name",
+            "tags": [
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v2.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                },
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v1.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                }
+            ],
+            "update_date": "2024-06-10T12:22:34.024",
+            "update_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        {
+            "create_date": "2024-06-16T12:22:34.024",
+            "create_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "description": "arm setting description 2",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx2",
+            "latest_tag": "v2.0",
+            "name": "arm 2",
+            "organization_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_name": "repo name",
+            "tags": [
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v2.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                },
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v1.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                }
+            ],
+            "update_date": "2024-06-18T12:22:34.024",
+            "update_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        {
+            "create_date": "2024-06-17T12:22:34.024",
+            "create_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "description": "arm setting description 3",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx3",
+            "latest_tag": "v2.0",
+            "name": "arm 3",
+            "organization_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_name": "repo name",
+            "tags": [
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v2.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                },
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v1.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                }
+            ],
+            "update_date": "2024-06-18T12:22:34.024",
+            "update_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        {
+            "create_date": "2024-06-16T12:22:34.024",
+            "create_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "description": "arm setting description 4",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx4",
+            "latest_tag": "v2.0",
+            "name": "arm 4",
+            "organization_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_name": "repo name",
+            "tags": [
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v2.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                },
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v1.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                }
+            ],
+            "update_date": "2024-06-18T12:22:34.024",
+            "update_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        },
+        {
+            "create_date": "2024-06-18T12:22:34.024",
+            "create_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "description": "arm setting description",
+            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "latest_tag": "v2.0",
+            "name": "arm 6",
+            "organization_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "repository_name": "repo name",
+            "tags": [
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v2.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                },
+                {
+                    "create_date": "2024-06-18T12:22:34.024",
+                    "name": "v1.0",
+                    "update_date": "2024-06-18T12:22:34.024"
+                }
+            ],
+            "update_date": "2024-06-18T12:22:34.024",
+            "update_user": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        }
+    ],
+    "status_code": 200
+}
