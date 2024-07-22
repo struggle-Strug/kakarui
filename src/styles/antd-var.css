@@ -1,0 +1,487 @@
+/* THEME */
+.ant-layout {
+  @apply bg-background;
+}
+
+.ant-layout .ant-layout-sider-trigger {
+  @apply bg-primary;
+}
+
+.ant-layout-content {
+  @apply text-primary;
+}
+
+/* MENU */
+.ant-menu-title-content {
+  @apply !ms-0 whitespace-pre-wrap text-nowrap text-center text-sm font-light text-light-gray;
+}
+
+.ant-menu-inline .ant-menu-item {
+  @apply m-0 flex h-max w-full flex-col items-center justify-center gap-y-1 rounded-none bg-primary !p-4 transition-colors;
+  row-gap: 8px;
+  padding: 0 !important;
+  margin-bottom: 36px;
+}
+
+/* .ant-menu-light .ant-menu-item-selected {
+  @apply bg-secondary font-extrabold;
+} */
+
+.ant-menu-item-group .ant-menu-item-group-title {
+  @apply text-base font-bold text-accent;
+}
+
+.ant-menu-light .ant-menu-item-selected span a {
+  @apply font-bold;
+}
+
+.ant-menu-light .ant-menu-item div {
+  @apply text-white;
+}
+.ant-menu-light .ant-menu-item .sider-space {
+  @apply h-[calc(100vh-680px)];
+}
+
+.ant-menu-light .ant-menu-item div svg {
+  @apply h-10 w-10;
+}
+
+.ant-menu-light.ant-menu-root.ant-menu-inline {
+  border-inline-end: none;
+}
+
+/* SWITCH */
+.ant-menu-item .ant-switch {
+  @apply bg-white;
+}
+
+.ant-switch.ant-switch-checked:hover:not(.ant-switch-disabled),
+.ant-switch:hover:not(.ant-switch-disabled) {
+  @apply bg-white;
+}
+
+.ant-menu-item .ant-switch .ant-switch-handle::before {
+  @apply bg-primary;
+}
+
+/* anh son them */
+.left-menu-switch .ant-switch-handle {
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.left-menu-switch.ant-switch.ant-switch-checked .ant-switch-handle {
+  inset-inline-start: calc(100% - 28px) !important;
+}
+
+.left-menu-switch.ant-switch .ant-switch-handle::before {
+  border-radius: 25px !important;
+  top: -1px !important;
+}
+
+/* SPIN */
+.ant-spin-nested-loading > div > .ant-spin {
+  @apply flex flex-col items-center justify-center;
+}
+
+.ant-spin-nested-loading > div > .ant-spin-lg .ant-spin-text {
+  @apply w-max;
+}
+
+/* FORM  */
+.ant-form {
+  @apply text-primary;
+}
+
+.ant-form-item {
+  @apply mb-7;
+}
+
+.ant-form-item-explain-error {
+  @apply text-sm;
+}
+
+.ant-form-horizontal .ant-form-item-control {
+  @apply lg:!flex-1;
+}
+
+.ant-form-item .ant-form-item-label > label {
+  @apply h-[40px] w-full text-base leading-[40px] text-primary;
+}
+
+.ant-form-item .ant-row.ant-form-item-row {
+  @apply items-start;
+}
+
+/* BUTTON */
+.ant-btn.ant-btn-icon-only {
+  @apply flex h-10 w-10 items-center justify-center;
+}
+
+.ant-btn {
+  @apply h-10 rounded-lg px-4 text-base font-normal shadow-none;
+}
+
+.ant-btn-sm {
+  @apply h-8 rounded-md text-sm;
+}
+
+.ant-btn.ant-btn-primary {
+  @apply bg-[var(--primary-button)] text-light-gray;
+}
+
+.ant-btn.ant-btn-lg {
+  @apply h-10 text-lg;
+}
+
+.ant-btn-text {
+  @apply font-normal;
+}
+
+.ant-btn span.ant-btn-icon svg {
+  @apply min-h-[16px] min-w-[16px];
+}
+
+.ant-btn.ant-btn-icon-only span svg {
+  @apply min-h-[20px] min-w-[20px];
+}
+
+.ant-btn.ant-btn-icon-only:disabled span svg polyline {
+  @apply stroke-primary;
+}
+
+.ant-btn-default {
+  @apply border-dark-gray-3 bg-light-gray text-primary;
+}
+
+.ant-popconfirm-buttons .ant-btn {
+  @apply h-10 px-6;
+}
+
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  @apply bg-primary-button opacity-80;
+}
+
+/* NOTIFICATION  */
+.notification-popover .ant-popover-inner,
+.notification-popover .ant-popover-arrow::before {
+  @apply bg-white p-0;
+}
+
+/* ICON  */
+.global-react-icons > path,
+.global-react-icons > polyline {
+  @apply stroke-current;
+}
+
+.ant-input-password-icon {
+  @apply cursor-pointer;
+}
+
+/* INPUT  */
+.ant-input,
+.ant-input-affix-wrapper {
+  @apply bg-white;
+}
+
+.ant-input-lg,
+.ant-input-affix-wrapper-lg {
+  @apply h-10 px-4 py-3 text-base;
+}
+
+.ant-input-number .ant-input-number-input-wrap {
+  @apply flex-1;
+}
+
+/* POPUP  */
+.ant-popover .ant-popover-inner {
+  @apply bg-white;
+}
+
+/* CARD */
+/* .ant-card-bordered {
+  @apply border-none;
+} */
+
+/* TABLE */
+.ant-table-wrapper .ant-table {
+  @apply overflow-hidden rounded-lg;
+}
+
+.ant-table .ant-table-content {
+  @apply overflow-auto;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  @apply bg-light-gray;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th,
+.ant-table-wrapper .ant-table-thead > tr > td {
+  @apply whitespace-pre-wrap text-primary;
+}
+
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > td,
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-tbody > tr > th {
+  border-bottom: 1px solid var(--border-gray-2);
+}
+
+.ant-table-wrapper .ant-table-cell,
+.ant-table-wrapper .ant-table-thead > tr > th,
+.ant-table-wrapper .ant-table-tbody > tr > th,
+.ant-table-wrapper .ant-table-tbody > tr > td,
+.ant-table-wrapper tfoot > tr > th,
+.ant-table-wrapper tfoot > tr > td {
+  @apply p-2;
+}
+
+/* only not bordered */
+.ant-table-wrapper .ant-table-tbody > tr > td,
+.ant-table-wrapper .ant-table-tbody > tr > th {
+  border: 0px;
+}
+
+.ant-table-wrapper .ant-table-tbody .ant-table-row.ant-table-row-selected > .ant-table-cell {
+  @apply bg-[#c6dfff];
+}
+
+.ant-table-wrapper .ant-table-tbody .ant-table-row.bg-dark-gray > .ant-table-cell-row-hover {
+  @apply bg-dark-gray-2;
+}
+
+.ant-table .ant-table-tbody tr.bg-dark-gray a > span {
+  @apply hover:border-white hover:text-white;
+}
+
+/* anh son them */
+.ant-table-tbody .ant-table-cell {
+  border-inline-end: none !important;
+}
+.ant-table-container {
+  border: none !important;
+}
+.ant-table-wrapper .ant-table.ant-table-bordered .ant-table-thead > tr > th {
+  border-top: 1px solid var(--border-gray);
+  border-bottom: 1px solid var(--border-gray);
+}
+.ant-table-wrapper
+  .ant-table.ant-table-bordered
+  .ant-table-container
+  table
+  > thead
+  > tr:first-child
+  > *:first-child {
+  border: 1px solid var(--border-gray);
+  border-radius: 8px 0 0 8px;
+}
+.ant-table-wrapper
+  .ant-table.ant-table-bordered
+  .ant-table-container
+  table
+  > thead
+  > tr:first-child
+  > *:last-child {
+  border-right: 1px solid var(--border-gray);
+  border-radius: 0 8px 8px 0;
+}
+.ant-table-wrapper
+  .ant-table.ant-table-bordered
+  > .ant-table-container
+  > .ant-table-content
+  > table
+  > tbody
+  > tr
+  > td {
+  @apply text-primary;
+}
+.ant-pagination .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination .ant-pagination-next .ant-pagination-item-link {
+  color: var(--dark-gray-3);
+}
+.ant-pagination .ant-pagination-item {
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--primary);
+}
+.ant-pagination .ant-pagination-item-active a {
+  color: var(--primary);
+}
+.ant-table-wrapper .ant-table-pagination.ant-pagination {
+  margin: 28px 0;
+}
+.ant-pagination .ant-pagination-prev,
+.ant-pagination .ant-pagination-next {
+  height: 36px;
+  width: 36px;
+}
+.ant-pagination .ant-pagination-item,
+.ant-pagination .ant-pagination-prev {
+  margin-inline-end: 14px;
+}
+/* UPLOAD */
+.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select,
+.ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
+  @apply m-0 w-max border-none;
+}
+
+.ant-radio-group {
+  @apply text-base;
+}
+
+/* SELECT */
+.ant-select-single.ant-select-lg {
+  height: 40px;
+  @apply text-base;
+}
+
+.ant-select-dropdown .ant-select-item,
+.ant-select-dropdown .ant-select-item-option-content {
+  @apply text-base;
+}
+
+.ant-select-dropdown .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  @apply h-10 bg-secondary text-base font-normal;
+}
+
+.ant-select-single.ant-select-lg:not(.ant-select-customize-input) .ant-select-selector {
+  @apply pl-4;
+}
+
+.ant-select-outlined:not(.ant-select-customize-input) .ant-select-selector {
+  @apply bg-white;
+}
+
+/* DATE PICKER */
+.ant-picker {
+  @apply w-full;
+}
+
+.ant-picker-clear {
+  @apply hidden;
+}
+
+.ant-picker-dropdown {
+  @apply max-w-[calc(100vw-64px)] overflow-hidden overflow-x-auto shadow-lg max-[640px]:!left-8 sm:w-auto;
+}
+
+.ant-picker-dropdown .ant-picker-panel-container {
+  @apply w-max;
+}
+
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
+  @apply text-white;
+}
+
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner:hover {
+  @apply text-black;
+}
+
+.ant-picker-dropdown .ant-picker-time-panel-column {
+  @apply overflow-y-auto;
+}
+
+/* CHECKBOX */
+.ant-checkbox-checked .ant-checkbox-inner {
+  @apply border-[#1777ff] bg-[#1777ff];
+}
+
+.ant-checkbox .ant-checkbox-inner {
+  @apply h-6 w-6 rounded-lg;
+}
+
+.ant-checkbox .ant-checkbox-inner:after {
+  @apply h-3 w-2;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner:after {
+  @apply h-2.5 w-2.5 bg-[#1777ff];
+}
+
+.ant-checkbox + span {
+  @apply shrink-0 px-5 text-base;
+}
+
+/* NUMBER */
+.ant-input-number {
+  @apply w-auto;
+}
+
+table :where(th, td) {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* TABS */
+.ant-tabs-top.ant-tabs-card > .ant-tabs-nav {
+  @apply mb-1;
+}
+
+/* MODAL */
+.ant-modal {
+  @apply text-primary;
+}
+
+.ant-modal .ant-modal-content {
+  @apply rounded-[28px] border border-solid border-dark-gray-3 p-0 text-base;
+}
+
+.ant-modal .ant-modal-header {
+  @apply rounded-t-[28px] px-10 py-8;
+}
+
+.ant-modal .ant-modal-header .ant-modal-title {
+  @apply text-base font-bold text-dark-gray-3;
+}
+
+.ant-modal .ant-modal-close {
+  inset-inline-end: 36px;
+  top: 36px;
+}
+
+.ant-modal .ant-modal-close .ant-modal-close-x span.anticon {
+  @apply text-base;
+}
+
+/* BREADCRUMBS */
+.ant-breadcrumb-separator {
+  color: var(--dark-gray-3) !important;
+  margin: auto 16px !important;
+}
+.ant-breadcrumb li:last-child {
+  color: var(--dark-gray-3) !important;
+}
+
+/* TIMELINE */
+.ant-timeline .ant-timeline-item-head-custom {
+  @apply m-0 p-0;
+}
+
+.ant-timeline .ant-timeline-item-head {
+  @apply m-0 p-0;
+}
+
+.ant-timeline {
+  @apply !text-dark-gray-3;
+}
+
+.ant-timeline-item-tail {
+  @apply !border !border-dark-gray-3;
+}
+
+/* TEXT */
+h3.ant-typography,
+div.ant-typography-h3,
+div.ant-typography-h3 > textarea,
+.ant-typography h3 {
+  @apply text-dark-gray-3;
+}
