@@ -292,7 +292,7 @@
   > tbody
   > tr
   > td {
-  @apply text-primary;
+  @apply text-base text-primary;
 }
 .ant-pagination .ant-pagination-prev .ant-pagination-item-link,
 .ant-pagination .ant-pagination-next .ant-pagination-item-link {
@@ -304,7 +304,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 300;
   color: var(--primary);
 }
 .ant-pagination .ant-pagination-item-active a {
@@ -436,7 +437,7 @@ table :where(th, td) {
 }
 
 .ant-modal .ant-modal-header {
-  @apply rounded-t-[28px] px-10 py-8;
+  @apply rounded-t-[28px] px-12 py-8;
 }
 
 .ant-modal .ant-modal-header .ant-modal-title {
@@ -444,12 +445,12 @@ table :where(th, td) {
 }
 
 .ant-modal .ant-modal-close {
-  inset-inline-end: 36px;
-  top: 36px;
+  inset-inline-end: 40px;
+  top: 30px;
 }
 
 .ant-modal .ant-modal-close .ant-modal-close-x span.anticon {
-  @apply text-base;
+  @apply text-lg;
 }
 
 /* BREADCRUMBS */
@@ -470,12 +471,12 @@ table :where(th, td) {
   @apply m-0 p-0;
 }
 
-.ant-timeline {
+#info-dashboard .ant-timeline {
   @apply !text-dark-gray-3;
 }
 
-.ant-timeline-item-tail {
-  @apply !border !border-dark-gray-3;
+#info-dashboard .ant-timeline-item-tail {
+  @apply !border-[3px] !border-[#F0F0F0];
 }
 
 /* TEXT */

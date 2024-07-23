@@ -1,5 +1,6 @@
 // user
 export const USER_LIST_KEY = 'USER_LIST_KEY'
+export const USER_DETAIL_KEY = 'USER_DETAIL_KEY'
 
 // deployment
 export const DEPLOYMENT_LIST_KEY = 'DEPLOYMENT_LIST_KEY'

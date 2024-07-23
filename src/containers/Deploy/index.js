@@ -1,10 +1,10 @@
-import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
-import { useLocalStorage } from '@/hooks/share'
+import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
 import deployApiStub from '@/hooks/stub/deploy'
-import projectApiStub from '@/hooks/stub/project'
 
 import { DeployAddEditModal, DeploySearchBox, DeploymentTable } from '@/components/deployment'
 import { AddIcon, ReloadIcon } from '@/components/icons'
@@ -15,31 +15,29 @@ import { getSearchOptions } from '@/utils/helper'
 const DeployContainer = () => {
   const [deployments, setDeployments] = useState([])
   const [refreshTime, setRefreshTime] = useState(0)
-  const [project, setProject] = useLocalStorage('defaultProject')
-  const refreshProject = () => {
-    projectApiStub.getDefaultProject().then(setProject)
-  }
-
-  useEffect(() => {
-    refreshProject()
-  }, [])
+  const [project] = useLocalStorageDefaultProject()
 
   const [query] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(),
     search: parseAsString,
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(30),
+    offset: parseAsInteger.withDefault(0),
   })
 
-  const { sort, search } = query || {}
-  const handleRefresh = () => {
-    deployApiStub.getDeploy(sort, search, refreshTime).then(setDeployments)
+  const { sort, search, limit, offset, page } = query || {}
+  const handleRefresh = (isInit = false) => {
+    deployApiStub
+      .getDeploy(sort, search, project, limit, offset + limit * (page - 1), refreshTime, isInit)
+      .then(setDeployments)
   }
 
   useEffect(() => {
     setRefreshTime((pre) => pre + 1)
-  }, [project])
+  }, [project, sort, search, limit, offset, page])
 
   useEffect(() => {
-    handleRefresh()
+    handleRefresh(true)
     const interval = setInterval(() => {
       setRefreshTime((pre) => pre + 1)
     }, 15000)
@@ -47,11 +45,14 @@ const DeployContainer = () => {
   }, [])
 
   useEffect(() => {
-    handleRefresh()
+    handleRefresh(true)
   }, [refreshTime])
 
   return (
     <Container title="デプロイ管理">
+      <Head>
+        <title>デプロイ管理</title>
+      </Head>
       <div className="flex-between mb-5">
         <DeploySearchBox options={getSearchOptions(deployments, ['module_config_name'])} />
         <div className="flex gap-8">

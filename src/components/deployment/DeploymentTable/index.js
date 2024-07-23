@@ -4,6 +4,11 @@ import { PlayIcon } from '@/components/icons'
 import { ColumnSorter, DeployStatus, RowContent, RowDate } from '@/components/table'
 import { Link, Table } from '@/components/ui'
 
+const getThumbnail = (index) => {
+  const num = index % 10
+  return `images/thumbnail/thumbnail-${num}.png`
+}
+
 const DeploymentTable = ({ data, total, loading, pagination }) => {
   const columns = [
     {
@@ -33,13 +38,20 @@ const DeploymentTable = ({ data, total, loading, pagination }) => {
     {
       title: <ColumnSorter title="ムービー" field="execute_result_url" />,
       key: 'url',
-      render: (item) =>
+      render: (item, record, index) =>
         item.execute_result_url && item.status === 'Complete' ? (
           <Link
             href={Routes.DEPLOY_MOVIE_SHOW_DETAIL.replace('[deploy_id]', item.id)}
-            className="flex justify-center"
+            className="relative flex justify-center"
           >
-            <PlayIcon size={30} />
+            <img
+              src={getThumbnail(index)}
+              alt="thumbnail"
+              className="h-[20px] w-[30px] rounded object-cover"
+            />
+            <div className="flex-center absolute h-[20px]  w-[30px]">
+              <PlayIcon size={16} color="#fff" />
+            </div>
           </Link>
         ) : (
           <div />

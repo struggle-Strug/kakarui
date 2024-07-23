@@ -1,5 +1,6 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 import projectApiStub from '@/hooks/stub/project'
@@ -35,6 +36,9 @@ const ProjectContainer = () => {
 
   return (
     <Container title="プロジェクト管理">
+      <Head>
+        <title>プロジェクト管理</title>
+      </Head>
       <div className="flex-between mb-5">
         <ProjectSearchBox options={getSearchOptions(project, ['name'])} />
         <div>

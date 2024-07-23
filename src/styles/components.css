@@ -69,6 +69,7 @@
 
 /* header-dropdown */
 .header-dropdown > ul {
+  border-top: 0px !important;
   border-radius: 0 0 24px 24px !important;
   border: 1px solid var(--dark-gray-3);
   padding: 0 !important;
@@ -84,14 +85,12 @@
 
 /* for react player */
 .player-wrapper {
-  position: relative;
-  padding-top: 56.25%;
+  /* max-h-[calc(100vh-240px)] */
+  @apply relative aspect-[1574/939] max-h-[calc(100vh-240px)] w-full min-w-full overflow-hidden rounded-lg bg-[#121212];
 }
 
 .react-player {
-  position: absolute;
-  top: 0;
-  left: 0;
+  @apply absolute inset-0 max-h-full overflow-hidden rounded-lg;
 }
 
 /* for search bar */

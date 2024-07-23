@@ -1,4 +1,5 @@
 import { AutoComplete } from 'antd'
+import toLower from 'lodash/toLower'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
 import { useCallback, useDeferredValue, useEffect, useState } from 'react'
@@ -9,6 +10,7 @@ import { Input } from '@/components/ui'
 const SearchBar = ({ placeholder = '', options = [] }) => {
   const [search, setSearch] = useState('')
   const deferredQuery = useDeferredValue(search)
+  const [optionList, setOptionList] = useState([])
 
   const [searchQuery, setSearchQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
@@ -28,11 +30,18 @@ const SearchBar = ({ placeholder = '', options = [] }) => {
     (keyword) => {
       if (!keyword) {
         setSearch('')
+        setOptionList([])
       } else {
         setSearch(keyword)
+        const lowerKeyword = toLower(keyword)
+        const filterOption = options.filter((opt) => {
+          const lowerValue = toLower(opt.value)
+          return lowerValue.includes(lowerKeyword)
+        })
+        setOptionList(filterOption)
       }
     },
-    [setSearch]
+    [setSearch, options]
   )
 
   const handleClearSearch = () => {
@@ -73,9 +82,6 @@ const SearchBar = ({ placeholder = '', options = [] }) => {
     }
   }
 
-  const filterOption = (inputValue, option) =>
-    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-
   return (
     <div className="search-bar relative flex h-[40px] w-full max-w-[368px] items-center overflow-hidden">
       <AutoComplete
@@ -86,16 +92,15 @@ const SearchBar = ({ placeholder = '', options = [] }) => {
         allowClear={{
           clearIcon: <CloseCircleIcon color="#ccc" size={18} />,
         }}
-        options={options}
+        options={optionList}
         placeholder={placeholder || '入力してください。'}
-        filterOption={filterOption}
         onChange={(val) => handleChange(val)}
         onClear={handleClearSearch}
         onSelect={onSelect}
       >
         <Input
           onKeyDown={handleKeyDown}
-          className="h-[40px] w-full max-w-[368px] !pr-[56px]"
+          className="h-[40px] w-full max-w-[368px] !pr-[75px]"
           placeholder=""
         />
       </AutoComplete>

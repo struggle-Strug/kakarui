@@ -1,6 +1,8 @@
-import { Modal, Spin } from 'antd'
+import { Modal, Spin, message } from 'antd'
 
-import { ACTIVE_STATUS } from '@/constants'
+import Head from 'next/head'
+
+import { ACTIVE_STATUS, USER_ROLE } from '@/constants'
 import { useLoadingSimulation } from '@/hooks/custom'
 import { useFlag } from '@/hooks/share'
 import userApiStub from '@/hooks/stub/user'
@@ -17,16 +19,20 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
   const onUpdateUser = async (values) => {
     const updateData = {
       ...values,
-      main_role: values.role,
+      main_role: values.role || USER_ROLE.MEMBER,
       enable: values.status === ACTIVE_STATUS.ENABLE.toString(),
       update_date: new Date().toISOString(),
     }
 
-    await userApiStub.updateUser(data.id, updateData)
-    startLoading(() => {
-      onSuccess?.()
-      onClose()
-    })
+    try {
+      await userApiStub.updateUser(data.id, updateData)
+      startLoading(() => {
+        onSuccess?.()
+        onClose()
+      })
+    } catch (error) {
+      message.error(error?.message)
+    }
   }
 
   return (
@@ -41,6 +47,9 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
           footer={null}
           width={698}
         >
+          <Head>
+            <title>ユーザー変更</title>
+          </Head>
           <p className="px-12 text-lg font-light text-primary">ユーザ情報の変更を行います。</p>
           <Spin spinning={loading}>
             <div className="p-12 font-light">

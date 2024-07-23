@@ -23,7 +23,10 @@ const DeployStatus = ({ status, className, contentClassName }) => {
   return (
     <div className={cn('flex items-center gap-2 text-base', className)}>
       <div
-        className={cn('h-[25px] w-[25px] rounded-full border border-solid', statusData?.style)}
+        className={cn(
+          'h-[25px] min-h-[25px] w-[25px] min-w-[25px] rounded-full border border-solid',
+          statusData?.style
+        )}
       />
       <div className={cn('ml-[64px]', contentClassName)}>{statusData?.content}</div>
     </div>

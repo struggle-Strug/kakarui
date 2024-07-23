@@ -1,17 +1,15 @@
 import dayjs from 'dayjs'
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
-// import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-import { FORMAT_STRING, Routes } from '@/constants'
-import { useLocalStorage } from '@/hooks/share'
+import { DEPLOYMENT_TYPE_TEXT, FORMAT_STRING, Routes } from '@/constants'
+import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
 import deployApiStub from '@/hooks/stub/deploy'
-import projectApiStub from '@/hooks/stub/project'
 
 import { PlayIcon, ReloadIcon } from '@/components/icons'
 import { HeaderTitle } from '@/components/layout/dashboard'
-import { DeployStatus, RowContent } from '@/components/table'
+import { DeployStatus, RowContent, RowDate } from '@/components/table'
 import { Button, Link, Table } from '@/components/ui'
 
 import { cn } from '@/utils/helper'
@@ -48,18 +46,14 @@ const BodyCell = (props) => {
   )
 }
 
+const getThumbnail = (index) => {
+  const num = index % 10
+  return `images/thumbnail/thumbnail-${num}.png`
+}
+
 const DashboardStatus = () => {
   const [deploy, setDeploy] = useState([])
-
-  const [project, setProject] = useLocalStorage('defaultProject')
-
-  const refreshProject = () => {
-    projectApiStub.getDefaultProject().then(setProject)
-  }
-
-  useEffect(() => {
-    refreshProject()
-  }, [])
+  const [project, , { projectName }, handleRefreshDefaultProject] = useLocalStorageDefaultProject()
 
   const [query] = useQueryStates({
     filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
@@ -74,7 +68,7 @@ const DashboardStatus = () => {
   const { filter, sort, search } = query || {}
 
   const handleRefresh = () => {
-    deployApiStub.getDeploy().then((list) => {
+    deployApiStub.getDeploy(null, null, project, null, null, dayjs().unix(), true).then((list) => {
       const listInProgress = list.filter((d) => d.status === 'In Progress')
       const listComplete = list.filter((d) => d.status === 'Complete')
       const listPending = list.filter((d) => d.status === 'Pending')
@@ -85,15 +79,20 @@ const DashboardStatus = () => {
           ...listPending.slice(0, 1),
         ].map((row, index) => ({
           ...row,
-          update_date: dayjs().subtract(index * 2, 'second'),
+          create_date: dayjs().subtract(index * 2, 'second'),
         }))
       )
     })
+    handleRefreshDefaultProject()
   }
 
   useEffect(() => {
     handleRefresh()
-    const timerId = setInterval(() => handleRefresh(), 300000)
+  }, [project])
+
+  useEffect(() => {
+    handleRefresh()
+    const timerId = setInterval(() => handleRefresh(), 300_000)
     return () => clearInterval(timerId)
   }, [filter, sort, search])
 
@@ -101,14 +100,16 @@ const DashboardStatus = () => {
     {
       title: '日付',
       className: 'text-base text-left',
-      dataIndex: 'update_date',
-      render: (date) => date && dayjs(date).format(FORMAT_STRING.datetime_full),
+      dataIndex: 'create_date',
+      render: (item) => (
+        <RowDate item={item} className="text-base" unit={FORMAT_STRING.datetime_full_str} />
+      ),
     },
     {
       title: 'プロジェクト',
       className: 'text-base text-left',
       dataIndex: 'project_id',
-      render: () => project?.name || 'テストプロジェクト',
+      render: () => projectName || 'テストプロジェクト',
     },
     {
       title: 'モジュール配置',
@@ -120,7 +121,7 @@ const DashboardStatus = () => {
       title: 'デプロイタイプ',
       className: 'text-base text-left min-w-[100px]',
       dataIndex: 'type',
-      render: (item) => <RowContent item={item} />,
+      render: (item) => <RowContent item={DEPLOYMENT_TYPE_TEXT[item] || ''} />,
     },
     {
       title: 'ステータス',
@@ -134,15 +135,25 @@ const DashboardStatus = () => {
       title: <div className="text-center text-base">ムービー</div>,
       className: ' text-base text-left',
       align: 'center',
-      render: (item) => {
-        return (
-          <Link
-            href={Routes.DEPLOY_MOVIE_SHOW_DETAIL.replace('[deploy_id]', item.id)}
-            className="flex flex-row justify-start"
-          >
-            <PlayIcon size={30} />
-          </Link>
-        )
+      render: (item, record, index) => {
+        if (item.execute_result_url && item.status === 'Complete') {
+          return (
+            <Link
+              href={Routes.DEPLOY_MOVIE_SHOW_DETAIL.replace('[deploy_id]', item.id)}
+              className="flex flex-row justify-start"
+            >
+              <img
+                src={getThumbnail(index)}
+                alt="thumbnail"
+                className="h-[20px] w-[30px] rounded object-cover"
+              />
+              <div className="flex-center absolute h-[20px]  w-[30px]">
+                <PlayIcon size={16} color="#fff" />
+              </div>
+            </Link>
+          )
+        }
+        return <div />
       },
     },
   ]

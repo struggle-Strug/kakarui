@@ -4,7 +4,8 @@ import { Result, Space, Spin } from 'antd'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
 
-import { useAuth } from '@/hooks/query'
+import { USER_ROLE } from '@/constants'
+import { useAuth, useGetMe } from '@/hooks/query'
 
 import { Button } from '@/components/ui'
 
@@ -18,13 +19,37 @@ import { Button } from '@/components/ui'
  * <AuthorizationCheck role={ADMIN_ROLE.EVENT_PROVIDER} /> // use for screen requiring eventProvider role
  * <AuthorizationCheck role={ADMIN_ROLE.OPERATOR} /> // use for screen requiring operator role
  */
-const AuthorizationCheck = ({ role, children }) => {
+
+const AuthorizationCheck = ({ children }) => {
   const router = useRouter()
 
-  const { role: authRole, loading } = useAuth()
-  const isAuthorized = authRole === role
+  const { loading } = useAuth()
 
-  if (!isAuthorized && !loading) {
+  const MEMBER_ROUTES = [
+    /^\/user-manage$/,
+    /^\/user-invite$/,
+    /^\/user$/,
+    /^\/user-change$/,
+    /^\/deploy-manage$/,
+  ]
+  const { data: me, isError, isLoading, isFetched, isSuccess } = useGetMe()
+
+  const isDeployAdmin = me?.user?.organizations?.some(
+    (organization) => organization?.sub_role === USER_ROLE.DEPLOY_ADMIN
+  )
+  const isMember =
+    me?.user?.organizations?.some((organization) =>
+      [USER_ROLE.MEMBER, USER_ROLE.ORG_ADMIN].includes(organization?.main_role)
+    ) || me?.user?.role === USER_ROLE.SYSTEM_ADMIN
+
+  const isPrivateRoute = MEMBER_ROUTES.some((regexp) => regexp.test(router.pathname))
+
+  const isAuthorized = isMember || isDeployAdmin
+  if (isLoading || isError || loading) {
+    return <Spin className="w-full" />
+  }
+
+  if (!isAuthorized && isPrivateRoute && !isMember && isFetched && isSuccess) {
     return (
       <section className="flex-center size-full">
         <Result

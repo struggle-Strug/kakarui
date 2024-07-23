@@ -13,7 +13,7 @@ import SipMenu from './SipMenu'
 const generateBreadcrumbs = (_, params) => {
   // const { project, robocon_year, team_name, prototype, device } = router.query
 
-  const breadcrumbs = [{ key: 'prototype', title: params?.project?.name || '' }]
+  const breadcrumbs = [{ key: 'prototype', title: params?.projectName || '' }]
 
   // if (project) {
   //   breadcrumbs.push({ key: 'project', title: project })
@@ -47,11 +47,11 @@ const generateBreadcrumbs = (_, params) => {
   return breadcrumbs
 }
 
-const HeaderBreadcrumbs = ({ project, refreshProject }) => {
+const HeaderBreadcrumbs = ({ project, projectName, setDefaultProject }) => {
   const router = useRouter()
   const breadcrumbs = useMemo(
-    () => generateBreadcrumbs(router, { project }),
-    [router.query, project]
+    () => generateBreadcrumbs(router, { project, projectName }),
+    [router.query, project, projectName]
   )
 
   const renderOrganizationName = (
@@ -63,8 +63,13 @@ const HeaderBreadcrumbs = ({ project, refreshProject }) => {
 
   const renderBreadcrumbs = (
     <>
-      <ProjectMenu breadcrumbs={breadcrumbs} project={project} refreshProject={refreshProject} />
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
+      <ProjectMenu
+        breadcrumbs={breadcrumbs}
+        project={project}
+        projectName={projectName}
+        setDefaultProject={setDefaultProject}
+      />
+      <Breadcrumbs breadcrumbs={breadcrumbs} projectName={projectName} />
     </>
   )
 

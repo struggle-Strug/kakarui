@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Modal, Spin, message } from 'antd'
 
+import Head from 'next/head'
 import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -34,11 +35,15 @@ const ProjectForm = ({ isEdit, data, onSuccess, onClose }) => {
       ...values,
       update_date: new Date().toISOString(),
     }
-    await projectApiStub.updateProject(data.id, updateData)
-    startLoading(() => {
-      onSuccess?.()
-      onClose()
-    })
+    try {
+      await projectApiStub.updateProject(data.id, updateData)
+      startLoading(() => {
+        onSuccess?.()
+        onClose()
+      })
+    } catch (error) {
+      message.error(error?.message)
+    }
   }
 
   const onSubmit = async (values) => {
@@ -120,7 +125,7 @@ const ProjectAddEditModal = ({ children, isEdit, ...props }) => {
           open={open}
           onCancel={onClose}
           title={
-            <h1 className="px-[14px] text-lg font-semibold text-dark-gray-3">
+            <h1 className="px-2 text-lg font-semibold text-dark-gray-3">
               {isEdit ? 'プロジェクト設定' : 'プロジェクト作成'}
             </h1>
           }
@@ -128,6 +133,9 @@ const ProjectAddEditModal = ({ children, isEdit, ...props }) => {
           footer={null}
           width={698}
         >
+          <Head>
+            <title>{isEdit ? 'プロジェクト設定' : 'プロジェクト作成'}</title>
+          </Head>
           <p className="px-12 text-lg font-light text-primary">
             {isEdit
               ? 'プロジェクトの基本情報を設定してください。'

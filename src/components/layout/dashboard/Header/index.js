@@ -1,37 +1,25 @@
-import { Avatar, Dropdown, Layout, Space } from 'antd'
-
-import { useEffect } from 'react'
+import { Avatar, Layout } from 'antd'
 
 import { APP_HEIGHT_HEADER } from '@/configs/theme'
-import { useLogout } from '@/hooks/query'
-import { useLocalStorage } from '@/hooks/share'
-import projectApiStub from '@/hooks/stub/project'
+import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
 
-import { LogOutIcon, UserIcon } from '@/components/icons'
+import { UserIcon } from '@/components/icons'
 
 import Logo from '../../common/Logo'
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs'
 
 const Header = () => {
-  const { doLogout } = useLogout()
-  const [project, setProject] = useLocalStorage('defaultProject')
+  // const { doLogout } = useLogout()
+  const [project, setDefaultProject, { projectName }] = useLocalStorageDefaultProject()
 
-  const refreshProject = () => {
-    projectApiStub.getDefaultProject().then(setProject)
-  }
-
-  useEffect(() => {
-    refreshProject()
-  }, [])
-
-  const items = [
-    {
-      label: 'ログアウト',
-      onClick: () => doLogout(),
-      icon: <LogOutIcon />,
-      key: '0',
-    },
-  ]
+  // const items = [
+  //   {
+  //     label: 'ログアウト',
+  //     onClick: () => doLogout(),
+  //     icon: <LogOutIcon />,
+  //     key: '0',
+  //   },
+  // ]
 
   const renderLogo = (
     <div className="shrink-0">
@@ -41,7 +29,11 @@ const Header = () => {
 
   const renderBreadcrumbs = (
     <div className="flex-1">
-      <HeaderBreadcrumbs project={project} refreshProject={refreshProject} />
+      <HeaderBreadcrumbs
+        project={project}
+        projectName={projectName}
+        setDefaultProject={setDefaultProject}
+      />
     </div>
   )
 
@@ -62,27 +54,26 @@ const Header = () => {
 
   const renderAuthenticated = (
     <div className="flex items-center">
-      <Dropdown menu={{ items }} trigger={['click']} onOpenChange={() => refreshProject()}>
+      <Avatar size={44} icon={<UserIcon />} />
+      {/* <Dropdown menu={{ items }} trigger={['click']} onOpenChange={() => {}}>
         <Space className="cursor-pointer" style={{ height: APP_HEIGHT_HEADER }}>
           <Avatar size={44} icon={<UserIcon />} />
         </Space>
-      </Dropdown>
+      </Dropdown> */}
     </div>
   )
 
   return (
     <Layout.Header
       style={{
-        left: '50%',
+        left: 0,
         padding: 0,
         height: APP_HEIGHT_HEADER,
-        transform: 'translateX(-50%)',
         borderBottom: '1px solid var(--primary)',
         borderTop: '1px solid var(--primary)',
         background: '#e4e4e4',
         overflow: 'hidden',
         position: 'fixed',
-        maxWidth: 1440,
         width: '100%',
         zIndex: 999,
         top: 0,

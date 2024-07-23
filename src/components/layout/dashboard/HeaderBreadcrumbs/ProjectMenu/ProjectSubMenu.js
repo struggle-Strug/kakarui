@@ -8,8 +8,8 @@ import projectApiStub from '@/hooks/stub/project'
 
 import { formatDate } from '@/utils/helper'
 
-const ProjectSubMenu = ({ onSetDefaultProject = () => {} }) => {
-  const [project, setProject] = useState([])
+const ProjectSubMenu = ({ setDefaultProject = () => {} }) => {
+  const [projects, setProjects] = useState([])
   const [page, setPage] = useState(1)
   const limit = 4
   const offset = 0
@@ -26,34 +26,36 @@ const ProjectSubMenu = ({ onSetDefaultProject = () => {} }) => {
 
   const reload = () => {
     projectApiStub
-      .getProjects(filter, sort, search, limit, offset + limit * (page - 1))
-      .then(setProject)
-  }
-
-  const handleDefault = (inputProject) => {
-    projectApiStub.setDefaultProject(inputProject).then((res) => onSetDefaultProject(res))
+      .getProjects(filter, sort, search, null, limit, offset + limit * (page - 1))
+      .then(setProjects)
   }
 
   useEffect(() => {
     reload()
   }, [filter, sort, search, page])
   return (
-    <div className="mx-[12px] w-[498px] px-3 py-6 text-lg font-light text-primary">
-      <div>プロジェクトを切り替える</div>
+    <div className="mx-3 w-[420px] px-3 py-4 font-light text-primary">
+      <div className="text-sm">プロジェクトを切り替える</div>
       <div className="mt-3.5 pl-5 text-xl">
-        {(project || []).map((pro) => (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        {(projects || []).map((pro) => (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <div
             key={pro.id}
-            className="flex items-center px-5 py-3.5 text-dark-gray-3 transition-colors hover:bg-light-gray"
-            onClick={() => {
-              handleDefault(pro)
-            }}
+            className="flex items-center px-4 py-[4px] text-dark-gray-3 transition-colors hover:bg-light-gray"
           >
             <div className="h-10 w-10 border bg-[#E5A13A]" />
-            <div className="pl-6">
-              <div className="text-base font-semibold text-dark-gray-3">{pro.name}</div>
-              <div className="text-base font-light text-primary">
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+            <div
+              className="pl-6"
+              role="presentation"
+              onClick={() => {
+                setDefaultProject(pro?.id)
+              }}
+            >
+              <div className="text-[13px] font-semibold leading-[15px] text-dark-gray-3">
+                {pro.name}
+              </div>
+              <div className="text-base text-xs font-light text-primary">
                 {`最終更新日 `}
                 {formatDate(pro.update_date, FORMAT_STRING.datetime_str)}
               </div>
@@ -65,7 +67,7 @@ const ProjectSubMenu = ({ onSetDefaultProject = () => {} }) => {
           pageSize={limit}
           defaultCurrent={page}
           onChange={(newPage) => setPage(newPage)}
-          className="mt-3.5 flex justify-end"
+          className="project-header mt-3.5 flex justify-end"
         />
       </div>
     </div>

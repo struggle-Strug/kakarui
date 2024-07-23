@@ -25,6 +25,7 @@ const FormItem = ({
   value,
   subLabel,
   labelClassName,
+  onChangeInput = () => {},
   ...inputProps
 }) => {
   const formItemId = useId()
@@ -92,6 +93,10 @@ const FormItem = ({
       name={name}
       control={control}
       render={({ field, fieldState }) => {
+        const onChange = (...args) => {
+          field.onChange(...args)
+          onChangeInput(...args)
+        }
         const validateStatus = getValidateStatus(fieldState)
         const help = getHelpMessage(fieldState)
 
@@ -130,6 +135,7 @@ const FormItem = ({
                 style,
                 ...inputProps,
                 ...field,
+                onChange,
                 disabled,
                 [keyValue]: value || getValue(field.value),
               })}

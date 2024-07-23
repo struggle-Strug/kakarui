@@ -50,7 +50,7 @@
     --indigo-rainbow: #1e305d;
 
     /* Text Colors */
-    --text-base: var(--black);
+    --text-base: var(--primary);
     --text-sub: var(--accent);
 
     /* Shadows */
@@ -64,11 +64,9 @@
 @layer base {
   body {
     font-family: var(--font-sans);
-    background-color: var(--black);
+    background-color: var(--background);
     font-size: var(--font-size);
     color: var(--primary);
-    margin: 0 auto !important;
-    max-width: 1440px;
   }
 }
 

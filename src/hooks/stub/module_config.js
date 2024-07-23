@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -6,16 +7,47 @@ import sinon from 'sinon'
 
 import { tryParseJson } from '@/utils/helper'
 
+import projectList from '@/services/mock-data/project'
 import { placeHolderData } from '@/services/placeholder-data'
 
 const data = placeHolderData.module_config.module_configs || []
 const dataDetail = placeHolderData.module_config_detail || {}
 
+// function makeid(length) {
+//   let result = ''
+//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+//   const charactersLength = characters.length
+//   let counter = 0
+//   while (counter < length) {
+//     result += characters.charAt(Math.floor(Math.random() * charactersLength))
+//     counter += 1
+//   }
+//   return result
+// }
+
+let filteredData = [...data]
+
 const moduleConfigApiStub = {
   getRawData: () => data,
 
-  getModuleConfig: sinon.stub().callsFake((filter, sort, search) => {
-    let filteredData = [...data]
+  getModuleConfig: sinon.stub().callsFake((filter, sort, search, projectId) => {
+    if (projectId) {
+      const currentProject =
+        projectList?.find((project) => project.id === projectId) || projectList?.[0]
+      filteredData = filteredData.map((d, index) => ({
+        ...d,
+        project_id: projectId,
+        name: `${currentProject?.name} ${data?.[index]?.name || ''}`,
+        description: d?.description,
+        create_date: dayjs()
+          .subtract(index + 4, 'hour')
+          .toISOString(),
+        update_date: dayjs()
+          .subtract(index + 4, 'hour')
+          .toISOString(),
+      }))
+      filteredData = filteredData.filter((module) => module.project_id === projectId)
+    }
 
     if (search) {
       const searchTerm = toLower(search)
@@ -75,7 +107,7 @@ const moduleConfigApiStub = {
   }),
 
   createModuleConfig: sinon.stub().callsFake((newModule) => {
-    data.push(newModule)
+    filteredData.push(newModule)
     return Promise.resolve(newModule)
   }),
 

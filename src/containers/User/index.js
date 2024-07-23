@@ -1,5 +1,6 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 import userApiStub from '@/hooks/stub/user'
@@ -20,10 +21,6 @@ const UserContainer = () => {
 
   const { filter, sort, search } = query || {}
 
-  useEffect(() => {
-    userApiStub.getUsers(filter, sort, search).then(setUsers)
-  }, [filter, sort, search])
-
   const reload = () => {
     userApiStub.getUsers(filter, sort, search).then(setUsers)
   }
@@ -38,18 +35,15 @@ const UserContainer = () => {
 
   return (
     <Container title="ユーザ管理">
+      <Head>
+        <title>ユーザ管理</title>
+      </Head>
       <div className="flex-between mb-5">
         <UserSearchBox options={getSearchOptions(users, ['company', 'name', 'mail'])} />
         <UserAddModalButton onSuccess={onAddUserSuccess} />
       </div>
 
-      <UserTable
-        data={users}
-        pagination={{ defaultPageSize: 10 }}
-        loading={false}
-        total={users.length}
-        reload={reload}
-      />
+      <UserTable data={users} loading={false} total={users.length} reload={reload} />
     </Container>
   )
 }

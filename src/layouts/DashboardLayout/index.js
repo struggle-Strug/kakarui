@@ -6,6 +6,7 @@ import { APP_HEIGHT_HEADER, APP_WIDTH_SIDER } from '@/configs/theme'
 import { Routes } from '@/constants'
 import { useAuth } from '@/hooks/query'
 
+import { AuthorizationCheck } from '@/components/common'
 import { ErrorBoundary, Header, Sider } from '@/components/layout/dashboard'
 
 const DashboardLayout = ({ children }) => {
@@ -14,7 +15,7 @@ const DashboardLayout = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="flex-center h-screen w-screen" style={{ maxWidth: 1440 }}>
+      <div className="flex-center h-screen w-screen">
         <Spin size="large" tip="読み込み中" className="text-white">
           <div />
         </Spin>
@@ -34,7 +35,6 @@ const DashboardLayout = ({ children }) => {
         <Sider />
         <Layout.Content
           style={{
-            maxWidth: 1440,
             marginRight: 'auto',
             position: 'relative',
             padding: '40px 64px',
@@ -42,10 +42,11 @@ const DashboardLayout = ({ children }) => {
             marginTop: APP_HEIGHT_HEADER,
             minHeight: `calc(100vh - ${APP_HEIGHT_HEADER}px)`,
             overflowY: 'auto',
-            height: 1380,
           }}
         >
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ErrorBoundary>
+            <AuthorizationCheck>{children}</AuthorizationCheck>
+          </ErrorBoundary>
         </Layout.Content>
       </Layout>
     </Layout>

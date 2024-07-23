@@ -4,6 +4,8 @@ import { setCookie } from 'nookies'
 
 import { encode } from 'next-auth/jwt'
 
+import { DEV } from '@/constants'
+
 const secret = process.env.NEXTAUTH_SECRET
 
 export default async function handler(req, res) {
@@ -26,8 +28,10 @@ export default async function handler(req, res) {
 
       const sessionToken = {
         user: {
-          name: `${decodedToken.family_name} ${decodedToken.given_name}`.trim(),
-          email: decodedToken.email,
+          name: decodedToken.family_name
+            ? `${decodedToken.family_name} ${decodedToken.given_name}`.trim()
+            : decodedToken.name,
+          email: decodedToken.email || decodedToken.preferred_username,
           id: decodedToken.oid, // Azure AD User Object ID
           roles: decodedToken.roles || [], // If roles are available in the ID token
           token: accessToken,
@@ -38,14 +42,25 @@ export default async function handler(req, res) {
       // Encode the session token
       const token = await encode({ token: sessionToken, secret })
 
-      // Set the session cookie
-      setCookie({ res }, 'next-auth.session-token', token, {
-        maxAge: 30 * 24 * 60 * 60, // 30 days
-        path: '/',
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-      })
+      if (DEV) {
+        // Set the session cookie
+        setCookie({ res }, 'next-auth.session-token', token, {
+          maxAge: 30 * 24 * 60 * 60, // 30 days
+          path: '/',
+          httpOnly: true,
+          secure: false,
+          sameSite: 'lax',
+        })
+      } else {
+        // Set the session cookie
+        setCookie({ res }, '__Secure-next-auth.session-token', token, {
+          maxAge: 30 * 24 * 60 * 60, // 30 days
+          path: '/',
+          httpOnly: true,
+          secure: true,
+          sameSite: 'lax',
+        })
+      }
 
       res.status(200).json({ message: 'Token saved successfully' })
     } catch (error) {

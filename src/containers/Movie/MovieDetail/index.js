@@ -1,7 +1,10 @@
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 
 import deployApiStub from '@/hooks/stub/deploy'
+
+import { Container } from '@/components/ui'
 
 const MovieShowDetailContainer = ({ projectId }) => {
   const [detail, setDetail] = useState()
@@ -11,18 +14,22 @@ const MovieShowDetailContainer = ({ projectId }) => {
   }, [projectId])
 
   return (
-    <div>
-      <div className="mb-9 text-lg font-semibold text-dark-gray-3">ログ表示(動画)</div>
+    <Container title="ログ表示(動画)">
+      <Head>
+        <title>ログ表示(動画)</title>
+      </Head>
       <div className="player-wrapper">
         <ReactPlayer
           url={detail?.execute_result_url}
           className="react-player"
-          controls
-          width="100%"
           height="100%"
+          width="100%"
+          controls
+          muted
+          volume={0}
         />
       </div>
-    </div>
+    </Container>
   )
 }
 

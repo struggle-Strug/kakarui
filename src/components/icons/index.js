@@ -5,9 +5,9 @@ import {
   UserOutlined as UserIcon,
 } from '@ant-design/icons'
 
-import { AiOutlineEdit as EditIcon } from 'react-icons/ai'
+import { AiOutlineEdit as EditIcon, AiOutlinePlayCircle as PlayIcon } from 'react-icons/ai'
 import { BiMenu as MenuIcon, BiSolidBell as NotificationIcon } from 'react-icons/bi'
-import { BsBoxArrowInUpLeft as ExternalLinkIcon, BsPlayBtn as PlayIcon } from 'react-icons/bs'
+import { BsBoxArrowInUpLeft as ExternalLinkIcon } from 'react-icons/bs'
 import { GrSettingsOption as SettingIcon } from 'react-icons/gr'
 import { IoIosCloseCircle as CloseCircleIcon, IoIosSearch as SearchIcon } from 'react-icons/io'
 import { IoReload as ReloadIcon, IoTriangleSharp as TriangleIcon } from 'react-icons/io5'

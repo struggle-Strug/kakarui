@@ -1,5 +1,5 @@
 {
-    "message": "get user detail infomation success.",
+    "message": "get user detail information success.",
     "status_code": 200,
     "user": {
         "company": "XXX.inc",

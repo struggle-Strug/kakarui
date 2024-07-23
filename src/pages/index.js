@@ -25,7 +25,7 @@ const LoginPage = () => {
           })
           .then((response) => {
             // Redirect to a secure page or home page after processing
-            router.push('/home')
+            if (typeof window !== 'undefined') window.location = '/home'
           })
           .catch((error) => {
             console.error('Error sending access token to server:', error)
@@ -35,7 +35,7 @@ const LoginPage = () => {
   }, [router.asPath])
 
   return (
-    <section className="flex-center min-h-screen" style={{ width: 1440 }}>
+    <section className="flex-center min-h-screen">
       <LoginForm />
     </section>
   )

@@ -10,9 +10,12 @@ import module_set_selection from './module_set_selection.json'
 import module_setting from './module_setting.json'
 //
 import user_by_organization from './user_by_organization.json'
+import users from './users.json'
 
 export const placeHolderData = {
   deployment_detail,
+  //
+  users,
   user_by_organization,
   //
   module_setting,

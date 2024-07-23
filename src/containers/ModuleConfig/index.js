@@ -1,7 +1,9 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
+import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
 import moduleConfigApiStub from '@/hooks/stub/module_config'
 
 import {
@@ -14,6 +16,7 @@ import { Container } from '@/components/ui'
 import { getSearchOptions } from '@/utils/helper'
 
 const ModuleConfigContainer = () => {
+  const [project] = useLocalStorageDefaultProject()
   const [modulesConfigs, setModuleConfigs] = useState([])
 
   const [query] = useQueryStates({
@@ -24,14 +27,22 @@ const ModuleConfigContainer = () => {
 
   const { filter, sort, search } = query || {}
 
+  const refreshData = () => {
+    moduleConfigApiStub.getModuleConfig(filter, sort, search, project).then(setModuleConfigs)
+  }
+
   useEffect(() => {
-    moduleConfigApiStub.getModuleConfig(filter, sort, search).then(setModuleConfigs)
-  }, [filter, sort, search])
+    refreshData()
+  }, [filter, sort, search, project])
 
   const searchOptions = getSearchOptions(moduleConfigApiStub.getRawData(), ['name', 'description'])
 
   return (
     <Container title="モジュール配置管理">
+      <Head>
+        <title>モジュール配置管理</title>
+      </Head>
+
       <div className="flex-between mb-5">
         <ModuleConfigSearchBox options={searchOptions} />
         <ModuleConfigAddButton />
@@ -42,6 +53,7 @@ const ModuleConfigContainer = () => {
         pagination={{}}
         loading={false}
         total={modulesConfigs.length + 1}
+        refreshData={refreshData}
       />
     </Container>
   )

@@ -11,25 +11,26 @@ import { ProjectAddEditModal } from '@/components/project'
 
 import ProjectSubMenu from './ProjectSubMenu'
 
-const ProjectMenu = ({ project, refreshProject = () => {} }) => {
+const ProjectMenu = ({ projectName, setDefaultProject = () => {} }) => {
   const router = useRouter()
   const [open, onOpen, onClose] = useFlag()
 
   const breadcrumbs = [
     // { key: 'robocon', title: 'ロボコン2024' },
     // { key: 'team_name', title: 'Team Eagle' },
-    { key: 'prototype', title: project?.name },
+    { key: 'prototype', title: projectName },
   ]
+
   const items = [
     {
       label: (
-        <div className="border-bottom-gray mx-[12px] flex w-[498px] items-center px-3 py-6 text-lg">
+        <div className="border-bottom-gray mx-3 flex w-[420px] items-center px-3 py-4">
           <div>
             <Image src={Assets.MENU.project} alt="gen3p" width={48} height={44} />
           </div>
           <div className="pl-3 font-semibold text-dark-gray-3">
-            <div className="text-lg ">プロジェクトサブメニュー</div>
-            <Breadcrumbs breadcrumbs={breadcrumbs} className="text-lg" />
+            <div>プロジェクトサブメニュー</div>
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
           </div>
         </div>
       ),
@@ -38,7 +39,7 @@ const ProjectMenu = ({ project, refreshProject = () => {} }) => {
     },
     {
       label: (
-        <div className="border-bottom-gray mx-[12px] w-[498px] px-3 py-6 text-lg font-light text-primary">
+        <div className="border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary">
           <ProjectAddEditModal onSuccess={() => router.push(Routes.PROJECT)}>
             <div> 新規プロジェクト作成</div>
           </ProjectAddEditModal>
@@ -49,7 +50,7 @@ const ProjectMenu = ({ project, refreshProject = () => {} }) => {
     },
     {
       label: (
-        <div className="border-bottom-gray mx-[12px] w-[498px] px-3 py-6 text-lg font-light text-primary">
+        <div className="border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary">
           プロジェクト管理
         </div>
       ),
@@ -59,8 +60,8 @@ const ProjectMenu = ({ project, refreshProject = () => {} }) => {
     {
       label: (
         <ProjectSubMenu
-          onSetDefaultProject={(res) => {
-            refreshProject(res)
+          setDefaultProject={(res) => {
+            setDefaultProject(res)
             onClose()
           }}
         />
@@ -79,7 +80,7 @@ const ProjectMenu = ({ project, refreshProject = () => {} }) => {
       <Dropdown
         menu={{ items }}
         trigger={['click']}
-        overlayClassName="pt-9 header-dropdown"
+        overlayClassName="pt-7 header-dropdown"
         open={open}
         onOpenChange={(nextOpen) => {
           if (nextOpen) {

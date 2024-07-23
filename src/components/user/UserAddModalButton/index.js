@@ -1,5 +1,7 @@
 import { Modal, Spin, message } from 'antd'
 
+import Head from 'next/head'
+
 import { ACTIVE_STATUS, USER_ROLE } from '@/constants'
 import { useLoadingSimulation } from '@/hooks/custom'
 import { useFlag } from '@/hooks/share'
@@ -25,11 +27,11 @@ const UserAddModalButton = ({ children, onSuccess, ...props }) => {
       create_date: new Date().toISOString(),
       update_user: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
       update_date: new Date().toISOString(),
-      ...values,
       role: USER_ROLE.MEMBER,
+      main_role: values.role || USER_ROLE.MEMBER,
+      ...values,
       status: ACTIVE_STATUS.ENABLE.toString(),
       enable: true,
-      main_role: values.role,
     }
 
     try {
@@ -55,6 +57,9 @@ const UserAddModalButton = ({ children, onSuccess, ...props }) => {
           footer={null}
           width={698}
         >
+          <Head>
+            <title>ユーザー招待</title>
+          </Head>
           <p className="px-12 text-lg font-light text-primary">
             組織に招待するユーザの情報を入力してください。
           </p>

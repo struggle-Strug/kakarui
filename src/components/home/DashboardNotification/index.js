@@ -72,15 +72,14 @@ const NoticeItem = memo((item) => {
 })
 
 const renderDot = (
-  <div className="h-5 w-5 rounded-full border border-solid border-dark-gray-3">&nbsp;</div>
+  <div className="h-5 w-5 rounded-full border-[6px] border-solid border-[#BFBFBF]">&nbsp;</div>
 )
 
 const DashboardNotification = () => {
   const renderItems = useCallback(
     () =>
-      [{}, ...data, {}].map((item) => ({
+      [...data].map((item) => ({
         children: <NoticeItem {...item} />,
-        color: 'white',
         dot: item?.title && renderDot,
         className: cn('p-0 m-0', item?.title ? 'pb-[36px]' : 'last:-mb-[36px]'),
       })),
@@ -94,13 +93,38 @@ const DashboardNotification = () => {
     >
       <HeaderTitle title="お知らせ" />
       <div
-        className="relative flex w-full flex-row items-stretch px-16 py-2"
+        className="relative flex w-full flex-row items-stretch px-16 py-8"
         style={{ border: '1px solid var(--dark-gray-3)', borderRadius: 20 }}
       >
-        <TimeLine wrapperClassName="grow" total={data.length} items={renderItems()} />
+        <TimeLine
+          id="info-dashboard"
+          wrapperClassName="grow"
+          total={data.length}
+          items={renderItems()}
+        />
         <div className="absolute bottom-4 right-16 w-full max-w-max">
           <a className=" inline text-nowrap text-base text-indigo-rainbow">もっと見る…</a>
         </div>
+        {/* <p
+          className=" whitespace-pre-wrap break-keep pb-16"
+          style={{
+            '-ms-word-break': 'break-keep',
+            wordBreak: 'keep-keep',
+            lineBreak: 'auto',
+            overflowWrap: 'anywhere',
+          }}
+        >
+          hogeテキストhogeテキストhogeテキストhogeテキストhogeテキストhogeテキスト
+          <br />
+          hogeテキストhogeテキストhogeテキストhogeテキストhogeテキストhogeテキスト
+          <br />
+          hogeテキストhogeテキストhogeテキストhogeテキストhogeテキストhogeテキスト
+          <br />
+          hogeテキストhogeテキストhogeテキストhogeテキストhogeテキストhogeテキスト
+          <br />
+          hogeテキストhogeテキストhogeテキストhogeテキストhogeテキストhogeテキスト
+          <br />
+        </p> */}
       </div>
     </div>
   )

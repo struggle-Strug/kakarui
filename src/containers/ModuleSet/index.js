@@ -1,5 +1,6 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 import moduleSetApiStub from '@/hooks/stub/module_set'
@@ -28,6 +29,9 @@ const ModuleSetContainer = () => {
 
   return (
     <Container title="モジュールセット管理">
+      <Head>
+        <title>モジュールセット管理</title>
+      </Head>
       <div className="flex-between mb-5">
         <ModuleSetSearchBox options={searchOptions} />
         <ModuleSetAddButton label="" />
