@@ -48,6 +48,8 @@ export const useAuth = () => {
     token,
     authenticated,
     permissions: new Set(Object.values({})),
+    organizationId: null,
+    loading: status === 'loading',
     username: data?.user?.name || '',
     loading: status === 'loading',
     email: data?.user?.email,

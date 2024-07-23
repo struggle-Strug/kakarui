@@ -1,5 +1,6 @@
 import { Spin } from 'antd'
 
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
@@ -31,6 +32,9 @@ const ModuleConfigDetailContainer = () => {
 
   return (
     <Container title="モジュール配置設定">
+      <Head>
+        <title>モジュール配置設定</title>
+      </Head>
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
         <ModuleConfigForm isEdit onSubmit={doUpdateModuleConfig} data={detail || {}} />

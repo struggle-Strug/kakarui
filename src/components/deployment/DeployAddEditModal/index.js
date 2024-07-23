@@ -18,6 +18,12 @@ const DeployAddEditModal = ({ children, isEdit, data }) => {
 
   return (
     <>
+      {open && (
+        <Head>
+          <title>{isEdit ? 'デプロイ' : 'デプロイ'}</title>
+        </Head>
+      )}
+
       <div role="presentation" onClick={onOpen}>
         {cloneElement(children, {
           ...children.props,

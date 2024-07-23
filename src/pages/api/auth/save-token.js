@@ -4,6 +4,8 @@ import { setCookie } from 'nookies'
 
 import { DEV } from '@/constants'
 
+import { DEV } from '@/constants'
+
 const secret = process.env.NEXTAUTH_SECRET
 
 export default async function handler(req, res) {
