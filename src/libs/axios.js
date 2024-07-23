@@ -5,7 +5,7 @@ import { getSession, signOut } from 'next-auth/react'
 import { API_ROOT, Routes, TIMEOUT, httpStatusCode } from '@/constants'
 
 const instance = axios.create({
-  baseURL: API_ROOT,
+  baseURL: `https://karakuri.agecode.dev/proxy?url=${API_ROOT}`,
   timeout: TIMEOUT,
 })
 
@@ -36,9 +36,9 @@ instance.interceptors.response.use(
       return 'timeout'
     }
 
-    if (error?.response?.status === httpStatusCode.UNAUTHORIZED) {
-      redirectIfUnAuthorized()
-    }
+    // if (error?.response?.status === httpStatusCode.UNAUTHORIZED) {
+    //   redirectIfUnAuthorized()
+    // }
 
     return Promise.reject(error)
   }

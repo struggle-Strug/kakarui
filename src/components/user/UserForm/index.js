@@ -66,7 +66,6 @@ const UserForm = ({ onAddEdit, isEdit, data, onClose, loading }) => {
           options={USER_ROLE_OPTIONS}
           placeholder="ロールを選択してください。"
           defaultValue={USER_ROLE.MEMBER}
-          disabled
         />
 
         <Checkbox name={FORM_INFO.SUB_ROLE} label="サブロール:" title="デプロイ管理者" />
