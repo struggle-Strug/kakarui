@@ -29,6 +29,10 @@ const ModuleConfigContainer = () => {
 
   const onRefetch = useDebouncedCallback(refetch)
 
+  const refreshData = () => {
+    moduleConfigApiStub.getModuleConfig(filter, sort, search, project).then(setModuleConfigs)
+  }
+
   useEffect(() => {
     if (reload === '1') {
       onRefetch()
@@ -45,6 +49,10 @@ const ModuleConfigContainer = () => {
 
   return (
     <Container title="モジュール配置管理">
+      <Head>
+        <title>モジュール配置管理</title>
+      </Head>
+
       <div className="flex-between mb-5">
         <div className="w-full">
           <SearchBar placeholder="モジュール配置名・説明" options={searchOptions} />

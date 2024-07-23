@@ -107,6 +107,9 @@ export const useUserCreate = ({ onSuccess } = {}) => {
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.USER_CREATE)
     },
+    enabled: Boolean(authenticated, token, id),
+    keepPreviousData: false,
+    cacheTime: 0,
   })
 
   const doCreateUser = useDebouncedCallback(mutateAsync)

@@ -1,7 +1,10 @@
+import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 
 import { useDeployQuery } from '@/hooks/query'
+
+import { Container } from '@/components/ui'
 
 import { Container } from '@/components/ui'
 

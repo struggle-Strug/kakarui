@@ -1,7 +1,13 @@
+import { AuthorizationCheck } from '@/components/common'
+
 import DeployContainer from '@/containers/Deploy'
 
 const DeployManagePage = () => {
-  return <DeployContainer />
+  return (
+    <AuthorizationCheck>
+      <DeployContainer />
+    </AuthorizationCheck>
+  )
 }
 
 export default DeployManagePage

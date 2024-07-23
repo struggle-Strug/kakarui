@@ -124,6 +124,7 @@ export const useProjectCreate = ({ onSuccess } = {}) => {
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.PROJECT_CREATE)
     },
+    enabled: !!organizationId,
   })
 
   const doCreateProject = useDebouncedCallback(mutate)
