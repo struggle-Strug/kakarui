@@ -1,0 +1,96 @@
+{
+    "description": "This is moduleset A.",
+    "moduleset_modules": [
+        {
+            "create_date": "2024-06-11T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "938fc62d-62e5-e613-0a1f-d794114b3f49",
+            "name": "Gzweb-KobeLab 0",
+            "tag": "v2.0",
+            "type": "sim",
+            "update_date": "2024-06-16T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-12T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "90b28773-50f3-3c53-e3a3-b9b5e1181fb6",
+            "name": "NavAndGesture 1",
+            "tag": "v2.1",
+            "type": "robot",
+            "update_date": "2024-06-17T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-13T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "36d7653e-c14b-cb2d-2dc2-db6cf88f5d3a",
+            "name": "SwitchingSkill 2",
+            "tag": "v2.2",
+            "type": "robot",
+            "update_date": "2024-06-18T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-14T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "fe74d215-8589-511e-ab61-9c7bff023f36",
+            "name": "NavSkill 3",
+            "tag": "v2.3",
+            "type": "sim",
+            "update_date": "2024-06-19T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-15T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "9c82cfa5-06aa-899c-9fa3-8b70da7606fb",
+            "name": "Nyokkey-Core 4",
+            "tag": "v2.4",
+            "type": "robot",
+            "update_date": "2024-06-20T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-16T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "95bc2b57-42a7-237c-3d8c-bd263588a915",
+            "name": "Gzweb-KobeLab 5",
+            "tag": "v2.5",
+            "type": "robot",
+            "update_date": "2024-06-21T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-17T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "7db189a1-68b6-2823-02e4-ba6e5821f169",
+            "name": "NavAndGesture 6",
+            "tag": "v2.6",
+            "type": "robot",
+            "update_date": "2024-06-22T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-18T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "27fe7b4a-1328-2523-5b67-92e241523c65",
+            "name": "SwitchingSkill 7",
+            "tag": "v2.7",
+            "type": "robot",
+            "update_date": "2024-06-23T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-19T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "43d37ba7-895a-2060-95bc-68f3089df7de",
+            "name": "NavSkill 8",
+            "tag": "v2.8",
+            "type": "robot",
+            "update_date": "2024-06-24T17:00:00.000Z"
+        },
+        {
+            "create_date": "2024-06-20T17:00:00.000Z",
+            "default_config_data": {},
+            "module_id": "edcf5d52-5b80-9302-a672-60653f7a3589",
+            "name": "Nyokkey-Core 9",
+            "tag": "v2.9",
+            "type": "robot",
+            "update_date": "2024-06-25T17:00:00.000Z"
+        }
+    ],
+    "name": "moduleset A"
+}

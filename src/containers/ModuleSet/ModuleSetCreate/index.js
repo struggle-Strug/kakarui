@@ -16,7 +16,7 @@ const ModuleSetCreateContainer = () => {
       router.push(Routes.MODULE_SET)
     },
   })
-  
+
   return (
     <Container title="モジュールセット登録">
       <Spin spinning={loading}>
