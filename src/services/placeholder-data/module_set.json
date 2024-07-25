@@ -1,0 +1,316 @@
+{
+    "message": "Modulesets infomation get success.",
+    "moduleset": [
+        {
+            "create_date": "2024-06-11T17:00:00.000Z",
+            "create_user": "d8658e0c-f728-96a5-5e10-8fdf7c2a81f5",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 0",
+            "id": "938fc62d-62e5-e613-0a1f-d794114b3f49",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 0",
+            "update_date": "2024-06-16T17:00:00.000Z",
+            "update_user": "29d76e87-1d75-8692-0607-bd1b44339d16"
+        },
+        {
+            "create_date": "2024-06-12T17:00:00.000Z",
+            "create_user": "5bcca5d7-3eb8-172a-4541-38a97a29a5a7",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 1",
+            "id": "6b53141f-ab0b-b56a-7cfb-ad191ff81671",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 1",
+            "update_date": "2024-06-17T17:00:00.000Z",
+            "update_user": "bdabf31b-82df-5e8e-5662-f0c7bf1e7a2b"
+        },
+        {
+            "create_date": "2024-06-13T17:00:00.000Z",
+            "create_user": "6c0fabf1-bf16-9277-6738-12a55d8eff0c",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 2",
+            "id": "8e435e6f-b033-5562-f950-9fe3802401a7",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 2",
+            "update_date": "2024-06-18T17:00:00.000Z",
+            "update_user": "a22ea912-d740-5602-c06a-e0331f617fe9"
+        },
+        {
+            "create_date": "2024-06-14T17:00:00.000Z",
+            "create_user": "602418a6-1088-476b-fe3b-9e6c6e8d3644",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 3",
+            "id": "9ff974ee-d65d-e60c-40fe-7846b84541c5",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 3",
+            "update_date": "2024-06-19T17:00:00.000Z",
+            "update_user": "c79c73a4-597a-5e3a-9117-adba313c7ca9"
+        },
+        {
+            "create_date": "2024-06-15T17:00:00.000Z",
+            "create_user": "baf1f42e-414a-8977-ad4c-9bfa29804623",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 4",
+            "id": "d1acf77c-2a03-143c-56ed-cd46d23de84f",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 4",
+            "update_date": "2024-06-20T17:00:00.000Z",
+            "update_user": "40178fb4-408e-66c7-ca06-32565db7020c"
+        },
+        {
+            "create_date": "2024-06-16T17:00:00.000Z",
+            "create_user": "d55481b1-c64c-75bc-7e48-5669c664d75f",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 5",
+            "id": "36e724b2-bc4a-28c1-e4da-dd9079c6e4bb",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 5",
+            "update_date": "2024-06-21T17:00:00.000Z",
+            "update_user": "6633834e-30e3-e228-c576-e7fee38b39aa"
+        },
+        {
+            "create_date": "2024-06-17T17:00:00.000Z",
+            "create_user": "12879cea-d3be-dd12-e5ee-974029ca35c4",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 6",
+            "id": "1e924df1-76f6-f82c-829e-7a9d186fc10f",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 6",
+            "update_date": "2024-06-22T17:00:00.000Z",
+            "update_user": "b0ab8d9c-0a2a-fe72-fc3b-4ddb789add72"
+        },
+        {
+            "create_date": "2024-06-18T17:00:00.000Z",
+            "create_user": "24e6ab03-9942-756f-de17-faac1dea3b1b",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 7",
+            "id": "59ce82ae-0074-084c-71ef-72e977997946",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 7",
+            "update_date": "2024-06-23T17:00:00.000Z",
+            "update_user": "a82dd6bc-7185-a22d-67cd-07466323ef66"
+        },
+        {
+            "create_date": "2024-06-19T17:00:00.000Z",
+            "create_user": "018e6ac8-321b-91a3-9e95-9576b660cb0d",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 8",
+            "id": "6746388c-db7e-b4f0-35b3-d1dc6afce06e",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 8",
+            "update_date": "2024-06-24T17:00:00.000Z",
+            "update_user": "1095123f-b584-1282-c537-8c7eea1bc9dd"
+        },
+        {
+            "create_date": "2024-06-20T17:00:00.000Z",
+            "create_user": "8d37f26b-39f2-3237-441d-c5da74d58119",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 9",
+            "id": "f9233896-94d5-3060-1971-f2c49ca1f677",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 9",
+            "update_date": "2024-06-25T17:00:00.000Z",
+            "update_user": "cf161834-5421-9ea5-b833-3dc8950da388"
+        },
+        {
+            "create_date": "2024-06-21T17:00:00.000Z",
+            "create_user": "2fc065fb-350c-6711-61ce-a3fe16505d96",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 10",
+            "id": "7924cbee-4414-89c0-e498-f56495fd3623",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 10",
+            "update_date": "2024-06-26T17:00:00.000Z",
+            "update_user": "2fc40133-4636-49c2-f119-09279bf87697"
+        },
+        {
+            "create_date": "2024-06-22T17:00:00.000Z",
+            "create_user": "dfa7fe27-38b5-ab47-ebce-e016020c1733",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 11",
+            "id": "fd558b0f-970f-1f9d-9034-9e7ce0362700",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 11",
+            "update_date": "2024-06-27T17:00:00.000Z",
+            "update_user": "be610d3f-2f53-6e6d-11fe-7c9ef01a32e4"
+        },
+        {
+            "create_date": "2024-06-23T17:00:00.000Z",
+            "create_user": "4609c1ae-c878-664f-dbd3-24705763ee44",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 12",
+            "id": "29adf432-186e-0f13-c44d-3a4fdcecff69",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 12",
+            "update_date": "2024-06-28T17:00:00.000Z",
+            "update_user": "b292788e-3a78-0a9f-434e-fe0eb17fbc44"
+        },
+        {
+            "create_date": "2024-06-24T17:00:00.000Z",
+            "create_user": "952721c1-4e49-75e1-fcac-171a0664a424",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 13",
+            "id": "2cc0166c-9619-6ad9-b506-bb2e7568108e",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 13",
+            "update_date": "2024-06-29T17:00:00.000Z",
+            "update_user": "7a6c95e4-433f-3171-c222-8d937bbdb924"
+        },
+        {
+            "create_date": "2024-06-25T17:00:00.000Z",
+            "create_user": "3fa5b05d-50a9-2bd5-9def-b5ebf06f21bd",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 14",
+            "id": "d97db7d8-94dc-83b0-40a2-20a9c3a1024a",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 14",
+            "update_date": "2024-06-30T17:00:00.000Z",
+            "update_user": "fb9197f5-3781-7009-a5b4-a731d829663c"
+        },
+        {
+            "create_date": "2024-06-26T17:00:00.000Z",
+            "create_user": "5bbaa5f4-9142-8652-323a-82d2e0db5fc1",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 15",
+            "id": "7617875c-9d0e-622f-704a-aa4a0ab1eef4",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 15",
+            "update_date": "2024-07-01T17:00:00.000Z",
+            "update_user": "295f3395-522a-cafa-4902-8887549c5260"
+        },
+        {
+            "create_date": "2024-06-27T17:00:00.000Z",
+            "create_user": "b7797ddb-7495-506d-4ada-b7c52464dff4",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 16",
+            "id": "4620b5d6-cd18-c316-d1eb-219f62c02edc",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 16",
+            "update_date": "2024-07-02T17:00:00.000Z",
+            "update_user": "63c142a8-0292-1612-1bdb-28e3a94798c4"
+        },
+        {
+            "create_date": "2024-06-28T17:00:00.000Z",
+            "create_user": "9888c38f-453c-6de4-83fa-f6f7be10bd04",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 17",
+            "id": "6f3f33ff-88f8-d124-e916-0610b4b43d3e",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 17",
+            "update_date": "2024-07-03T17:00:00.000Z",
+            "update_user": "83f2f9ff-dffd-f158-5409-4c2554e24a7c"
+        },
+        {
+            "create_date": "2024-06-29T17:00:00.000Z",
+            "create_user": "ef741250-eec6-12d9-6e09-ec605b6ef223",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 18",
+            "id": "e097e375-911b-e228-552b-39fd1380e08c",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 18",
+            "update_date": "2024-07-04T17:00:00.000Z",
+            "update_user": "3abd3450-d71b-a97a-9bd5-3449c0b6bbc0"
+        },
+        {
+            "create_date": "2024-06-30T17:00:00.000Z",
+            "create_user": "400348e4-efba-0296-c597-9c4565d145a5",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 19",
+            "id": "734a43bb-81d7-c8e7-1836-ce3b88eedcfb",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 19",
+            "update_date": "2024-07-05T17:00:00.000Z",
+            "update_user": "cfb9042f-43b3-2777-f27b-f3aeee1ad635"
+        },
+        {
+            "create_date": "2024-07-01T17:00:00.000Z",
+            "create_user": "a3c49aff-7f05-42f2-f6dd-9a7a3ca1ac26",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 20",
+            "id": "dc961b5b-6c9b-0941-15a3-4339291405a0",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 20",
+            "update_date": "2024-07-06T17:00:00.000Z",
+            "update_user": "65d1347f-5970-e0fb-9f15-df05eead5d3a"
+        },
+        {
+            "create_date": "2024-07-02T17:00:00.000Z",
+            "create_user": "17099d97-039c-36d5-bd57-f02fbc1e9352",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 21",
+            "id": "d8c34bc6-71a4-27c6-3c42-66fed1f02278",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 21",
+            "update_date": "2024-07-07T17:00:00.000Z",
+            "update_user": "9831beb4-227c-6960-5275-7f30033e4e7b"
+        },
+        {
+            "create_date": "2024-07-03T17:00:00.000Z",
+            "create_user": "799c8020-2401-e612-890d-36ee2327a1eb",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 22",
+            "id": "903e1ff6-1afa-3837-5d02-16d3351cf62f",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 22",
+            "update_date": "2024-07-08T17:00:00.000Z",
+            "update_user": "eb53544e-1637-d6d8-a7fb-a3346445a522"
+        },
+        {
+            "create_date": "2024-07-04T17:00:00.000Z",
+            "create_user": "c127d508-3e7e-a48a-d954-6176d399356f",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 23",
+            "id": "5428b563-5f79-12e8-17b5-03923b32e156",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 23",
+            "update_date": "2024-07-09T17:00:00.000Z",
+            "update_user": "973418d2-3723-418d-d4e8-2cd150bd780c"
+        },
+        {
+            "create_date": "2024-07-05T17:00:00.000Z",
+            "create_user": "58b8e0b0-843e-d8bb-a3a2-0aa458593f88",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 24",
+            "id": "c973f4e7-7453-59f0-8c3f-3276c864c7c1",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 24",
+            "update_date": "2024-07-10T17:00:00.000Z",
+            "update_user": "81706932-76c7-ff16-dc5b-0357e3be0ebf"
+        },
+        {
+            "create_date": "2024-07-06T17:00:00.000Z",
+            "create_user": "ca3c0527-b1ad-d827-a8b9-82805831f6f3",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 25",
+            "id": "71f4aa37-4d89-4094-fdae-0bc4643ad15f",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 25",
+            "update_date": "2024-07-11T17:00:00.000Z",
+            "update_user": "dba80d16-7b73-0fa7-0027-98357ec52915"
+        },
+        {
+            "create_date": "2024-07-07T17:00:00.000Z",
+            "create_user": "3bc1c7f5-46a3-e409-0fe6-9fe7fb31b8f1",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 26",
+            "id": "c0d2f8e9-bcda-c406-de18-8ff586316e12",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 26",
+            "update_date": "2024-07-12T17:00:00.000Z",
+            "update_user": "3f0a2b03-b107-7637-0bb0-a3dc60e34bd2"
+        },
+        {
+            "create_date": "2024-07-08T17:00:00.000Z",
+            "create_user": "803a8e04-f98b-807a-0cbc-e55bfead97da",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 27",
+            "id": "87a5664c-b266-ac17-5883-706575a086c2",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 27",
+            "update_date": "2024-07-13T17:00:00.000Z",
+            "update_user": "a4b7118c-2af8-4205-f95b-5c9d1ae87b96"
+        },
+        {
+            "create_date": "2024-07-09T17:00:00.000Z",
+            "create_user": "3d9b32f3-d43d-fe4c-7193-196430a54914",
+            "description": "夜間にMS神戸ラボ24階を東回りで見回り、エレベータホール前まで戻るモジュールセット。 28",
+            "id": "abcbf073-5735-09c6-863f-f46678ce5e2d",
+            "moduleset_modules": {},
+            "name": "夜間監視モジュールセット 28",
+            "update_date": "2024-07-14T17:00:00.000Z",
+            "update_user": "d9634076-8d53-3d35-66a0-82a5b45ab057"
+        },
+        {
+            "create_date": "2024-07-10T17:00:00.000Z",
+            "create_user": "26a808f4-aba0-9178-28e6-dc1f7e0a08f8",
+            "description": "介護士から音声により指示があった部屋番号のカーテン及び窓を指示の通り、開放または施錠・閉鎖する。 29",
+            "id": "06ee91a8-e4a8-d5f8-4885-31dac236a98f",
+            "moduleset_modules": {},
+            "name": "カーテン及び窓開閉モジュールセット 29",
+            "update_date": "2024-07-15T17:00:00.000Z",
+            "update_user": "ab404c2b-cd0c-c410-3816-677896bf5f33"
+        },
+        {
+            "create_date": "2024-07-11T17:00:00.000Z",
+            "create_user": "b77c3bcd-bd00-a563-ea99-e46b7b185d2c",
+            "description": "QRコード読み取りのNavskill-QRcodeなどを中心としたモジュールセット。 30",
+            "id": "5f942139-d486-fc31-0d94-fff169630a3f",
+            "moduleset_modules": {},
+            "name": "QRコード読み取りモジュールセット 30",
+            "update_date": "2024-07-16T17:00:00.000Z",
+            "update_user": "8eed1991-ed41-f46f-b579-105de8be656f"
+        }
+    ],
+    "status_code": 200
+}

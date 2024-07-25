@@ -1,0 +1,109 @@
+/* REACT ICONS */
+.react-icons {
+  @apply align-middle;
+}
+
+/* RICH EDITOR */
+.quill {
+  @apply relative inline-block w-full rounded-lg border border-solid border-accent;
+  max-width: 740px;
+  /* TODO: set width */
+}
+
+.quill .ql-toolbar.ql-snow {
+  @apply rounded-t-lg border-x-transparent border-b-accent border-t-transparent;
+}
+
+.quill .ql-container.ql-snow {
+  @apply rounded-b-lg border-none;
+}
+
+.ql-editor .ql-video {
+  @apply aspect-[100/56] h-auto w-3/4;
+}
+
+.quill.disabled {
+  color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: var(--accent);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* MESSAGE ITEM */
+.message-item-appear {
+  animation-name: messageAppear;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: backwards;
+}
+
+.fade-in-down {
+  animation-name: fadeInDown;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* header-dropdown */
+.header-dropdown > ul {
+  border-top: 0px !important;
+  border-radius: 0 0 24px 24px !important;
+  border: 1px solid var(--dark-gray-3);
+  padding: 0 !important;
+}
+
+.header-dropdown > ul > li {
+  padding: 0 !important;
+}
+
+.border-bottom-gray {
+  border-bottom: 1px solid var(--dark-gray-3);
+}
+
+/* for react player */
+.player-wrapper {
+  /* max-h-[calc(100vh-240px)] */
+  @apply relative aspect-[1574/939] max-h-[calc(100vh-240px)] w-full min-w-full overflow-hidden rounded-lg bg-[#121212];
+}
+
+.react-player {
+  @apply absolute inset-0 max-h-full overflow-hidden rounded-lg;
+}
+
+/* for search bar */
+.search-bar .ant-select .ant-select-clear {
+  top: 18px;
+  right: 60px;
+}
+
+.search-bar .ant-select-selector {
+  box-shadow: none !important;
+  background: #fff !important;
+}
+
+.search-bar input {
+  box-shadow: none !important;
+}
