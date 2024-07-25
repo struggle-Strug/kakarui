@@ -61,9 +61,7 @@ const MyDeploymentTable = ({ data, total, loading }) => {
     {
       title: <div className="min-w-[200px]">プロジェクト</div>,
       dataIndex: 'project_name',
-      render: (item) => (
-        <RowContent item={item || 'テストプロジェクト'} className="min-w-[200px] max-w-[400px]" />
-      ),
+      render: (item) => <RowContent item={item} className="min-w-[200px] max-w-[400px]" />,
     },
     {
       title: <div className="min-w-[240px]">モジュール配置</div>,

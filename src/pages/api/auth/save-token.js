@@ -54,7 +54,7 @@ export default async function handler(req, res) {
         })
       } else {
         // Set the session cookie
-        setCookie({ res }, '__Secure-next-auth.session-token', token, {
+        setCookie({ res }, 'next-auth.session-token', token, {
           maxAge: 30 * 24 * 60 * 60, // 30 days
           path: '/',
           httpOnly: true,
