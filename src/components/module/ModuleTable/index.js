@@ -6,8 +6,6 @@ import { Table } from '@/components/ui'
 
 import ModuleAddEditModalButton from '../ModuleAddEditModalButton'
 
-// import ModuleDeleteModalButton from '../ModuleDeleteModalButton'
-
 const ModuleTable = ({ data, total, loading, pagination, reload }) => {
   const columns = [
     {
@@ -46,7 +44,6 @@ const ModuleTable = ({ data, total, loading, pagination, reload }) => {
       render: (record) => (
         <Space>
           <ModuleAddEditModalButton isEdit data={record} onSuccess={reload} />
-          {/* <ModuleDeleteModalButton {...item} /> */}
         </Space>
       ),
       className: 'min-w-[150px]',
@@ -54,14 +51,7 @@ const ModuleTable = ({ data, total, loading, pagination, reload }) => {
   ]
 
   return (
-    <Table
-      total={total}
-      pagination={pagination}
-      loading={loading}
-      columns={columns}
-      data={data}
-      hasEmpty
-    />
+    <Table total={total} pagination={pagination} loading={loading} columns={columns} data={data} />
   )
 }
 

@@ -4,7 +4,7 @@ import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 import sinon from 'sinon'
 
-import { tryParseJson } from '@/utils/helper'
+import { tryParseJson } from '@/utils/helper/functions'
 
 import { placeHolderData } from '@/services/placeholder-data'
 

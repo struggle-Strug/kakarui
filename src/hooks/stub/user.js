@@ -6,7 +6,7 @@ import sinon from 'sinon'
 
 import { API_ERROR_CODE, API_ERROR_MESSAGES } from '@/constants'
 
-import { tryParseJson } from '@/utils/helper'
+import { tryParseJson } from '@/utils/helper/functions'
 
 import { placeHolderData } from '@/services/placeholder-data'
 

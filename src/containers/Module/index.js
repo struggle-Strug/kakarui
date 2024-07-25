@@ -78,6 +78,8 @@ const ModuleContainer = () => {
     },
   ]
 
+  const searchOptions = getSearchOptions(moduleApiStub.getRawData(), ['name', 'description'])
+
   return (
     <Container title="モジュール管理">
       <div className="flex-between mb-5">

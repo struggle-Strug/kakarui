@@ -4,14 +4,17 @@ import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 import sinon from 'sinon'
 
-import { tryParseJson } from '@/utils/helper'
+import { tryParseJson } from '@/utils/helper/functions'
 
 import { placeHolderData } from '@/services/placeholder-data'
 
 const data = placeHolderData.module.module || []
+const dataDetail = placeHolderData.module_set_detail || {}
 
 const moduleApiStub = {
-  getModule: sinon.stub().callsFake((sort, search) => {
+  getRawData: () => data,
+
+  getModule: sinon.stub().callsFake((filter, sort, search) => {
     let filteredData = [...data]
 
     if (search) {
@@ -67,6 +70,10 @@ const moduleApiStub = {
     return Promise.resolve(filteredData)
   }),
 
+  getModuleById: sinon.stub().callsFake(() => {
+    return Promise.resolve(dataDetail)
+  }),
+
   addModule: sinon.stub().callsFake((newModule) => {
     data.push(newModule)
     return Promise.resolve(newModule)
@@ -81,14 +88,14 @@ const moduleApiStub = {
     return Promise.reject(new Error('Module not found'))
   }),
 
-  // deleteModule: sinon.stub().callsFake((moduleId) => {
-  //   const index = data.findIndex((module) => module.id === moduleId)
-  //   if (index !== -1) {
-  //     data.splice(index, 1)
-  //     return Promise.resolve()
-  //   }
-  //   return Promise.reject(new Error('User not found'))
-  // }),
+  deleteModule: sinon.stub().callsFake((moduleId) => {
+    const index = data.findIndex((module) => module.id === moduleId)
+    if (index !== -1) {
+      data.splice(index, 1)
+      return Promise.resolve()
+    }
+    return Promise.reject(new Error('User not found'))
+  }),
 }
 
 export default moduleApiStub

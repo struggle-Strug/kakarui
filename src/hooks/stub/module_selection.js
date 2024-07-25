@@ -8,20 +8,20 @@ import { tryParseJson } from '@/utils/helper/functions'
 
 import { placeHolderData } from '@/services/placeholder-data'
 
-const data = placeHolderData.module_setting.module_settings || []
+const data = placeHolderData.module_selection.moduleset || []
 
-const moduleSettingApiStub = {
+const moduleSetSelectionApiStub = {
   getRawData: () => data,
 
-  getData: sinon.stub().callsFake((filter, sort, search) => {
+  getModuleSetSelection: sinon.stub().callsFake((filter, sort, search) => {
     let filteredData = [...data]
 
     if (search) {
       const searchTerm = toLower(search)
 
-      filteredData = filteredData.filter((d) => {
-        const lowerName = toLower(d.property)
-        const lowerDescription = toLower(d.settings)
+      filteredData = filteredData.filter((module) => {
+        const lowerName = toLower(module.name)
+        const lowerDescription = toLower(module.description)
 
         return includes(lowerName, searchTerm) || includes(lowerDescription, searchTerm)
       })
@@ -63,18 +63,18 @@ const moduleSettingApiStub = {
       }
     } else {
       // sort default
-      filteredData = orderBy(filteredData, ['property', 'settings'], ['desc', 'asc'])
+      filteredData = orderBy(filteredData, ['update_date', 'name'], ['desc', 'asc'])
     }
 
     return Promise.resolve(filteredData)
   }),
 
-  createData: sinon.stub().callsFake((newModule) => {
+  createModuleSetSelection: sinon.stub().callsFake((newModule) => {
     data.push(newModule)
     return Promise.resolve(newModule)
   }),
 
-  updateData: sinon.stub().callsFake((moduleId, updatedModule) => {
+  updateModuleSetSelection: sinon.stub().callsFake((moduleId, updatedModule) => {
     const index = data.findIndex((module) => module.id === moduleId)
     if (index !== -1) {
       data[index] = { ...data[index], ...updatedModule }
@@ -83,7 +83,7 @@ const moduleSettingApiStub = {
     return Promise.reject(new Error('Module not found'))
   }),
 
-  deleteData: sinon.stub().callsFake((moduleId) => {
+  deleteModuleSetSelection: sinon.stub().callsFake((moduleId) => {
     const index = data.findIndex((module) => module.id === moduleId)
     if (index !== -1) {
       data.splice(index, 1)
@@ -93,4 +93,4 @@ const moduleSettingApiStub = {
   }),
 }
 
-export default moduleSettingApiStub
+export default moduleSetSelectionApiStub

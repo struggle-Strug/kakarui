@@ -14,9 +14,6 @@ const DeployContainer = () => {
   const [{ sort, search }] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
-    page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(30),
-    offset: parseAsInteger.withDefault(0),
   })
 
   const { data, filteredData, isLoading, isFetching, refetch } = useDeployQuery({ search, sort })
@@ -34,9 +31,6 @@ const DeployContainer = () => {
 
   return (
     <Container title="デプロイ管理">
-      <Head>
-        <title>デプロイ管理</title>
-      </Head>
       <div className="flex-between mb-5">
         <DeploySearchBox options={getSearchOptions(data, ['module_config_name'])} />
         <div className="flex gap-8">{renderActions}</div>

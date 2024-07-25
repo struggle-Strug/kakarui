@@ -12,7 +12,7 @@ import { ExternalLinkIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
 import { Button, ButtonIcon } from '@/components/ui'
 
-import { getSearchOptions } from '@/utils/helper'
+import { getSearchOptions } from '@/utils/helper/functions'
 
 import ModuleSettingTableForm from './ModuleSettingTableForm'
 
