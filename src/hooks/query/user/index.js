@@ -1,4 +1,5 @@
-import { isServer, useQuery } from '@tanstack/react-query'
+import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -6,8 +7,9 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, STALE_TIME, USER_LIST_KEY } from '@/constants'
+import { API, API_ERROR_MESSAGES, STALE_TIME, USER_LIST_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
+import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
@@ -87,4 +89,57 @@ export const useUserPermissions = () => {
   const permissions = organizationDetail?.authorized_apis || []
 
   return { permissions }
+}
+
+export const useUserCreate = ({ onSuccess } = {}) => {
+  const queryClient = useQueryClient()
+
+  const { organizationId } = useOrganizationQuery()
+  const { stubEnabled } = useStubEnabled()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (params) => {
+      const response = await Axios.post(API.USER.CREATE, params, { timeout: 60000 })
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, stubEnabled])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      const errorCode = get(error, 'response.data.error_code')
+      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
+      message.error(errorMess)
+    },
+  })
+
+  const doCreateUser = useDebouncedCallback(mutate)
+  return { doCreateUser, isPending, isSuccess }
+}
+
+export const useUserUpdate = ({ userId, onSuccess } = {}) => {
+  const queryClient = useQueryClient()
+
+  const { organizationId } = useOrganizationQuery()
+  const { stubEnabled } = useStubEnabled()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (params) => {
+      const response = await Axios.put(buildApiURL(API.USER.UPDATE, { user_id: userId }), params)
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, stubEnabled])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      const errorCode = get(error, 'response.data.error_code')
+      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
+      message.error(errorMess)
+    },
+  })
+
+  const doUpdateUser = useDebouncedCallback(mutate)
+
+  return { doUpdateUser, isPending, isSuccess }
 }

@@ -25,7 +25,8 @@ const ProjectSubMenuItem = memo(({ item, onClick }) => (
 const ProjectSubMenu = ({ data, loading, setProjectActive, onClose }) => {
   const [page, setPage] = useState(1)
 
-  const slicedData = data.slice(page - 1, page - 1 + DEFAULT_PAGE_SIZE_MENU)
+  const pageSize = (page - 1) * DEFAULT_PAGE_SIZE_MENU
+  const slicedData = data.slice(pageSize, pageSize + DEFAULT_PAGE_SIZE_MENU)
 
   const doSetProjectActive = useDebouncedCallback((item) => {
     setProjectActive(item)
@@ -43,13 +44,15 @@ const ProjectSubMenu = ({ data, loading, setProjectActive, onClose }) => {
       <Spin spinning={loading}>
         <div className="mt-3.5 pl-5 text-xl">
           {slicedData.map(renderItem)}
-          <Pagination
-            defaultCurrent={page}
-            pageSize={DEFAULT_PAGE_SIZE_MENU}
-            onChange={(newPage) => setPage(newPage)}
-            className="project-header mt-3.5 flex justify-end"
-            total={data.length * DEFAULT_PAGE_SIZE_MENU > data.length ? 30 : data.length}
-          />
+          <div className="mt-3.5 flex justify-end">
+            <Pagination
+              defaultCurrent={page}
+              pageSize={DEFAULT_PAGE_SIZE_MENU}
+              onChange={(newPage) => setPage(newPage)}
+              total={data.length}
+              showLessItems
+            />
+          </div>
         </div>
       </Spin>
     </div>

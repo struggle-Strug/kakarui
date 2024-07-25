@@ -15,7 +15,7 @@ import {
   STALE_TIME,
 } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
-import { useSyncLocalStorage } from '@/hooks/share'
+import { useDebouncedCallback, useSyncLocalStorage } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
@@ -23,7 +23,6 @@ import { buildApiURL } from '@/utils/helper/request'
 import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
 
-import { useDebouncedCallback } from '../../share'
 import { useOrganizationQuery } from '../organization'
 
 export const useProjectActive = () => {

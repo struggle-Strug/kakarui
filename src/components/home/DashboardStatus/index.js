@@ -1,5 +1,4 @@
-import { INTERVAL_5M } from '@/constants'
-import { useDeployQuery } from '@/hooks/query'
+import { useMyDeploy } from '@/hooks/query'
 
 import { ReloadIcon } from '@/components/icons'
 import { HeaderTitle } from '@/components/layout/dashboard'
@@ -8,13 +7,7 @@ import { Button } from '@/components/ui'
 import MyDeploymentTable from './MyDeploymentTable'
 
 const DashboardStatus = () => {
-  const { data, isLoading, isFetching, refetch } = useDeployQuery({
-    options: {
-      refetchInterval: INTERVAL_5M,
-    },
-  })
-
-  const slicedData = data.slice(0, 10)
+  const { data: myDeploys, isLoading, refetch } = useMyDeploy({ limit: 10 })
 
   return (
     <div
@@ -26,16 +19,12 @@ const DashboardStatus = () => {
         <Button
           label="リロード"
           icon={<ReloadIcon size={32} />}
-          onClick={() => refetch()}
+          onClick={() => refetch?.()}
           type="outline"
         />
       </div>
 
-      <MyDeploymentTable
-        data={slicedData}
-        total={slicedData.length}
-        loading={isLoading || isFetching}
-      />
+      <MyDeploymentTable data={myDeploys} total={myDeploys.length} loading={isLoading} />
     </div>
   )
 }

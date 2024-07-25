@@ -4,8 +4,8 @@ export const USER_STATUS = {
 }
 
 export const ACTIVE_STATUS = {
-  ENABLE: 1,
-  DISABLE: 0,
+  ENABLE: true,
+  DISABLE: false,
 }
 
 export const DEPLOY_STATUS = {

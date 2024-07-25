@@ -2,7 +2,6 @@ import random from 'lodash/random'
 
 import { Routes } from '@/constants'
 
-import { PlayIcon } from '@/components/icons'
 import { Link } from '@/components/ui'
 
 // DRAFT
