@@ -189,3 +189,56 @@ export const useUserUpdate = ({ userId, onSuccess } = {}) => {
 
   return { doUpdateUser, isPending, isSuccess }
 }
+
+export const useUserCreate = ({ onSuccess } = {}) => {
+  const queryClient = useQueryClient()
+
+  const { organizationId } = useOrganizationQuery()
+  const { stubEnabled } = useStubEnabled()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (params) => {
+      const response = await Axios.post(API.USER.CREATE, params, { timeout: 60000 })
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, stubEnabled])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      const errorCode = get(error, 'response.data.error_code')
+      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
+      message.error(errorMess)
+    },
+  })
+
+  const doCreateUser = useDebouncedCallback(mutate)
+  return { doCreateUser, isPending, isSuccess }
+}
+
+export const useUserUpdate = ({ userId, onSuccess } = {}) => {
+  const queryClient = useQueryClient()
+
+  const { organizationId } = useOrganizationQuery()
+  const { stubEnabled } = useStubEnabled()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (params) => {
+      const response = await Axios.put(buildApiURL(API.USER.UPDATE, { user_id: userId }), params)
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, stubEnabled])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      const errorCode = get(error, 'response.data.error_code')
+      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
+      message.error(errorMess)
+    },
+  })
+
+  const doUpdateUser = useDebouncedCallback(mutate)
+
+  return { doUpdateUser, isPending, isSuccess }
+}
