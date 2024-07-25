@@ -1,11 +1,10 @@
-import { Modal, Spin, message } from 'antd'
+import { Modal, Spin } from 'antd'
 
 import Head from 'next/head'
 
 import { ACTIVE_STATUS, USER_ROLE } from '@/constants'
-import { useLoadingSimulation } from '@/hooks/custom'
+import { useUserUpdate } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
-import userApiStub from '@/hooks/stub/user'
 
 import { EditIcon } from '@/components/icons'
 import { ButtonIcon } from '@/components/ui'
@@ -14,25 +13,24 @@ import UserForm from '../UserForm'
 
 const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
   const [open, onOpen, onClose] = useFlag()
-  const [loading, startLoading] = useLoadingSimulation()
+
+  const { doUpdateUser, isPending: updateLoading } = useUserUpdate({
+    userId: data?.entra_id,
+    onSuccess: () => {
+      onSuccess?.()
+      onClose()
+    },
+  })
 
   const onUpdateUser = async (values) => {
-    const updateData = {
-      ...values,
-      main_role: values.role || USER_ROLE.MEMBER,
-      enable: values.status === ACTIVE_STATUS.ENABLE.toString(),
-      update_date: new Date().toISOString(),
-    }
+    const { name, mail, company, status } = values || {}
 
-    try {
-      await userApiStub.updateUser(data.id, updateData)
-      startLoading(() => {
-        onSuccess?.()
-        onClose()
-      })
-    } catch (error) {
-      message.error(error?.message)
-    }
+    const role = values?.role === USER_ROLE.SYSTEM_ADMIN ? USER_ROLE.SYSTEM_ADMIN : null
+    const enable = status === ACTIVE_STATUS.ENABLE.toString()
+
+    const newUser = { name, mail, company, role, enable }
+
+    doUpdateUser(newUser)
   }
 
   return (
@@ -51,9 +49,16 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
             <title>ユーザー変更</title>
           </Head>
           <p className="px-12 text-lg font-light text-primary">ユーザ情報の変更を行います。</p>
-          <Spin spinning={loading}>
+          <Spin spinning={!!updateLoading}>
             <div className="p-12 font-light">
-              <UserForm isEdit {...props} data={data} onAddEdit={onUpdateUser} onClose={onClose} />
+              <UserForm
+                isEdit
+                {...props}
+                data={data}
+                onAddEdit={onUpdateUser}
+                loading={!!updateLoading}
+                onClose={onClose}
+              />
             </div>
           </Spin>
         </Modal>

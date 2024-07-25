@@ -11,13 +11,13 @@ import { Button } from '@/components/ui'
 
 import { FORM_INFO, userFormSchema, userValues } from '@/validations/userSchema'
 
-const UserForm = ({ onAddEdit, isEdit, data, onClose }) => {
+const UserForm = ({ onAddEdit, isEdit, data, onClose, loading }) => {
   const defaultValues = useMemo(
     () =>
       isEdit
         ? {
             ...data,
-            status: data.enable
+            status: data?.enable
               ? ACTIVE_STATUS.ENABLE.toString()
               : ACTIVE_STATUS.DISABLE.toString(),
           }
@@ -84,7 +84,7 @@ const UserForm = ({ onAddEdit, isEdit, data, onClose }) => {
           <Button type="default" className="min-w-[200px]" onClick={onClose}>
             <span className="font-semibold">{isEdit ? 'リセット' : 'キャンセル'}</span>
           </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
+          <Button type="primary" htmlType="submit" className="min-w-[200px]" loading={loading}>
             <span className="font-semibold">{isEdit ? ' 変更 ' : ' 招待 '}</span>
           </Button>
         </div>

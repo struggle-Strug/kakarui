@@ -1,48 +1,34 @@
-import { Modal, Spin, message } from 'antd'
+import { Modal, Spin } from 'antd'
 
 import Head from 'next/head'
 
-import { ACTIVE_STATUS, USER_ROLE } from '@/constants'
-import { useLoadingSimulation } from '@/hooks/custom'
+import { USER_ROLE } from '@/constants'
+import { useUserCreate } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
-import userApiStub from '@/hooks/stub/user'
 
 import { AddIcon } from '@/components/icons'
 import { Button } from '@/components/ui'
-
-import { uuidv4 } from '@/utils/helper/functions'
 
 import UserForm from '../UserForm'
 
 const UserAddModalButton = ({ children, onSuccess, ...props }) => {
   const [open, onOpen, onClose] = useFlag()
-  const [loading, startLoading] = useLoadingSimulation()
+
+  const { doCreateUser, isPending: createLoading } = useUserCreate({
+    onSuccess: () => {
+      onClose()
+      onSuccess?.()
+    },
+  })
 
   const onAddUser = async (values) => {
-    const newUser = {
-      id: uuidv4(),
-      organization_id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-      user_id: 'yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy',
-      create_user: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      create_date: new Date().toISOString(),
-      update_user: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
-      update_date: new Date().toISOString(),
-      role: USER_ROLE.MEMBER,
-      main_role: values.role || USER_ROLE.MEMBER,
-      ...values,
-      status: ACTIVE_STATUS.ENABLE.toString(),
-      enable: true,
-    }
+    const { name, mail, company } = values || {}
 
-    try {
-      await userApiStub.addUser(newUser)
-      startLoading(() => {
-        onSuccess?.()
-        onClose()
-      })
-    } catch (error) {
-      message.error(error?.message)
-    }
+    const role = values?.role === USER_ROLE.SYSTEM_ADMIN ? USER_ROLE.SYSTEM_ADMIN : null
+
+    const newUser = { name, mail, company, role }
+
+    doCreateUser(newUser)
   }
 
   return (
@@ -63,9 +49,14 @@ const UserAddModalButton = ({ children, onSuccess, ...props }) => {
           <p className="px-12 text-lg font-light text-primary">
             組織に招待するユーザの情報を入力してください。
           </p>
-          <Spin spinning={loading}>
+          <Spin spinning={!!createLoading}>
             <div className="p-12 pr-20 font-light">
-              <UserForm onAddEdit={onAddUser} {...props} onClose={onClose} />
+              <UserForm
+                onAddEdit={onAddUser}
+                {...props}
+                onClose={onClose}
+                loading={!!createLoading}
+              />
             </div>
           </Spin>
         </Modal>
