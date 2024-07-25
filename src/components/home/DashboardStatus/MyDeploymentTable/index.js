@@ -59,10 +59,10 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       ),
     },
     {
-      title: <div className="min-w-[154px]">プロジェクト</div>,
+      title: <div className="min-w-[200px]">プロジェクト</div>,
       dataIndex: 'project_name',
       render: (item) => (
-        <RowContent item={item || 'テストプロジェクト'} className="min-w-[154px] max-w-[400px]" />
+        <RowContent item={item || 'テストプロジェクト'} className="min-w-[200px] max-w-[400px]" />
       ),
     },
     {
@@ -119,7 +119,7 @@ const MyDeploymentTable = ({ data, total, loading }) => {
         pagination={false}
         bordered={false}
       />
-      <DeployShowMore />
+      {data.length > 0 ? <DeployShowMore /> : null}
     </section>
   )
 }

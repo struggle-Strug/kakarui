@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import base64url from 'base64url'
 import jwt from 'jsonwebtoken'
 import { setCookie } from 'nookies'
 
@@ -40,7 +41,7 @@ export default async function handler(req, res) {
       }
 
       // Encode the session token
-      const token = await encode({ token: sessionToken, secret })
+      const token = base64url.encode(await encode({ token: sessionToken, secret }))
 
       if (DEV) {
         // Set the session cookie
