@@ -11,7 +11,7 @@ import { Input, InputTextArea, UploadImageInput } from '@/components/form'
 import { AddIcon, EditIcon } from '@/components/icons'
 import { Button, ButtonIcon } from '@/components/ui'
 
-import { uuidv4 } from '@/utils/helper'
+import { uuidv4 } from '@/utils/helper/functions'
 
 import { moduleFormSchema, moduleValues } from '@/validations/moduleSchema'
 

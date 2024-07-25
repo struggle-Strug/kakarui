@@ -37,9 +37,6 @@ const ModuleSetContainer = () => {
 
   return (
     <Container title="モジュールセット管理">
-      <Head>
-        <title>モジュールセット管理</title>
-      </Head>
       <div className="flex-between mb-5">
         <div className="w-full">
           <SearchBar placeholder="モジュールセット名・説明" options={searchOptions} />

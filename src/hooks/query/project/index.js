@@ -124,7 +124,9 @@ export const useProjectCreate = ({ onSuccess } = {}) => {
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.PROJECT_CREATE)
     },
-    enabled: !!organizationId,
+    enabled: Boolean(!isServer && organizationId),
+    staleTime: STALE_TIME,
+    ...options,
   })
 
   const doCreateProject = useDebouncedCallback(mutate)

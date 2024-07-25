@@ -41,10 +41,6 @@ const ModuleConfigContainer = () => {
 
   return (
     <Container title="モジュール配置管理">
-      <Head>
-        <title>モジュール配置管理</title>
-      </Head>
-
       <div className="flex-between mb-5">
         <div className="w-full">
           <SearchBar placeholder="モジュール配置名・説明" options={searchOptions} />

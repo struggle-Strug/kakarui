@@ -3,11 +3,15 @@ import { Dropdown } from 'antd'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
+import { useGetMe, useOrganizationQuery } from '@/hooks/query'
 
 import { UsersLightIcon } from '@/components/icons'
 
 const SipMenu = () => {
   const router = useRouter()
+  const { organizationDetail } = useOrganizationQuery()
+  const { isMember } = useGetMe()
+
   const items = [
     {
       label: (
@@ -15,7 +19,7 @@ const SipMenu = () => {
           <UsersLightIcon size={40} />
           <div className="pl-1.5">
             <div>組織サブメニュー</div>
-            <div className="text-lg">SIP</div>
+            <div className="text-lg">{organizationDetail?.organization_name || ''}</div>
           </div>
         </div>
       ),
@@ -29,6 +33,7 @@ const SipMenu = () => {
         </div>
       ),
       onClick: () => router.push(Routes.USER),
+      disabled: isMember,
       key: '1',
     },
     {

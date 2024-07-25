@@ -5,7 +5,7 @@ import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 import sinon from 'sinon'
 
-import { tryParseJson } from '@/utils/helper'
+import { tryParseJson } from '@/utils/helper/functions'
 
 import projectList from '@/services/mock-data/project'
 import { placeHolderData } from '@/services/placeholder-data'
@@ -25,12 +25,12 @@ const dataDetail = placeHolderData.module_config_detail || {}
 //   return result
 // }
 
-let filteredData = [...data]
-
 const moduleConfigApiStub = {
   getRawData: () => data,
 
   getModuleConfig: sinon.stub().callsFake((filter, sort, search, projectId) => {
+    let filteredData = [...data] // Reset filteredData to the original data on each call
+
     if (projectId) {
       const currentProject =
         projectList?.find((project) => project.id === projectId) || projectList?.[0]
@@ -51,7 +51,8 @@ const moduleConfigApiStub = {
 
     if (search) {
       const searchTerm = toLower(search)
-
+      // eslint-disable-next-line no-console
+      console.log(searchTerm, 'searchkeyword')
       filteredData = filteredData.filter((module) => {
         const lowerName = toLower(module.name)
         const lowerDescription = toLower(module.description)
@@ -107,7 +108,7 @@ const moduleConfigApiStub = {
   }),
 
   createModuleConfig: sinon.stub().callsFake((newModule) => {
-    filteredData.push(newModule)
+    data.push(newModule)
     return Promise.resolve(newModule)
   }),
 

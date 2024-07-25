@@ -20,9 +20,6 @@ const UserContainer = () => {
 
   return (
     <Container title="ユーザ管理">
-      <Head>
-        <title>ユーザ管理</title>
-      </Head>
       <div className="flex-between mb-5">
         <UserSearchBox options={getSearchOptions(data, ['company', 'name', 'mail'])} />
         <UserAddModalButton onSuccess={onRefetch} />
