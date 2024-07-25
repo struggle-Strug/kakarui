@@ -1,27 +1,19 @@
-import { useState } from 'react'
-
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
 import { Table } from '@/components/ui'
 
-const ModuleSetSelectionTableForm = ({ data }) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
-
+const ModuleSetSelectionTableForm = ({ data, loading, total, setSelected }) => {
   const columns = [
     {
-      title: <ColumnSorter title={<span> モジュールセット名</span>} field="name" />,
+      title: <ColumnSorter title="モジュールセット名" field="name" />,
       dataIndex: 'name',
       className: 'min-w-[248px]',
-      render: (text) => (
-        <div className="flex w-[248px] cursor-pointer items-center gap-x-4 text-base">
-          <span>{text}</span>
-        </div>
-      ),
+      render: (item) => <RowContent item={item} className="max-w-[400px]" />,
     },
     {
       title: <ColumnSorter title="説明" field="description" />,
       dataIndex: 'description',
-      className: 'min-w-[440px]',
-      render: (item) => <RowContent item={item} className="max-w-[440px]" />,
+      className: 'min-w-[320px]',
+      render: (item) => <RowContent item={item} className="max-w-[400px]" />,
     },
     {
       title: <ColumnSorter title="登録日" field="create_date" />,
@@ -37,20 +29,21 @@ const ModuleSetSelectionTableForm = ({ data }) => {
     },
   ]
 
-  const onSelectChange = (newSelectedRowKeys) => {
-    setSelectedRowKeys(newSelectedRowKeys)
+  const onSelectChange = (newSelected) => {
+    setSelected(newSelected)
   }
 
   const rowSelection = {
     type: 'radio',
-    selectedRowKeys,
-    onChange: onSelectChange,
+    onSelect: onSelectChange,
   }
 
   return (
     <Table
       rowSelection={rowSelection}
-      pagination={{ defaultPageSize: 10 }}
+      total={total}
+      pagination={{ defaultPageSize: 30 }}
+      loading={loading}
       columns={columns}
       data={data}
     />

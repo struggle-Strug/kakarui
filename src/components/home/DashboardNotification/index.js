@@ -5,7 +5,7 @@ import { memo, useCallback } from 'react'
 import { FORMAT_STRING } from '@/constants'
 
 import { HeaderTitle } from '@/components/layout/dashboard'
-import { Link, TimeLine } from '@/components/ui'
+import { TimeLine } from '@/components/ui'
 
 import { cn } from '@/utils/helper/functions'
 
@@ -34,16 +34,16 @@ const data = [
   },
 ]
 
-const NoticeItemLink = (item) => {
-  if (item?.type === 'project') {
-    return (
-      <Link href={`/project/${item?.project?.id}`} className="font-semibold text-indigo-rainbow">
-        ロボコンプロジェクトについて見る &gt;
-      </Link>
-    )
-  }
-  return null
-}
+// const NoticeItemLink = (item) => {
+//   if (item?.type === 'project') {
+//     return (
+//       <Link href={`/project/${item?.project?.id}`} className="font-semibold text-indigo-rainbow">
+//         ロボコンプロジェクトについて見る &gt;
+//       </Link>
+//     )
+//   }
+//   return null
+// }
 
 const NoticeItem = memo((item) => {
   if (!item?.title) return null
@@ -53,17 +53,16 @@ const NoticeItem = memo((item) => {
       className="grid grid-flow-row"
       style={{ '-ms-word-break': 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
     >
-      <div className="flex flex-row text-nowrap text-base">
-        <div className="w-full max-w-[calc(18%)] whitespace-pre-wrap break-keep pl-[17px] pr-7 text-primary">
+      <div className="flex flex-row gap-2 text-nowrap text-base">
+        <div className="w-full max-w-[135px] whitespace-pre-wrap break-keep text-primary">
           {item?.created ? dayjs(item?.created).format(FORMAT_STRING.date_str) : <>&nbsp;</>}
         </div>
-        <div className="w-full max-w-[calc(18%)] whitespace-pre-wrap break-keep pr-[31px] text-primary">
+        <div className="w-full max-w-[170px] whitespace-pre-wrap break-keep text-primary">
           {item?.title}
         </div>
         <div className="grow ">
           <div className="flex flex-col gap-4 text-base">
             <div className="whitespace-pre-wrap break-keep text-primary">{item?.description}</div>
-            <NoticeItemLink {...item} />
           </div>
         </div>
       </div>
@@ -75,13 +74,24 @@ const renderDot = (
   <div className="h-5 w-5 rounded-full border-[6px] border-solid border-[#BFBFBF]">&nbsp;</div>
 )
 
+// const NotificationShowMore = () => (
+//   <div className="absolute bottom-4 right-16 w-full max-w-max cursor-not-allowed">
+//     <Link
+//       className="inline text-nowrap text-base text-indigo-rainbow transition-opacity hover:opacity-75"
+//       disabled
+//     >
+//       もっと見る…
+//     </Link>
+//   </div>
+// )
+
 const DashboardNotification = () => {
   const renderItems = useCallback(
     () =>
       [...data].map((item) => ({
         children: <NoticeItem {...item} />,
         dot: item?.title && renderDot,
-        className: cn('p-0 m-0', item?.title ? 'pb-[36px]' : 'last:-mb-[36px]'),
+        className: cn('p-0 m-0', item?.title ? '!pb-[46px] last:!pb-[0px] last:!-mb-[30px]' : ''),
       })),
     [data]
   )
@@ -93,7 +103,7 @@ const DashboardNotification = () => {
     >
       <HeaderTitle title="お知らせ" />
       <div
-        className="relative flex w-full flex-row items-stretch px-16 py-8"
+        className="relative flex w-full flex-row items-stretch px-9 py-8"
         style={{ border: '1px solid var(--dark-gray-3)', borderRadius: 20 }}
       >
         <TimeLine
@@ -102,9 +112,7 @@ const DashboardNotification = () => {
           total={data.length}
           items={renderItems()}
         />
-        <div className="absolute bottom-4 right-16 w-full max-w-max">
-          <a className=" inline text-nowrap text-base text-indigo-rainbow">もっと見る…</a>
-        </div>
+        {/* <NotificationShowMore /> */}
         {/* <p
           className=" whitespace-pre-wrap break-keep pb-16"
           style={{

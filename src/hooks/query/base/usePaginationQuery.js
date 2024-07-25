@@ -6,7 +6,9 @@ import { message } from 'antd'
 
 import { useEffect } from 'react'
 
-import { fetch, post, usePagination, useStateQueries } from '@/utils/helper'
+import { usePagination } from '@/utils/helper/pagination'
+import { useStateQueries } from '@/utils/helper/query'
+import { fetcher, post } from '@/utils/helper/request'
 
 export const usePaginationQuery = ({
   queryURL,
@@ -24,7 +26,7 @@ export const usePaginationQuery = ({
     queryKey: [queryKey, { page, pageSize, search, sort, ...query }],
     queryFn: () =>
       placeholderData ??
-      fetch(queryURL, {
+      fetcher(queryURL, {
         page: Math.max(page - 1, 0),
         pageSize,
         search,

@@ -2,7 +2,7 @@ import { Breadcrumb as AntdBreadcrumb } from 'antd'
 
 import { useRouter } from 'next/router'
 
-const Breadcrumbs = ({ breadcrumbs, projectName }) => {
+const Breadcrumbs = ({ breadcrumbs }) => {
   const router = useRouter()
   if (!breadcrumbs?.length) {
     return null
@@ -15,7 +15,7 @@ const Breadcrumbs = ({ breadcrumbs, projectName }) => {
   }
 
   const items = (breadcrumbs || []).map((b) => ({
-    title: b.title || projectName,
+    title: b.title,
     onClick: () => handleClickBreadcrumb(b?.href),
   }))
 

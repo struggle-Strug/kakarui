@@ -22,7 +22,8 @@ const ModuleConfigForm = ({ isEdit, onAddUpdate, data }) => {
   const router = useRouter()
 
   const [moduleSelectionId, setModuleSelectionId] = useState(null)
-  const [moduleSetSelectionId, setModuleSetSelectionId] = useState(null)
+  const [selectedModuleSet, setSelectedModuleSet] = useState(null)
+  const [showModuleSetSelectionModal, setShowModuleSetSelectionModal] = useState(false)
   const [selectedModule, setSelectedModule] = useState([])
 
   const defaultValues = useMemo(() => (isEdit ? { ...(data || {}) } : {}), [data])
@@ -43,6 +44,14 @@ const ModuleConfigForm = ({ isEdit, onAddUpdate, data }) => {
   const onBack = () => {
     router.replace(Routes.MODULE_CONFIG)
   }
+
+  const closeModuleSetSelectionModal = (value = null) => {
+    if (value) setSelectedModuleSet(value)
+    setShowModuleSetSelectionModal(false)
+  }
+
+  // eslint-disable-next-line no-console
+  console.log('selectedModuleSet', selectedModuleSet)
 
   const renderForm = (
     <FormProvider {...methods}>
@@ -75,7 +84,7 @@ const ModuleConfigForm = ({ isEdit, onAddUpdate, data }) => {
             type="outline"
             label="モジュールセット選択"
             icon={<ExternalLinkIcon size={46} />}
-            onClick={() => setModuleSetSelectionId('abc')}
+            onClick={() => setShowModuleSetSelectionModal(true)}
           />
           <Button
             type="outline"
@@ -114,9 +123,8 @@ const ModuleConfigForm = ({ isEdit, onAddUpdate, data }) => {
         onClose={() => setModuleSelectionId(null)}
       />
       <ModuleSetSelectionModal
-        open={!!moduleSetSelectionId}
-        moduleSetSelectionId={moduleSetSelectionId}
-        onClose={() => setModuleSetSelectionId(null)}
+        open={showModuleSetSelectionModal}
+        onClose={(value) => closeModuleSetSelectionModal(value)}
       />
     </>
   )

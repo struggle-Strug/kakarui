@@ -1,64 +1,47 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import Head from 'next/head'
-import { useEffect, useState } from 'react'
-
-import projectApiStub from '@/hooks/stub/project'
+import { useProjectQuery } from '@/hooks/query'
+import { useDebouncedCallback } from '@/hooks/share'
 
 import { AddIcon } from '@/components/icons'
 import { ProjectAddEditModal, ProjectSearchBox, ProjectTable } from '@/components/project'
 import { Button, Container } from '@/components/ui'
 
-import { getSearchOptions } from '@/utils/helper'
+import { getSearchOptions } from '@/utils/helper/functions'
 
 const ProjectContainer = () => {
-  const [project, setProject] = useState([])
-
-  const [query] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  const [{ sort, search }] = useQueryStates({
+    sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
 
-  const { filter, sort, search } = query || {}
+  const { data, filteredData, isLoading, isFetching, refetch } = useProjectQuery({ search, sort })
 
-  const onAddProjectSuccess = () => {
-    projectApiStub.getProjects(undefined, sort).then(setProject)
-  }
+  const onRefetch = useDebouncedCallback(refetch)
 
-  const reload = () => {
-    projectApiStub.getProjects(filter, sort, search).then(setProject)
-  }
-
-  useEffect(() => {
-    reload()
-  }, [filter, sort, search])
+  const renderActions = (
+    <ProjectAddEditModal onSuccess={onRefetch}>
+      <Button
+        icon={<AddIcon size={36} />}
+        label="新規プロジェクト作成"
+        onClick={() => null}
+        type="outline"
+      />
+    </ProjectAddEditModal>
+  )
 
   return (
     <Container title="プロジェクト管理">
-      <Head>
-        <title>プロジェクト管理</title>
-      </Head>
       <div className="flex-between mb-5">
-        <ProjectSearchBox options={getSearchOptions(project, ['name'])} />
-        <div>
-          <ProjectAddEditModal onSuccess={onAddProjectSuccess}>
-            <Button
-              icon={<AddIcon size={36} />}
-              label="新規プロジェクト作成"
-              onClick={() => null}
-              type="outline"
-            />
-          </ProjectAddEditModal>
-        </div>
+        <ProjectSearchBox options={getSearchOptions(data, ['name', 'description'])} />
+        <div>{renderActions}</div>
       </div>
 
       <ProjectTable
-        data={project}
-        pagination={{}}
-        loading={false}
-        total={project.length}
-        reload={reload}
+        data={filteredData}
+        loading={isLoading || isFetching}
+        total={filteredData.length}
+        reload={onRefetch}
       />
     </Container>
   )

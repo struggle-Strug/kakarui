@@ -2,7 +2,8 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { DEFAULT_PAGE_SIZE } from '@/constants'
 
-import { fetcher, post, useQueryInfinite, useStateQueries } from '@/utils/helper'
+import { useQueryInfinite, useStateQueries } from '@/utils/helper/query'
+import { fetcher, post } from '@/utils/helper/request'
 
 export const useInfinite = (key, { queryURL, variables = {}, options } = {}) => {
   const { select, getNextPageParam } = useQueryInfinite({ iteratee: options?.iteratee })

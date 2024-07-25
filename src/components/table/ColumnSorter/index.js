@@ -4,13 +4,15 @@ import { useCustomRowSort } from '@/hooks/custom'
 
 import { SortedDownIcon, SortedUpIcon } from '@/components/icons'
 
-const ColumnSorter = ({ title, field }) => {
+import { cn } from '@/utils/helper/functions'
+
+const ColumnSorter = ({ title, field, className }) => {
   const { handleSortChange, isAscending, isDescending } = useCustomRowSort({ field })
 
   return (
     <Space
       size={0}
-      className="flex min-w-max cursor-pointer items-center justify-between"
+      className={cn('flex min-w-max cursor-pointer items-center justify-between gap-4', className)}
       onClick={handleSortChange}
     >
       <span className="text-base">{title}</span>

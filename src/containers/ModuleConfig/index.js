@@ -1,19 +1,15 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import Head from 'next/head'
 import { useEffect, useState } from 'react'
 
 import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
 import moduleConfigApiStub from '@/hooks/stub/module_config'
 
-import {
-  ModuleConfigAddButton,
-  ModuleConfigSearchBox,
-  ModuleConfigTable,
-} from '@/components/module_config'
+import { ModuleConfigAddButton, ModuleConfigSearchBox } from '@/components/module_config'
+import { ModuleSetTable } from '@/components/module_set'
 import { Container } from '@/components/ui'
 
-import { getSearchOptions } from '@/utils/helper'
+import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleConfigContainer = () => {
   const [project] = useLocalStorageDefaultProject()
@@ -39,21 +35,17 @@ const ModuleConfigContainer = () => {
 
   return (
     <Container title="モジュール配置管理">
-      <Head>
-        <title>モジュール配置管理</title>
-      </Head>
-
       <div className="flex-between mb-5">
         <ModuleConfigSearchBox options={searchOptions} />
         <ModuleConfigAddButton />
       </div>
 
-      <ModuleConfigTable
+      <ModuleSetTable
         data={modulesConfigs}
         pagination={{}}
+        // refreshData={refreshData}
         loading={false}
         total={modulesConfigs.length + 1}
-        refreshData={refreshData}
       />
     </Container>
   )

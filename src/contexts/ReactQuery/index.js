@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { useState } from 'react'
 
-import { DEBUG, httpStatusCode } from '@/constants'
+import { DEV, httpStatusCode } from '@/constants'
 
 const RQ_DEFAULT_QUERIES_OPTIONS = {
   refetchOnWindowFocus: false,
@@ -36,7 +36,7 @@ export const ReactQueryProvider = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {DEBUG && <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />}
+      {DEV && <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />}
     </QueryClientProvider>
   )
 }

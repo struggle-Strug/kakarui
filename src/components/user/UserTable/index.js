@@ -56,7 +56,15 @@ const UserTable = ({ data, total, loading, reload }) => {
     },
   ]
 
-  return <Table total={total} pagination={{}} loading={loading} columns={columns} data={data} />
+  return (
+    <Table
+      total={total}
+      pagination={{ defaultPageSize: 10 }}
+      loading={loading}
+      columns={columns}
+      data={data}
+    />
+  )
 }
 
 export default UserTable

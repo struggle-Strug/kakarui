@@ -1,12 +1,11 @@
-import Head from 'next/head'
+import { HeadNext } from '@/components/common'
 
 const CheckPage = () => {
   return (
-    <div>
-      <Head>
-        <title>監視</title>
-      </Head>
-    </div>
+    <>
+      <HeadNext title="監視" />
+      <div />
+    </>
   )
 }
 

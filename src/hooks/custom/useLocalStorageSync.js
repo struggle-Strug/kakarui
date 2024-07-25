@@ -1,7 +1,7 @@
 // Source: https://usehooks.com/useLocalStorage
 import { useEffect, useState } from 'react'
 
-import projectApiStub from '../stub/project'
+// eslint-disable-next-line import/no-cycle
 
 export function useLocalStorageSync(key, initialValue) {
   // State to store our value
@@ -50,9 +50,8 @@ export function useLocalStorageSync(key, initialValue) {
           }
         } catch (error) {
           // If error also return initialValue
-          window.localStorage.clear(key)
         }
-      }, 1000)
+      }, 500)
     }
     return () => clearInterval(interval)
   })
@@ -62,24 +61,11 @@ export function useLocalStorageSync(key, initialValue) {
 export const useLocalStorageDefaultProject = () => {
   const [defaultProject, setDefaultProject] = useLocalStorageSync('defaultProject')
   const [projectName, setProjectName] = useState()
+  return [defaultProject, setDefaultProject, { projectName, setProjectName }]
+}
 
-  const handleRefresh = () => {
-    if (defaultProject) {
-      projectApiStub
-        .getProjects(undefined, undefined, undefined, defaultProject)
-        .then((projects) => {
-          setProjectName(projects?.[0]?.name || 'プロト1.5')
-        })
-    } else {
-      projectApiStub.getProjects().then((projects) => {
-        setDefaultProject(projects?.[0]?.id)
-        setProjectName(projects?.[0]?.name || 'プロト1.5')
-      })
-    }
-  }
-
-  useEffect(() => {
-    handleRefresh()
-  }, [defaultProject])
-  return [defaultProject, setDefaultProject, { projectName }, handleRefresh]
+export const useLocalStorageDefaultOrganization = () => {
+  const [defaultOrganization, setDefaultOrganization] = useLocalStorageSync('defaultOrganization')
+  const [organizationName, setOrganizationName] = useState()
+  return [defaultOrganization, setDefaultOrganization, { organizationName, setOrganizationName }]
 }

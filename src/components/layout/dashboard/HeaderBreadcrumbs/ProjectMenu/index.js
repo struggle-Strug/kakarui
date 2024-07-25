@@ -2,8 +2,10 @@ import { Dropdown } from 'antd'
 
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import { Assets, Routes } from '@/constants'
+import { useProjectActive, useProjectQuery } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Breadcrumbs } from '@/components/common'
@@ -11,15 +13,22 @@ import { ProjectAddEditModal } from '@/components/project'
 
 import ProjectSubMenu from './ProjectSubMenu'
 
-const ProjectMenu = ({ projectName, setDefaultProject = () => {} }) => {
+const ProjectMenu = ({ breadcrumbs }) => {
   const router = useRouter()
+
   const [open, onOpen, onClose] = useFlag()
 
-  const breadcrumbs = [
-    // { key: 'robocon', title: 'ロボコン2024' },
-    // { key: 'team_name', title: 'Team Eagle' },
-    { key: 'prototype', title: projectName },
-  ]
+  const { data, isLoading } = useProjectQuery({
+    sort: JSON.stringify([{ field: 'create_date', value: 'asc' }]),
+  })
+
+  const { projectActive, setProjectActive } = useProjectActive()
+
+  useEffect(() => {
+    if (!projectActive?.name && data?.[0]?.name) {
+      setProjectActive(data?.[0])
+    }
+  }, [data])
 
   const items = [
     {
@@ -60,10 +69,10 @@ const ProjectMenu = ({ projectName, setDefaultProject = () => {} }) => {
     {
       label: (
         <ProjectSubMenu
-          setDefaultProject={(res) => {
-            setDefaultProject(res)
-            onClose()
-          }}
+          data={data}
+          loading={isLoading}
+          setProjectActive={setProjectActive}
+          onClose={onClose}
         />
       ),
       onClick: ({ domEvent: event }) => {

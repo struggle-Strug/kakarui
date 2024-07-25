@@ -1,4 +1,4 @@
-import { cn } from '@/utils/helper'
+import { cn } from '@/utils/helper/functions'
 
 /**
  * A component that renders a header with an optional icon, subtitle, and extra content.

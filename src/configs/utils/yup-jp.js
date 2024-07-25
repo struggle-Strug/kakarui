@@ -19,7 +19,8 @@ export const string = {
   max: ({ label, max }) => `${label ? `${label}は` : ''}${max}文字以下を入力してください。`,
   matches: ({ label, regex }) =>
     `${label ? `${label}は` : ''}以下の形式で入力してください: ${regex}。`,
-  email: ({ label }) => `${label ? `${label}には` : ''}正しいメールアドレスを入力してください。`,
+  email: ({ label }) =>
+    `${label ? `${label}には` : ''}メールアドレスの形式を正しく入力してください。`,
   url: ({ label }) => `${label ? `${label}には` : ''}正しいURLを入力してください。`,
   uuid: ({ label }) => `${label ? `${label}には` : ''}正しいUUIDを入力してください。`,
   trim: ({ label }) => `${label ? `${label}の` : ''}前後の空白を削除してください。`,

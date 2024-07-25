@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { APP_WIDTH_SIDER } from '@/configs/theme'
 
-import { getMenuHref, getMenuItems } from '@/utils/helper'
+import { getMenuHref, getMenuItems } from '@/utils/helper/menu'
 
 import RoutesTree from '@/RoutesTree'
 

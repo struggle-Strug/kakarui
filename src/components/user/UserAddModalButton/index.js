@@ -10,7 +10,7 @@ import userApiStub from '@/hooks/stub/user'
 import { AddIcon } from '@/components/icons'
 import { Button } from '@/components/ui'
 
-import { uuidv4 } from '@/utils/helper'
+import { uuidv4 } from '@/utils/helper/functions'
 
 import UserForm from '../UserForm'
 

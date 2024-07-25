@@ -1,7 +1,6 @@
 import { Avatar, Layout } from 'antd'
 
 import { APP_HEIGHT_HEADER } from '@/configs/theme'
-import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
 
 import { UserIcon } from '@/components/icons'
 
@@ -9,9 +8,6 @@ import Logo from '../../common/Logo'
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs'
 
 const Header = () => {
-  // const { doLogout } = useLogout()
-  const [project, setDefaultProject, { projectName }] = useLocalStorageDefaultProject()
-
   // const items = [
   //   {
   //     label: 'ログアウト',
@@ -29,11 +25,7 @@ const Header = () => {
 
   const renderBreadcrumbs = (
     <div className="flex-1">
-      <HeaderBreadcrumbs
-        project={project}
-        projectName={projectName}
-        setDefaultProject={setDefaultProject}
-      />
+      <HeaderBreadcrumbs />
     </div>
   )
 

@@ -2,7 +2,8 @@ import { useMemo } from 'react'
 
 import { FORMAT_STRING } from '@/constants'
 
-import { cn, formatDate } from '@/utils/helper'
+import { formatDate } from '@/utils/helper/dayjs'
+import { cn } from '@/utils/helper/functions'
 
 const RowDate = ({ item, unit = FORMAT_STRING.date_str, className = '' }) => {
   const date = useMemo(() => {

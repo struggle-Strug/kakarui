@@ -1,11 +1,11 @@
-/* eslint-disable no-unused-vars */
 import { Result, Space, Spin } from 'antd'
 
 import { useRouter } from 'next/router'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 
-import { USER_ROLE } from '@/constants'
-import { useAuth, useGetMe } from '@/hooks/query'
+import { MEMBER_ROLE_BLOCKED_PAGES } from '@/constants'
+import { useStubEnabled } from '@/hooks/custom'
+import { useAuth, useGetMe, useOrganizationQuery } from '@/hooks/query'
 
 import { Button } from '@/components/ui'
 
@@ -25,31 +25,34 @@ const AuthorizationCheck = ({ children }) => {
 
   const { loading } = useAuth()
 
-  const MEMBER_ROUTES = [
-    /^\/user-manage$/,
-    /^\/user-invite$/,
-    /^\/user$/,
-    /^\/user-change$/,
-    /^\/deploy-manage$/,
-  ]
-  const { data: me, isError, isLoading, isFetched, isSuccess } = useGetMe()
+  const { data: me, isError, isLoading, isFetched, isSuccess, ...query } = useGetMe()
+  const { isSystemAdmin, isOrgAdmin, isMember, isDeployAdmin } = query || {}
 
-  const isDeployAdmin = me?.user?.organizations?.some(
-    (organization) => organization?.sub_role === USER_ROLE.DEPLOY_ADMIN
-  )
-  const isMember =
-    me?.user?.organizations?.some((organization) =>
-      [USER_ROLE.MEMBER, USER_ROLE.ORG_ADMIN].includes(organization?.main_role)
-    ) || me?.user?.role === USER_ROLE.SYSTEM_ADMIN
+  const { setOrganizations } = useOrganizationQuery()
+  const { stubEnabled } = useStubEnabled()
 
-  const isPrivateRoute = MEMBER_ROUTES.some((regexp) => regexp.test(router.pathname))
+  useEffect(() => {
+    const _organizations = me?.organizations || []
 
-  const isAuthorized = isMember || isDeployAdmin
-  if (isLoading || isError || loading) {
+    if (!isLoading && isSuccess) {
+      setOrganizations(_organizations)
+    }
+  }, [me?.organizations, isError, isLoading, isSuccess])
+
+  // --- permission check --
+  const isPermission = useMemo(() => {
+    if (isMember && MEMBER_ROLE_BLOCKED_PAGES.includes(router.pathname)) return false
+
+    return true
+  }, [router.pathname, isSystemAdmin, isOrgAdmin, isDeployAdmin, isMember])
+
+  const isAuthorized = isSystemAdmin || isOrgAdmin || isMember || isDeployAdmin
+
+  if ((isLoading || loading || isError) && !stubEnabled) {
     return <Spin className="w-full" />
   }
 
-  if (!isAuthorized && isPrivateRoute && !isMember && isFetched && isSuccess) {
+  if (!isAuthorized || (isFetched && isSuccess && !isPermission)) {
     return (
       <section className="flex-center size-full">
         <Result

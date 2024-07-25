@@ -1,5 +1,3 @@
-import { toLower } from 'lodash'
-
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
@@ -21,19 +19,21 @@ export default function MyApp({ Component, pageProps }) {
 
   const isAuthPage = router.pathname === Routes.AUTH.LOGIN
 
-  const isPuclicPage = toLower(router.pathname) === toLower(Routes.CHECK)
+  const isPublicPage = router.pathname === Routes.CHECK
+
   const layout = useCallback(
     (children) => {
-      if (isPuclicPage) {
+      if (isPublicPage) {
         return children
       }
+
       if (isAuthPage) {
         return <AuthLayout>{children}</AuthLayout>
       }
 
       return <DashboardLayout>{children}</DashboardLayout>
     },
-    [isAuthPage, isPuclicPage, router.pathname]
+    [isAuthPage, isPublicPage, router.pathname]
   )
 
   return (

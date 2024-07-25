@@ -1,29 +1,21 @@
 import { Layout } from 'antd'
 
-import { forwardRef, useMemo } from 'react'
+import { forwardRef } from 'react'
 
-const Container = ({ title, helper, extra, children, className, style }, ref) => {
-  const renderHelper = useMemo(
-    () => (
-      <span style={{ color: '#8A7774' }} className="ml-2.5 text-sm">
-        {helper}
-      </span>
-    ),
-    [helper]
-  )
+import HeadNext from '@/components/common/HeadNext'
 
+const Container = ({ meta = true, title, children, className, style }, ref) => {
   return (
-    <Layout ref={ref} {...{ style, className }}>
-      <header className="mb-6 flex items-center justify-between">
-        <div className="text-lg font-semibold text-dark-gray-3">
-          {title}
-          {helper ? renderHelper : null}
-        </div>
-        {extra}
-      </header>
+    <>
+      {!!meta && title ? <HeadNext title={title} {...meta} /> : null}
 
-      <Layout.Content>{children}</Layout.Content>
-    </Layout>
+      <Layout ref={ref} {...{ style, className }}>
+        <header className="mb-6 flex items-center justify-between">
+          {title ? <div className="text-lg font-semibold text-dark-gray-3">{title}</div> : null}
+        </header>
+        <Layout.Content>{children}</Layout.Content>
+      </Layout>
+    </>
   )
 }
 

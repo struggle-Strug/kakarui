@@ -83,14 +83,26 @@ const ModuleSetForm = ({ isEdit, onAddUpdate, data }) => {
           data={data?.moduleset_modules || placeHolderData.module_set_detail.moduleset_modules}
         />
 
-        <Space className="flex-end mt-12 gap-x-4">
-          <Button type="default" className="min-w-[200px]" onClick={onBack}>
-            <span className="font-semibold">キャンセル</span>
-          </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
-            <span className="font-semibold"> {isEdit ? '保存' : '登録'} </span>
-          </Button>
-        </Space>
+        {isEdit && (
+          <Space className="flex-end mt-12 gap-x-4">
+            <Button type="default" className="min-w-[200px]" onClick={onBack}>
+              <span className="font-semibold">キャンセル</span>
+            </Button>
+            <Button type="primary" htmlType="submit" className="min-w-[200px]">
+              <span className="font-semibold">保存</span>
+            </Button>
+          </Space>
+        )}
+        {!isEdit && (
+          <Space className="flex-end mt-12 gap-x-4">
+            <Button type="primary" htmlType="submit" className="min-w-[200px]">
+              <span className="font-semibold">登録</span>
+            </Button>
+            <Button type="default" className="min-w-[200px]" onClick={onBack}>
+              <span className="font-semibold">キャンセル</span>
+            </Button>
+          </Space>
+        )}
       </Form>
     </FormProvider>
   )

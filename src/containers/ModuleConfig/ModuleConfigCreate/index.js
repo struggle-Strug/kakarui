@@ -1,6 +1,5 @@
 import { Spin } from 'antd'
 
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
@@ -10,7 +9,7 @@ import moduleConfigApiStub from '@/hooks/stub/module_config'
 import { ModuleConfigForm } from '@/components/module_config'
 import { Container } from '@/components/ui'
 
-import { uuidv4 } from '@/utils/helper'
+import { uuidv4 } from '@/utils/helper/functions'
 
 const ModuleConfigCreateContainer = () => {
   const router = useRouter()
@@ -38,9 +37,6 @@ const ModuleConfigCreateContainer = () => {
 
   return (
     <Container title="モジュール配置設定">
-      <Head>
-        <title>モジュール配置設定</title>
-      </Head>
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
         <ModuleConfigForm onAddUpdate={onModuleConfigCreate} />

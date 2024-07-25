@@ -1,23 +1,21 @@
-import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 
-import deployApiStub from '@/hooks/stub/deploy'
+import { useDeployQuery } from '@/hooks/query'
 
 import { Container } from '@/components/ui'
 
 const MovieShowDetailContainer = ({ projectId }) => {
   const [detail, setDetail] = useState()
 
+  const { getDeployDetail } = useDeployQuery()
+
   useEffect(() => {
-    deployApiStub.getDeployById(projectId).then(setDetail)
+    setDetail(getDeployDetail(projectId))
   }, [projectId])
 
   return (
     <Container title="ログ表示(動画)">
-      <Head>
-        <title>ログ表示(動画)</title>
-      </Head>
       <div className="player-wrapper">
         <ReactPlayer
           url={detail?.execute_result_url}

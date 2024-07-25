@@ -17,9 +17,10 @@ export function buildURL(url, query) {
   return _url
 }
 
-export const fetch = async (URL, query) => {
-  const response = await Axios.get(buildURL(URL, query))
-  return response.data
+export function buildApiURL(endpoint, params) {
+  return Object.keys(params).reduce((url, key) => {
+    return url.replace(`{${key}}`, params[key])
+  }, endpoint)
 }
 
 export const fetcher = async ({ url, query } = {}) => {

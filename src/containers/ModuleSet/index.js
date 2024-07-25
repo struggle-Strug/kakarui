@@ -1,47 +1,33 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import Head from 'next/head'
-import { useEffect, useState } from 'react'
-
-import moduleSetApiStub from '@/hooks/stub/module_set'
+import { useModuleSetQuery } from '@/hooks/query'
 
 import { ModuleSetAddButton, ModuleSetSearchBox, ModuleSetTable } from '@/components/module_set'
 import { Container } from '@/components/ui'
 
-import { getSearchOptions } from '@/utils/helper'
+import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleSetContainer = () => {
-  const [moduleSets, setModuleSets] = useState([])
-
-  const [query] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  const [{ sort, search }] = useQueryStates({
+    sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
 
-  const { filter, sort, search } = query || {}
+  const { data, filteredData, isLoading, isFetching } = useModuleSetQuery({ search, sort })
 
-  useEffect(() => {
-    moduleSetApiStub.getModuleSet(filter, sort, search).then(setModuleSets)
-  }, [filter, sort, search])
-
-  const searchOptions = getSearchOptions(moduleSetApiStub.getRawData(), ['name', 'description'])
+  const searchOptions = getSearchOptions(data, ['name'])
 
   return (
     <Container title="モジュールセット管理">
-      <Head>
-        <title>モジュールセット管理</title>
-      </Head>
       <div className="flex-between mb-5">
         <ModuleSetSearchBox options={searchOptions} />
         <ModuleSetAddButton label="" />
       </div>
 
       <ModuleSetTable
-        data={moduleSets}
-        pagination={{}}
-        loading={false}
-        total={moduleSets.length + 1}
+        data={filteredData}
+        loading={isLoading || isFetching}
+        total={filteredData.length}
       />
     </Container>
   )

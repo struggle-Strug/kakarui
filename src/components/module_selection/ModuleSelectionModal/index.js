@@ -1,21 +1,37 @@
 import { Form, Modal, Spin } from 'antd'
+import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useLoadingSimulation } from '@/hooks/custom'
+import moduleSetSelectionApiStub from '@/hooks/stub/module_selection'
 
 import { SearchBar } from '@/components/layout/dashboard'
 import { Button } from '@/components/ui'
 
-import { getSearchOptions } from '@/utils/helper'
+import { getSearchOptions } from '@/utils/helper/functions'
 
-import data from '@/services/mock-data/module_selection_set.json'
-
+// import data from '@/services/mock-data/module_selection_set.json'
 import ModuleSelectionTableForm from './ModuleSelectionTableForm'
 
 const ModuleSelectionModal = ({ open, onClose }) => {
   const [loading, startLoading] = useLoadingSimulation()
+  const [data, setData] = useState([])
+
+  const [{ filter, sort, search }] = useQueryStates({
+    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
+    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+    search: parseAsString,
+  })
+
+  const reload = () => {
+    moduleSetSelectionApiStub.getModuleSetSelection(filter, sort, search).then(setData)
+  }
+
+  useEffect(() => {
+    reload()
+  }, [filter, sort, search])
 
   const defaultValues = useMemo(() => ({}), [])
 

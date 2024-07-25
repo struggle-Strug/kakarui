@@ -6,7 +6,7 @@ import { ButtonIcon, Table } from '@/components/ui'
 
 import ProjectAddEditModal from '../ProjectAddEditModal'
 
-const ProjectTable = ({ data, total, loading, pagination, reload = () => null }) => {
+const ProjectTable = ({ data, total, loading, reload }) => {
   const columns = [
     {
       title: <ColumnSorter title="プロジェクト名" field="name" />,
@@ -34,7 +34,7 @@ const ProjectTable = ({ data, total, loading, pagination, reload = () => null })
       title: <span className="text-base">操作</span>,
       render: (record) => (
         <Space>
-          <ProjectAddEditModal isEdit data={record} onSuccess={reload}>
+          <ProjectAddEditModal isEdit data={record} onSuccess={() => reload?.()}>
             <ButtonIcon icon={<EditIcon size={32} />} onClick={() => null} />
           </ProjectAddEditModal>
         </Space>
@@ -42,16 +42,7 @@ const ProjectTable = ({ data, total, loading, pagination, reload = () => null })
     },
   ]
 
-  return (
-    <Table
-      total={total}
-      pagination={pagination}
-      loading={loading}
-      columns={columns}
-      data={data}
-      hasEmpty
-    />
-  )
+  return <Table total={total} pagination={{}} loading={loading} columns={columns} data={data} />
 }
 
 export default ProjectTable

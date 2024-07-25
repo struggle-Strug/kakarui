@@ -1,75 +1,39 @@
 /* eslint-disable camelcase */
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 import { Assets } from '@/constants'
+import { useOrganizationQuery, useProjectActive } from '@/hooks/query'
 
 import { Breadcrumbs } from '@/components/common'
 
 import ProjectMenu from './ProjectMenu'
 import SipMenu from './SipMenu'
 
-const generateBreadcrumbs = (_, params) => {
-  // const { project, robocon_year, team_name, prototype, device } = router.query
+const HeaderBreadcrumbs = () => {
+  const { organizationName } = useOrganizationQuery()
+  const { projectActive } = useProjectActive()
 
-  const breadcrumbs = [{ key: 'prototype', title: params?.projectName || '' }]
-
-  // if (project) {
-  //   breadcrumbs.push({ key: 'project', title: project })
-  // }
-
-  // if (robocon_year) {
-  //   breadcrumbs.push({ key: 'robocon', title: robocon_year })
-  // }
-
-  // if (team_name) {
-  //   breadcrumbs.push({ key: 'team_name', title: team_name })
-  // }
-
-  // if (prototype) {
-  //   breadcrumbs.push({ key: 'prototype', title: prototype })
-  // }
-
-  // if (device) {
-  //   breadcrumbs.push({ key: 'device', title: device })
-  // }
-
-  // // Add default values if no queries are present
-  // if (breadcrumbs.length === 0) {
-  //   breadcrumbs.push(
-  //     { key: 'robocon', title: 'ロボコン2024' },
-  //     { key: 'team_name', title: 'Team Eagle' },
-  //     { key: 'prototype', title: 'プロト1.5' }
-  //   )
-  // }
-
-  return breadcrumbs
-}
-
-const HeaderBreadcrumbs = ({ project, projectName, setDefaultProject }) => {
-  const router = useRouter()
   const breadcrumbs = useMemo(
-    () => generateBreadcrumbs(router, { project, projectName }),
-    [router.query, project, projectName]
+    () => [
+      // { key: 'robocon', title: 'ロボコン2024' },
+      // { key: 'team_name', title: 'Team Eagle' },
+      { key: 'prototype', title: projectActive?.name || '' },
+    ],
+    [projectActive?.name]
   )
 
   const renderOrganizationName = (
     <>
       <SipMenu />
-      <div>SIP</div>
+      <div>{organizationName}</div>
     </>
   )
 
   const renderBreadcrumbs = (
     <>
-      <ProjectMenu
-        breadcrumbs={breadcrumbs}
-        project={project}
-        projectName={projectName}
-        setDefaultProject={setDefaultProject}
-      />
-      <Breadcrumbs breadcrumbs={breadcrumbs} projectName={projectName} />
+      <ProjectMenu breadcrumbs={breadcrumbs} />
+      <Breadcrumbs breadcrumbs={breadcrumbs} />
     </>
   )
 

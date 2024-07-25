@@ -1,49 +1,36 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import Head from 'next/head'
-import { useEffect, useState } from 'react'
-
-import userApiStub from '@/hooks/stub/user'
+import { useUserQuery } from '@/hooks/query'
+import { useDebouncedCallback } from '@/hooks/share'
 
 import { Container } from '@/components/ui'
 import { UserAddModalButton, UserSearchBox, UserTable } from '@/components/user'
 
-import { getSearchOptions } from '@/utils/helper'
+import { getSearchOptions } from '@/utils/helper/functions'
 
 const UserContainer = () => {
-  const [users, setUsers] = useState([])
-
-  const [query] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  const [{ sort, search }] = useQueryStates({
+    sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
 
-  const { filter, sort, search } = query || {}
+  const { data, filteredData, isLoading, isFetching, refetch } = useUserQuery({ search, sort })
 
-  const reload = () => {
-    userApiStub.getUsers(filter, sort, search).then(setUsers)
-  }
-
-  const onAddUserSuccess = () => {
-    reload()
-  }
-
-  useEffect(() => {
-    reload()
-  }, [filter, sort, search])
+  const onRefetch = useDebouncedCallback(refetch)
 
   return (
     <Container title="ユーザ管理">
-      <Head>
-        <title>ユーザ管理</title>
-      </Head>
       <div className="flex-between mb-5">
-        <UserSearchBox options={getSearchOptions(users, ['company', 'name', 'mail'])} />
-        <UserAddModalButton onSuccess={onAddUserSuccess} />
+        <UserSearchBox options={getSearchOptions(data, ['company', 'name', 'mail'])} />
+        <UserAddModalButton onSuccess={onRefetch} />
       </div>
 
-      <UserTable data={users} loading={false} total={users.length} reload={reload} />
+      <UserTable
+        data={filteredData}
+        loading={isLoading || isFetching}
+        total={filteredData.length}
+        reload={onRefetch}
+      />
     </Container>
   )
 }

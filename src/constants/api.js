@@ -25,7 +25,7 @@ export default {
     DETAIL: '/users/{user_id}',
     CREATE: '/users/user_create', // POST
     UPDATE: '/users/{user_id}', // PUT
-    BY_ORGANIZATION: '/organizations/{organization_id}/users/',
+    BY_ORGANIZATION: '/organizations/{organization_id}/users',
   },
 
   MODULE: {
@@ -42,7 +42,7 @@ export default {
   },
 
   MODULE_SET: {
-    LIST: '/organizations/{organization_id}/modules',
+    LIST: '/organizations/{organization_id}/module-sets',
     CREATE: '/organizations/{organization_id}/module-sets', // POST
     UPDATE: '/organizations/{organization_id}/module-sets/{module_set_id}', // PUT
   },

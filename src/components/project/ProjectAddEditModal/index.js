@@ -5,20 +5,29 @@ import Head from 'next/head'
 import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useLoadingSimulation } from '@/hooks/custom'
+import { useProjectCreate, useProjectUpdate } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
-import projectApiStub from '@/hooks/stub/project'
 
 import { Input, InputTextArea } from '@/components/form'
 import { Button } from '@/components/ui'
-
-import { uuidv4 } from '@/utils/helper'
 
 import { FORM_INFO, projectFormSchema, projectValues } from '@/validations/projectSchema'
 
 const ProjectForm = ({ isEdit, data, onSuccess, onClose }) => {
   const defaultValues = useMemo(() => (isEdit ? data : projectValues), [data, isEdit])
-  const [loading, startLoading] = useLoadingSimulation()
+  const { doCreateProject, isPending: createLoading } = useProjectCreate({
+    onSuccess: () => {
+      onClose()
+      onSuccess?.()
+    },
+    message,
+  })
+  const { doUpdateProject, isPending: updateLoading } = useProjectUpdate({
+    onSuccess: () => {
+      onClose()
+    },
+    message,
+  })
 
   const methods = useForm({
     mode: 'onChange',
@@ -30,47 +39,13 @@ const ProjectForm = ({ isEdit, data, onSuccess, onClose }) => {
     methods.reset(defaultValues)
   }, [defaultValues])
 
-  const updateProject = async (values) => {
-    const updateData = {
-      ...values,
-      update_date: new Date().toISOString(),
-    }
-    try {
-      await projectApiStub.updateProject(data.id, updateData)
-      startLoading(() => {
-        onSuccess?.()
-        onClose()
-      })
-    } catch (error) {
-      message.error(error?.message)
-    }
-  }
-
   const onSubmit = async (values) => {
     if (isEdit) {
-      updateProject(values)
+      const { name, description, id } = values
+      doUpdateProject({ name, description, id })
       return
     }
-    const newProject = {
-      id: uuidv4(),
-      organization_id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-      name: 'projectB',
-      description: 'This is robot development projectB.',
-      create_user: 'user',
-      create_date: new Date().toISOString(),
-      update_user: 'user',
-      update_date: new Date().toISOString(),
-      ...values,
-    }
-    try {
-      await projectApiStub.createProject(newProject)
-      startLoading(() => {
-        onSuccess?.()
-        onClose()
-      })
-    } catch (error) {
-      message.error(error?.message)
-    }
+    doCreateProject(values)
   }
 
   const renderForm = (
@@ -109,7 +84,7 @@ const ProjectForm = ({ isEdit, data, onSuccess, onClose }) => {
     </FormProvider>
   )
 
-  return <Spin spinning={loading}>{renderForm}</Spin>
+  return <Spin spinning={!!createLoading || !!updateLoading}>{renderForm}</Spin>
 }
 
 const ProjectAddEditModal = ({ children, isEdit, ...props }) => {

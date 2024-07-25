@@ -15,3 +15,6 @@ export const FORMAT_STRING = {
   time_tomorrow: 'HH:mm 今日',
   time_month_day: 'MMM DD',
 }
+
+export const INTERVAL_15S = 15_000 // 15s
+export const INTERVAL_5M = 300_000 // 5minute

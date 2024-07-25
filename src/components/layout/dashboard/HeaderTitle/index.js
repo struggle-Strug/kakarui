@@ -1,6 +1,6 @@
 import { Typography } from 'antd'
 
-import { cn } from '@/utils/helper'
+import { cn } from '@/utils/helper/functions'
 
 const { Title } = Typography
 

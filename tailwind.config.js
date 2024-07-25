@@ -58,8 +58,8 @@ module.exports = {
         'indigo-rainbow': 'var(--indigo-rainbow)',
       },
       textColor: {
-        base: 'var(--text-base)',
-        sub: 'var(--text-sub)',
+        primary: 'var(--primary)',
+        sub: 'var(--accent)',
       },
       boxShadow: {
         media: 'var(--media-shadow)',

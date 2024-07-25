@@ -28,7 +28,7 @@ const DeployStatus = ({ status, className, contentClassName }) => {
           statusData?.style
         )}
       />
-      <div className={cn('ml-[64px]', contentClassName)}>{statusData?.content}</div>
+      <div className={cn('ml-3', contentClassName)}>{statusData?.content}</div>
     </div>
   )
 }

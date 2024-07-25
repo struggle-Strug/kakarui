@@ -34,10 +34,12 @@ const SearchBar = ({ placeholder = '', options = [] }) => {
       } else {
         setSearch(keyword)
         const lowerKeyword = toLower(keyword)
+        // WARNING: This is a customer request, please do not modify - (2024/07/20)
         const filterOption = options.filter((opt) => {
           const lowerValue = toLower(opt.value)
-          return lowerValue.includes(lowerKeyword)
+          return lowerValue.startsWith(lowerKeyword)
         })
+
         setOptionList(filterOption)
       }
     },

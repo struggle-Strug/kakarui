@@ -1,5 +1,6 @@
 import {
   DeleteOutlined as DeleteIcon,
+  FolderOpenFilled as FolderIcon,
   LoadingOutlined as LoadingIcon,
   PlusOutlined as PlusIcon,
   UserOutlined as UserIcon,
@@ -82,6 +83,7 @@ export {
   TriangleIcon,
   UserIcon,
   UsersLightIcon,
+  FolderIcon,
 }
 
 //

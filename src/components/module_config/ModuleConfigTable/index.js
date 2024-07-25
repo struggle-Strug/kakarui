@@ -8,7 +8,7 @@ import { DeployIcon, EditIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate, RowTextLink } from '@/components/table'
 import { ButtonIcon, Table } from '@/components/ui'
 
-const ModuleConfigTable = ({ data, total, loading, pagination, refreshData }) => {
+const ModuleConfigTable = ({ data, total, loading, refreshData }) => {
   const columns = [
     {
       title: <ColumnSorter title="モジュール配置名" field="name" />,
@@ -55,7 +55,7 @@ const ModuleConfigTable = ({ data, total, loading, pagination, refreshData }) =>
             <ButtonIcon icon={<EditIcon size={32} />} onClick={() => {}} />
           </RowTextLink>
 
-          <DeployAddEditModal isEdit data={row} dataList={data} onSuccess={refreshData}>
+          <DeployAddEditModal isEdit data={row} onSuccess={refreshData}>
             <ButtonIcon icon={<DeployIcon size={32} />} onClick={() => {}} />
           </DeployAddEditModal>
         </Space>
@@ -65,7 +65,13 @@ const ModuleConfigTable = ({ data, total, loading, pagination, refreshData }) =>
   ]
 
   return (
-    <Table total={total} pagination={pagination} loading={loading} columns={columns} data={data} />
+    <Table
+      total={total}
+      pagination={{ defaultPageSize: 30 }}
+      loading={loading}
+      columns={columns}
+      data={data}
+    />
   )
 }
 
