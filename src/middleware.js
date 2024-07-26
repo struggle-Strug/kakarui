@@ -23,33 +23,33 @@ export default withAuth(
     response.cookies.set('locale', 'en')
 
     // Basic Authentication check
-    // if (!DEV) {
-    //   const basicAuth = req.headers.get('authorization')
+    if (!DEV) {
+      const basicAuth = req.headers.get('authorization')
 
-    //   if (!basicAuth) {
-    //     return new NextResponse('Authorization header missing', {
-    //       status: 401,
-    //       headers: {
-    //         'WWW-Authenticate': 'Basic realm="Protected Area"',
-    //       },
-    //     })
-    //   }
+      if (!basicAuth) {
+        return new NextResponse('Authorization header missing', {
+          status: 401,
+          headers: {
+            'WWW-Authenticate': 'Basic realm="Protected Area"',
+          },
+        })
+      }
 
-    //   const auth = basicAuth.split(' ')[1]
-    //   const [user, pwd] = Buffer.from(auth, 'base64').toString().split(':')
+      const auth = basicAuth.split(' ')[1]
+      const [user, pwd] = Buffer.from(auth, 'base64').toString().split(':')
 
-    //   const expectedUser = process.env.BASIC_AUTH_USER
-    //   const expectedPassword = process.env.BASIC_AUTH_PASSWORD
+      const expectedUser = process.env.BASIC_AUTH_USER
+      const expectedPassword = process.env.BASIC_AUTH_PASSWORD
 
-    //   if (user !== expectedUser || pwd !== expectedPassword) {
-    //     return new NextResponse('Authentication required', {
-    //       status: 401,
-    //       headers: {
-    //         'WWW-Authenticate': 'Basic realm="Secure Area"',
-    //       },
-    //     })
-    //   }
-    // }
+      if (user !== expectedUser || pwd !== expectedPassword) {
+        return new NextResponse('Authentication required', {
+          status: 401,
+          headers: {
+            'WWW-Authenticate': 'Basic realm="Secure Area"',
+          },
+        })
+      }
+    }
 
     // NextAuth Authentication
     const goBackHome = () => NextResponse.redirect(new URL(Routes.HOME, req.url))
