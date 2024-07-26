@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import base64url from 'base64url'
 import jwt from 'jsonwebtoken'
 import { setCookie } from 'nookies'
 
