@@ -9,6 +9,7 @@ import { useRobotActive } from '@/hooks/query'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { formatDate } from '@/utils/helper/dayjs'
+import { truncateText } from '@/utils/helper/strings'
 
 const RobotListMenuItem = memo(({ item, onClick }) => (
   <div
