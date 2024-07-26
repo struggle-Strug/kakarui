@@ -330,6 +330,12 @@
 .ant-pagination .ant-pagination-prev {
   margin-inline-end: 14px;
 }
+.header-menu {
+  & > .ant-pagination-item,
+  & > .ant-pagination-prev {
+    margin-inline-end: 9px;
+  }
+}
 /* UPLOAD */
 .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select,
 .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {

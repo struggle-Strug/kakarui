@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { isServer, useQuery } from '@tanstack/react-query'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
@@ -6,41 +7,46 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, MODULE_SET_SELECTION_KEY, STALE_TIME } from '@/constants'
+import { API, MODULE_CONFIG_LIST_KEY, STALE_TIME } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 
-import { tryParseJson } from '@/utils/helper/functions'
+import { mapOptionsQuery, tryParseJson } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
 
 import { useOrganizationQuery } from '../organization'
+import { useProjectActive } from '../project'
 
-export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) => {
+export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
   const { stubEnabled } = useStubEnabled()
 
   const query = useQuery({
-    queryKey: [MODULE_SET_SELECTION_KEY, organizationId, stubEnabled],
+    queryKey: [MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, stubEnabled],
     queryFn: async () => {
       if (stubEnabled) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        return mockData.module_set
+        return mockData.module_config
       }
 
       const response = await Axios.get(
-        buildApiURL(API.MODULE_SET.LIST, { organization_id: organizationId })
+        buildApiURL(API.MODULE_CONFIG.LIST, {
+          organization_id: organizationId,
+          project_id: projectActiveId,
+        })
       )
 
       return response.data
     },
-    enabled: Boolean(!isServer),
+    enabled: Boolean(!isServer && organizationId),
     staleTime: STALE_TIME,
     ...options,
   })
 
-  const data = query.data?.moduleset || []
+  const data = query.data?.module_configs || []
 
   // -- search and sort --
   const filteredData = useMemo(() => {
@@ -48,6 +54,7 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
 
     if (search) {
       const lowerSearchTerm = toLower(search)
+
       result = result.filter(
         (item) =>
           includes(toLower(item.name), lowerSearchTerm) ||
@@ -65,6 +72,7 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
         return orderBy(data, [sortBy], [sortOrder])
       } catch (error) {
         // handle error
+        console.error('Error sorting data:', error)
         return data
       }
     } else {
@@ -75,5 +83,15 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
     return result
   }, [data, search, sort])
 
-  return { ...query, data, filteredData }
+  // -- get detail --
+  const getModuleConfigDetail = (moduleConfigId) => {
+    return data.find((moduleConfig) => moduleConfig?.id === moduleConfigId) || null
+  }
+
+  // -- get options --
+  const getModuleConfigOptions = () => {
+    return mapOptionsQuery(data)
+  }
+
+  return { ...query, data, filteredData, getModuleConfigDetail, getModuleConfigOptions }
 }

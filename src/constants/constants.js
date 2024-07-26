@@ -26,6 +26,7 @@ export const LOCAL_STORAGE_KEYS = {
   ORGANIZATIONS_DETAIL: 'organization-detail',
   ORGANIZATION_ID: 'organization-id',
   PROJECT: 'project',
+  ROBOT: 'robot',
 }
 
 export const DEFAULT_ORGANIZATION_ID = 'b53e56d4-125c-42c2-90e0-2b4b17e085fd'

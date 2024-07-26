@@ -1,23 +1,22 @@
 import { Pagination, Spin } from 'antd'
 
+import Image from 'next/image'
 import { memo, useState } from 'react'
 
-import { DEFAULT_PAGE_SIZE_MENU, FORMAT_STRING } from '@/constants'
+import { Assets, DEFAULT_PAGE_SIZE_MENU, FORMAT_STRING } from '@/constants'
 import { useLoadingSimulation } from '@/hooks/custom'
-import { useProjectActive } from '@/hooks/query'
+import { useRobotActive } from '@/hooks/query'
 import { useDebouncedCallback } from '@/hooks/share'
-
-import { FolderIcon } from '@/components/icons'
 
 import { formatDate } from '@/utils/helper/dayjs'
 
-const ProjectSubMenuItem = memo(({ item, onClick }) => (
+const RobotListMenuItem = memo(({ item, onClick }) => (
   <div
     onClick={onClick}
     className="flex shrink-0 items-center gap-x-6 px-4 py-[4px] text-dark-gray-3 transition-colors hover:bg-light-gray"
     role="presentation"
   >
-    <FolderIcon className="text-[40px]" size={40} />
+    <Image src={Assets.MENU.project} className="shrink-0" alt="gen3p" width={44} height={42} />
     <div className="flex-1">
       <div className="text-[13px] font-semibold leading-[15px] text-dark-gray-3">{item?.name}</div>
       <div className="space-x-1 text-xs font-light text-primary">
@@ -28,20 +27,20 @@ const ProjectSubMenuItem = memo(({ item, onClick }) => (
   </div>
 ))
 
-const ProjectSubMenu = ({ data, loading, onClose }) => {
+const RobotListMenu = ({ data, loading, onClose }) => {
   const [page, setPage] = useState(1)
 
   const [clicking, startClicking] = useLoadingSimulation(false, 500)
-  const { projectActiveId, setProjectActive } = useProjectActive()
+  const { robotActiveId, setRobotActive } = useRobotActive()
 
   const pageSize = (page - 1) * DEFAULT_PAGE_SIZE_MENU
   const slicedData = data.slice(pageSize, pageSize + DEFAULT_PAGE_SIZE_MENU)
 
-  const doSetProjectActive = useDebouncedCallback((item) => {
-    if (item?.id === projectActiveId) return
+  const doSetRobotActive = useDebouncedCallback((item) => {
+    if (item?.id === robotActiveId) return
 
     startClicking(() => {
-      setProjectActive(item)
+      setRobotActive(item)
       onClose?.()
     })
   })
@@ -53,12 +52,12 @@ const ProjectSubMenu = ({ data, loading, onClose }) => {
   })
 
   const renderItem = (item) => (
-    <ProjectSubMenuItem key={item?.id} item={item} onClick={() => doSetProjectActive(item)} />
+    <RobotListMenuItem key={item?.id} item={item} onClick={() => doSetRobotActive(item)} />
   )
 
   return (
-    <div className="mx-3 w-[420px] px-3 py-4 font-light text-primary">
-      <div className="text-sm">プロジェクトを切り替える</div>
+    <div className="mx-3 w-[360px] px-3 py-4 font-light text-primary">
+      <div className="text-sm">ターゲットを切り替える</div>
 
       <Spin spinning={loading || clicking}>
         <div className="mt-3.5 pl-5 text-xl">
@@ -70,7 +69,6 @@ const ProjectSubMenu = ({ data, loading, onClose }) => {
               onChange={onChangePage}
               total={data.length}
               showLessItems
-              className="header-menu"
             />
           </div>
         </div>
@@ -79,4 +77,4 @@ const ProjectSubMenu = ({ data, loading, onClose }) => {
   )
 }
 
-export default ProjectSubMenu
+export default RobotListMenu

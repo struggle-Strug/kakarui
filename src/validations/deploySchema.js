@@ -1,26 +1,20 @@
 import * as Yup from 'yup'
 
-import { DEPLOYMENT_MODEL_OPTIONS } from '@/constants'
-
-const FORM_INFO = {
-  PROJECT_NAME: 'name',
+const FORM_DEPLOY = {
+  NAME: 'name',
   DESCRIPTION: 'description',
-  MODEL: 'model',
+  MODULE_CONFIG: 'module_config_id',
   TYPE: 'type',
-  MODULE: 'module',
-}
-
-const deployValues = {
-  [FORM_INFO.PROJECT_NAME]: 'プロト1.5',
-  [FORM_INFO.DESCRIPTION]: '荷物の運搬、把持、配置を行うモジュール配置定義。',
-  [FORM_INFO.MODEL]: DEPLOYMENT_MODEL_OPTIONS[0].value,
+  ROBOT: 'robot_id',
 }
 
 const deployFormSchema = () =>
   Yup.object().shape({
-    [FORM_INFO.TYPE]: Yup.string().required('デプロイ先タイプを選択してください。'),
-    [FORM_INFO.MODULE]: Yup.string().required('モジュール配置名を選択してください。'),
-    [FORM_INFO.MODEL]: Yup.string().default(DEPLOYMENT_MODEL_OPTIONS[0].value),
+    [FORM_DEPLOY.MODULE_CONFIG]: Yup.string()
+      .trim()
+      .required('モジュール配置名を選択してください。'),
+    [FORM_DEPLOY.TYPE]: Yup.string().trim().required('デプロイ先タイプを選択してください。'),
+    [FORM_DEPLOY.ROBOT]: Yup.string().trim().required('デプロイ先モデルを選択してください。'),
   })
 
-export { FORM_INFO, deployFormSchema, deployValues }
+export { FORM_DEPLOY, deployFormSchema }

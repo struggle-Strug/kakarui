@@ -107,7 +107,7 @@ const MyDeploymentTable = ({ data, total, loading }) => {
   }
 
   return (
-    <section className="relative rounded-[20px] border border-solid border-dark-gray-3 px-9 pb-20 pt-4">
+    <section className="relative rounded-[20px] border border-solid border-dark-gray-3 px-9 pb-10 pt-4">
       <Table
         data={data}
         total={total}
@@ -117,7 +117,7 @@ const MyDeploymentTable = ({ data, total, loading }) => {
         pagination={false}
         bordered={false}
       />
-      {data.length > 0 ? <DeployShowMore /> : null}
+      {!loading && data.length > 0 ? <DeployShowMore /> : null}
     </section>
   )
 }

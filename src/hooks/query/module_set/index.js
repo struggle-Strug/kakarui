@@ -24,7 +24,10 @@ export const useModuleSetQuery = ({ search, sort, options = {} } = {}) => {
   const query = useQuery({
     queryKey: [MODULE_SET_LIST_KEY, organizationId, stubEnabled],
     queryFn: async () => {
-      if (stubEnabled) return mockData.module_set
+      if (stubEnabled) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return mockData.module_set
+      }
 
       const response = await Axios.get(
         buildApiURL(API.MODULE_SET.LIST, { organization_id: organizationId })

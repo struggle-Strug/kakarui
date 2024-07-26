@@ -17,7 +17,3 @@ export const DEPLOYMENT_TYPE = {
   ROBOT: 'robot',
   SIM: 'sim',
 }
-
-export const DEPLOYMENT_MODEL_TYPE = {
-  NYOKKEY: 'nyokkey',
-}

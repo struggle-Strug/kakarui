@@ -1,6 +1,5 @@
 import {
   ACTIVE_STATUS_TEXT,
-  DEPLOYMENT_MODEL_TYPE_TEXT,
   DEPLOYMENT_TYPE_TEXT,
   GENDER_TEXT,
   SORT_TYPE_TEXT,
@@ -29,10 +28,5 @@ export const ACTIVE_STATUS_OPTIONS = Object.keys(ACTIVE_STATUS_TEXT).map((value)
 
 export const DEPLOYMENT_TYPE_OPTIONS = Object.keys(DEPLOYMENT_TYPE_TEXT).map((value) => ({
   label: DEPLOYMENT_TYPE_TEXT[value],
-  value,
-}))
-
-export const DEPLOYMENT_MODEL_OPTIONS = Object.keys(DEPLOYMENT_MODEL_TYPE_TEXT).map((value) => ({
-  label: DEPLOYMENT_MODEL_TYPE_TEXT[value],
   value,
 }))

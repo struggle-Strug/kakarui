@@ -34,14 +34,13 @@ const DeploymentTable = ({ data, total, loading }) => {
     {
       title: <ColumnSorter title="ムービー" field="execute_result_url" />,
       className: 'min-w-[154px]',
-      render: (item) => {
+      render: (item, _, index) => {
         const isCompletedStatus = item?.status === DEPLOY_STATUS.COMPLETE
 
-        // data có cái nào có "execute_result_url" đâu =))
         if (!isCompletedStatus || !item?.execute_result_url)
           return <div className="h-[84px] min-w-[154px]" />
 
-        return <ThumbnailLink itemId={item?.id} />
+        return <ThumbnailLink itemId={item?.id} index={index} />
       },
     },
   ]

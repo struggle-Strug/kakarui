@@ -1,37 +1,25 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import { useEffect, useState } from 'react'
+import { useModuleConfigQuery } from '@/hooks/query'
 
-import { useLocalStorageDefaultProject } from '@/hooks/custom/useLocalStorageSync'
-import moduleConfigApiStub from '@/hooks/stub/module_config'
-
-import { ModuleConfigAddButton, ModuleConfigSearchBox } from '@/components/module_config'
-import { ModuleSetTable } from '@/components/module_set'
+import {
+  ModuleConfigAddButton,
+  ModuleConfigSearchBox,
+  ModuleConfigTable,
+} from '@/components/module_config'
 import { Container } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleConfigContainer = () => {
-  const [project] = useLocalStorageDefaultProject()
-  const [modulesConfigs, setModuleConfigs] = useState([])
-
-  const [query] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  const [{ sort, search }] = useQueryStates({
+    sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
 
-  const { filter, sort, search } = query || {}
+  const { data, filteredData, isLoading } = useModuleConfigQuery({ sort, search })
 
-  const refreshData = () => {
-    moduleConfigApiStub.getModuleConfig(filter, sort, search, project).then(setModuleConfigs)
-  }
-
-  useEffect(() => {
-    refreshData()
-  }, [filter, sort, search, project])
-
-  const searchOptions = getSearchOptions(moduleConfigApiStub.getRawData(), ['name', 'description'])
+  const searchOptions = getSearchOptions(data, ['name', 'description'])
 
   return (
     <Container title="モジュール配置管理">
@@ -40,13 +28,7 @@ const ModuleConfigContainer = () => {
         <ModuleConfigAddButton />
       </div>
 
-      <ModuleSetTable
-        data={modulesConfigs}
-        pagination={{}}
-        // refreshData={refreshData}
-        loading={false}
-        total={modulesConfigs.length + 1}
-      />
+      <ModuleConfigTable loading={isLoading} total={filteredData.length} data={filteredData} />
     </Container>
   )
 }

@@ -100,11 +100,11 @@ export const removeItemByIndex = (array, index) =>
 
 export const keyByTextQuery = (res) => keyBy(res?.results || res || [], 'id')
 
-export const mapOptionsQuery = (res) =>
-  (res?.results || res || []).map(({ name, id }) => ({
-    key: id,
-    label: name,
-    value: id,
+export const mapOptionsQuery = (arr, key1 = 'name', key2 = 'id') =>
+  (arr || []).map(({ [key1]: label, [key2]: value } = {}) => ({
+    key: value,
+    label,
+    value,
   }))
 
 export const getValidArrayOrFallback = (array, fallbackValue = []) => {
