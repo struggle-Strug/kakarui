@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable no-console */
-import base64url from 'base64url'
+import jwt from 'jsonwebtoken'
 
-import { decode, encode } from 'next-auth/jwt'
 import { signIn } from 'next-auth/react'
 
 import { Routes } from '@/constants'
@@ -87,14 +86,12 @@ export const authOptions = {
   },
   jwt: {
     encode: async ({ token, secret, maxAge }) => {
-      let jwtToken = await encode({ token, secret }) // jwt.sign(token, secret, { expiresIn: maxAge })
-      jwtToken = jwtToken.replace(/0/gi, '@')
-      return base64url.encode(jwtToken)
+      let jwtToken = jwt.sign(token, secret)
+
+      return jwtToken
     },
     decode: async ({ token, secret }) => {
-      let decodedToken = base64url.decode(token)
-      decodedToken = decodedToken.replace(/@/gi, '0')
-      const decoded = await decode({ token: decodedToken, secret })
+      const decoded = jwt.decode(token, secret)
       return decoded
     },
   },
