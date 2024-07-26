@@ -87,11 +87,13 @@ export const authOptions = {
   },
   jwt: {
     encode: async ({ token, secret, maxAge }) => {
-      const jwtToken = await encode({ token, secret }) // jwt.sign(token, secret, { expiresIn: maxAge })
+      let jwtToken = await encode({ token, secret }) // jwt.sign(token, secret, { expiresIn: maxAge })
+      jwtToken = jwtToken.replace(/0x/gi, '@x')
       return base64url.encode(jwtToken)
     },
     decode: async ({ token, secret }) => {
-      const decodedToken = base64url.decode(token)
+      let decodedToken = base64url.decode(token)
+      decodedToken = decodedToken.replace(/@x/gi, '0x')
       const decoded = await decode({ token: decodedToken, secret })
       return decoded
     },

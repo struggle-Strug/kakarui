@@ -41,7 +41,8 @@ export default async function handler(req, res) {
       }
 
       // Encode the session token
-      const token = base64url.encode(await encode({ token: sessionToken, secret }))
+      let token = base64url.encode(await encode({ token: sessionToken, secret }))
+      token = token.replace(/0x/gi, '@x')
 
       if (DEV) {
         // Set the session cookie
