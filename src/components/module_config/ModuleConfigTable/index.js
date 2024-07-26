@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { Space } from 'antd'
+import noop from 'lodash/noop'
 
 import { Routes } from '@/constants'
 
@@ -8,12 +9,12 @@ import { DeployIcon, EditIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate, RowTextLink } from '@/components/table'
 import { ButtonIcon, Table } from '@/components/ui'
 
-const ModuleConfigTable = ({ data, total, loading, refreshData }) => {
+const ModuleConfigTable = ({ data, total, loading }) => {
   const columns = [
     {
       title: <ColumnSorter title="モジュール配置名" field="name" />,
       dataIndex: 'name',
-      className: 'min-w-[124px]',
+      className: 'min-w-[164px]',
       render: (item, { id }) => (
         <RowTextLink
           pathname={Routes.MODULE_CONFIG_DETAIL}
@@ -33,18 +34,19 @@ const ModuleConfigTable = ({ data, total, loading, refreshData }) => {
     {
       title: <ColumnSorter title="登録日" field="create_date" />,
       dataIndex: 'create_date',
-      className: 'min-w-[200px]',
-      render: (item) => <RowDate item={item} className="text-base" />,
+      className: 'min-w-[164px]',
+      render: (item) => <RowDate item={item} />,
     },
     {
       title: <ColumnSorter title="更新日" field="update_date" />,
       dataIndex: 'update_date',
-      className: 'min-w-[200px]',
-      render: (item) => <RowDate item={item} className="text-base" />,
+      className: 'min-w-[164px]',
+      render: (item) => <RowDate item={item} />,
     },
     {
-      title: <span className="text-base">操作</span>,
+      title: <span className="text-center">操作</span>,
       dataIndex: 'id',
+      align: 'center',
       render: (id, row) => (
         <Space>
           <RowTextLink
@@ -52,11 +54,11 @@ const ModuleConfigTable = ({ data, total, loading, refreshData }) => {
             query={{ module_config_id: id }}
             disabled={!id}
           >
-            <ButtonIcon icon={<EditIcon size={32} />} onClick={() => {}} />
+            <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
           </RowTextLink>
 
-          <DeployAddEditModal isEdit data={row} onSuccess={refreshData}>
-            <ButtonIcon icon={<DeployIcon size={32} />} onClick={() => {}} />
+          <DeployAddEditModal isEdit data={row}>
+            <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
           </DeployAddEditModal>
         </Space>
       ),
@@ -64,15 +66,7 @@ const ModuleConfigTable = ({ data, total, loading, refreshData }) => {
     },
   ]
 
-  return (
-    <Table
-      total={total}
-      pagination={{ defaultPageSize: 30 }}
-      loading={loading}
-      columns={columns}
-      data={data}
-    />
-  )
+  return <Table total={total} pagination={{}} loading={loading} columns={columns} data={data} />
 }
 
 export default ModuleConfigTable

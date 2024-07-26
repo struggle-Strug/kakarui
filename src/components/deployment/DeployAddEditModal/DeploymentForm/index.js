@@ -1,29 +1,43 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form } from 'antd'
+import { Form, Spin } from 'antd'
+import isEmpty from 'lodash/isEmpty'
 
 import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { DEPLOYMENT_MODEL_OPTIONS, DEPLOYMENT_TYPE_OPTIONS } from '@/constants'
-import { useProjectActive } from '@/hooks/query'
-import moduleConfigApiStub from '@/hooks/stub/module_config'
+import { DEPLOYMENT_TYPE_OPTIONS } from '@/constants'
+import {
+  useDeployStart,
+  useModuleConfigQuery,
+  useProjectActive,
+  useRobotActive,
+  useRobotQuery,
+} from '@/hooks/query'
 
 import { Input, InputTextArea, Select } from '@/components/form'
 import { Button } from '@/components/ui'
 
-import { FORM_INFO, deployFormSchema, deployValues } from '@/validations/deploySchema'
+import { FORM_DEPLOY, deployFormSchema } from '@/validations/deploySchema'
 
-const DeploymentForm = ({ onAddEdit, isEdit, data, onClose }) => {
-  const { projectActiveId } = useProjectActive()
+const DeploymentForm = ({ isEdit, data, onClose }) => {
+  const { data: moduleConfigs, getModuleConfigOptions } = useModuleConfigQuery()
+  const { getRobotOptions } = useRobotQuery()
+
+  const moduleConfigOptions = getModuleConfigOptions()
+  const robotOptions = getRobotOptions()
+
+  const { projectActive } = useProjectActive()
+  const { robotActive } = useRobotActive()
 
   const defaultValues = useMemo(
-    () =>
-      isEdit
-        ? {
-            ...data,
-          }
-        : deployValues,
-    [data, isEdit]
+    () => ({
+      [FORM_DEPLOY.NAME]: projectActive?.name || '',
+      [FORM_DEPLOY.MODULE_CONFIG]: data?.id,
+      [FORM_DEPLOY.DESCRIPTION]: data?.description || '',
+      [FORM_DEPLOY.TYPE]: robotActive?.type || '',
+      [FORM_DEPLOY.ROBOT]: robotActive?.id,
+    }),
+    [data, projectActive?.name, robotActive?.id]
   )
 
   const methods = useForm({
@@ -36,20 +50,25 @@ const DeploymentForm = ({ onAddEdit, isEdit, data, onClose }) => {
     methods.reset(defaultValues)
   }, [defaultValues])
 
-  const onSubmit = (values) => {
-    onAddEdit(values)
-  }
-
-  const moduleConfigs = moduleConfigApiStub.getRawData()
-
-  const moduleOptions = moduleConfigs.flatMap((m) => {
-    if (m?.project_id !== projectActiveId) return []
-    return { label: m?.name, value: m?.id }
+  const { doDeployStart, isPending } = useDeployStart({
+    onSuccess: () => {
+      methods.reset({})
+      onClose()
+    },
   })
 
-  const onChangeModule = (value) => {
-    methods.setValue(FORM_INFO.DESCRIPTION, moduleConfigs.find((i) => i?.id === value)?.description)
+  const onSubmit = (values) => {
+    doDeployStart(values)
   }
+
+  const moduleConfigIdWatch = methods.watch(FORM_DEPLOY.MODULE_CONFIG)
+
+  useEffect(() => {
+    if (moduleConfigIdWatch === data?.id) return
+
+    const moduleConfigActive = moduleConfigs.find((m) => m?.id === moduleConfigIdWatch)
+    methods.setValue(FORM_DEPLOY.DESCRIPTION, moduleConfigActive?.description)
+  }, [moduleConfigIdWatch, data?.id, moduleConfigs])
 
   const renderForm = (
     <FormProvider {...methods}>
@@ -57,47 +76,47 @@ const DeploymentForm = ({ onAddEdit, isEdit, data, onClose }) => {
         onFinish={methods.handleSubmit(onSubmit)}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
+        className="item-start"
         layout="horizontal"
         labelAlign="left"
         colon={false}
         labelWrap
-        className="item-start"
       >
         <Input
-          name={FORM_INFO.PROJECT_NAME}
+          name={FORM_DEPLOY.NAME}
           label="プロジェクト名:"
           placeholder="プロジェクト名を入力してください。"
           disabled
         />
 
         <Select
-          name={FORM_INFO.MODULE}
+          name={FORM_DEPLOY.MODULE_CONFIG}
           label="モジュール配置名:"
           placeholder="モジュール配置名を選択してください。"
-          onChangeInput={onChangeModule}
-          options={moduleOptions}
+          options={moduleConfigOptions}
+          disabled={!isEmpty(data)}
         />
 
         <InputTextArea
           label="説明:"
-          name={FORM_INFO.DESCRIPTION}
+          name={FORM_DEPLOY.DESCRIPTION}
           placeholder="説明を入力してください。"
           rows={3}
           disabled
         />
 
         <Select
-          name={FORM_INFO.TYPE}
+          name={FORM_DEPLOY.TYPE}
           label="デプロイ先タイプ:"
           options={DEPLOYMENT_TYPE_OPTIONS}
           placeholder="デプロイ先タイプを選択してください。"
         />
 
         <Select
-          name={FORM_INFO.MODEL}
+          name={FORM_DEPLOY.ROBOT}
           label="デプロイ先モデル:"
-          options={DEPLOYMENT_MODEL_OPTIONS}
           placeholder="デプロイ先モデルを入力してください。"
+          options={robotOptions}
           disabled
         />
 
@@ -113,7 +132,7 @@ const DeploymentForm = ({ onAddEdit, isEdit, data, onClose }) => {
     </FormProvider>
   )
 
-  return <>{renderForm}</>
+  return <Spin spinning={isPending}>{renderForm}</Spin>
 }
 
 export default DeploymentForm

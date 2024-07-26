@@ -48,11 +48,11 @@ const ProjectMenu = ({ breadcrumbs }) => {
     },
     {
       label: (
-        <div className="border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary">
-          <ProjectAddEditModal onSuccess={() => router.push(Routes.PROJECT)}>
-            <div> 新規プロジェクト作成</div>
-          </ProjectAddEditModal>
-        </div>
+        <ProjectAddEditModal onSuccess={() => router.push(Routes.PROJECT)}>
+          <div className="border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary">
+            新規プロジェクト作成
+          </div>
+        </ProjectAddEditModal>
       ),
       onClick: () => null,
       key: '1',
@@ -67,14 +67,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
       key: '2',
     },
     {
-      label: (
-        <ProjectSubMenu
-          data={data}
-          loading={isLoading}
-          setProjectActive={setProjectActive}
-          onClose={onClose}
-        />
-      ),
+      label: <ProjectSubMenu data={data} loading={isLoading} onClose={onClose} />,
       onClick: ({ domEvent: event }) => {
         event.preventDefault()
       },
@@ -84,20 +77,16 @@ const ProjectMenu = ({ breadcrumbs }) => {
     },
   ]
 
+  const onOpenChange = (enable) => (enable ? onOpen() : onClose())
+
   return (
     <div>
       <Dropdown
         menu={{ items }}
         trigger={['click']}
         overlayClassName="pt-7 header-dropdown"
+        onOpenChange={onOpenChange}
         open={open}
-        onOpenChange={(nextOpen) => {
-          if (nextOpen) {
-            onOpen()
-          } else {
-            onClose()
-          }
-        }}
       >
         <div className="w-max cursor-pointer text-sm hover:opacity-75">プロジェクト</div>
       </Dropdown>

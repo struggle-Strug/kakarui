@@ -1,4 +1,4 @@
-import { useMyDeploy } from '@/hooks/query'
+import { useMyDeployQuery } from '@/hooks/query'
 
 import { ReloadIcon } from '@/components/icons'
 import { HeaderTitle } from '@/components/layout/dashboard'
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui'
 import MyDeploymentTable from './MyDeploymentTable'
 
 const DashboardStatus = () => {
-  const { data: myDeploys, isLoading, refetch } = useMyDeploy({ limit: 10 })
+  const { data, loading, refetch } = useMyDeployQuery({ limit: 10 })
 
   return (
     <div
@@ -24,7 +24,7 @@ const DashboardStatus = () => {
         />
       </div>
 
-      <MyDeploymentTable data={myDeploys} total={myDeploys.length} loading={isLoading} />
+      <MyDeploymentTable data={data} total={data.length} loading={loading} />
     </div>
   )
 }

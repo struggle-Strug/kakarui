@@ -1,0 +1,1552 @@
+[
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {},
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "7aeebd51-3770-4062-b5e2-2cb75c06fdd0",
+          "module_instance": "moduleTest_roscore",
+          "module_name": "roscore",
+          "module_set_id": "d095dbf1-73db-4581-bfd2-8e4ac0b2ffb8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T04:05:43.713028",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "dd993149-ea6e-49e1-98a1-2de344a822fb",
+    "log": null,
+    "module_config_id": "e8aa4771-c0bc-44a3-964c-ecc887a696e7",
+    "module_config_name": "roscore",
+    "module_status": {
+      "moduleTest_roscore": {
+        "status": ""
+      }
+    },
+    "project_id": "0c8bddeb-d242-4aab-9ea5-e18229aee0c3",
+    "project_name": "プロジェクトA-01",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "In Progress",
+    "type": "sim",
+    "update_date": "2024-07-25T18:05:00.180840",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {},
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": {
+                "Cmd": [
+                  "bash",
+                  "-c",
+                  "roscore"
+                ],
+                "HostConfig": {
+                  "NetworkMode": "host"
+                },
+                "NetworkingConfig": {
+                  "EndpointsConfig": {
+                    "host": {}
+                  }
+                }
+              }
+            },
+            "startupOrder": 0,
+            "status": "running"
+          },
+          "module_id": "7aeebd51-3770-4062-b5e2-2cb75c06fdd0",
+          "module_instance": "moduleTest_roscore",
+          "module_name": "roscore",
+          "module_set_id": "d095dbf1-73db-4581-bfd2-8e4ac0b2ffb8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T04:08:18.463380",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "2ef7bddc-f6c4-4856-8075-7f41f6ae61df",
+    "log": null,
+    "module_config_id": "e8aa4771-c0bc-44a3-964c-ecc887a696e7",
+    "module_config_name": "roscore",
+    "module_status": {
+      "moduleTest_roscore": {
+        "status": ""
+      }
+    },
+    "project_id": "0c8bddeb-d242-4aab-9ea5-e18229aee0c3",
+    "project_name": "プロジェクトA-01",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "In Progress",
+    "type": "robot",
+    "update_date": "2024-07-25T18:05:00.227714",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {},
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "7aeebd51-3770-4062-b5e2-2cb75c06fdd0",
+          "module_instance": "moduleTest_roscore",
+          "module_name": "roscore",
+          "module_set_id": "d095dbf1-73db-4581-bfd2-8e4ac0b2ffb8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T04:09:44.713533",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "fdf2d1c5-8805-43b5-8dbc-8c039f5ecd15",
+    "log": null,
+    "module_config_id": "e8aa4771-c0bc-44a3-964c-ecc887a696e7",
+    "module_config_name": "roscore",
+    "module_status": {
+      "moduleTest_roscore": {
+        "status": ""
+      }
+    },
+    "project_id": "0c8bddeb-d242-4aab-9ea5-e18229aee0c3",
+    "project_name": "プロジェクトA-01",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "In Progress",
+    "type": "sim",
+    "update_date": "2024-07-25T18:05:00.290182",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "\"{\\\"Cmd\\\": [\\\"bash\\\", \\\"-c\\\", \\\"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\\\"], \\\"HostConfig\\\": {\\\"NetworkMode\\\": \\\"host\\\"}, \\\"NetworkingConfig\\\": {\\\"EndpointsConfig\\\": {\\\"host\\\": {}}}, \\\"tty\\\": true}\"",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "\"{\\\"Cmd\\\": [\\\"bash\\\", \\\"-c\\\", \\\"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\\\"], \\\"HostConfig\\\": {\\\"NetworkMode\\\": \\\"host\\\"}, \\\"Binds\\\": [\\\"/tmp/.X11-unix:/tmp/.X11-unix:rw\\\"], \\\"NetworkingConfig\\\": {\\\"EndpointsConfig\\\": {\\\"host\\\": {}}}, \\\"tty\\\": true}\"",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "\"{\\\"Cmd\\\": [\\\"bash\\\", \\\"-c\\\", \\\"sleep infinity\\\"], \\\"HostConfig\\\": {\\\"NetworkMode\\\": \\\"host\\\"}, \\\"Binds\\\": [\\\"/tmp/.X11-unix:/tmp/.X11-unix:rw\\\"], \\\"NetworkingConfig\\\": {\\\"EndpointsConfig\\\": {\\\"host\\\": {}}}, \\\"tty\\\": true}\"",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "\"{\\\"Cmd\\\": [\\\"bash\\\", \\\"-c\\\", \\\"roscore\\\"], \\\"HostConfig\\\": {\\\"NetworkMode\\\": \\\"host\\\"}, \\\"NetworkingConfig\\\": {\\\"EndpointsConfig\\\": {\\\"host\\\": {}}}, \\\"tty\\\": true}\"",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "\"{\\\"Cmd\\\": [\\\"bash\\\", \\\"-c\\\", \\\"roslaunch --wait /app/launch/sim.gazebo.launch\\\"], \\\"HostConfig\\\": {\\\"NetworkMode\\\": \\\"host\\\", \\\"DeviceRequests\\\": [{\\\"Count\\\": -1, \\\"Capabilities\\\": [[\\\"gpu\\\"]]}]}, \\\"Binds\\\": [\\\"/tmp/.X11-unix:/tmp/.X11-unix:rw\\\"], \\\"NetworkingConfig\\\": {\\\"EndpointsConfig\\\": {\\\"host\\\": {}}}, \\\"tty\\\": true}\"",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T07:49:06.464758",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "c60cf2ee-bd9e-4d0c-a068-2b07c84c734f",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:00.748148",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"sleep infinity\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roslaunch --wait /app/launch/sim.gazebo.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\", \"DeviceRequests\": [{\"Count\": -1, \"Capabilities\": [[\"gpu\"]]}]}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T10:13:12.371429",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "3bde84f1-a8ae-45ad-9ee1-dffa76a47d3a",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:03.263780",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"sleep infinity\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roslaunch --wait /app/launch/sim.gazebo.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\", \"DeviceRequests\": [{\"Count\": -1, \"Capabilities\": [[\"gpu\"]]}]}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T10:20:48.263740",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "9a4cc3f6-9923-4ba7-9373-e13d8dc19364",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:03.498182",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"sleep infinity\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roslaunch --wait /app/launch/sim.gazebo.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\", \"DeviceRequests\": [{\"Count\": -1, \"Capabilities\": [[\"gpu\"]]}]}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T10:33:53.282321",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "401514fb-1e3b-4d08-82c7-05b88f038e55",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:05.638782",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"sleep infinity\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roslaunch --wait /app/launch/sim.gazebo.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\", \"DeviceRequests\": [{\"Count\": -1, \"Capabilities\": [[\"gpu\"]]}]}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T10:46:26.487914",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "3b1aa06b-e19f-48c6-8ab6-ddef169f4980",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:05.873157",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"sleep infinity\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roslaunch --wait /app/launch/sim.gazebo.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\", \"DeviceRequests\": [{\"Count\": -1, \"Capabilities\": [[\"gpu\"]]}]}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T10:49:01.988707",
+    "create_user": "ad3a7c48-8592-4002-a189-e874e40235e4",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "0e526dbe-4a4c-4216-9e24-f1899e5afa29",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:08.404439",
+    "update_user": "ad3a7c48-8592-4002-a189-e874e40235e4"
+  },
+  {
+    "config_data": {
+      "modules": [
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "REVISION": {
+                "value": "revb"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.move-it.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/99b17883-1fe8-419e-81e3-2d10d85d3e06:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "6f27a1f1-85cb-48d5-815f-0f00800a0bec",
+          "module_instance": "move-it_01",
+          "module_name": "move-it",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "MAP": {
+                "value": "map_storage/b1_8cell_map"
+              },
+              "NAV": {
+                "value": "true"
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"set -e && sleep 10 && roslaunch --wait /app/launch/middleware.navigation.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/2a7f01c7-5534-47d1-8ff6-c1beb73a1f08:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "d9833b9d-3314-4539-ad1d-c8a871635a4a",
+          "module_instance": "navigation_01",
+          "module_name": "navigation",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"sleep infinity\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/8442f344-6f9a-4204-a8cf-9abfdaeb4459:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "4aeec10e-eafc-45e6-87bd-9834fc0ae872",
+          "module_instance": "rviz-gpu_01",
+          "module_name": "rviz-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roscore\"], \"HostConfig\": {\"NetworkMode\": \"host\"}, \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/7aeebd51-3770-4062-b5e2-2cb75c06fdd0:v1.0"
+            },
+            "startupOrder": 0,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "89e05ca7-ad84-4bd7-87dc-904dc4b53fea",
+          "module_instance": "roscore_01",
+          "module_name": "roscore",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        },
+        {
+          "config_data": {
+            "env": {
+              "GUI": {
+                "value": false
+              },
+              "HAND_TYPE": {
+                "value": "kaleido"
+              },
+              "NVIDIA_DRIVER_CAPABILITIES": {
+                "value": "all"
+              },
+              "REVISION": {
+                "value": "revb"
+              },
+              "SIM": {
+                "value": true
+              },
+              "WORLD": {
+                "value": "Akashi_B1.world"
+              },
+              "__GLX_VENDOR_LIBRARY_NAME": {
+                "value": "nvidia"
+              },
+              "__NV_PRIME_RENDER_OFFLOAD": {
+                "value": 1
+              }
+            },
+            "imagePullPolicy": "on-create",
+            "restartPolicy": "always",
+            "settings": {
+              "createOptions": "{\"Cmd\": [\"bash\", \"-c\", \"roslaunch --wait /app/launch/sim.gazebo.launch\"], \"HostConfig\": {\"NetworkMode\": \"host\", \"DeviceRequests\": [{\"Count\": -1, \"Capabilities\": [[\"gpu\"]]}]}, \"Binds\": [\"/tmp/.X11-unix:/tmp/.X11-unix:rw\"], \"NetworkingConfig\": {\"EndpointsConfig\": {\"host\": {}}}, \"tty\": true}",
+              "image": "etkdevcrmodjpea1.azurecr.io/47cb2547-61d2-4b7e-8b73-27f28bc0f811:v1.0"
+            },
+            "startupOrder": 10,
+            "status": "running",
+            "type": "docker",
+            "version": "1.0"
+          },
+          "module_id": "cfa283f3-a179-4c79-a31d-f22c04e69a4f",
+          "module_instance": "gazebo-gpu_01",
+          "module_name": "gazebo-gpu",
+          "module_set_id": "e824c713-8693-4004-9ec6-34b6bd1a78f8",
+          "tag": "v1.0",
+          "type": "sim"
+        }
+      ]
+    },
+    "create_date": "2024-07-19T15:17:43.874867",
+    "create_user": "3a0e7cb0-dd84-4eac-a046-d17c741c07a8",
+    "execute_end_date": null,
+    "execute_result_url": null,
+    "execute_start_date": null,
+    "id": "11b11342-d2cb-4c2f-9720-db2c41057d0f",
+    "log": null,
+    "module_config_id": "3ce287b9-1bf9-4eb0-83ba-12cbf429597a",
+    "module_config_name": "モジュール配置定義テスト更新",
+    "module_status": {
+      "gazebo-gpu_01": {
+        "status": "running"
+      },
+      "move-it_01": {
+        "status": "running"
+      },
+      "navigation_01": {
+        "status": "running"
+      },
+      "roscore_01": {
+        "status": "running"
+      },
+      "rviz-gpu_01": {
+        "status": "running"
+      }
+    },
+    "project_id": "fe694977-83a5-4ab7-99b4-2e0aded1b4fe",
+    "project_name": "結合試験用プロジェクト",
+    "result": null,
+    "robot_id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+    "status": "Complete",
+    "type": "sim",
+    "update_date": "2024-07-22T02:20:08.638825",
+    "update_user": "3a0e7cb0-dd84-4eac-a046-d17c741c07a8"
+  }
+]

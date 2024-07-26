@@ -7,13 +7,7 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import {
-  API,
-  API_ERROR_MESSAGES,
-  LOCAL_STORAGE_KEYS,
-  PROJECT_LIST_KEY,
-  STALE_TIME,
-} from '@/constants'
+import { API, API_ERROR_MESSAGES, LOCAL_STORAGE_KEYS, PROJECT_LIST_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback, useSyncLocalStorage } from '@/hooks/share'
 
@@ -42,7 +36,10 @@ export const useProjectQuery = ({ search, sort, options = {} } = {}) => {
   const query = useQuery({
     queryKey: [PROJECT_LIST_KEY, organizationId, stubEnabled],
     queryFn: async () => {
-      if (stubEnabled) return mockData.project_list
+      if (stubEnabled) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return mockData.project_list
+      }
 
       const response = await Axios.get(
         buildApiURL(API.PROJECT.LIST, { organization_id: organizationId })
@@ -51,7 +48,7 @@ export const useProjectQuery = ({ search, sort, options = {} } = {}) => {
       return response.data
     },
     enabled: Boolean(!isServer && organizationId),
-    staleTime: STALE_TIME,
+    staleTime: Infinity,
     ...options,
   })
 

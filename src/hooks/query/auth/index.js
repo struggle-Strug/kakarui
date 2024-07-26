@@ -96,7 +96,10 @@ export const useGetMe = () => {
   const query = useQuery({
     queryKey: ['me', meId, stubEnabled],
     queryFn: async () => {
-      if (stubEnabled) return mockData.me.user
+      if (stubEnabled) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return mockData.me.user
+      }
 
       const response = await fetchMe({ meId })
       return response.data?.user
@@ -107,8 +110,6 @@ export const useGetMe = () => {
   const meRole = query.data?.role
   const meMainRole = organizationDetail?.main_role
   const meSubRole = organizationDetail?.sub_role
-
-  console.log({ meRole, meMainRole, meSubRole })
 
   const isSystemAdmin = meMainRole === USER_ROLE.SYSTEM_ADMIN || meRole === USER_ROLE.SYSTEM_ADMIN
   const isDeployAdmin = meSubRole === USER_ROLE.DEPLOY_ADMIN

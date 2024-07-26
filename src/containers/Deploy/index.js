@@ -1,3 +1,4 @@
+import noop from 'lodash/noop'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useDeployQuery } from '@/hooks/query'
@@ -22,13 +23,8 @@ const DeployContainer = () => {
   const renderActions = (
     <>
       <Button icon={<ReloadIcon size={36} />} type="outline" label="リロード" onClick={onRefetch} />
-      <DeployAddEditModal onSuccess={onRefetch}>
-        <Button
-          type="outline"
-          icon={<AddIcon size={36} />}
-          onClick={() => null}
-          label="新規デプロイ"
-        />
+      <DeployAddEditModal>
+        <Button type="outline" label="新規デプロイ" icon={<AddIcon size={36} />} onClick={noop} />
       </DeployAddEditModal>
     </>
   )

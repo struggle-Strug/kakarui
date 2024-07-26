@@ -26,7 +26,10 @@ export const useUserQuery = ({ search, sort, options = {} } = {}) => {
   const query = useQuery({
     queryKey: [USER_LIST_KEY, organizationId, stubEnabled],
     queryFn: async () => {
-      if (stubEnabled) return mockData.user_by_organization
+      if (stubEnabled) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return mockData.user_by_organization
+      }
 
       const response = await Axios.get(
         buildApiURL(API.USER.BY_ORGANIZATION, { organization_id: organizationId })

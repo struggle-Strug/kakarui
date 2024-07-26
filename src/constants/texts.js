@@ -1,6 +1,6 @@
 import { USER_ROLE } from './constants'
 import { ACTIVE_STATUS, DEPLOY_STATUS, USER_STATUS } from './status'
-import { DEPLOYMENT_MODEL_TYPE, DEPLOYMENT_TYPE, GENDER_TYPE, SORT_TYPE } from './types'
+import { DEPLOYMENT_TYPE, GENDER_TYPE, SORT_TYPE } from './types'
 
 export const APP_NAME = 'Karakuri Admin Dashboard'
 
@@ -48,8 +48,4 @@ export const ACTIVE_STATUS_TEXT = {
 export const DEPLOYMENT_TYPE_TEXT = {
   [DEPLOYMENT_TYPE.ROBOT]: '実機',
   [DEPLOYMENT_TYPE.SIM]: 'Sim環境',
-}
-
-export const DEPLOYMENT_MODEL_TYPE_TEXT = {
-  [DEPLOYMENT_MODEL_TYPE.NYOKKEY]: 'Nyokkey',
 }

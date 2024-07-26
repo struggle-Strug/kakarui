@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { isServer, useQuery } from '@tanstack/react-query'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
@@ -6,10 +7,11 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, MODULE_SET_SELECTION_KEY, STALE_TIME } from '@/constants'
+import { API, LOCAL_STORAGE_KEYS, ROBOT_LIST_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
+import { useSyncLocalStorage } from '@/hooks/share'
 
-import { tryParseJson } from '@/utils/helper/functions'
+import { mapOptionsQuery, tryParseJson } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -17,30 +19,40 @@ import { mockData } from '@/services/mock-data'
 
 import { useOrganizationQuery } from '../organization'
 
-export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) => {
+export const useRobotActive = () => {
+  const [robotActive, setRobotActive] = useSyncLocalStorage(LOCAL_STORAGE_KEYS.ROBOT, {})
+
+  return {
+    robotActiveId: robotActive?.id,
+    setRobotActive,
+    robotActive,
+  }
+}
+
+export const useRobotQuery = ({ search, sort, options = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
 
   const query = useQuery({
-    queryKey: [MODULE_SET_SELECTION_KEY, organizationId, stubEnabled],
+    queryKey: [ROBOT_LIST_KEY, organizationId, stubEnabled],
     queryFn: async () => {
       if (stubEnabled) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        return mockData.module_set
+        return mockData.robot_list
       }
 
       const response = await Axios.get(
-        buildApiURL(API.MODULE_SET.LIST, { organization_id: organizationId })
+        buildApiURL(API.ROBOT.LIST, { organization_id: organizationId })
       )
 
       return response.data
     },
-    enabled: Boolean(!isServer),
-    staleTime: STALE_TIME,
+    enabled: Boolean(!isServer && organizationId),
+    staleTime: Infinity,
     ...options,
   })
 
-  const data = query.data?.moduleset || []
+  const data = query.data?.robots || []
 
   // -- search and sort --
   const filteredData = useMemo(() => {
@@ -48,6 +60,7 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
 
     if (search) {
       const lowerSearchTerm = toLower(search)
+
       result = result.filter(
         (item) =>
           includes(toLower(item.name), lowerSearchTerm) ||
@@ -65,6 +78,7 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
         return orderBy(data, [sortBy], [sortOrder])
       } catch (error) {
         // handle error
+        console.error('Error sorting data:', error)
         return data
       }
     } else {
@@ -75,5 +89,15 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
     return result
   }, [data, search, sort])
 
-  return { ...query, data, filteredData }
+  // -- get detail --
+  const getRobotDetail = (robotId) => {
+    return data.find((robot) => robot?.id === robotId) || null
+  }
+
+  // -- get options --
+  const getRobotOptions = () => {
+    return mapOptionsQuery(data, 'model')
+  }
+
+  return { ...query, data, filteredData, getRobotDetail, getRobotOptions }
 }
