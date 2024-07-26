@@ -10,6 +10,7 @@ import { useDebouncedCallback } from '@/hooks/share'
 import { FolderIcon } from '@/components/icons'
 
 import { formatDate } from '@/utils/helper/dayjs'
+import { truncateText } from '@/utils/helper/strings'
 
 const ProjectSubMenuItem = memo(({ item, onClick }) => (
   <div
