@@ -55,7 +55,6 @@ const ModuleSettingForm = ({ open, onClose }) => {
     <FormProvider {...methods}>
       <Form onFinish={methods.handleSubmit(onSubmit)} layout="horizontal">
         <ModuleSettingTableForm data={data} />
-
         <div className="flex-end mt-12 gap-x-4">
           <Button type="default" className="min-w-[200px]" onClick={onClose}>
             <span className="font-semibold">キャンセル</span>
