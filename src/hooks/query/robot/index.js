@@ -96,7 +96,7 @@ export const useRobotQuery = ({ search, sort, options = {} } = {}) => {
 
   // -- get options --
   const getRobotOptions = () => {
-    return mapOptionsQuery(data, 'model')
+    return mapOptionsQuery(data)
   }
 
   return { ...query, data, filteredData, getRobotDetail, getRobotOptions }

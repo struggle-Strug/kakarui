@@ -1,4 +1,5 @@
 import { Dropdown } from 'antd'
+import noop from 'lodash/noop'
 
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -43,7 +44,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
           </div>
         </div>
       ),
-      onClick: () => null,
+      onClick: noop,
       key: '0',
     },
     {
@@ -54,7 +55,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
           </div>
         </ProjectAddEditModal>
       ),
-      onClick: () => null,
+      onClick: noop,
       key: '1',
     },
     {

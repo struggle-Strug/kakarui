@@ -1,13 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Modal, Spin, message } from 'antd'
 
-import Head from 'next/head'
-import { useEffect, useMemo } from 'react'
+import { cloneElement, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useProjectCreate, useProjectUpdate } from '@/hooks/query'
+import { useGetMe, useProjectCreate, useProjectUpdate } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
+import { HeadNext } from '@/components/common'
 import { Input, InputTextArea } from '@/components/form'
 import { Button } from '@/components/ui'
 
@@ -87,37 +87,38 @@ const ProjectForm = ({ isEdit, data, onSuccess, onClose }) => {
   return <Spin spinning={!!createLoading || !!updateLoading}>{renderForm}</Spin>
 }
 
-const ProjectAddEditModal = ({ children, isEdit, ...props }) => {
+const ProjectAddEditModal = ({ children, isEdit, data, onSuccess }) => {
   const [open, onOpen, onClose] = useFlag()
+
+  const { isAcceptedAddEditProject } = useGetMe()
+
+  const title = isEdit ? 'プロジェクト設定' : 'プロジェクト作成'
+  const description = isEdit
+    ? 'プロジェクトの基本情報を設定してください。'
+    : 'プロジェクトの基本情報を入力してください。'
 
   return (
     <>
       <div role="presentation" onClick={onOpen}>
-        {children}
+        {cloneElement(children, {
+          ...children.props,
+          disabled: !isAcceptedAddEditProject,
+        })}
       </div>
+
       {open && (
         <Modal
           open={open}
           onCancel={onClose}
-          title={
-            <h1 className="px-2 text-lg font-semibold text-dark-gray-3">
-              {isEdit ? 'プロジェクト設定' : 'プロジェクト作成'}
-            </h1>
-          }
+          title={<h1 className="text-lg font-semibold text-dark-gray-3">{title}</h1>}
           className="rounded-3xl"
           footer={null}
           width={698}
         >
-          <Head>
-            <title>{isEdit ? 'プロジェクト設定' : 'プロジェクト作成'}</title>
-          </Head>
-          <p className="px-12 text-lg font-light text-primary">
-            {isEdit
-              ? 'プロジェクトの基本情報を設定してください。'
-              : 'プロジェクトの基本情報を入力してください。'}
-          </p>
+          <HeadNext title={title} />
+          <p className="px-12 text-lg font-light text-primary">{description}</p>
           <div className="p-12 font-light">
-            <ProjectForm {...props} isEdit={isEdit} onClose={onClose} />
+            <ProjectForm isEdit={isEdit} data={data} onClose={onClose} onSuccess={onSuccess} />
           </div>
         </Modal>
       )}

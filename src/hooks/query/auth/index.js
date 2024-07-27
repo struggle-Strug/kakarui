@@ -110,7 +110,6 @@ export const useGetMe = () => {
   const meRole = query.data?.role
   const meMainRole = organizationDetail?.main_role
   const meSubRole = organizationDetail?.sub_role
-
   const isSystemAdmin = meMainRole === USER_ROLE.SYSTEM_ADMIN || meRole === USER_ROLE.SYSTEM_ADMIN
   const isDeployAdmin = meSubRole === USER_ROLE.DEPLOY_ADMIN
   const isOrgAdmin = meMainRole === USER_ROLE.ORG_ADMIN
@@ -123,5 +122,21 @@ export const useGetMe = () => {
     return true
   }, [isOrgAdmin, isMember, isDeployAdmin])
 
-  return { ...query, isSystemAdmin, isDeployAdmin, isOrgAdmin, isMember, isAcceptedDeployment }
+  const isAcceptedAddEditProject = useMemo(() => {
+    if (isSystemAdmin || isOrgAdmin) return true
+
+    return false
+  }, [isSystemAdmin, isOrgAdmin])
+
+  return {
+    ...query,
+    //
+    isSystemAdmin,
+    isDeployAdmin,
+    isOrgAdmin,
+    isMember,
+    //
+    isAcceptedDeployment,
+    isAcceptedAddEditProject,
+  }
 }

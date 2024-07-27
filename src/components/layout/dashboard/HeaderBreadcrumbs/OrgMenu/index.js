@@ -1,4 +1,5 @@
 import { Dropdown } from 'antd'
+import noop from 'lodash/noop'
 
 import { useRouter } from 'next/router'
 
@@ -7,15 +8,20 @@ import { useGetMe, useOrganizationQuery } from '@/hooks/query'
 
 import { UsersLightIcon } from '@/components/icons'
 
-const SipMenu = () => {
+import { cn } from '@/utils/helper/functions'
+
+const OrgMenu = () => {
   const router = useRouter()
+
   const { organizationDetail } = useOrganizationQuery()
   const { isMember } = useGetMe()
+
+  const disabledRedirectUser = Boolean(isMember)
 
   const items = [
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 font-semibold text-dark-gray-3">
+        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 font-semibold text-dark-gray-2">
           <UsersLightIcon size={40} />
           <div className="pl-1.5">
             <div>組織サブメニュー</div>
@@ -23,22 +29,27 @@ const SipMenu = () => {
           </div>
         </div>
       ),
-      onClick: () => null,
+      onClick: noop,
       key: '0',
     },
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 text-dark-gray-3">
+        <div
+          className={cn(
+            'border-bottom-gray mx-3 flex w-[400px] px-3 py-4',
+            disabledRedirectUser ? 'text-dark-grey-2' : 'text-black'
+          )}
+        >
           ユーザ管理
         </div>
       ),
       onClick: () => router.push(Routes.USER),
-      disabled: isMember,
+      disabled: disabledRedirectUser,
       key: '1',
     },
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 text-dark-gray-3">
+        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 text-black">
           モジュール管理
         </div>
       ),
@@ -46,9 +57,7 @@ const SipMenu = () => {
       key: '2',
     },
     {
-      label: (
-        <div className="mx-3 flex w-[400px] px-3 py-4 text-dark-gray-3">モジュールセット管理</div>
-      ),
+      label: <div className="mx-3 flex w-[400px] px-3 py-4 text-black">モジュールセット管理</div>,
       onClick: () => router.push(Routes.MODULE_SET),
       key: '3',
     },
@@ -63,4 +72,4 @@ const SipMenu = () => {
   )
 }
 
-export default SipMenu
+export default OrgMenu

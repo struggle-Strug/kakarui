@@ -1,4 +1,5 @@
 import { Space } from 'antd'
+import noop from 'lodash/noop'
 
 import { EditIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
@@ -35,7 +36,7 @@ const ProjectTable = ({ data, total, loading, reload }) => {
       render: (record) => (
         <Space>
           <ProjectAddEditModal isEdit data={record} onSuccess={() => reload?.()}>
-            <ButtonIcon icon={<EditIcon size={32} />} onClick={() => null} />
+            <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
           </ProjectAddEditModal>
         </Space>
       ),
