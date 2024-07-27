@@ -53,6 +53,7 @@ const moduleConfigApiStub = {
       const searchTerm = toLower(search)
       // eslint-disable-next-line no-console
       console.log(searchTerm, 'searchkeyword')
+
       filteredData = filteredData.filter((module) => {
         const lowerName = toLower(module.name)
         const lowerDescription = toLower(module.description)
