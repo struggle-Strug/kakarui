@@ -124,20 +124,27 @@ const fetchDeployData = async (organizationId, projectId) => {
 export const useMyDeployQuery = ({ limit } = {}) => {
   const queryClient = useQueryClient()
 
-  const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
+  const { organizationId } = useOrganizationQuery() || {}
+  const { stubEnabled } = useStubEnabled() || {}
 
-  const { data: projects = [] } = useProjectQuery()
+  const { data: projects = [] } = useProjectQuery() || {}
 
-  const projectIds = useMemo(() => (projects || []).map((p) => p?.id), [projects])
+  const projectIds = useMemo(() => {
+    const ids = (projects || []).map((p) => p?.id)
+    console.log('Project IDs:', ids)
+    return ids
+  }, [projects])
 
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
 
   useEffect(() => {
     const fetchAllDeployData = async () => {
+      if (projectIds.length === 0) return
+
       setIsLoading(true)
       const chunkedProjectIds = chunk(projectIds, 5)
+      console.log('Chunked Project IDs:', chunkedProjectIds)
 
       try {
         for (const projectChunk of chunkedProjectIds) {
@@ -156,83 +163,83 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       }
     }
 
-    if (!isServer && organizationId && projectIds?.length > 0) {
+    if (typeof window !== 'undefined' && organizationId && projectIds.length > 0) {
       fetchAllDeployData()
     }
-  }, [projectIds, organizationId, fetchDeployData])
+  }, [projectIds, organizationId, queryClient])
 
-  console.log(Array.isArray(projectIds), projectIds)
+  // Create a single useQuery to fetch data for all projectIds
+  const deployQuery = useQuery({
+    queryKey: [DEPLOY_LIST_KEY, organizationId, projectIds],
+    queryFn: async () => {
+      if (projectIds.length === 0) return []
 
-  const deployQueries = (projectIds || []).map((projectId) => {
-    const query = useQuery({
-      queryKey: [DEPLOY_LIST_KEY, organizationId, projectId],
-      queryFn: () => fetchDeployData(organizationId, projectId),
-      placeholderData: mockData.my_deploy_list,
-      refetchInterval: INTERVAL_5M,
-      enabled: !stubEnabled,
-      staleTime: Infinity,
-    })
+      const chunkedProjectIds = chunk(projectIds, 5)
+      const results = []
 
-    if (!query) {
-      return {
-        refetch: noop,
-        isLoading: false,
-        isSuccess: false,
-        isError: true,
-        data: [],
+      for (const projectChunk of chunkedProjectIds) {
+        const chunkResults = await Promise.allSettled(
+          projectChunk.map((projectId) => fetchDeployData(organizationId, projectId))
+        )
+
+        chunkResults.forEach((result, index) => {
+          if (result.status === 'fulfilled') {
+            results.push(...result.value)
+          } else {
+            console.error(
+              `Error fetching data for projectId ${projectChunk[index]}:`,
+              result.reason
+            )
+          }
+        })
       }
-    }
 
-    return {
-      ...query,
-      refetch: query.refetch ?? noop,
-      isLoading: query.isLoading ?? false,
-      isSuccess: query.isSuccess ?? false,
-      isError: query.isError ?? false,
-      data: query.data || [],
-    }
+      return results
+    },
+    placeholderData: [],
+    enabled: projectIds.length > 0 && !stubEnabled,
+    staleTime: Infinity,
+    refetchInterval: INTERVAL_5M,
   })
 
   const deployData = useMemo(() => {
-    const result = deployQueries
-      .filter((query) => query.isSuccess && query.data)
-      .flatMap((query) => query.data)
+    const result = deployQuery.data || []
+    console.log('Deploy Data Result:', result)
 
-    const projectIdToNameMap = projects.reduce((map, project) => {
+    const projectIdToNameMap = (projects || []).reduce((map, project) => {
       if (project?.id && project?.name) {
         map[project.id] = project.name
       }
       return map
     }, {})
 
-    const enhancedResult = result.map((deploy) => ({
+    const enhancedResult = (result || []).map((deploy) => ({
       ...deploy,
       project_name: projectIdToNameMap[deploy.project_id] || null,
     }))
 
     return orderBy(enhancedResult, ['create_date'], ['asc'])
-  }, [deployQueries, projects])
+  }, [deployQuery.data, projects])
 
   const refetchAll = useCallback(async () => {
     setIsRefetching(true)
     if (stubEnabled) {
       await new Promise((resolve) => setTimeout(resolve, 1500))
     } else {
-      await Promise.allSettled(deployQueries.map((query) => query.refetch()))
+      await deployQuery.refetch()
     }
     setIsRefetching(false)
-  }, [deployQueries, stubEnabled])
+  }, [deployQuery, stubEnabled])
 
   const slicedData = limit ? deployData.slice(0, limit) : deployData
   const data = stubEnabled ? mockData.my_deploy_list : slicedData
 
   return {
-    loading: isLoading || isRefetching,
+    loading: isLoading || isRefetching || deployQuery.isLoading,
     data: isLoading ? [] : data,
     refetch: refetchAll,
   }
 }
-
 export const useDeployStart = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
