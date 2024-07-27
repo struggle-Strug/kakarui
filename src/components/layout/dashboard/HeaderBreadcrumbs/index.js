@@ -17,7 +17,14 @@ const HeaderBreadcrumbs = () => {
     () => [
       // { key: 'robocon', title: 'ロボコン2024' },
       // { key: 'team_name', title: 'Team Eagle' },
-      { key: 'prototype', title: projectActive?.name || '' },
+      {
+        key: 'prototype',
+        title: (
+          <div className="w-60 truncate" title={projectActive?.name || ''}>
+            {projectActive?.name || ''}
+          </div>
+        ),
+      },
     ],
     [projectActive?.name]
   )

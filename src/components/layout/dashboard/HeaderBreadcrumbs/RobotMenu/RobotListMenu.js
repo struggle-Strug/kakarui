@@ -16,9 +16,16 @@ const RobotListMenuItem = memo(({ item, onClick }) => (
     className="flex shrink-0 items-center gap-x-6 px-4 py-[4px] text-dark-gray-3 transition-colors hover:bg-light-gray"
     role="presentation"
   >
-    <Image src={Assets.MENU.project} className="shrink-0" alt="gen3p" width={44} height={42} />
-    <div className="flex-1">
-      <div className="text-[13px] font-semibold leading-[15px] text-dark-gray-3">{item?.name}</div>
+    <div className="shrink-0">
+      <Image src={Assets.MENU.project} className="shrink-0" alt="gen3p" width={44} height={42} />
+    </div>
+    <div className="w-[calc(100%-40px-24px)] flex-1">
+      <div
+        className="w-full truncate text-[13px] font-semibold leading-[15px] text-dark-gray-3"
+        title={item?.name}
+      >
+        {item?.name}
+      </div>
       <div className="space-x-1 text-xs font-light text-primary">
         <span>最終更新日</span>
         <span>{formatDate(item?.update_date, FORMAT_STRING.datetime_str)}</span>
@@ -67,6 +74,8 @@ const RobotListMenu = ({ data, loading, onClose }) => {
               defaultCurrent={page}
               pageSize={DEFAULT_PAGE_SIZE_MENU}
               onChange={onChangePage}
+              showSizeChanger={false}
+              className="header-menu"
               total={data.length}
               showLessItems
             />

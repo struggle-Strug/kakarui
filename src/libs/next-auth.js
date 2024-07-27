@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable no-console */
-import base64url from 'base64url'
+import jwt from 'jsonwebtoken'
 
-import { decode, encode } from 'next-auth/jwt'
 import { signIn } from 'next-auth/react'
 
 import { Routes } from '@/constants'
@@ -15,11 +14,11 @@ const AzureADProvider = {
   wellKnown: `https://login.microsoftonline.com/${process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID}/v2.0/.well-known/openid-configuration?appid=${process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID}`,
   authorization: {
     params: {
-      scope: 'openid profile email 0049ffb4-a5e8-4f66-b3d7-f1694bd929a7/Api.ReadWrite',
+      scope: `openid profile email ${process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID}/Api.ReadWrite`,
       response_type: 'token',
     },
   },
-  scope: 'openid profile email 0049ffb4-a5e8-4f66-b3d7-f1694bd929a7/Api.ReadWrite',
+  scope: `openid profile email ${process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID}/Api.ReadWrite`,
   response_type: 'token',
   clientId: process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID,
   checks: [],
@@ -87,12 +86,12 @@ export const authOptions = {
   },
   jwt: {
     encode: async ({ token, secret, maxAge }) => {
-      const jwtToken = await encode({ token, secret }) // jwt.sign(token, secret, { expiresIn: maxAge })
-      return base64url.encode(jwtToken)
+      const jwtToken = jwt.sign(token, secret)
+
+      return jwtToken
     },
     decode: async ({ token, secret }) => {
-      const decodedToken = base64url.decode(token)
-      const decoded = await decode({ token: decodedToken, secret })
+      const decoded = jwt.decode(token, secret)
       return decoded
     },
   },

@@ -41,7 +41,7 @@ const RobotMenu = () => {
         <div className="text-sm">ターゲット</div>
         <div className="flex items-center">
           <Image src={Assets.MENU.project} alt="gen3p" width={24} height={22} />
-          <span className="ml-3 text-sm">Nyokkey Gen3B</span>
+          <span className="ml-3 text-sm">{robotActive?.name}</span>
         </div>
       </>
     )

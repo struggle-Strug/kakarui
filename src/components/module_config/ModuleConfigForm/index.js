@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { Routes } from '@/constants'
 
-import { Input, InputTextArea } from '@/components/form'
+import { DatePicker, Input, InputTextArea } from '@/components/form'
 import { AddIcon, ExternalLinkIcon } from '@/components/icons'
 import ModuleAddEditModalButton from '@/components/module/ModuleAddEditModalButton'
 import { ModuleSelectionModal, ModuleSetSelectionModal } from '@/components/module_selection'
@@ -76,6 +76,16 @@ const ModuleConfigForm = ({ isEdit, onAddUpdate, data }) => {
             name={FORM_MODULE_CONFIG.DESCRIPTION}
             placeholder="説明を入力してください。"
             rows={4}
+          />
+          <DatePicker
+            label="登録日"
+            placeholder="登録日を入力してください。"
+            name={FORM_MODULE_CONFIG.CREATE_DATE}
+          />
+          <DatePicker
+            label="更新日"
+            placeholder="更新日を入力してください。"
+            name={FORM_MODULE_CONFIG.UPDATE_DATE}
           />
         </div>
 
