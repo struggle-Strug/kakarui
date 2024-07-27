@@ -85,7 +85,7 @@ export const authOptions = {
   },
   jwt: {
     encode: async ({ token, secret, maxAge }) => {
-      let jwtToken = jwt.sign(token, secret)
+      const jwtToken = jwt.sign(token, secret)
 
       const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
       const sqlInjectionPattern =
