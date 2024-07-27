@@ -10,7 +10,6 @@ import { useDebouncedCallback } from '@/hooks/share'
 import { FolderIcon } from '@/components/icons'
 
 import { formatDate } from '@/utils/helper/dayjs'
-import { truncateText } from '@/utils/helper/strings'
 
 const ProjectSubMenuItem = memo(({ item, onClick }) => (
   <div
@@ -18,10 +17,15 @@ const ProjectSubMenuItem = memo(({ item, onClick }) => (
     className="flex shrink-0 items-center gap-x-6 overflow-hidden px-4 py-[4px] text-dark-gray-3 transition-colors hover:bg-light-gray"
     role="presentation"
   >
-    <FolderIcon className="text-[40px]" size={40} />
-    <div className="flex-1">
-      <div className="text-[13px] font-semibold leading-[15px] text-dark-gray-3">
-        {truncateText(item?.name, 20)}
+    <div className="shrink-0">
+      <FolderIcon className="text-[40px]" size={40} />
+    </div>
+    <div className="w-[calc(100%-40px-24px)] flex-1">
+      <div
+        className="w-full truncate text-[13px] font-semibold leading-[15px] text-dark-gray-3"
+        title={item?.name}
+      >
+        {item?.name}
       </div>
       <div className="space-x-1 text-xs font-light text-primary">
         <span>最終更新日</span>

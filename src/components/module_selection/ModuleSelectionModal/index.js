@@ -12,7 +12,6 @@ import { Button } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
-// import data from '@/services/mock-data/module_selection_set.json'
 import ModuleSelectionTableForm from './ModuleSelectionTableForm'
 
 const ModuleSelectionModal = ({ open, onClose }) => {

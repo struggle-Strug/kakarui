@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       }
 
       // Encode the session token
-      let token = jwt.sign(sessionToken, secret)
+      const token = jwt.sign(sessionToken, secret)
 
       if (DEV) {
         // Set the session cookie
@@ -51,13 +51,18 @@ export default async function handler(req, res) {
         })
       } else {
         // Set the session cookie
-        setCookie({ res }, 'next-auth.session-token', token, {
-          maxAge: 30 * 24 * 60 * 60, // 30 days
-          path: '/',
-          httpOnly: true,
-          secure: true,
-          sameSite: 'lax',
-        })
+        setCookie(
+          { res },
+          `${process.env.NEXT_PUBLIC_VERCEL_PREFIX || ''}next-auth.session-token`,
+          token,
+          {
+            maxAge: 30 * 24 * 60 * 60, // 30 days
+            path: '/',
+            httpOnly: true,
+            secure: true,
+            sameSite: 'lax',
+          }
+        )
       }
 
       res.status(200).json({ message: 'Token saved successfully' })

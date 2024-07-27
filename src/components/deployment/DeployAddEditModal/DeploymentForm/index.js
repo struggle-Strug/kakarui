@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Spin } from 'antd'
-import isEmpty from 'lodash/isEmpty'
 
 import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -94,7 +93,6 @@ const DeploymentForm = ({ isEdit, data, onClose }) => {
           label="モジュール配置名:"
           placeholder="モジュール配置名を選択してください。"
           options={moduleConfigOptions}
-          disabled={!isEmpty(data)}
         />
 
         <InputTextArea

@@ -1,7 +1,7 @@
 import { DEPLOYMENT_TYPE_TEXT, DEPLOY_STATUS, FORMAT_STRING, Routes } from '@/constants'
 
 import { ThumbnailLink } from '@/components/common'
-import { DeployStatus, RowContent, RowDate } from '@/components/table'
+import { DeployStatus, RowContent, RowDate, RowTextLink } from '@/components/table'
 import { Link, Table } from '@/components/ui'
 
 import { cn } from '@/utils/helper/functions'
@@ -67,7 +67,15 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       title: <div className="min-w-[240px]">モジュール配置</div>,
       dataIndex: 'module_config_name',
       width: '60%',
-      render: (item) => <RowContent item={item} className="min-w-[240px] max-w-[400px]" />,
+      render: (item, row) => (
+        <RowTextLink
+          pathname={Routes.MODULE_CONFIG_DETAIL}
+          query={{ module_config_id: row?.module_config_id }}
+          disabled={!row?.module_config_id}
+        >
+          <RowContent item={item} className="min-w-[240px] max-w-[400px]" />
+        </RowTextLink>
+      ),
     },
     {
       title: <div className="min-w-[132px]">デプロイタイプ</div>,

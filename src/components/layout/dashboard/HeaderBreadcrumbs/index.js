@@ -5,8 +5,6 @@ import { useOrganizationQuery, useProjectActive } from '@/hooks/query'
 
 import { Breadcrumbs } from '@/components/common'
 
-import { truncateText } from '@/utils/helper/strings'
-
 import ProjectMenu from './ProjectMenu'
 import RobotMenu from './RobotMenu'
 import SipMenu from './SipMenu'
@@ -21,7 +19,11 @@ const HeaderBreadcrumbs = () => {
       // { key: 'team_name', title: 'Team Eagle' },
       {
         key: 'prototype',
-        title: truncateText(projectActive?.name, 20) || '',
+        title: (
+          <div className="w-60 truncate" title={projectActive?.name || ''}>
+            {projectActive?.name || ''}
+          </div>
+        ),
       },
     ],
     [projectActive?.name]

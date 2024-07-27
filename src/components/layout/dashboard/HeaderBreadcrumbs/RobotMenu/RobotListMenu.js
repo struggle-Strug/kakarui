@@ -9,7 +9,6 @@ import { useRobotActive } from '@/hooks/query'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { formatDate } from '@/utils/helper/dayjs'
-import { truncateText } from '@/utils/helper/strings'
 
 const RobotListMenuItem = memo(({ item, onClick }) => (
   <div
@@ -17,10 +16,15 @@ const RobotListMenuItem = memo(({ item, onClick }) => (
     className="flex shrink-0 items-center gap-x-6 px-4 py-[4px] text-dark-gray-3 transition-colors hover:bg-light-gray"
     role="presentation"
   >
-    <Image src={Assets.MENU.project} className="shrink-0" alt="gen3p" width={44} height={42} />
-    <div className="flex-1">
-      <div className="text-[13px] font-semibold leading-[15px] text-dark-gray-3">
-        {truncateText(item?.name, 20)}
+    <div className="shrink-0">
+      <Image src={Assets.MENU.project} className="shrink-0" alt="gen3p" width={44} height={42} />
+    </div>
+    <div className="w-[calc(100%-40px-24px)] flex-1">
+      <div
+        className="w-full truncate text-[13px] font-semibold leading-[15px] text-dark-gray-3"
+        title={item?.name}
+      >
+        {item?.name}
       </div>
       <div className="space-x-1 text-xs font-light text-primary">
         <span>最終更新日</span>

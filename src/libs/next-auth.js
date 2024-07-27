@@ -14,11 +14,11 @@ const AzureADProvider = {
   wellKnown: `https://login.microsoftonline.com/${process.env.NEXT_PUBLIC_AZURE_AD_TENANT_ID}/v2.0/.well-known/openid-configuration?appid=${process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID}`,
   authorization: {
     params: {
-      scope: 'openid profile email 0049ffb4-a5e8-4f66-b3d7-f1694bd929a7/Api.ReadWrite',
+      scope: `openid profile email ${process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID}/Api.ReadWrite`,
       response_type: 'token',
     },
   },
-  scope: 'openid profile email 0049ffb4-a5e8-4f66-b3d7-f1694bd929a7/Api.ReadWrite',
+  scope: `openid profile email ${process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID}/Api.ReadWrite`,
   response_type: 'token',
   clientId: process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID,
   checks: [],
@@ -86,7 +86,7 @@ export const authOptions = {
   },
   jwt: {
     encode: async ({ token, secret, maxAge }) => {
-      let jwtToken = jwt.sign(token, secret)
+      const jwtToken = jwt.sign(token, secret)
 
       return jwtToken
     },

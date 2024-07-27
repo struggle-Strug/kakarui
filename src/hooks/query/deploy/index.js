@@ -10,6 +10,7 @@ import { message } from 'antd'
 import chunk from 'lodash/chunk'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
+import noop from 'lodash/noop'
 import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 
@@ -159,8 +160,8 @@ export const useMyDeployQuery = ({ limit } = {}) => {
     }
   }, [projectIds, organizationId, fetchDeployData])
 
-  const deployQueries = (projectIds || []).map((projectId) =>
-    useQuery({
+  const deployQueries = (projectIds || []).map((projectId) => {
+    const query = useQuery({
       queryKey: [DEPLOY_LIST_KEY, organizationId, projectId],
       queryFn: () => fetchDeployData(organizationId, projectId),
       placeholderData: mockData.my_deploy_list,
@@ -168,7 +169,19 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       enabled: !stubEnabled,
       staleTime: Infinity,
     })
-  )
+
+    if (!query) {
+      return {
+        refetch: noop,
+        isLoading: false,
+        isSuccess: false,
+        isError: true,
+        data: [],
+      }
+    }
+
+    return query
+  })
 
   const deployData = useMemo(() => {
     const result = deployQueries

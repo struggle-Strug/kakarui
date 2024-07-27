@@ -14,7 +14,7 @@ export const mockData = {
   project_list,
   user_by_organization,
   my_deploy_list,
+  module_config,
   module_set,
   robot_list,
-  module_config,
 }
