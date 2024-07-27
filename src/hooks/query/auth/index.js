@@ -115,6 +115,8 @@ export const useGetMe = () => {
   const isOrgAdmin = meMainRole === USER_ROLE.ORG_ADMIN
   const isMember = meMainRole === USER_ROLE.MEMBER
 
+  console.log({ role: meRole, main_role: meMainRole, sub_role: meSubRole })
+
   const isAcceptedDeployment = useMemo(() => {
     if (isOrgAdmin && !isDeployAdmin) return false
     if (isMember && !isDeployAdmin) return false

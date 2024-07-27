@@ -41,18 +41,23 @@ export const useProjectQuery = ({ search, sort, options = {} } = {}) => {
         return mockData.project_list
       }
 
-      const response = await Axios.get(
-        buildApiURL(API.PROJECT.LIST, { organization_id: organizationId })
-      )
+      try {
+        const response = await Axios.get(
+          buildApiURL(API.PROJECT.LIST, { organization_id: organizationId })
+        )
 
-      return response.data
+        return response.data.projects || []
+      } catch (error) {
+        console.error('Error fetching deploy data for projects:', error)
+        return []
+      }
     },
     enabled: Boolean(!isServer && organizationId),
     staleTime: Infinity,
     ...options,
   })
 
-  const data = query.data?.projects || []
+  const data = query.data || []
 
   // -- search and sort --
   const filteredData = useMemo(() => {

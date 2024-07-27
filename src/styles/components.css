@@ -107,3 +107,8 @@
 .search-bar input {
   box-shadow: none !important;
 }
+
+/* button icon disabled */
+button.ant-btn.ant-btn-icon-only:disabled svg path {
+  stroke: #cfcecd;
+}

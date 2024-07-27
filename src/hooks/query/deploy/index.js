@@ -128,7 +128,8 @@ export const useMyDeployQuery = ({ limit } = {}) => {
   const { stubEnabled } = useStubEnabled()
 
   const { data: projects = [] } = useProjectQuery()
-  const projectIds = useMemo(() => projects.map((p) => p?.id), [projects])
+
+  const projectIds = useMemo(() => (projects || []).map((p) => p?.id), [projects])
 
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
@@ -155,10 +156,12 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       }
     }
 
-    if (!isServer && organizationId && projectIds.length > 0) {
+    if (!isServer && organizationId && projectIds?.length > 0) {
       fetchAllDeployData()
     }
   }, [projectIds, organizationId, fetchDeployData])
+
+  console.log(Array.isArray(projectIds), projectIds)
 
   const deployQueries = (projectIds || []).map((projectId) => {
     const query = useQuery({
@@ -180,7 +183,14 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       }
     }
 
-    return query
+    return {
+      ...query,
+      refetch: query.refetch ?? noop,
+      isLoading: query.isLoading ?? false,
+      isSuccess: query.isSuccess ?? false,
+      isError: query.isError ?? false,
+      data: query.data || [],
+    }
   })
 
   const deployData = useMemo(() => {
@@ -250,10 +260,7 @@ export const useDeployStart = ({ onSuccess } = {}) => {
         stubEnabled,
       ])
 
-      if (response?.data?.message) {
-        message.success(response.data.message)
-      }
-
+      message.success('デプロイ要求が受理されました。')
       onSuccess?.(response)
     },
     onError: (error) => {
