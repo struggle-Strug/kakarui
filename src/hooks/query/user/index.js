@@ -1,5 +1,4 @@
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -7,11 +6,12 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, API_ERROR_MESSAGES, STALE_TIME, USER_LIST_KEY } from '@/constants'
+import { API, API_ERRORS, STALE_TIME, USER_LIST_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
+import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -41,6 +41,10 @@ export const useUserQuery = ({ search, sort, options = {} } = {}) => {
     staleTime: STALE_TIME,
     ...options,
   })
+
+  if (query.isError && query.error) {
+    showAPIErrorMessage(query.error, API_ERRORS.USER_LIST)
+  }
 
   const data = query.data?.users || []
 
@@ -87,13 +91,6 @@ export const useUserQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getUserDetail }
 }
 
-export const useUserPermissions = () => {
-  const { organizationDetail } = useOrganizationQuery()
-  const permissions = organizationDetail?.authorized_apis || []
-
-  return { permissions }
-}
-
 export const useUserCreate = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
@@ -110,9 +107,7 @@ export const useUserCreate = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.USER_CREATE)
     },
   })
 
@@ -136,9 +131,7 @@ export const useUserUpdate = ({ userId, onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.USER_UPDATE)
     },
   })
 

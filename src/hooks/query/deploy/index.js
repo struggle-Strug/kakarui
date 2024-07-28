@@ -10,7 +10,6 @@ import { message } from 'antd'
 import chunk from 'lodash/chunk'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
-import noop from 'lodash/noop'
 import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 
@@ -18,7 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import {
   API,
-  API_ERROR_MESSAGES,
+  API_ERRORS,
   DEPLOY_LIST_KEY,
   INTERVAL_5M,
   INTERVAL_15S,
@@ -29,6 +28,7 @@ import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
+import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -64,6 +64,10 @@ export const useDeployQuery = ({ search, sort, options = {} } = {}) => {
     staleTime: STALE_TIME,
     ...options,
   })
+
+  if (query.isError && query.error) {
+    showAPIErrorMessage(query.error, API_ERRORS.DEPLOY_LIST)
+  }
 
   const data = query.data?.deploys || []
 
@@ -124,8 +128,8 @@ const fetchDeployData = async (organizationId, projectId) => {
 export const useMyDeployQuery = ({ limit } = {}) => {
   const queryClient = useQueryClient()
 
-  const { organizationId } = useOrganizationQuery() || {}
   const { stubEnabled } = useStubEnabled() || {}
+  const { organizationId } = useOrganizationQuery() || {}
 
   const { data: projects = [] } = useProjectQuery() || {}
 
@@ -198,9 +202,13 @@ export const useMyDeployQuery = ({ limit } = {}) => {
     },
     placeholderData: [],
     enabled: projectIds.length > 0 && !stubEnabled,
-    staleTime: Infinity,
     refetchInterval: INTERVAL_5M,
+    staleTime: Infinity,
   })
+
+  if (deployQuery.isError && deployQuery.error) {
+    showAPIErrorMessage(deployQuery.error, API_ERRORS.PROJECT_LIST)
+  }
 
   const deployData = useMemo(() => {
     const result = deployQuery.data || []
@@ -240,6 +248,7 @@ export const useMyDeployQuery = ({ limit } = {}) => {
     refetch: refetchAll,
   }
 }
+
 export const useDeployStart = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
@@ -271,9 +280,7 @@ export const useDeployStart = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.DEPLOY[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.DEPLOY_START)
     },
   })
 

@@ -31,6 +31,8 @@ const userFormSchema = () =>
     [FORM_INFO.ROLE]: Yup.string().trim().max(100, `${100}文字以下を入力してください。`),
     [FORM_INFO.COMPANY]: Yup.string()
       .trim()
+      .nullable()
+      .notRequired()
       .max(MAX_LEN_CONTENT, `${MAX_LEN_CONTENT}文字以下を入力してください。`),
   })
 
