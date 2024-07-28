@@ -157,9 +157,7 @@ export const useUserCreate = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.USER_CREATE)
     },
   })
 
@@ -183,9 +181,7 @@ export const useUserUpdate = ({ userId, onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.USER[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.USER_UPDATE)
     },
   })
 
