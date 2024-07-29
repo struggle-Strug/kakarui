@@ -63,7 +63,7 @@ const UserAddModalButton = ({ children, onSuccess, ...props }) => {
           <p className="px-12 text-lg font-light text-primary">
             組織に招待するユーザの情報を入力してください。
           </p>
-          <Spin spinning={!!createLoading}>
+          <Spin spinning={loading}>
             <div className="p-12 pr-20 font-light">
               <UserForm onAddEdit={onAddUser} {...props} onClose={onClose} loading={loading} />
             </div>
