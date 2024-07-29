@@ -1,9 +1,9 @@
-import { Modal, Spin } from 'antd'
+import { Modal, Spin, message } from 'antd'
 
 import Head from 'next/head'
 
 import { ACTIVE_STATUS, USER_ROLE } from '@/constants'
-import { useUserUpdate } from '@/hooks/query'
+import { usePermissionUpdate, useUserUpdate } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { EditIcon } from '@/components/icons'
@@ -16,22 +16,40 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
 
   const { doUpdateUser, isPending: updateLoading } = useUserUpdate({
     userId: data?.entra_id,
-    onSuccess: () => {
-      onSuccess?.()
-      onClose()
-    },
+  })
+
+  const { doUpdatePermission, isPending: updatePermissionLoading } = usePermissionUpdate({
+    userId: data?.user_id,
+    organizationUserId: data?.id,
   })
 
   const onUpdateUser = async (values) => {
-    const { name, mail, company, status } = values || {}
+    const { name, mail, company, status, main_role: mainRole, sub_role: subRole } = values || {}
 
     const role = values?.role === USER_ROLE.SYSTEM_ADMIN ? USER_ROLE.SYSTEM_ADMIN : null
     const enable = status === ACTIVE_STATUS.ENABLE.toString()
 
-    const newUser = { name, mail, company, role, enable }
+    const userUpdate = { name, mail, company, role, enable }
 
-    doUpdateUser(newUser)
+    doUpdateUser(userUpdate)
+
+    try {
+      await doUpdateUser(data)
+
+      await doUpdatePermission({
+        main_role: mainRole,
+        sub_role: subRole ? USER_ROLE.DEPLOY_ADMIN : null,
+      })
+      message.success('処理完了しました。')
+      onSuccess?.()
+      onClose()
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error updating user:', error)
+    }
   }
+
+  const updating = updateLoading || updatePermissionLoading
 
   return (
     <>
@@ -49,14 +67,14 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
             <title>ユーザー変更</title>
           </Head>
           <p className="px-12 text-lg font-light text-primary">ユーザ情報の変更を行います。</p>
-          <Spin spinning={!!updateLoading}>
+          <Spin spinning={updating}>
             <div className="p-12 font-light">
               <UserForm
                 isEdit
                 {...props}
                 data={data}
                 onAddEdit={onUpdateUser}
-                loading={!!updateLoading}
+                loading={updating}
                 onClose={onClose}
               />
             </div>

@@ -51,7 +51,7 @@ const NoticeItem = memo((item) => {
   return (
     <div
       className="grid grid-flow-row"
-      style={{ '-ms-word-break': 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
+      style={{ msWordBreak: 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
     >
       <div className="flex flex-row gap-2 text-nowrap text-base">
         <div className="w-full max-w-[135px] whitespace-pre-wrap break-keep text-primary">
@@ -99,7 +99,7 @@ const DashboardNotification = () => {
   return (
     <div
       className="flex w-full flex-col"
-      style={{ '-ms-word-break': 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
+      style={{ msWordBreak: 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
     >
       <HeaderTitle title="お知らせ" />
       <div

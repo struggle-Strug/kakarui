@@ -6,6 +6,7 @@ const FORM_INFO = {
   NAME: 'name',
   EMAIL: 'mail',
   ROLE: 'role',
+  SUB_ROLE: 'sub_role',
   COMPANY: 'company',
   ENABLE: 'enable',
 }
@@ -14,6 +15,7 @@ const userValues = {
   [FORM_INFO.NAME]: '',
   [FORM_INFO.EMAIL]: '',
   [FORM_INFO.ROLE]: 'member',
+  [FORM_INFO.SUB_ROLE]: false,
   [FORM_INFO.COMPANY]: '',
 }
 
@@ -31,6 +33,8 @@ const userFormSchema = () =>
     [FORM_INFO.ROLE]: Yup.string().trim().max(100, `${100}文字以下を入力してください。`),
     [FORM_INFO.COMPANY]: Yup.string()
       .trim()
+      .nullable()
+      .notRequired()
       .max(MAX_LEN_CONTENT, `${MAX_LEN_CONTENT}文字以下を入力してください。`),
   })
 

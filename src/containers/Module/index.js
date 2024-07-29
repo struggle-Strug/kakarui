@@ -33,7 +33,7 @@ const ModuleContainer = () => {
         <ModuleAddEditModalButton label="モジュール登録" />
       </div>
 
-      <ModuleTable data={modules} pagination={{}} loading={false} total={modules.length} />
+      <ModuleTable data={modules} loading={false} total={modules.length} />
     </Container>
   )
 }

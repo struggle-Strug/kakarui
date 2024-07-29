@@ -7,11 +7,12 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, API_ERROR_MESSAGES, LOCAL_STORAGE_KEYS, PROJECT_LIST_KEY } from '@/constants'
+import { API, API_ERRORS, LOCAL_STORAGE_KEYS, PROJECT_LIST_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback, useSyncLocalStorage } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
+import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -41,18 +42,27 @@ export const useProjectQuery = ({ search, sort, options = {} } = {}) => {
         return mockData.project_list
       }
 
-      const response = await Axios.get(
-        buildApiURL(API.PROJECT.LIST, { organization_id: organizationId })
-      )
+      try {
+        const response = await Axios.get(
+          buildApiURL(API.PROJECT.LIST, { organization_id: organizationId })
+        )
 
-      return response.data
+        return response.data.projects || []
+      } catch (error) {
+        console.error('Error fetching deploy data for projects:', error)
+        return []
+      }
     },
     enabled: Boolean(!isServer && organizationId),
     staleTime: Infinity,
     ...options,
   })
 
-  const data = query.data?.projects || []
+  if (query.isError && query.error) {
+    showAPIErrorMessage(query.error, API_ERRORS.PROJECT_LIST)
+  }
+
+  const data = query.data || []
 
   // -- search and sort --
   const filteredData = useMemo(() => {
@@ -97,7 +107,7 @@ export const useProjectQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getProjectDetail }
 }
 
-export const useProjectCreate = ({ onSuccess, message } = {}) => {
+export const useProjectCreate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
 
@@ -114,17 +124,16 @@ export const useProjectCreate = ({ onSuccess, message } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.PROJECT[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.PROJECT_CREATE)
     },
   })
 
   const doCreateProject = useDebouncedCallback(mutate)
+
   return { doCreateProject, isPending, isSuccess }
 }
 
-export const useProjectUpdate = ({ onSuccess, message } = {}) => {
+export const useProjectUpdate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
 
@@ -141,9 +150,7 @@ export const useProjectUpdate = ({ onSuccess, message } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.PROJECT[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.PROJECT_UPDATE)
     },
   })
 

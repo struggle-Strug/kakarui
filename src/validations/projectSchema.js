@@ -15,7 +15,11 @@ const projectFormSchema = () =>
     [FORM_INFO.PROJECT_NAME]: Yup.string()
       .required('プロジェクト名を入力してください。')
       .max(50, `${50}文字以下を入力してください。`),
-    [FORM_INFO.DESCRIPTION]: Yup.string().max(4000, `${4000}文字以下を入力してください。`),
+    [FORM_INFO.DESCRIPTION]: Yup.string()
+      .trim()
+      .nullable()
+      .notRequired()
+      .max(4000, `${4000}文字以下を入力してください。`),
   })
 
 export { projectFormSchema, projectValues, FORM_INFO }

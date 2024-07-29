@@ -5,9 +5,9 @@ import { useOrganizationQuery, useProjectActive } from '@/hooks/query'
 
 import { Breadcrumbs } from '@/components/common'
 
+import OrgMenu from './OrgMenu'
 import ProjectMenu from './ProjectMenu'
 import RobotMenu from './RobotMenu'
-import SipMenu from './SipMenu'
 
 const HeaderBreadcrumbs = () => {
   const { organizationName } = useOrganizationQuery()
@@ -20,7 +20,7 @@ const HeaderBreadcrumbs = () => {
       {
         key: 'prototype',
         title: (
-          <div className="w-60 truncate" title={projectActive?.name || ''}>
+          <div className="max-w-60 truncate" title={projectActive?.name || ''}>
             {projectActive?.name || ''}
           </div>
         ),
@@ -31,7 +31,7 @@ const HeaderBreadcrumbs = () => {
 
   const renderOrganizationName = (
     <>
-      <SipMenu />
+      <OrgMenu />
       <div>{organizationName}</div>
     </>
   )

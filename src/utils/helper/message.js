@@ -1,6 +1,10 @@
+import { message } from 'antd'
 import dayjs from 'dayjs'
+import get from 'lodash/get'
 
-import { FORMAT_STRING } from '@/constants'
+import { FORMAT_STRING } from '@/constants/time'
+
+import { errorMessage as errorMessageData } from '@/services/error-message'
 
 export const groupedDays = (_messages = []) => {
   return (
@@ -26,4 +30,33 @@ export function generateMessages(_messages) {
 
     return acc.concat([...sortedMessages, { type: 'day', date, id: date }])
   }, [])
+}
+
+// -- API ERROR MESSAGE --
+/**
+ * @param {string} errorMessage - The original error message.
+ * @param {Object} params - The parameters to replace (eg: { name: 'value', count: 10 }).
+ * @returns {string} The formatted error message.
+ */
+
+export function formatErrorMessage(errorMessage, params = {}) {
+  if (Object.keys(params).length > 0) {
+    return Object.keys(params).reduce((current, key) => {
+      return current.replace(`{${key}}`, params[key])
+    }, errorMessage)
+  }
+
+  return errorMessage
+}
+
+export const getErrorMessage = (errorKey, errorCode, params = {}) => {
+  const errorGroup = errorMessageData.api_error_message[errorKey]
+  const errorMessage = errorGroup ? errorGroup[errorCode] : 'サーバー側で問題が発生しました。'
+  return formatErrorMessage(errorMessage, params)
+}
+
+export function showAPIErrorMessage(error, errorKey, params = {}) {
+  const errorCode = get(error, 'response.data.error_code')
+  const errorMessage = getErrorMessage(errorKey, errorCode, params)
+  message.error(errorMessage)
 }

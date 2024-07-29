@@ -107,14 +107,15 @@ export const useGetMe = () => {
     enabled: Boolean(authenticated && meId),
   })
 
-  const meRole = query.data?.role
-  const meMainRole = organizationDetail?.main_role
-  const meSubRole = organizationDetail?.sub_role
-
+  const meRole = query.data?.role?.trim()
+  const meMainRole = organizationDetail?.main_role?.trim()
+  const meSubRole = organizationDetail?.sub_role?.trim()
   const isSystemAdmin = meMainRole === USER_ROLE.SYSTEM_ADMIN || meRole === USER_ROLE.SYSTEM_ADMIN
   const isDeployAdmin = meSubRole === USER_ROLE.DEPLOY_ADMIN
   const isOrgAdmin = meMainRole === USER_ROLE.ORG_ADMIN
   const isMember = meMainRole === USER_ROLE.MEMBER
+
+  console.log({ role: meRole, main_role: meMainRole, sub_role: meSubRole })
 
   const isAcceptedDeployment = useMemo(() => {
     if (isOrgAdmin && !isDeployAdmin) return false
@@ -123,5 +124,21 @@ export const useGetMe = () => {
     return true
   }, [isOrgAdmin, isMember, isDeployAdmin])
 
-  return { ...query, isSystemAdmin, isDeployAdmin, isOrgAdmin, isMember, isAcceptedDeployment }
+  const isAcceptedAddEditProject = useMemo(() => {
+    if (isSystemAdmin || isOrgAdmin) return true
+
+    return false
+  }, [isSystemAdmin, isOrgAdmin])
+
+  return {
+    ...query,
+    //
+    isSystemAdmin,
+    isDeployAdmin,
+    isOrgAdmin,
+    isMember,
+    //
+    isAcceptedDeployment,
+    isAcceptedAddEditProject,
+  }
 }

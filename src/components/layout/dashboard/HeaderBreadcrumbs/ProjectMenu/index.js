@@ -1,15 +1,18 @@
 import { Dropdown } from 'antd'
+import noop from 'lodash/noop'
 
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { Assets, Routes } from '@/constants'
-import { useProjectActive, useProjectQuery } from '@/hooks/query'
+import { useGetMe, useProjectActive, useProjectQuery } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Breadcrumbs } from '@/components/common'
 import { ProjectAddEditModal } from '@/components/project'
+
+import { cn } from '@/utils/helper/functions'
 
 import ProjectSubMenu from './ProjectSubMenu'
 
@@ -23,6 +26,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
   })
 
   const { projectActive, setProjectActive } = useProjectActive()
+  const { isAcceptedAddEditProject } = useGetMe()
 
   useEffect(() => {
     if (!projectActive?.name && data?.[0]?.name) {
@@ -43,18 +47,23 @@ const ProjectMenu = ({ breadcrumbs }) => {
           </div>
         </div>
       ),
-      onClick: () => null,
+      onClick: noop,
       key: '0',
     },
     {
       label: (
         <ProjectAddEditModal onSuccess={() => router.push(Routes.PROJECT)}>
-          <div className="border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary">
+          <div
+            className={cn('border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary', {
+              'text-dark-grey-2': !isAcceptedAddEditProject,
+            })}
+          >
             新規プロジェクト作成
           </div>
         </ProjectAddEditModal>
       ),
-      onClick: () => null,
+      disabled: !isAcceptedAddEditProject,
+      onClick: noop,
       key: '1',
     },
     {

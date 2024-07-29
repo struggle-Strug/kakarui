@@ -7,11 +7,12 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, LOCAL_STORAGE_KEYS, ROBOT_LIST_KEY } from '@/constants'
+import { API, API_ERRORS, LOCAL_STORAGE_KEYS, ROBOT_LIST_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useSyncLocalStorage } from '@/hooks/share'
 
 import { mapOptionsQuery, tryParseJson } from '@/utils/helper/functions'
+import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -51,6 +52,10 @@ export const useRobotQuery = ({ search, sort, options = {} } = {}) => {
     staleTime: Infinity,
     ...options,
   })
+
+  if (query.isError && query.error) {
+    showAPIErrorMessage(query.error, API_ERRORS.ROBOT_LIST)
+  }
 
   const data = query.data?.robots || []
 
@@ -96,7 +101,7 @@ export const useRobotQuery = ({ search, sort, options = {} } = {}) => {
 
   // -- get options --
   const getRobotOptions = () => {
-    return mapOptionsQuery(data, 'model')
+    return mapOptionsQuery(data)
   }
 
   return { ...query, data, filteredData, getRobotDetail, getRobotOptions }

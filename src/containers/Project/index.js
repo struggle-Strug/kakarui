@@ -1,3 +1,4 @@
+import noop from 'lodash/noop'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useProjectQuery } from '@/hooks/query'
@@ -24,7 +25,7 @@ const ProjectContainer = () => {
       <Button
         icon={<AddIcon size={36} />}
         label="新規プロジェクト作成"
-        onClick={() => null}
+        onClick={noop}
         type="outline"
       />
     </ProjectAddEditModal>

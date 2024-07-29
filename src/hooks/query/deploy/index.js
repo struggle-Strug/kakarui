@@ -10,7 +10,6 @@ import { message } from 'antd'
 import chunk from 'lodash/chunk'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
-import noop from 'lodash/noop'
 import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 
@@ -18,7 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import {
   API,
-  API_ERROR_MESSAGES,
+  API_ERRORS,
   DEPLOY_LIST_KEY,
   INTERVAL_5M,
   INTERVAL_15S,
@@ -29,6 +28,7 @@ import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
+import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -64,6 +64,10 @@ export const useDeployQuery = ({ search, sort, options = {} } = {}) => {
     staleTime: STALE_TIME,
     ...options,
   })
+
+  if (query.isError && query.error) {
+    showAPIErrorMessage(query.error, API_ERRORS.DEPLOY_LIST)
+  }
 
   const data = query.data?.deploys || []
 
@@ -124,19 +128,27 @@ const fetchDeployData = async (organizationId, projectId) => {
 export const useMyDeployQuery = ({ limit } = {}) => {
   const queryClient = useQueryClient()
 
-  const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
+  const { stubEnabled } = useStubEnabled() || {}
+  const { organizationId } = useOrganizationQuery() || {}
 
-  const { data: projects = [] } = useProjectQuery()
-  const projectIds = useMemo(() => projects.map((p) => p?.id), [projects])
+  const { data: projects = [] } = useProjectQuery() || {}
+
+  const projectIds = useMemo(() => {
+    const ids = (projects || []).map((p) => p?.id)
+    console.log('Project IDs:', ids)
+    return ids
+  }, [projects])
 
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
 
   useEffect(() => {
     const fetchAllDeployData = async () => {
+      if (projectIds.length === 0) return
+
       setIsLoading(true)
       const chunkedProjectIds = chunk(projectIds, 5)
+      console.log('Chunked Project IDs:', chunkedProjectIds)
 
       try {
         for (const projectChunk of chunkedProjectIds) {
@@ -155,69 +167,83 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       }
     }
 
-    if (!isServer && organizationId && projectIds.length > 0) {
+    if (typeof window !== 'undefined' && organizationId && projectIds.length > 0) {
       fetchAllDeployData()
     }
-  }, [projectIds, organizationId, fetchDeployData])
+  }, [projectIds, organizationId, queryClient])
 
-  const deployQueries = (projectIds || []).map((projectId) => {
-    const query = useQuery({
-      queryKey: [DEPLOY_LIST_KEY, organizationId, projectId],
-      queryFn: () => fetchDeployData(organizationId, projectId),
-      placeholderData: mockData.my_deploy_list,
-      refetchInterval: INTERVAL_5M,
-      enabled: !stubEnabled,
-      staleTime: Infinity,
-    })
+  // Create a single useQuery to fetch data for all projectIds
+  const deployQuery = useQuery({
+    queryKey: [DEPLOY_LIST_KEY, organizationId, projectIds],
+    queryFn: async () => {
+      if (projectIds.length === 0) return []
 
-    if (!query) {
-      return {
-        refetch: noop,
-        isLoading: false,
-        isSuccess: false,
-        isError: true,
-        data: [],
+      const chunkedProjectIds = chunk(projectIds, 5)
+      const results = []
+
+      for (const projectChunk of chunkedProjectIds) {
+        const chunkResults = await Promise.allSettled(
+          projectChunk.map((projectId) => fetchDeployData(organizationId, projectId))
+        )
+
+        chunkResults.forEach((result, index) => {
+          if (result.status === 'fulfilled') {
+            results.push(...result.value)
+          } else {
+            console.error(
+              `Error fetching data for projectId ${projectChunk[index]}:`,
+              result.reason
+            )
+          }
+        })
       }
-    }
 
-    return query
+      return results
+    },
+    placeholderData: [],
+    enabled: projectIds.length > 0 && !stubEnabled,
+    refetchInterval: INTERVAL_5M,
+    staleTime: Infinity,
   })
 
-  const deployData = useMemo(() => {
-    const result = deployQueries
-      .filter((query) => query.isSuccess && query.data)
-      .flatMap((query) => query.data)
+  if (deployQuery.isError && deployQuery.error) {
+    showAPIErrorMessage(deployQuery.error, API_ERRORS.PROJECT_LIST)
+  }
 
-    const projectIdToNameMap = projects.reduce((map, project) => {
+  const deployData = useMemo(() => {
+    const result = deployQuery.data || []
+    console.log('Deploy Data Result:', result)
+
+    const projectIdToNameMap = (projects || []).reduce((map, project) => {
       if (project?.id && project?.name) {
         map[project.id] = project.name
       }
       return map
     }, {})
 
-    const enhancedResult = result.map((deploy) => ({
+    const enhancedResult = (result || []).map((deploy) => ({
       ...deploy,
       project_name: projectIdToNameMap[deploy.project_id] || null,
     }))
 
     return orderBy(enhancedResult, ['create_date'], ['asc'])
-  }, [deployQueries, projects])
+  }, [deployQuery.data, projects])
 
   const refetchAll = useCallback(async () => {
     setIsRefetching(true)
     if (stubEnabled) {
       await new Promise((resolve) => setTimeout(resolve, 1500))
     } else {
-      await Promise.allSettled(deployQueries.map((query) => query.refetch()))
+      await deployQuery.refetch()
     }
     setIsRefetching(false)
-  }, [deployQueries, stubEnabled])
+  }, [deployQuery, stubEnabled])
 
   const slicedData = limit ? deployData.slice(0, limit) : deployData
   const data = stubEnabled ? mockData.my_deploy_list : slicedData
 
   return {
-    loading: isLoading || isRefetching,
+    loading: isLoading || isRefetching || deployQuery.isLoading,
     data: isLoading ? [] : data,
     refetch: refetchAll,
   }
@@ -250,16 +276,11 @@ export const useDeployStart = ({ onSuccess } = {}) => {
         stubEnabled,
       ])
 
-      if (response?.data?.message) {
-        message.success(response.data.message)
-      }
-
+      message.success('デプロイ要求が受理されました。')
       onSuccess?.(response)
     },
     onError: (error) => {
-      const errorCode = get(error, 'response.data.error_code')
-      const errorMess = API_ERROR_MESSAGES.DEPLOY[errorCode]
-      message.error(errorMess)
+      showAPIErrorMessage(error, API_ERRORS.DEPLOY_START)
     },
   })
 

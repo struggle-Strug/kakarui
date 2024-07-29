@@ -12,7 +12,7 @@ const DashboardStatus = () => {
   return (
     <div
       className="flex w-full flex-col"
-      style={{ '-ms-word-break': 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
+      style={{ msWordBreak: 'break-keep', lineBreak: 'auto', overflowWrap: 'anywhere' }}
     >
       <div className="flex flex-row justify-between">
         <HeaderTitle title="ダッシュボード" />
