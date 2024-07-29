@@ -1,4 +1,4 @@
-import { Modal, Spin } from 'antd'
+import { Modal, Spin, message } from 'antd'
 
 import Head from 'next/head'
 
