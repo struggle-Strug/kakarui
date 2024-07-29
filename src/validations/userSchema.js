@@ -6,6 +6,7 @@ const FORM_INFO = {
   NAME: 'name',
   EMAIL: 'mail',
   ROLE: 'role',
+  SUB_ROLE: 'sub_role',
   COMPANY: 'company',
   ENABLE: 'enable',
 }
@@ -14,6 +15,7 @@ const userValues = {
   [FORM_INFO.NAME]: '',
   [FORM_INFO.EMAIL]: '',
   [FORM_INFO.ROLE]: 'member',
+  [FORM_INFO.SUB_ROLE]: false,
   [FORM_INFO.COMPANY]: '',
 }
 

@@ -69,7 +69,7 @@ const UserForm = ({ onAddEdit, isEdit, data, onClose, loading }) => {
           disabled
         />
 
-        <Checkbox name="sub_role" label="サブロール:" title="デプロイ管理者" />
+        <Checkbox name={FORM_INFO.SUB_ROLE} label="サブロール:" title="デプロイ管理者" />
 
         <Select
           name="status"

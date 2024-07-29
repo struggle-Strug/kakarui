@@ -97,7 +97,7 @@ export const useUserCreate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
 
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
       const response = await Axios.post(API.USER.CREATE, params, { timeout: 60000 })
       return response
@@ -111,7 +111,7 @@ export const useUserCreate = ({ onSuccess } = {}) => {
     },
   })
 
-  const doCreateUser = useDebouncedCallback(mutate)
+  const doCreateUser = useDebouncedCallback(mutateAsync)
   return { doCreateUser, isPending, isSuccess }
 }
 
