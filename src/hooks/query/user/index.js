@@ -121,7 +121,7 @@ export const useUserUpdate = ({ userId, onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
 
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
       const response = await Axios.put(buildApiURL(API.USER.UPDATE, { user_id: userId }), params)
       return response
@@ -135,7 +135,7 @@ export const useUserUpdate = ({ userId, onSuccess } = {}) => {
     },
   })
 
-  const doUpdateUser = useDebouncedCallback(mutate)
+  const doUpdateUser = useDebouncedCallback(mutateAsync)
 
   return { doUpdateUser, isPending, isSuccess }
 }

@@ -1,4 +1,4 @@
-import { Modal, Spin } from 'antd'
+import { Modal, Spin, message } from 'antd'
 
 import Head from 'next/head'
 
@@ -14,7 +14,7 @@ import UserForm from '../UserForm'
 const UserAddModalButton = ({ children, onSuccess, ...props }) => {
   const [open, onOpen, onClose] = useFlag()
 
-  const { doCreateUser, isPending: createLoading } = useUserCreate()
+  const { doCreateUser, isPending: createLoading } = useUserCreate({})
 
   const { doAddPermission, isPending: addPermissionLoading } = usePermissionAdd()
 
@@ -33,6 +33,7 @@ const UserAddModalButton = ({ children, onSuccess, ...props }) => {
           sub_role: subRole ? USER_ROLE.DEPLOY_ADMIN : null,
         })
       }
+      message.success('処理完了しました。')
 
       onSuccess?.()
       onClose()

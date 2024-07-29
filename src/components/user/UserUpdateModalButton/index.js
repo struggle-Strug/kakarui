@@ -1,4 +1,4 @@
-import { Modal, Spin } from 'antd'
+import { Modal, Spin, message } from 'antd'
 
 import Head from 'next/head'
 
@@ -40,7 +40,7 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
         main_role: mainRole,
         sub_role: subRole ? USER_ROLE.DEPLOY_ADMIN : null,
       })
-
+      message.success('処理完了しました。')
       onSuccess?.()
       onClose()
     } catch (error) {

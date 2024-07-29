@@ -2,7 +2,7 @@ import { USER_ROLE } from './constants'
 import { ACTIVE_STATUS, DEPLOY_STATUS, USER_STATUS } from './status'
 import { DEPLOYMENT_TYPE, GENDER_TYPE, SORT_TYPE } from './types'
 
-export const APP_NAME = 'Karakuri Admin Dashboard'
+export const APP_NAME = 'KARAKURI'
 
 export const EMPTY_TEXT = '指定なし'
 

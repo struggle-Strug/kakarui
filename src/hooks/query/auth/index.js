@@ -107,9 +107,9 @@ export const useGetMe = () => {
     enabled: Boolean(authenticated && meId),
   })
 
-  const meRole = query.data?.role
-  const meMainRole = organizationDetail?.main_role
-  const meSubRole = organizationDetail?.sub_role
+  const meRole = query.data?.role?.trim()
+  const meMainRole = organizationDetail?.main_role?.trim()
+  const meSubRole = organizationDetail?.sub_role?.trim()
   const isSystemAdmin = meMainRole === USER_ROLE.SYSTEM_ADMIN || meRole === USER_ROLE.SYSTEM_ADMIN
   const isDeployAdmin = meSubRole === USER_ROLE.DEPLOY_ADMIN
   const isOrgAdmin = meMainRole === USER_ROLE.ORG_ADMIN
