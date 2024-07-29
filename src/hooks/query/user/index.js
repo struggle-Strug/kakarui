@@ -161,7 +161,7 @@ export const useUserCreate = ({ onSuccess } = {}) => {
     },
   })
 
-  const doCreateUser = useDebouncedCallback(mutate)
+  const doCreateUser = useDebouncedCallback(mutateAsync)
   return { doCreateUser, isPending, isSuccess }
 }
 
