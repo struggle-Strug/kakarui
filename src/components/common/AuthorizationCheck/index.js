@@ -37,7 +37,13 @@ const AuthorizationCheck = ({ children }) => {
     if (!isLoading && isSuccess) {
       setOrganizations(_organizations)
     }
-  }, [me?.organizations, isError, isLoading, isSuccess])
+  }, [router.pathname, me?.organizations, isError, isLoading, isSuccess])
+
+  useEffect(() => {
+    if (query?.refetch) {
+      query?.refetch?.()
+    }
+  }, [router.pathname])
 
   // --- permission check --
   const isPermission = useMemo(() => {
