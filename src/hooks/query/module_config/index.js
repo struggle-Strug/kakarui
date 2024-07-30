@@ -95,3 +95,71 @@ export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
 
   return { ...query, data, filteredData, getModuleConfigDetail, getModuleConfigOptions }
 }
+
+export const useModuleConfigCreate = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (params) => {
+      const response = await Axios.post(
+        buildApiURL(API.MODULE.CREATE, { organization_id: organizationId }),
+        { ...params },
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          timeout: 60000,
+        }
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      console.log('response', response)
+      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      console.log('error', error)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
+    },
+  })
+
+  const doCreateModule = useDebouncedCallback(mutate)
+
+  return { doCreateModule, isPending, isSuccess }
+}
+
+export const useModuleConfigUpdate = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: moduleId, ...params }) => {
+      const response = await Axios.put(
+        buildApiURL(API.MODULE.UPDATE, { organization_id: organizationId, module_id: moduleId }),
+        { ...params },
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          timeout: 60000,
+        }
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      console.log('response', response)
+      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      console.log('error', error)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
+    },
+  })
+
+  const doUpdateModule = useDebouncedCallback(mutate)
+
+  return { doUpdateModule, isPending, isSuccess }
+}

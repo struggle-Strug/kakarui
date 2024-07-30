@@ -6,11 +6,10 @@ import { useState } from 'react'
 import { useModuleSetSelectionQuery } from '@/hooks/query'
 
 import { SearchBar } from '@/components/layout/dashboard'
-import { Button } from '@/components/ui'
+import { ColumnSorter, RowContent, RowDate } from '@/components/table'
+import { Button, Table } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
-
-import ModuleSetSelectionTableForm from './ModuleSetSelectionTableForm'
 
 const ModuleSetSelectionModal = ({ open, onClose }) => {
   const [selected, setSelected] = useState(null)
@@ -24,6 +23,42 @@ const ModuleSetSelectionModal = ({ open, onClose }) => {
 
   const searchOptions = getSearchOptions(data, ['name'])
 
+  const columns = [
+    {
+      title: <ColumnSorter title="モジュールセット名" field="name" />,
+      dataIndex: 'name',
+      className: 'min-w-[248px]',
+      render: (item) => <RowContent item={item} className="max-w-[400px]" />,
+    },
+    {
+      title: <ColumnSorter title="説明" field="description" />,
+      dataIndex: 'description',
+      className: 'min-w-[320px]',
+      render: (item) => <RowContent item={item} className="max-w-[400px]" />,
+    },
+    {
+      title: <ColumnSorter title="登録日" field="create_date" />,
+      dataIndex: 'create_date',
+      className: 'min-w-[124px]',
+      render: (text) => <RowDate item={text} />,
+    },
+    {
+      title: <ColumnSorter title="更新日" field="update_date" />,
+      dataIndex: 'update_date',
+      className: 'min-w-[124px]',
+      render: (text) => <RowDate item={text} />,
+    },
+  ]
+
+  const onSelectChange = (newSelected) => {
+    setSelected(newSelected)
+  }
+
+  const rowSelection = {
+    type: 'radio',
+    onSelect: onSelectChange,
+  }
+
   return (
     <Modal
       open={open}
@@ -36,14 +71,13 @@ const ModuleSetSelectionModal = ({ open, onClose }) => {
       <div className="space-y-6 px-12 pb-16 font-light">
         <h3 className="text-lg text-primary">モジュールセットを選択してください。</h3>
         <SearchBar placeholder="モジュールセット名・説明" options={searchOptions} />
-        <ModuleSetSelectionTableForm
-          data={filteredData}
-          loading={isLoading || isFetching}
+        <Table
+          rowSelection={rowSelection}
           total={filteredData.length}
-          selected={selected}
-          setSelected={setSelected}
+          loading={isLoading || isFetching}
+          columns={columns}
+          data={filteredData}
         />
-
         <div className="flex-end mt-12 gap-x-4">
           <Button type="default" className="min-w-[200px]" onClick={() => onClose()}>
             <span className="font-semibold">キャンセル</span>

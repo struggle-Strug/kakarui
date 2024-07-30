@@ -3,29 +3,31 @@ import { Spin } from 'antd'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
-import { useLoadingSimulation } from '@/hooks/custom'
+import { useModuleSetCreate } from '@/hooks/query'
 
 import { ModuleSetForm } from '@/components/module_set'
 import { Container } from '@/components/ui'
 
 const ModuleSetCreateContainer = () => {
   const router = useRouter()
-  const [loading, startLoading] = useLoadingSimulation()
 
-  const onModuleSetCreate = (values) => {
-    // eslint-disable-next-line no-console
-    console.log(values)
+  const { doCreateModuleSet, isPending: loading } = useModuleSetCreate({
+    onSuccess: () => {
+      router.push(Routes.MODULE_SET)
+    },
+  })
 
-    startLoading(() => {
-      router.replace(Routes.MODULE_SET)
-    })
+  const data = {
+    name: '',
+    description: '',
+    moduleset_modules: [],
   }
 
   return (
     <Container title="モジュールセット登録">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">プロジェクトにモジュールセットを登録します。</p>
-        <ModuleSetForm onAddUpdate={onModuleSetCreate} />
+        <ModuleSetForm onSubmit={doCreateModuleSet} data={data} />
       </Spin>
     </Container>
   )

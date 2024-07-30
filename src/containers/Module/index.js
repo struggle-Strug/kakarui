@@ -1,39 +1,40 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import { useEffect, useState } from 'react'
+import { useModuleQuery } from '@/hooks/query'
+import { useDebouncedCallback } from '@/hooks/share'
 
-import moduleApiStub from '@/hooks/stub/module'
-
-import { ModuleAddEditModalButton, ModuleSearchBox, ModuleTable } from '@/components/module'
+import { SearchBar } from '@/components/layout/dashboard'
+import { ModuleAddEditModalButton, ModuleTable } from '@/components/module'
 import { Container } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleContainer = () => {
-  const [modules, setModule] = useState([])
-
-  const [query] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  const [{ sort, search }] = useQueryStates({
+    sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
 
-  const { filter, sort, search } = query || {}
+  const { data, filteredData, isLoading, isFetching, refetch } = useModuleQuery({ search, sort })
 
-  useEffect(() => {
-    moduleApiStub.getModule(filter, sort, search).then(setModule)
-  }, [filter, sort, search])
+  const searchOptions = getSearchOptions(data, ['name'])
 
-  const searchOptions = getSearchOptions(moduleApiStub.getRawData(), ['name', 'description'])
+  const onRefetch = useDebouncedCallback(refetch)
 
   return (
     <Container title="モジュール管理">
       <div className="flex-between mb-5">
-        <ModuleSearchBox options={searchOptions} />
-        <ModuleAddEditModalButton label="モジュール登録" />
+        <div className="w-full">
+          <SearchBar placeholder="モジュールセット名・説明" options={searchOptions} />
+        </div>
+        <ModuleAddEditModalButton label="モジュール登録" data={null} onSuccess={onRefetch} />
       </div>
 
-      <ModuleTable data={modules} loading={false} total={modules.length} />
+      <ModuleTable
+        data={filteredData}
+        loading={isLoading || isFetching}
+        total={filteredData.length}
+      />
     </Container>
   )
 }

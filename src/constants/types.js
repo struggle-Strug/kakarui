@@ -16,4 +16,5 @@ export const GENDER_TYPE = {
 export const DEPLOYMENT_TYPE = {
   ROBOT: 'robot',
   SIM: 'sim',
+  ALL: '',
 }

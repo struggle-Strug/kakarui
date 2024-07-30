@@ -1,13 +1,20 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
+import { useRouter } from 'next/router'
+
+import { Routes } from '@/constants'
 import { useModuleSetQuery } from '@/hooks/query'
 
-import { ModuleSetAddButton, ModuleSetSearchBox, ModuleSetTable } from '@/components/module_set'
-import { Container } from '@/components/ui'
+import { AddIcon } from '@/components/icons'
+import { SearchBar } from '@/components/layout/dashboard'
+import { ModuleSetTable } from '@/components/module_set'
+import { Button, Container } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleSetContainer = () => {
+  const router = useRouter()
+
   const [{ sort, search }] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
@@ -20,8 +27,15 @@ const ModuleSetContainer = () => {
   return (
     <Container title="モジュールセット管理">
       <div className="flex-between mb-5">
-        <ModuleSetSearchBox options={searchOptions} />
-        <ModuleSetAddButton label="" />
+        <div className="w-full">
+          <SearchBar placeholder="モジュールセット名・説明" options={searchOptions} />
+        </div>
+        <Button
+          type="outline"
+          icon={<AddIcon size={36} />}
+          label="新規モジュールセット"
+          onClick={() => router.push(Routes.MODULE_SET_CREATE)}
+        />
       </div>
 
       <ModuleSetTable

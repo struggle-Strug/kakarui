@@ -43,6 +43,7 @@ export default {
 
   MODULE_SET: {
     LIST: '/organizations/{organization_id}/module-sets',
+    DETAIL: '/organizations/{organization_id}/module-sets/{module_set_id}', // GET
     CREATE: '/organizations/{organization_id}/module-sets', // POST
     UPDATE: '/organizations/{organization_id}/module-sets/{module_set_id}', // PUT
   },

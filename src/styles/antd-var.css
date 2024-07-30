@@ -186,7 +186,7 @@
 
 .ant-input-lg,
 .ant-input-affix-wrapper-lg {
-  @apply h-10 px-4 py-3 text-base;
+  @apply h-10 px-4 py-0 text-base;
 }
 
 .ant-input-number .ant-input-number-input-wrap {
@@ -339,7 +339,7 @@
 /* UPLOAD */
 .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select,
 .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
-  @apply m-0 w-max border-none;
+  @apply m-0 border-none;
 }
 
 .ant-radio-group {
@@ -503,4 +503,8 @@ div.ant-typography-h3,
 div.ant-typography-h3 > textarea,
 .ant-typography h3 {
   @apply text-dark-gray-3;
+}
+
+.ant-table-cell .ant-form-item {
+  margin: 0;
 }
