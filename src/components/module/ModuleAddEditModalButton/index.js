@@ -15,23 +15,21 @@ import { FORM_INFO, moduleFormSchema } from '@/validations/moduleSchema'
 
 const ModuleForm = ({ onSuccess, isEdit, data, onClose }) => {
   const defaultValues = useMemo(
-    () =>
-      isEdit
-        ? data
-        : {
-            name: '',
-            description: '',
-            tag: '',
-            file: null,
-          },
-    [data, isEdit]
+    () => ({
+      ...(data || {}),
+      tag: data?.latest_tag || data?.tag?.[0]?.name || '',
+      file: null,
+    }),
+    [data]
   )
+
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: () => {
       onClose()
       onSuccess?.()
     },
   })
+
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
@@ -52,7 +50,7 @@ const ModuleForm = ({ onSuccess, isEdit, data, onClose }) => {
   const onSubmit = useCallback(
     async (values) => {
       if (isEdit) {
-        doCreateModule(values)
+        doUpdateModule(values)
         return
       }
       doCreateModule(values)

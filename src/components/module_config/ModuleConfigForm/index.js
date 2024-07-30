@@ -41,6 +41,10 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     },
   })
 
+  useEffect(() => {
+    methods.reset(defaultValues)
+  }, [defaultValues])
+
   const { append, remove } = useFieldArray({
     control: methods.control,
     name: 'config_data.modules',
