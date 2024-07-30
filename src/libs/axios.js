@@ -5,7 +5,7 @@ import { getSession, signOut } from 'next-auth/react'
 import { API_ROOT, Routes, TESTING, TIMEOUT, httpStatusCode } from '@/constants'
 
 const instance = axios.create({
-  baseURL: TESTING ? `https://karakuri.agecode.dev/proxy?url=${API_ROOT}` : API_ROOT,
+  baseURL: API_ROOT,
   timeout: TIMEOUT,
 })
 
