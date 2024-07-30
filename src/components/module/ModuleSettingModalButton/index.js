@@ -19,6 +19,7 @@ import configData from '@/services/mock-data/config_data'
 import { moduleSettingSchema } from '@/validations/moduleSchema'
 
 const ModuleSettingForm = ({ open, onClose, data, setData }) => {
+  // eslint-disable-next-line no-unused-vars
   const [{ sort, search }, setQueryState] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(),
     search: parseAsString,

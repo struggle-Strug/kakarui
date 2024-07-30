@@ -3,7 +3,7 @@ import { Spin } from 'antd'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
-import { useModuleConfigDetailQuery, useModuleConfigUpdate } from '@/hooks/query'
+import { useModuleConfigQuery, useModuleConfigUpdate } from '@/hooks/query'
 
 import { ModuleConfigForm } from '@/components/module_config'
 import { Container } from '@/components/ui'
@@ -12,7 +12,8 @@ const ModuleConfigDetailContainer = () => {
   const router = useRouter()
   const moduleConfigId = router.query.module_config_id
 
-  const data = useModuleConfigDetailQuery(moduleSetId)
+  const { getModuleConfigDetail } = useModuleConfigQuery()
+  const detail = getModuleConfigDetail(moduleConfigId)
 
   const { doUpdateModuleConfig, isPending: loading } = useModuleConfigUpdate({
     onSuccess: () => {
@@ -20,7 +21,7 @@ const ModuleConfigDetailContainer = () => {
     },
   })
 
-  if (!data) {
+  if (!detail) {
     router.push('/404')
     return `<></>`
   }
@@ -29,7 +30,7 @@ const ModuleConfigDetailContainer = () => {
     <Container title="モジュール配置設定">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
-        <ModuleConfigForm isEdit onSubmit={doUpdateModuleConfig} data={data} />
+        <ModuleConfigForm isEdit onSubmit={doUpdateModuleConfig} data={detail || {}} />
       </Spin>
     </Container>
   )

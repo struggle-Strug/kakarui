@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import get from 'lodash/get'
 import includes from 'lodash/includes'

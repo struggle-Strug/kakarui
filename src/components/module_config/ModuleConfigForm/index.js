@@ -3,7 +3,7 @@ import { Form, Space } from 'antd'
 import orderBy from 'lodash/orderBy'
 
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'

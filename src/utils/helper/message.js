@@ -2,7 +2,6 @@ import { message } from 'antd'
 import dayjs from 'dayjs'
 import get from 'lodash/get'
 
-import { API_ERRORS } from '@/constants'
 import { FORMAT_STRING } from '@/constants/time'
 
 import { errorMessage as errorMessageData } from '@/services/error-message'
