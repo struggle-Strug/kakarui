@@ -15,15 +15,16 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [selectedModules, setSelectedModules] = useState(null)
 
-  useEffect(() => {
-    setSelectedRowKeys([])
-    setSelectedModules([])
-  }, [])
-
-  const [{ sort, search }] = useQueryStates({
+  const [{ sort, search }, setQueryState] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
+
+  useEffect(() => {
+    setSelectedRowKeys([])
+    setSelectedModules([])
+    setQueryState({ search: '' })
+  }, [])
 
   const { data, filteredData, isLoading, isFetching } = useModuleSelectionQuery({ search, sort })
 
@@ -150,6 +151,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
           <SearchBar placeholder="モジュール名・説明" options={searchOptions} />
         </div>
         <Table
+          pagination={{}}
           rowSelection={rowSelection}
           columns={columns}
           loading={isLoading || isFetching}

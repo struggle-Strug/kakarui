@@ -11,7 +11,7 @@ import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
 import { ModuleAddEditModalButton, ModuleSettingModalButton } from '@/components/module'
 import { ModuleSelectionModal } from '@/components/module_selection'
-import { ColumnSorter, RowDate } from '@/components/table'
+import { RowDate } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { FORM_MODULE_SET, moduleSetSchema } from '@/validations/moduleSetSchema'
@@ -27,9 +27,10 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const defaultValues = useMemo(() => {
     return {
       ...data,
-      moduleset_modules: data.moduleset_modules.map((module) => {
+      moduleset_modules: data.moduleset_modules.map((module, i) => {
         return {
           ...module,
+          key: `${Date.now()}-${i}`,
           name: module.module_name,
         }
       }),
@@ -70,7 +71,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
             .map((module, i) =>
               module.tags.map((tag, j) => {
                 return {
-                  id: `${Date.now()}-${i}-${j}`,
+                  key: `${Date.now()}-${i}-${j}`,
                   name: module.name,
                   module_id: module.id,
                   tag: tag.name,
@@ -90,7 +91,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
           const oldModule = values.moduleset_modules[moduleSelectionModalChangeIndex]
           if (newModule && oldModule) {
             const changeModule = {
-              id: `${Date.now()}`,
+              key: `${Date.now()}`,
               name: newModule.name,
               module_id: newModule.id,
               tag: newModule.tags[0].name,
@@ -125,9 +126,14 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     setModuleSelectionModalFlag(false)
   }, [setModuleSelectionModalFlag])
 
+  const sorter = (a, b, key) => {
+    return a[key] > b[key] ? 1 : -1
+  }
+
   const columns = [
     {
-      title: <ColumnSorter title={<span> モジュール名</span>} field="name" />,
+      title: 'モジュール名',
+      sorter: (a, b) => sorter(a, b, 'name'),
       dataIndex: 'name',
       className: 'min-w-[200px]',
       render: (text, record, index) => (
@@ -141,7 +147,8 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       ),
     },
     {
-      title: <ColumnSorter title="タグ" field="tag" />,
+      title: 'タグ',
+      sorter: (a, b) => sorter(a, b, 'tag'),
       dataIndex: 'tag',
       className: 'min-w-[96px]',
       render: (value, record, index) => (
@@ -154,7 +161,8 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       ),
     },
     {
-      title: <ColumnSorter title="デプロイ先種別" field="type" />,
+      title: 'デプロイ先種別',
+      sorter: (a, b) => sorter(a, b, 'type'),
       dataIndex: 'type',
       className: 'min-w-[272px]',
       render: (value, record, index) => (
@@ -175,7 +183,8 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       ),
     },
     {
-      title: <ColumnSorter title="設定値" field="default_config_data" />,
+      title: '設定値',
+      sorter: (a, b) => sorter(a, b, 'default_config_data'),
       dataIndex: 'default_config_data',
       className: 'min-w-[356px]',
       render: (value, record, index) => (
@@ -195,23 +204,21 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       ),
     },
     {
-      title: <ColumnSorter title="登録日" field="create_date" />,
+      title: '登録日',
+      sorter: (a, b) => sorter(a, b, 'create_date'),
       dataIndex: 'create_date',
       className: 'min-w-[124px]',
       render: (text) => <RowDate item={text} />,
     },
     {
-      title: <ColumnSorter title="更新日" field="update_date" />,
+      title: '更新日',
+      sorter: (a, b) => sorter(a, b, 'update_date'),
       dataIndex: 'update_date',
       className: 'min-w-[124px]',
       render: (text) => <RowDate item={text} />,
     },
     {
-      title: (
-        <span className="text-center text-base" field="id">
-          操作
-        </span>
-      ),
+      title: '操作',
       dataIndex: 'id',
       align: 'center',
       className: 'min-w-[96px]',
@@ -259,6 +266,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         </Space>
 
         <Table
+          rowKey="key"
           key={tableKey}
           pagination={false}
           columns={columns}

@@ -72,6 +72,7 @@ const ModuleSetSelectionModal = ({ open, onClose }) => {
         <h3 className="text-lg text-primary">モジュールセットを選択してください。</h3>
         <SearchBar placeholder="モジュールセット名・説明" options={searchOptions} />
         <Table
+          pagination={{}}
           rowSelection={rowSelection}
           total={filteredData.length}
           loading={isLoading || isFetching}

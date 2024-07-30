@@ -7,15 +7,16 @@ const FORM_MODULE_SET = {
 }
 
 const moduleSchema = Yup.object().shape({
-  module_id: Yup.string().required('モジュールを入力してください。'),
-  tag: Yup.string().required('タグを入力してください。'),
+  tag: Yup.string().trim().required('タグを入力してください。'),
   type: Yup.string(),
   default_config_data: Yup.object().required('設定値を入力してください。'),
 })
 
 const moduleSetSchema = Yup.object().shape({
-  [FORM_MODULE_SET.NAME]: Yup.string().trim().required().max(50),
-  [FORM_MODULE_SET.DESCRIPTION]: Yup.string().trim().max(4000),
+  [FORM_MODULE_SET.NAME]: Yup.string().trim().required().max(50, `50文字以下を入力してください。`),
+  [FORM_MODULE_SET.DESCRIPTION]: Yup.string()
+    .trim()
+    .max(4000, '無効な入力です。4000文字以下で入力してください。'),
   [FORM_MODULE_SET.MODULESET_MODULES]: Yup.array().of(moduleSchema),
 })
 
