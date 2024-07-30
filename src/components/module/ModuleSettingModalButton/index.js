@@ -1,76 +1,103 @@
-import { Form, Modal, Spin } from 'antd'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Form, Modal } from 'antd'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useLoadingSimulation } from '@/hooks/custom'
 import { useFlag } from '@/hooks/share'
-import moduleSettingApiStub from '@/hooks/stub/module_setting'
 
+import { Input, InputTextArea, Select } from '@/components/form'
 import { ExternalLinkIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
-import { Button, ButtonIcon } from '@/components/ui'
+import { ColumnSorter } from '@/components/table'
+import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
-import ModuleSettingTableForm from './ModuleSettingTableForm'
+import configData from '@/services/mock-data/config_data'
+import { moduleSettingSchema } from '@/validations/moduleSchema'
 
-const ModuleSettingForm = ({ open, onClose }) => {
-  const [loading, startLoading] = useLoadingSimulation()
-  const [data, setData] = useState([])
+const ModuleSettingForm = ({ open, onClose, data, setData }) => {
+  // const [{ filter, sort, search }] = useQueryStates({
+  //   filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
+  //   sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  //   search: parseAsString,
+  // })
 
-  const [{ filter, sort, search }] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
-    search: parseAsString,
+  // const reload = () => {
+  //   moduleSettingApiStub.getData(filter, sort, search).then(setData)
+  // }
+
+  // useEffect(() => {
+  //   reload()
+  // }, [filter, sort, search])
+
+  // const searchOptions = getSearchOptions(values, ['key', 'value'])
+
+  const defaultValues = useMemo(() => {
+    const parseData = data && data !== '' && Object.keys(data).length !== 0 ? data : configData
+    const parseValues = Object.keys(parseData).map((key) => {
+      const value =
+        typeof parseData[key] === 'string' ? parseData[key] : JSON.stringify(parseData[key])
+      return { key, value }
+    })
+    return {
+      config_data: parseValues,
+    }
+  }, [data])
+
+  const methods = useForm({
+    resolver: yupResolver(moduleSettingSchema),
+    defaultValues: {
+      config_data: [],
+    },
   })
 
-  const reload = () => {
-    moduleSettingApiStub.getData(filter, sort, search).then(setData)
-  }
-
-  useEffect(() => {
-    reload()
-  }, [filter, sort, search])
-
-  const defaultValues = useMemo(() => ({}), [])
-
-  const methods = useForm()
+  const values = methods.getValues()
 
   useEffect(() => {
     methods.reset(defaultValues)
-  }, [defaultValues])
+  }, [data])
 
-  const onSubmit = (values) => {
-    // eslint-disable-next-line no-console
-    console.log(values)
-
-    startLoading(() => {
-      onClose()
-    })
-  }
-
-  const renderForm = (
-    <FormProvider {...methods}>
-      <Form onFinish={methods.handleSubmit(onSubmit)} layout="horizontal">
-        <ModuleSettingTableForm data={data} />
-        <div className="flex-end mt-12 gap-x-4">
-          <Button type="default" className="min-w-[200px]" onClick={onClose}>
-            <span className="font-semibold">キャンセル</span>
-          </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
-            <span className="font-semibold"> 設定 </span>
-          </Button>
-        </div>
-      </Form>
-    </FormProvider>
+  const onSubmit = useCallback(
+    (formData) => {
+      const objectData = formData.config_data.reduce((acc, cur) => {
+        let value = ''
+        try {
+          value = JSON.parse(cur.value)
+        } catch {
+          value = cur.value
+        }
+        acc[cur.key] = value
+        return acc
+      }, {})
+      setData(objectData)
+    },
+    [setData]
   )
 
-  const searchOptions = getSearchOptions(moduleSettingApiStub.getRawData(), [
-    'property',
-    'settings',
-  ])
+  const columns = [
+    {
+      title: <ColumnSorter title={<span>プロパティ</span>} field="key" />,
+      dataIndex: 'key',
+      className: 'min-w-[248px]',
+      render: (value) => <div className="text-base">{value}</div>,
+    },
+    {
+      title: <ColumnSorter title="設定" field="value" />,
+      dataIndex: 'value',
+      className: 'min-w-[440px]',
+      render: (value, record, index) => (
+        <Input
+          ref={methods.ref}
+          {...methods.register(`config_data.${index}.value`)}
+          defaultValue={value}
+          name={`config_data.${index}.value`}
+        />
+      ),
+    },
+  ]
 
   return (
     <Modal
@@ -83,24 +110,32 @@ const ModuleSettingForm = ({ open, onClose }) => {
     >
       <div className="space-y-6 px-12 pb-16 font-light">
         <h3 className="text-lg text-primary">以下のプロパティを設定してください。</h3>
-        <div>
-          <SearchBar placeholder="プロパティ" options={searchOptions} />
-        </div>
-        <Spin spinning={loading}>
-          <div className="p-12 text-base">{renderForm}</div>
-        </Spin>
+        <div>{/* <SearchBar placeholder="プロパティ" options={searchOptions} disabled /> */}</div>
+        <FormProvider {...methods}>
+          <Form onFinish={methods.handleSubmit(onSubmit)} layout="horizontal">
+            <Table rowKey="key" pagination={false} columns={columns} data={values.config_data} />
+            <div className="flex-end mt-12 gap-x-4">
+              <Button type="default" className="min-w-[200px]" onClick={onClose}>
+                <span className="font-semibold">キャンセル</span>
+              </Button>
+              <Button type="primary" htmlType="submit" className="min-w-[200px]">
+                <span className="font-semibold"> 設定 </span>
+              </Button>
+            </div>
+          </Form>
+        </FormProvider>
       </div>
     </Modal>
   )
 }
 
-const ModuleSettingModalButton = () => {
+const ModuleSettingModalButton = ({ data, setData }) => {
   const [open, onOpen, onClose] = useFlag()
 
   return (
     <>
       <ButtonIcon icon={<ExternalLinkIcon size={32} />} onClick={onOpen} />
-      {open && <ModuleSettingForm open={open} onClose={onClose} />}
+      {open && <ModuleSettingForm open={open} onClose={onClose} data={data} setData={setData} />}
     </>
   )
 }
