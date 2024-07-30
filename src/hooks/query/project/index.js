@@ -120,7 +120,7 @@ export const useProjectCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([PROJECT_LIST_KEY, organizationId])
+      queryClient.invalidateQueries([PROJECT_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {
@@ -146,7 +146,7 @@ export const useProjectUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([PROJECT_LIST_KEY, organizationId])
+      queryClient.invalidateQueries([PROJECT_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {

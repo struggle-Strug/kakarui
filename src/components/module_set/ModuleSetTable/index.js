@@ -1,4 +1,5 @@
 import { Space } from 'antd'
+import noop from 'lodash/noop'
 
 import { Routes } from '@/constants'
 
@@ -42,7 +43,7 @@ const ModuleSetTable = ({ data, total, loading }) => {
             query={{ module_set_id: id }}
             disabled={!id}
           >
-            <ButtonIcon icon={<EditIcon size={32} />} />
+            <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
           </RowTextLink>
         </Space>
       ),

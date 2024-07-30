@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { API, API_ERRORS, USER_LIST_KEY } from '@/constants'
-import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { showAPIErrorMessage } from '@/utils/helper/message'
@@ -15,7 +14,6 @@ export const usePermissionAdd = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
   const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
@@ -29,7 +27,7 @@ export const usePermissionAdd = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, stubEnabled])
+      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {
@@ -46,7 +44,6 @@ export const usePermissionUpdate = ({ userId, organizationUserId, onSuccess } = 
   const queryClient = useQueryClient()
 
   const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
@@ -61,7 +58,7 @@ export const usePermissionUpdate = ({ userId, organizationUserId, onSuccess } = 
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, stubEnabled])
+      queryClient.invalidateQueries([USER_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {
