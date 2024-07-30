@@ -47,6 +47,7 @@ export const API_ERROR_CODE = {
 }
 
 export const API_ERRORS = {
+  COMMON: 'COMMON',
   USER_CREATE: 'USER_CREATE',
   USER_LIST: 'USER_LIST',
   USER_UPDATE: 'USER_UPDATE',

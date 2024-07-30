@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { PlusOutlined } from '@ant-design/icons'
 import { Upload, message } from 'antd'
 

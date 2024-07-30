@@ -7,12 +7,11 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
-import { DatePicker, Input, InputTextArea, Select } from '@/components/form'
+import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
 import { ModuleSettingModalButton } from '@/components/module'
 import ModuleAddEditModalButton from '@/components/module/ModuleAddEditModalButton'
 import { ModuleSelectionModal, ModuleSetSelectionModal } from '@/components/module_selection'
-import { ColumnSorter } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { FORM_MODULE_CONFIG, moduleConfigSchema } from '@/validations/moduleConfigSchema'
@@ -297,6 +296,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         </Space>
 
         <Table
+          id="table_form"
           rowKey="key"
           key={tableKey}
           pagination={false}

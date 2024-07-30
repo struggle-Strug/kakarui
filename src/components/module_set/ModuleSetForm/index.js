@@ -266,6 +266,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         </Space>
 
         <Table
+          id="table_form"
           rowKey="key"
           key={tableKey}
           pagination={false}
