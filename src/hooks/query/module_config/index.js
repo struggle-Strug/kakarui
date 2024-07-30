@@ -123,7 +123,12 @@ export const useModuleConfigCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false])
+      queryClient.invalidateQueries([
+        MODULE_CONFIG_LIST_KEY,
+        organizationId,
+        projectActiveId,
+        false,
+      ])
       queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
       queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
@@ -159,7 +164,12 @@ export const useModuleConfigUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false])
+      queryClient.invalidateQueries([
+        MODULE_CONFIG_LIST_KEY,
+        organizationId,
+        projectActiveId,
+        false,
+      ])
       queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
       queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
