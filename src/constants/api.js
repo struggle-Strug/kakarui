@@ -36,13 +36,14 @@ export default {
 
   MODULE_CONFIG: {
     LIST: '/organizations/{organization_id}/projects/{project_id}/module-configs', // POST
-    CREATE: '/organizations/{organization_id}/Projects/{project_id}/module-configs', // POST
+    CREATE: '/organizations/{organization_id}/projects/{project_id}/module-configs', // POST
     UPDATE:
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // PUT
   },
 
   MODULE_SET: {
     LIST: '/organizations/{organization_id}/module-sets',
+    DETAIL: '/organizations/{organization_id}/module-sets/{module_set_id}', // GET
     CREATE: '/organizations/{organization_id}/module-sets', // POST
     UPDATE: '/organizations/{organization_id}/module-sets/{module_set_id}', // PUT
   },

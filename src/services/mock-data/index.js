@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import deploy_list from './deploy_list.json'
 import me from './me.json'
+import module from './module.json'
 import module_config from './module_config.json'
 import module_set from './module_set.json'
 import my_deploy_list from './my_deploy_list.json'
@@ -15,6 +16,7 @@ export const mockData = {
   user_by_organization,
   my_deploy_list,
   module_config,
+  module,
   module_set,
   robot_list,
 }

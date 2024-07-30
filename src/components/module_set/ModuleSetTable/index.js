@@ -49,15 +49,7 @@ const ModuleSetTable = ({ data, total, loading }) => {
     },
   ]
 
-  return (
-    <Table
-      total={total}
-      pagination={{ defaultPageSize: 30 }}
-      loading={loading}
-      columns={columns}
-      data={data}
-    />
-  )
+  return <Table total={total} loading={loading} columns={columns} data={data} />
 }
 
 export default ModuleSetTable

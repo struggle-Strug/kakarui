@@ -1,22 +1,43 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Modal, message } from 'antd'
+import { Form, Modal, Spin } from 'antd'
 
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { useModuleCreate, useModuleUpdate } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
-import moduleApiStub from '@/hooks/stub/module'
 
-import { Input, InputTextArea, UploadImageInput } from '@/components/form'
+import { Input, InputTarFile, InputTextArea } from '@/components/form'
 import { AddIcon, EditIcon } from '@/components/icons'
 import { Button, ButtonIcon } from '@/components/ui'
 
-import { uuidv4 } from '@/utils/helper/functions'
-
-import { moduleFormSchema, moduleValues } from '@/validations/moduleSchema'
+import { FORM_INFO, moduleFormSchema } from '@/validations/moduleSchema'
 
 const ModuleForm = ({ onSuccess, isEdit, data, onClose }) => {
-  const defaultValues = useMemo(() => (isEdit ? data : moduleValues), [data, isEdit])
+  const defaultValues = useMemo(
+    () =>
+      isEdit
+        ? data
+        : {
+            name: '',
+            description: '',
+            tag: '',
+            file: null,
+          },
+    [data, isEdit]
+  )
+  const { doCreateModule, isPending: createLoading } = useModuleCreate({
+    onSuccess: () => {
+      onClose()
+      onSuccess?.()
+    },
+  })
+  const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
+    onSuccess: () => {
+      onClose()
+      onSuccess?.()
+    },
+  })
 
   const methods = useForm({
     mode: 'onChange',
@@ -28,43 +49,18 @@ const ModuleForm = ({ onSuccess, isEdit, data, onClose }) => {
     methods.reset(defaultValues)
   }, [defaultValues])
 
-  const updateModule = async (values) => {
-    const updateData = {
-      ...values,
-      update_date: new Date().toISOString(),
-    }
-    await moduleApiStub.updateModule(data.id, updateData)
-    onSuccess?.()
-    onClose()
-  }
+  const onSubmit = useCallback(
+    async (values) => {
+      if (isEdit) {
+        doCreateModule(values)
+        return
+      }
+      doCreateModule(values)
+    },
+    [doCreateModule, doUpdateModule]
+  )
 
-  const onSubmit = async (values) => {
-    if (isEdit) {
-      updateModule(values)
-      return
-    }
-    const newModule = {
-      id: uuidv4(),
-      organization_id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-      repository_id: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-      repository_name: 'repo name',
-      create_user: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-      create_date: new Date().toISOString(),
-      update_user: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-      update_date: new Date().toISOString(),
-      latest_tag: values?.tag,
-      ...values,
-    }
-    try {
-      await moduleApiStub.addModule(newModule)
-      onSuccess?.()
-      onClose()
-    } catch (error) {
-      message.error(error?.message)
-    }
-  }
-
-  return (
+  const renderForm = (
     <FormProvider {...methods}>
       <Form
         onFinish={methods.handleSubmit(onSubmit)}
@@ -75,30 +71,46 @@ const ModuleForm = ({ onSuccess, isEdit, data, onClose }) => {
         colon={false}
         labelWrap
       >
-        <Input name="name" label="モジュール名:" placeholder="モジュール名を入力してください。" />
+        <Input
+          name={FORM_INFO.NAME}
+          label="モジュール名:"
+          placeholder="モジュール名を入力してください。"
+        />
 
-        <UploadImageInput name="file" label="モジュール: " />
+        <InputTarFile name={FORM_INFO.FILE} label="モジュール: " />
 
-        <Input name="tag" label="タグ:" placeholder="タグを入力してください。" />
+        <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" />
 
         <InputTextArea
           rows={4}
           label="説明:"
-          name="description"
+          name={FORM_INFO.DESCRIPTION}
           placeholder="説明を入力してください。"
         />
 
         <div className="flex-end mt-12 gap-x-4">
-          <Button type="default" className="min-w-[200px]" onClick={onClose}>
+          <Button
+            type="default"
+            className="min-w-[200px]"
+            onClick={() => onClose()}
+            disabled={createLoading || updateLoading}
+          >
             <span className="font-semibold">キャンセル</span>
           </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="min-w-[200px]"
+            disabled={createLoading || updateLoading}
+          >
             <span className="font-semibold"> 登録 </span>
           </Button>
         </div>
       </Form>
     </FormProvider>
   )
+
+  return <Spin spinning={createLoading || updateLoading}>{renderForm}</Spin>
 }
 
 const ModuleAddEditModalButton = ({ label, isEdit, ...props }) => {
@@ -114,7 +126,7 @@ const ModuleAddEditModalButton = ({ label, isEdit, ...props }) => {
       {open && (
         <Modal
           open={open}
-          onCancel={onClose}
+          onCancel={() => onClose()}
           title={<h1 className="text-lg font-semibold text-dark-gray-3">モジュール登録・変更</h1>}
           className="rounded-3xl"
           footer={null}

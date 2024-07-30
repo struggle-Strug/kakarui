@@ -1,0 +1,54 @@
+{
+  "status": "running",
+  "restartPolicy": "always",
+  "startupOrder": 1,
+  "env": {},
+  "settings": {
+    "createOptions": {
+      "ExposedPorts": {
+        "22/tcp": {}
+      },
+      "Env": ["FOO=bar", "BAZ=quux"],
+      "Cmd": ["date"],
+      "Volumes": {
+        "/volumes/data": {}
+      },
+      "HostConfig": {
+        "Devices": [
+          {
+            "PathOnHost": "/dev/sda",
+            "PathInContainer": "/dev/xvda",
+            "CgroupPermissions": "rwm"
+          }
+        ],
+        "DeviceRequests": [
+          {
+            "Count": -1,
+            "Capabilities": [["gpu"]]
+          }
+        ],
+        "Binds": ["/tmp:/tmp"],
+        "PortBindings": {
+          "8080/tcp": [
+            {
+              "HostPort": "80"
+            }
+          ]
+        },
+        "RestartPolicy": {
+          "Name": "",
+          "MaximumRetryCount": 0
+        },
+        "Mounts": [
+          {
+            "Target": "/ModuleStoragePath",
+            "Source": "/HostStoragePath",
+            "Type": "bind",
+            "ReadOnly": false
+          }
+        ],
+        "Runtime": "nvidia"
+      }
+    }
+  }
+}

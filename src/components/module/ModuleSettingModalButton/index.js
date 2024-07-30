@@ -1,76 +1,103 @@
-import { Form, Modal, Spin } from 'antd'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Form, Modal } from 'antd'
+import { includes, toLower } from 'lodash'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useLoadingSimulation } from '@/hooks/custom'
 import { useFlag } from '@/hooks/share'
-import moduleSettingApiStub from '@/hooks/stub/module_setting'
 
+import { Input } from '@/components/form'
 import { ExternalLinkIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
-import { Button, ButtonIcon } from '@/components/ui'
+import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
-import ModuleSettingTableForm from './ModuleSettingTableForm'
+import configData from '@/services/mock-data/config_data'
+import { moduleSettingSchema } from '@/validations/moduleSchema'
 
-const ModuleSettingForm = ({ open, onClose }) => {
-  const [loading, startLoading] = useLoadingSimulation()
-  const [data, setData] = useState([])
-
-  const [{ filter, sort, search }] = useQueryStates({
-    filter: parseAsArrayOf(parseAsString, ',').withDefault(['', '']),
+const ModuleSettingForm = ({ open, onClose, data, setData }) => {
+  const [{ sort, search }, setQueryState] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(),
     search: parseAsString,
   })
 
-  const reload = () => {
-    moduleSettingApiStub.getData(filter, sort, search).then(setData)
-  }
-
-  useEffect(() => {
-    reload()
-  }, [filter, sort, search])
-
-  const defaultValues = useMemo(() => ({}), [])
-
-  const methods = useForm()
-
-  useEffect(() => {
-    methods.reset(defaultValues)
-  }, [defaultValues])
-
-  const onSubmit = (values) => {
-    // eslint-disable-next-line no-console
-    console.log(values)
-
-    startLoading(() => {
-      onClose()
+  const defaultValues = useMemo(() => {
+    const parseData = data && data !== '' && Object.keys(data).length !== 0 ? data : configData
+    const parseValues = Object.keys(parseData).map((key, index) => {
+      const value =
+        typeof parseData[key] === 'string' ? parseData[key] : JSON.stringify(parseData[key])
+      return { key, value, index }
     })
-  }
+    return {
+      config_data: parseValues,
+    }
+  }, [data])
 
-  const renderForm = (
-    <FormProvider {...methods}>
-      <Form onFinish={methods.handleSubmit(onSubmit)} layout="horizontal">
-        <ModuleSettingTableForm data={data} />
-        <div className="flex-end mt-12 gap-x-4">
-          <Button type="default" className="min-w-[200px]" onClick={onClose}>
-            <span className="font-semibold">キャンセル</span>
-          </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
-            <span className="font-semibold"> 設定 </span>
-          </Button>
-        </div>
-      </Form>
-    </FormProvider>
+  const methods = useForm({
+    resolver: yupResolver(moduleSettingSchema),
+    defaultValues,
+  })
+
+  const values = methods.getValues()
+
+  const searchOptions = getSearchOptions(values.config_data, ['key', 'value'])
+
+  const onSubmit = useCallback(
+    (formData) => {
+      const objectData = formData.config_data.reduce((acc, cur) => {
+        let value = ''
+        try {
+          value = JSON.parse(cur.value)
+        } catch {
+          value = cur.value
+        }
+        acc[cur.key] = value
+        return acc
+      }, {})
+      setData(objectData)
+    },
+    [setData]
   )
 
-  const searchOptions = getSearchOptions(moduleSettingApiStub.getRawData(), [
-    'property',
-    'settings',
-  ])
+  const filteredData = useMemo(() => {
+    const searchTerm = toLower(search)
+    return values.config_data.filter((record) => includes(toLower(record.key), searchTerm))
+  }, [values.config_data, search])
+
+  const sorter = (a, b, key) => {
+    return a[key] > b[key] ? 1 : -1
+  }
+
+  useEffect(() => {
+    setQueryState({ search: '' })
+  }, [data])
+
+  const columns = [
+    {
+      title: 'プロパティ',
+      dataIndex: 'key',
+      className: 'min-w-[248px]',
+      render: (value) => <div className="text-base">{value}</div>,
+      sorter: (a, b) => sorter(a, b, 'key'),
+    },
+    {
+      title: '設定',
+      dataIndex: 'value',
+      className: 'min-w-[440px]',
+      sorter: (a, b) => sorter(a, b, 'value'),
+      render: (value, record) => (
+        <Input
+          ref={methods.ref}
+          {...methods.register(`config_data.${record.index}.value`)}
+          defaultValue={value}
+          name={`config_data.${record.index}.value`}
+        />
+      ),
+    },
+  ]
 
   return (
     <Modal
@@ -86,21 +113,31 @@ const ModuleSettingForm = ({ open, onClose }) => {
         <div>
           <SearchBar placeholder="プロパティ" options={searchOptions} />
         </div>
-        <Spin spinning={loading}>
-          <div className="p-12 text-base">{renderForm}</div>
-        </Spin>
+        <FormProvider {...methods}>
+          <Form onFinish={methods.handleSubmit(onSubmit)} layout="horizontal">
+            <Table rowKey="key" pagination={false} columns={columns} data={filteredData} />
+            <div className="flex-end mt-12 gap-x-4">
+              <Button type="default" className="min-w-[200px]" onClick={onClose}>
+                <span className="font-semibold">キャンセル</span>
+              </Button>
+              <Button type="primary" htmlType="submit" className="min-w-[200px]">
+                <span className="font-semibold"> 設定 </span>
+              </Button>
+            </div>
+          </Form>
+        </FormProvider>
       </div>
     </Modal>
   )
 }
 
-const ModuleSettingModalButton = () => {
+const ModuleSettingModalButton = ({ data, setData }) => {
   const [open, onOpen, onClose] = useFlag()
 
   return (
     <>
       <ButtonIcon icon={<ExternalLinkIcon size={32} />} onClick={onOpen} />
-      {open && <ModuleSettingForm open={open} onClose={onClose} />}
+      {open && <ModuleSettingForm open={open} onClose={onClose} data={data} setData={setData} />}
     </>
   )
 }

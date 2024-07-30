@@ -1,5 +1,2 @@
-export { default as ModuleSetAddButton } from './ModuleSetAddButton'
-export { default as ModuleSetAddTableForm } from './ModuleSetAddTableForm'
-export { default as ModuleSetSearchBox } from './ModuleSetSearchBox'
 export { default as ModuleSetTable } from './ModuleSetTable'
 export { default as ModuleSetForm } from './ModuleSetForm'

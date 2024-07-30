@@ -2,6 +2,7 @@ import { message } from 'antd'
 import dayjs from 'dayjs'
 import get from 'lodash/get'
 
+import { API_ERRORS } from '@/constants'
 import { FORMAT_STRING } from '@/constants/time'
 
 import { errorMessage as errorMessageData } from '@/services/error-message'
@@ -49,9 +50,12 @@ export function formatErrorMessage(errorMessage, params = {}) {
   return errorMessage
 }
 
-export const getErrorMessage = (errorKey, errorCode, params = {}) => {
-  const errorGroup = errorMessageData.api_error_message[errorKey]
-  const errorMessage = errorGroup ? errorGroup[errorCode] : 'サーバー側で問題が発生しました。'
+const getErrorMessage = (errorKey, errorCode, params = {}) => {
+  const apiErrorMessage = errorMessageData.api_error_message || {}
+  const errorMessage =
+    apiErrorMessage?.[errorKey]?.[errorCode] ||
+    apiErrorMessage.COMMON?.[errorCode] ||
+    'サーバー側で問題が発生しました。'
   return formatErrorMessage(errorMessage, params)
 }
 

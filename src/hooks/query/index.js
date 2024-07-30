@@ -1,6 +1,7 @@
 export * from './auth'
 export * from './deploy'
 export * from './module'
+export * from './module_selection'
 export * from './module_config'
 export * from './module_set'
 export * from './module_set_selection'
