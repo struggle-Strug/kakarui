@@ -78,7 +78,7 @@ const ModuleContainer = () => {
     },
   ]
 
-  const searchOptions = getSearchOptions(moduleApiStub.getRawData(), ['name', 'description'])
+  const onRefetch = useDebouncedCallback(refetch)
 
   return (
     <Container title="モジュール管理">
