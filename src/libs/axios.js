@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { getSession, signOut } from 'next-auth/react'
 
-import { API_ROOT, Routes, TESTING, TIMEOUT, httpStatusCode } from '@/constants'
+import { API_ROOT, Routes, TIMEOUT, httpStatusCode } from '@/constants'
 
 const instance = axios.create({
   baseURL: API_ROOT,

@@ -3,7 +3,7 @@ import { Form, Modal } from 'antd'
 import { includes, toLower } from 'lodash'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useFlag } from '@/hooks/share'
@@ -11,7 +11,6 @@ import { useFlag } from '@/hooks/share'
 import { Input } from '@/components/form'
 import { ExternalLinkIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
-import { ColumnSorter } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
@@ -89,7 +88,7 @@ const ModuleSettingForm = ({ open, onClose, data, setData }) => {
       dataIndex: 'value',
       className: 'min-w-[440px]',
       sorter: (a, b) => sorter(a, b, 'value'),
-      render: (value, record, index) => (
+      render: (value, record) => (
         <Input
           ref={methods.ref}
           {...methods.register(`config_data.${record.index}.value`)}
