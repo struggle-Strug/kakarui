@@ -13,18 +13,23 @@ const ModuleConfigCreateContainer = () => {
 
   const { doCreateModuleConfig, isPending: loading } = useModuleConfigCreate({
     onSuccess: () => {
-      router.push({
-        pathname: Routes.MODULE_CONFIG,
-        query: { reload: 1 },
-      })
+      router.push(Routes.MODULE_CONFIG)
     },
   })
+
+  const data = {
+    name: '',
+    description: '',
+    config_data: {
+      modules: [],
+    },
+  }
 
   return (
     <Container title="モジュール配置設定">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
-        <ModuleConfigForm onSubmit={doCreateModuleConfig} data={null} />
+        <ModuleConfigForm onSubmit={doCreateModuleConfig} data={data} />
       </Spin>
     </Container>
   )

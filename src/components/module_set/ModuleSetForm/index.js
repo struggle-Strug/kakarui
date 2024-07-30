@@ -24,11 +24,19 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalFlag, setModuleSelectionModalFlag] = useState(false)
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
-  const [moduleFormFlag, setModuleFormFlag] = useState(false)
-  const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
-  const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
-  const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
-  const [sortedInfo, setSortedInfo] = useState({ field: undefined, order: undefined })
+
+  const defaultValues = useMemo(() => {
+    return {
+      ...data,
+      moduleset_modules: data.moduleset_modules.map((module, i) => {
+        return {
+          ...module,
+          key: `${Date.now()}-${i}`,
+          name: module.module_name,
+        }
+      }),
+    }
+  }, [data])
 
   const methods = useForm({
     resolver: yupResolver(moduleSetSchema),
@@ -151,38 +159,14 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     setModuleSelectionModalFlag(false)
   }, [setModuleSelectionModalFlag])
 
-  const onTableChange = (pagination, filters, sorter) => {
-    setSortedInfo(sorter)
+  const sorter = (a, b, key) => {
+    return a[key] > b[key] ? 1 : -1
   }
-
-  useEffect(() => {
-    if (data) {
-      const defaultValues = {
-        ...data,
-        moduleset_modules: data.moduleset_modules.map((module, i) => {
-          return {
-            ...module,
-            name: module.module_name,
-            key: `${Date.now()}-${i}`,
-          }
-        }),
-      }
-      methods.reset(defaultValues)
-    }
-  }, [data])
-
-  useEffect(() => {
-    if (sortedInfo.field !== undefined && sortedInfo.field !== undefined) {
-      const column = sortedInfo.field
-      const order = sortedInfo.order === 'descend' ? 'desc' : 'asc'
-      const orderedModules = orderBy(values.moduleset_modules, [column], [order])
-      methods.setValue('moduleset_modules', orderedModules)
-    }
-  }, [sortedInfo])
 
   const columns = [
     {
       title: 'モジュール名',
+      sorter: (a, b) => sorter(a, b, 'name'),
       dataIndex: 'name',
       sorter: true,
       className: 'min-w-[200px]',
@@ -198,6 +182,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: 'タグ',
+      sorter: (a, b) => sorter(a, b, 'tag'),
       dataIndex: 'tag',
       sorter: true,
       className: 'min-w-[96px]',
@@ -211,6 +196,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: 'デプロイ先種別',
+      sorter: (a, b) => sorter(a, b, 'type'),
       dataIndex: 'type',
       sorter: true,
       className: 'min-w-[272px]',
@@ -232,6 +218,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: '設定値',
+      sorter: (a, b) => sorter(a, b, 'default_config_data'),
       dataIndex: 'default_config_data',
       className: 'min-w-[356px]',
       render: (value, record, index) => (
@@ -251,6 +238,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: '登録日',
+      sorter: (a, b) => sorter(a, b, 'create_date'),
       dataIndex: 'create_date',
       sorter: true,
       className: 'min-w-[124px]',
@@ -258,6 +246,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: '更新日',
+      sorter: (a, b) => sorter(a, b, 'update_date'),
       dataIndex: 'update_date',
       sorter: true,
       className: 'min-w-[124px]',
@@ -317,7 +306,6 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         </Space>
 
         <Table
-          id="table_form"
           rowKey="key"
           key={tableKey}
           pagination={false}

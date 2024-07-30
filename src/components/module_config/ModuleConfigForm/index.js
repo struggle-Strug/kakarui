@@ -3,15 +3,17 @@ import { Form, Space } from 'antd'
 import orderBy from 'lodash/orderBy'
 
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
-import { Input, InputTextArea, Select } from '@/components/form'
+import { DatePicker, Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
-import { ModuleForm, ModuleSettingModal } from '@/components/module'
+import { ModuleSettingModalButton } from '@/components/module'
+import ModuleAddEditModalButton from '@/components/module/ModuleAddEditModalButton'
 import { ModuleSelectionModal, ModuleSetSelectionModal } from '@/components/module_selection'
+import { ColumnSorter } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { FORM_MODULE_CONFIG, moduleConfigSchema } from '@/validations/moduleConfigSchema'
@@ -24,11 +26,20 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
   const [moduleSetSelectionModalFlag, setModuleSetSelectionModalFlag] = useState(false)
-  const [moduleFormFlag, setModuleFormFlag] = useState(false)
-  const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
-  const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
-  const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
-  const [sortedInfo, setSortedInfo] = useState({ field: undefined, order: undefined })
+
+  const defaultValues = useMemo(() => {
+    return {
+      ...data,
+      config_data: {
+        modules: data.config_data.modules.map((module, i) => {
+          return {
+            ...module,
+            key: `${Date.now()}-${i}`,
+          }
+        }),
+      },
+    }
+  }, [data])
 
   const methods = useForm({
     resolver: yupResolver(moduleConfigSchema),
@@ -90,7 +101,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
                   key: `${Date.now()}-${i}-${j}`,
                   module_id: module.id,
                   module_set_id: null,
-                  module_instance: '',
                   module_name: module.name,
                   tag: tag.name,
                   type: '',
@@ -104,14 +114,13 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         }
         if (moduleSelectionModalType === 'radio') {
           const newModule = newModules[0]
-          const oldModule = values.config_data.modules[moduleSelectionModalChangeIndex]
+          const oldModule = values.moduleset_modules[moduleSelectionModalChangeIndex]
           if (newModule && oldModule) {
             const changeModule = {
               key: `${Date.now()}`,
               module_id: newModule.id,
               module_set_id: null,
               module_name: newModule.name,
-              module_instance: oldModule.module_instance,
               tag: newModule.tags[0].name,
               type: oldModule.type,
               config_data: oldModule.config_data,
@@ -132,11 +141,9 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           return {
             id: `${Date.now()}-${i}`,
-            key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
             module_name: module.module_name,
-            module_instance: '',
             tag: module.tag,
             type: module.type,
             config_data: module.default_config_data,
@@ -149,23 +156,12 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     [append, setModuleSetSelectionModalFlag]
   )
 
-  const moduleSettingModalOpen = useCallback(
-    (index, settingData) => {
-      setModuleSettingModalIndex(index)
-      setModuleSettingModalData(settingData)
-      setModuleSettingModalFlag(true)
+  const updateModuleSetting = useCallback(
+    (index, value) => {
+      methods.setValue(`config_data.modules.${index}.config_data`, value)
+      setTableKey((prevKey) => prevKey + 1)
     },
-    [setModuleSettingModalIndex, setModuleSettingModalData, setModuleSettingModalFlag]
-  )
-
-  const moduleSettingModalSetData = useCallback(
-    (value) => {
-      if (moduleSettingModalIndex > -1) {
-        methods.setValue(`config_data.modules.${moduleSettingModalIndex}.config_data`, value)
-        setTableKey((prevKey) => prevKey + 1)
-      }
-    },
-    [moduleSettingModalIndex, methods.setValue, setTableKey]
+    [methods, setTableKey]
   )
 
   const onBack = () => {
@@ -176,41 +172,15 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     setModuleSelectionModalFlag(false)
   }, [setModuleSelectionModalFlag])
 
-  const onTableChange = (pagination, filters, sorter) => {
-    setSortedInfo(sorter)
+  const sorter = (a, b, key) => {
+    return a[key] > b[key] ? 1 : -1
   }
-
-  useEffect(() => {
-    if (data) {
-      const defaultValues = {
-        ...data,
-        config_data: {
-          modules: data.config_data.modules.map((module, i) => {
-            return {
-              ...module,
-              key: `${Date.now()}-${i}`,
-            }
-          }),
-        },
-      }
-      methods.reset(defaultValues)
-    }
-  }, [data])
-
-  useEffect(() => {
-    if (sortedInfo.field !== undefined && sortedInfo.field !== undefined) {
-      const column = sortedInfo.field
-      const order = sortedInfo.order === 'descend' ? 'desc' : 'asc'
-      const orderedModules = orderBy(values.config_data.modules, [column], [order])
-      methods.setValue('config_data.modules', orderedModules)
-    }
-  }, [sortedInfo])
 
   const columns = [
     {
       title: 'モジュール名',
+      sorter: (a, b) => sorter(a, b, 'module_name'),
       dataIndex: 'module_name',
-      sorter: true,
       className: 'min-w-[220px]',
       render: (text, record, index) => (
         <div className="flex w-[240px] cursor-pointer items-center gap-x-4 text-base">
@@ -224,11 +194,12 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: 'インスタンス名',
+      sorter: (a, b) => sorter(a, b, 'module_instance'),
       dataIndex: 'module_instance',
-      sorter: true,
       className: 'min-w-[356px]',
       render: (value, record, index) => (
         <Input
+          ref={methods.ref}
           {...methods.register(`config_data.modules.${index}.module_instance`)}
           defaultValue={value}
           name={`config_data.modules.${index}.module_instance`}
@@ -237,18 +208,19 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: 'タグ',
+      sorter: (a, b) => sorter(a, b, 'tag'),
       dataIndex: 'tag',
-      sorter: true,
       className: 'min-w-[96px] text-base',
       render: (tag) => <div className="text-base">{tag || '-'}</div>,
     },
     {
       title: 'デプロイ先種別',
+      sorter: (a, b) => sorter(a, b, 'type'),
       dataIndex: 'type',
-      sorter: true,
       className: 'min-w-[272px]',
       render: (value, record, index) => (
         <Select
+          ref={methods.ref}
           {...methods.register(`config_data.modules.${index}.type`)}
           defaultValue={value}
           name={`config_data.modules.${index}.type`}
@@ -265,17 +237,19 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: '設定値',
+      sorter: (a, b) => sorter(a, b, 'config_data'),
       dataIndex: 'config_data',
       className: 'min-w-[200px]',
       render: (value, record, index) => (
         <Input
+          ref={methods.ref}
           {...methods.register(`config_data.modules.${index}.config_data`)}
           value={JSON.stringify(value)}
           name={`config_data.modules.${index}.config_data`}
           suffix={
-            <ButtonIcon
-              icon={<ExternalLinkIcon size={32} />}
-              onClick={() => moduleSettingModalOpen(index, value)}
+            <ModuleSettingModalButton
+              data={value}
+              setData={(result) => updateModuleSetting(index, result)}
             />
           }
           disabled
@@ -285,7 +259,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     {
       title: '操作',
       dataIndex: 'id',
-      sorter: true,
       align: 'center',
       className: 'min-w-[96px]',
       render: (id, record, index) => (
@@ -344,22 +317,15 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
             icon={<AddIcon size={36} />}
             onClick={() => moduleCheckSelectionModalOpen()}
           />
-          <Button
-            icon={<AddIcon size={36} />}
-            type="outline"
-            label="新規モジュール追加"
-            onClick={() => setModuleFormFlag(true)}
-          />
+          <ModuleAddEditModalButton label="新規モジュール追加" data={null} onSuccess={onSuccess} />
         </Space>
 
         <Table
-          id="table_form"
           rowKey="key"
           key={tableKey}
           pagination={false}
           columns={columns}
           data={values.config_data.modules}
-          onChange={onTableChange}
         />
         {values.config_data.modules.length === 0 && (
           <div className="ant-form-item">
@@ -383,18 +349,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       <ModuleSetSelectionModal
         open={moduleSetSelectionModalFlag}
         onClose={moduleSetSelectionModalClose}
-      />
-      <ModuleForm
-        open={moduleFormFlag}
-        data={null}
-        onSuccess={onSuccess}
-        onClose={() => setModuleFormFlag(false)}
-      />
-      <ModuleSettingModal
-        open={moduleSettingModalFlag}
-        onClose={() => setModuleSettingModalFlag(false)}
-        data={moduleSettingModalData}
-        setData={moduleSettingModalSetData}
       />
     </FormProvider>
   )

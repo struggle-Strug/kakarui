@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
@@ -6,14 +7,8 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import {
-  API,
-  API_ERRORS,
-  MODULE_CONFIG_LIST_KEY,
-  MODULE_LIST_KEY,
-  MODULE_SET_LIST_KEY,
-} from '@/constants'
-import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
+import { API, API_ERRORS, MODULE_CONFIG_LIST_KEY, STALE_TIME } from '@/constants'
+import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { mapOptionsQuery, tryParseJson } from '@/utils/helper/functions'
@@ -53,7 +48,9 @@ export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
     ...options,
   })
 
-  useShowErrorOnce(query, API_ERRORS.MODULE_CONFIG_LIST)
+  if (query.isError && query.error) {
+    showAPIErrorMessage(query.error, API_ERRORS.MODULE_CONFIG_LIST)
+  }
 
   const data = query.data?.module_configs || []
 
@@ -134,6 +131,7 @@ export const useModuleConfigCreate = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
+      console.log('error', error)
       showAPIErrorMessage(error, API_ERRORS.MODULE_CONFIG_CREATE)
     },
   })
@@ -175,6 +173,7 @@ export const useModuleConfigUpdate = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
+      console.log('error', error)
       showAPIErrorMessage(error, API_ERRORS.MODULE_CONFIG_UPDATE)
     },
   })
