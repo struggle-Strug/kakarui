@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { Assets, Routes } from '@/constants'
-import { useGetMe, useProjectActive, useProjectQuery } from '@/hooks/query'
+import { useGetMe, useProjectActive, useProjectQuery, useUserActive } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Breadcrumbs } from '@/components/common'
@@ -21,18 +21,19 @@ const ProjectMenu = ({ breadcrumbs }) => {
 
   const [open, onOpen, onClose] = useFlag()
 
-  const { data, isLoading } = useProjectQuery({
+  const { filteredData, isLoading } = useProjectQuery({
     sort: JSON.stringify([{ field: 'create_date', value: 'asc' }]),
   })
 
   const { projectActive, setProjectActive } = useProjectActive()
-  const { isAcceptedAddEditProject } = useGetMe()
+  const { data: me = {}, isAcceptedAddEditProject } = useGetMe()
+  const { userActiveId } = useUserActive()
 
   useEffect(() => {
-    if (!projectActive?.name && data?.[0]?.name) {
-      setProjectActive(data?.[0])
+    if (filteredData?.[0]?.name && (me?.id !== userActiveId || !projectActive?.name)) {
+      setProjectActive(filteredData?.[0])
     }
-  }, [data])
+  }, [filteredData, me?.id, userActiveId])
 
   const items = [
     {
@@ -76,7 +77,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
       key: '2',
     },
     {
-      label: <ProjectSubMenu data={data} loading={isLoading} onClose={onClose} />,
+      label: <ProjectSubMenu data={filteredData} loading={isLoading} onClose={onClose} />,
       onClick: ({ domEvent: event }) => {
         event.preventDefault()
       },

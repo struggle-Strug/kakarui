@@ -22,6 +22,7 @@ export const USER_ROLE = {
 
 export const LOCAL_STORAGE_KEYS = {
   STUB: 'stub', // on/off
+  USER: 'user',
   ORGANIZATIONS: 'organizations',
   ORGANIZATIONS_DETAIL: 'organization-detail',
   ORGANIZATION_ID: 'organization-id',

@@ -5,8 +5,9 @@ import { message } from 'antd'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useMemo, useState } from 'react'
 
-import { API, Routes, USER_ROLE } from '@/constants'
+import { API, LOCAL_STORAGE_KEYS, Routes, USER_ROLE } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
+import { useSyncLocalStorage } from '@/hooks/share'
 
 import { buildApiURL } from '@/utils/helper/request'
 
@@ -25,11 +26,22 @@ export const fetchMe = async ({ meId }) => {
   }
 }
 
+export const useUserActive = () => {
+  const [userActive, setUserActive] = useSyncLocalStorage(LOCAL_STORAGE_KEYS.USER, {})
+
+  return {
+    userActiveId: userActive?.id,
+    userActive,
+    setUserActive,
+  }
+}
+
 export const useAuth = () => {
   const { data, status } = useSession()
 
   const authenticated = status === 'authenticated'
   const token = data?.user?.token || data?.token
+  const entraId = data?.user?.entra_id || ''
   const id = data?.user?.id || ''
 
   return {
@@ -39,6 +51,7 @@ export const useAuth = () => {
     username: data?.user?.name || '',
     loading: status === 'loading',
     email: data?.user?.email,
+    entraId,
     id,
   }
 }
@@ -91,6 +104,7 @@ export const useLogout = () => {
 export const useGetMe = () => {
   const { organizationDetail } = useOrganizationQuery()
   const { id: meId, authenticated } = useAuth()
+  const { setUserActive } = useUserActive()
   const { stubEnabled } = useStubEnabled()
 
   const query = useQuery({
@@ -105,14 +119,19 @@ export const useGetMe = () => {
       return response.data?.user
     },
     enabled: Boolean(authenticated && meId),
+    select: (response) => {
+      setUserActive(response)
+      return response
+    },
   })
 
   const enable = query.data?.enable
+
   const meRole = query.data?.role?.trim()
   const meMainRole = organizationDetail?.main_role?.trim()
   const meSubRole = organizationDetail?.sub_role?.trim()
-  const isSystemAdmin =
-    enable && (meMainRole === USER_ROLE.SYSTEM_ADMIN || meRole === USER_ROLE.SYSTEM_ADMIN)
+
+  const isSystemAdmin = enable && [meMainRole, meRole].includes(USER_ROLE.SYSTEM_ADMIN)
   const isDeployAdmin = enable && meSubRole === USER_ROLE.DEPLOY_ADMIN
   const isOrgAdmin = enable && meMainRole === USER_ROLE.ORG_ADMIN
   const isMember = enable && meMainRole === USER_ROLE.MEMBER

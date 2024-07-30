@@ -254,7 +254,6 @@ export const useDeployStart = ({ onSuccess } = {}) => {
 
   const { organizationId } = useOrganizationQuery()
   const { projectActiveId } = useProjectActive()
-  const { stubEnabled } = useStubEnabled()
 
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
@@ -268,12 +267,12 @@ export const useDeployStart = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([DEPLOY_LIST_KEY, organizationId, projectActiveId, stubEnabled])
+      queryClient.invalidateQueries([DEPLOY_LIST_KEY, organizationId, projectActiveId, false])
       queryClient.invalidateQueries([
         MODULE_CONFIG_LIST_KEY,
         organizationId,
         projectActiveId,
-        stubEnabled,
+        false,
       ])
 
       message.success('デプロイ要求が受理されました。')

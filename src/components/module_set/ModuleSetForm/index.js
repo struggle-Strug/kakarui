@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Space } from 'antd'
 
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
@@ -41,6 +41,10 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     resolver: yupResolver(moduleSetSchema),
     defaultValues,
   })
+
+  useEffect(() => {
+    methods.reset(defaultValues)
+  }, [defaultValues])
 
   const { append, remove } = useFieldArray({
     control: methods.control,

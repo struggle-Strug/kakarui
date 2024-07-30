@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 
 import { Assets, DEV } from '@/constants'
-import { useRobotActive, useRobotQuery } from '@/hooks/query'
+import { useGetMe, useRobotActive, useRobotQuery, useUserActive } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import RobotListMenu from './RobotListMenu'
@@ -12,21 +12,23 @@ import RobotListMenu from './RobotListMenu'
 const RobotMenu = () => {
   const [open, onOpen, onClose] = useFlag()
 
-  const { data, isLoading } = useRobotQuery({
-    sort: JSON.stringify([{ field: 'create_date', value: 'asc' }]),
+  const { filteredData, isLoading } = useRobotQuery({
+    sort: JSON.stringify([{ field: 'name', value: 'asc' }]),
   })
 
   const { robotActive, setRobotActive } = useRobotActive()
+  const { userActiveId } = useUserActive()
+  const { data: me = {} } = useGetMe()
 
   useEffect(() => {
-    if (!robotActive?.name && data?.[0]?.name) {
-      setRobotActive(data?.[0])
+    if (filteredData?.[0]?.name && (me?.id !== userActiveId || !robotActive?.name)) {
+      setRobotActive(filteredData?.[0])
     }
-  }, [data])
+  }, [filteredData, me?.id, userActiveId])
 
   const items = [
     {
-      label: <RobotListMenu data={data} loading={isLoading} onClose={onClose} />,
+      label: <RobotListMenu data={filteredData} loading={isLoading} onClose={onClose} />,
       className: '!pointer-events-auto !cursor-pointer !rounded-l-[24px] !rounded-r-[24px]',
       onClick: ({ domEvent: event }) => event?.preventDefault?.(),
       disabled: true,

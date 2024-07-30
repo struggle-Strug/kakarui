@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
@@ -7,7 +6,14 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, API_ERRORS, MODULE_LIST_KEY, STALE_TIME } from '@/constants'
+import {
+  API,
+  API_ERRORS,
+  MODULE_CONFIG_LIST_KEY,
+  MODULE_LIST_KEY,
+  MODULE_SET_LIST_KEY,
+  STALE_TIME,
+} from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
@@ -109,12 +115,12 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      console.log('response', response)
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId])
+      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {
-      console.log('error', error)
       showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
     },
   })
@@ -143,12 +149,12 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      console.log('response', response)
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId])
+      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {
-      console.log('error', error)
       showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
     },
   })
