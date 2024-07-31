@@ -18,6 +18,7 @@ export const mockData = {
   module,
   module_config,
   module,
+  module_config,
   module_set,
   my_deploy_list,
   project,

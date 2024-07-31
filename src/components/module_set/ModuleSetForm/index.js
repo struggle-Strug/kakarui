@@ -40,8 +40,21 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   })
 
   useEffect(() => {
-    methods.reset(defaultValues)
-  }, [defaultValues])
+    if (data) {
+      const defaultValues = {
+        ...data,
+        config_data: {
+          modules: data.config_data.modules.map((module, i) => {
+            return {
+              ...module,
+              key: `${Date.now()}-${i}`,
+            }
+          }),
+        },
+      }
+      methods.reset(defaultValues)
+    }
+  }, [data])
 
   const { append, remove } = useFieldArray({
     control: methods.control,
