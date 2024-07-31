@@ -6,7 +6,7 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, MODULE_SET_SELECTION_KEY, STALE_TIME } from '@/constants'
+import { API, MODULE_SET_SELECTION_KEY } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 
 import { tryParseJson } from '@/utils/helper/functions'
@@ -36,7 +36,7 @@ export const useModuleSetSelectionQuery = ({ search, sort, options = {} } = {}) 
       return response.data
     },
     enabled: Boolean(!isServer),
-    staleTime: STALE_TIME,
+    staleTime: Infinity,
     ...options,
   })
 

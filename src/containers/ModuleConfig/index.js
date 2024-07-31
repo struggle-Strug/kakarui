@@ -1,9 +1,11 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import { Routes } from '@/constants'
 import { useModuleConfigQuery } from '@/hooks/query'
+import { useDebouncedCallback } from '@/hooks/share'
 
 import { AddIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
@@ -14,15 +16,24 @@ import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleConfigContainer = () => {
   const router = useRouter()
+  const { reload } = router.query
 
   const [{ sort, search }] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
     search: parseAsString,
   })
 
-  const { data, filteredData, isLoading } = useModuleConfigQuery({ sort, search })
+  const { data, filteredData, isLoading, refetch } = useModuleConfigQuery({ sort, search })
 
   const searchOptions = getSearchOptions(data, ['name', 'description'])
+
+  const onRefetch = useDebouncedCallback(refetch)
+
+  useEffect(() => {
+    if (reload === 1) {
+      onRefetch()
+    }
+  }, [reload])
 
   return (
     <Container title="モジュール配置管理">

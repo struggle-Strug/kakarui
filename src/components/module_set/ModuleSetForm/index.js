@@ -9,7 +9,7 @@ import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
 import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
-import { ModuleAddEditModalButton, ModuleSettingModalButton } from '@/components/module'
+import { ModuleForm, ModuleSettingModalButton } from '@/components/module'
 import { ModuleSelectionModal } from '@/components/module_selection'
 import { RowDate } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
@@ -23,6 +23,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalFlag, setModuleSelectionModalFlag] = useState(false)
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
+  const [moduleFormFlag, setModuleFormFlag] = useState(false)
 
   const defaultValues = useMemo(() => {
     return {
@@ -266,7 +267,12 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
             icon={<AddIcon size={36} />}
             onClick={() => moduleCheckSelectionModalOpen()}
           />
-          <ModuleAddEditModalButton label="新規モジュール追加" data={null} onSuccess={onSuccess} />
+          <Button
+            icon={<AddIcon size={36} />}
+            type="outline"
+            label="新規モジュール追加"
+            onClick={() => setModuleFormFlag(true)}
+          />
         </Space>
 
         <Table
@@ -291,6 +297,12 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         open={moduleSelectionModalFlag}
         type={moduleSelectionModalType}
         onClose={moduleCheckSelectionModalClose}
+      />
+      <ModuleForm
+        open={moduleFormFlag}
+        data={null}
+        onSuccess={onSuccess}
+        onClose={() => setModuleFormFlag(false)}
       />
     </FormProvider>
   )

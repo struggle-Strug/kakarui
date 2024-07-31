@@ -1,13 +1,15 @@
+import { forwardRef } from 'react'
+
 import { InputTarFile as BaseInputTarFile } from '@/components/ui'
 
 import FormItem from '../FormItem'
 
-const InputTarFile = (props) => {
+const InputTarFile = (props, ref) => {
   return (
     <FormItem {...props}>
-      <BaseInputTarFile />
+      <BaseInputTarFile ref={ref} />
     </FormItem>
   )
 }
 
-export default InputTarFile
+export default forwardRef(InputTarFile)

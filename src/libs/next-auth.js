@@ -85,8 +85,14 @@ export const authOptions = {
   },
   jwt: {
     encode: async ({ token, secret, maxAge }) => {
-      const jwtToken = jwt.sign(token, secret)
+      let jwtToken = jwt.sign(token, secret)
 
+      const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
+
+      while (pattern.test(jwtToken)) {
+        console.log(`failed regen token`)
+        jwtToken = jwt.sign(token, secret)
+      }
       return jwtToken
     },
     decode: async ({ token, secret }) => {

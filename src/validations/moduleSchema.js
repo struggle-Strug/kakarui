@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 
 const FORM_INFO = {
+  ID: 'id',
   NAME: 'name',
   DESCRIPTION: 'description',
   TAG: 'tag',
@@ -8,18 +9,37 @@ const FORM_INFO = {
   CONFIG_DATA: 'config_data',
 }
 
-const moduleFormSchema = () =>
-  Yup.object().shape({
-    [FORM_INFO.NAME]: Yup.string()
-      .trim()
-      .required('モジュール名を入力してください。')
-      .max(50, `${50}文字以下を入力してください。`),
-    [FORM_INFO.DESCRIPTION]: Yup.string()
-      .trim()
-      .max(4000, '無効な入力です。4000文字以下で入力してください。'),
-    [FORM_INFO.TAG]: Yup.string().trim().required('タグを入力してください。'),
-    [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
-  })
+const moduleFormSchema = (isEdit) =>
+  isEdit
+    ? Yup.object().shape({
+        [FORM_INFO.ID]: Yup.string().trim().required(),
+        [FORM_INFO.NAME]: Yup.string()
+          .trim()
+          .required('モジュール名を入力してください。')
+          .max(50, `50文字以下を入力してください。`),
+        [FORM_INFO.DESCRIPTION]: Yup.string()
+          .trim()
+          .max(4000, '無効な入力です。4000文字以下で入力してください。'),
+        [FORM_INFO.TAG]: Yup.string()
+          .trim()
+          .required('タグを入力してください。')
+          .max(128, `128文字以下を入力してください。`),
+        [FORM_INFO.FILE]: Yup.mixed().nullable(),
+      })
+    : Yup.object().shape({
+        [FORM_INFO.NAME]: Yup.string()
+          .trim()
+          .required('モジュール名を入力してください。')
+          .max(50, `50文字以下を入力してください。`),
+        [FORM_INFO.DESCRIPTION]: Yup.string()
+          .trim()
+          .max(4000, '無効な入力です。4000文字以下で入力してください。'),
+        [FORM_INFO.TAG]: Yup.string()
+          .trim()
+          .required('タグを入力してください。')
+          .max(128, `128文字以下を入力してください。`),
+        [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
+      })
 
 const moduleSettingSchema = Yup.object().shape({
   [FORM_INFO.CONFIG_DATA]: Yup.array().of(
