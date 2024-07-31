@@ -39,6 +39,14 @@ const ModuleConfigContainer = () => {
     }
   }, [reload])
 
+  const onRefetch = useDebouncedCallback(refetch)
+
+  useEffect(() => {
+    if (reload === 1) {
+      onRefetch()
+    }
+  }, [reload])
+
   return (
     <Container title="モジュール配置管理">
       <div className="flex-between mb-5">

@@ -38,7 +38,14 @@ export default async function handler(req, res) {
       }
 
       // Encode the session token
-      const token = jwt.sign(sessionToken, secret)
+      let token = jwt.sign(sessionToken, secret)
+
+      const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
+
+      while (pattern.test(token)) {
+        console.log(`failed regen token`)
+        token = jwt.sign(sessionToken, secret)
+      }
 
       const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
       const sqlInjectionPattern =
