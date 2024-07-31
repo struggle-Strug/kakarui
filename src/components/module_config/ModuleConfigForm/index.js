@@ -65,8 +65,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
 
   const values = methods.getValues()
 
-  console.log('values', values)
-
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
     setModuleSelectionModalFlag(true)
@@ -363,7 +361,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
           data={values.config_data.modules}
           onChange={onTableChange}
         />
-
         {values.config_data.modules.length === 0 && (
           <div className="ant-form-item">
             <div className="ant-form-item-explain-error">モジュールを追加してください。</div>
