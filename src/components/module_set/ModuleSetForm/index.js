@@ -24,6 +24,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalFlag, setModuleSelectionModalFlag] = useState(false)
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
+  const [moduleFormFlag, setModuleFormFlag] = useState(false)
 
   const defaultValues = useMemo(() => {
     return {

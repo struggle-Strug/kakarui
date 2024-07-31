@@ -18,7 +18,7 @@ const moduleConfigSchema = () =>
   Yup.object().shape({
     [FORM_MODULE_CONFIG.NAME]: Yup.string()
       .trim()
-      .required()
+      .required('モジュール配置名を入力してください。')
       .max(50, `50文字以下を入力してください。`),
     [FORM_MODULE_CONFIG.DESCRIPTION]: Yup.string()
       .trim()
