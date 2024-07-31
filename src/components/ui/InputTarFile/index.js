@@ -15,7 +15,7 @@ const InputTarFile = (props, ref) => {
     return false
   }
 
-  const onCustomChange = ({ file, fileList: updatedFileList }) => {
+  const handleUploadChange = ({ file, fileList: updatedFileList }) => {
     const isAcceptFile = accept.includes(file.type)
     const isLtMaxFileSize = file.size <= maxSize * 1024 * 1024
     if (!isAcceptFile) {
@@ -31,20 +31,20 @@ const InputTarFile = (props, ref) => {
     }
     setFileList(updatedFileList)
     onChange(file)
-    return true
+    return false
   }
 
   return (
     <Upload
       name="upload"
-      ref={ref}
       accept={accept}
       multiple={false}
       fileList={fileList}
       beforeUpload={beforeUpload}
-      onChange={onCustomChange}
+      onChange={handleUploadChange}
       disabled={disabled}
     >
+      <input type="hidden" ref={ref} />
       <div className="flex-center aspect-square w-32 cursor-pointer flex-col rounded-lg border border-dashed bg-light-gray p-3">
         <PlusOutlined />
         <div className="mt-2">Upload</div>

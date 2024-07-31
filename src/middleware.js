@@ -5,7 +5,7 @@ import { getToken } from 'next-auth/jwt'
 import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
 
-import { DEV, Routes } from '@/constants'
+import { Routes } from '@/constants'
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|icons|images|favicon.ico).*)'],
@@ -16,11 +16,11 @@ export default withAuth(
   async function middleware(req) {
     const token = await getToken({ req })
     const response = NextResponse.next()
-    const router = req.nextUrl
-    const isAuth = !!token
+    // const router = req.nextUrl
+    // const isAuth = !!token
 
     // Set locale cookie
-    response.cookies.set('locale', 'en')
+    response.cookies.set('locale', 'ja')
 
     // Basic Authentication check
     // if (!DEV) {
@@ -52,8 +52,8 @@ export default withAuth(
     // }
 
     // NextAuth Authentication
-    const goBackHome = () => NextResponse.redirect(new URL(Routes.HOME, req.url))
-    const redirectToLogin = () => NextResponse.redirect(new URL(Routes.AUTH.LOGIN, req.url))
+    // const goBackHome = () => NextResponse.redirect(new URL(Routes.HOME, req.url))
+    // const redirectToLogin = () => NextResponse.redirect(new URL(Routes.AUTH.LOGIN, req.url))
 
     // if (router.pathname === Routes.AUTH.LOGIN) {
     //   return isAuth ? goBackHome() : null

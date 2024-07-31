@@ -9,4 +9,4 @@ export const MAX_LEN_USERNAME = 20
 export const MESSAGE_IMAGE_SIZE = { WIDTH: 320, HEIGHT: 242 }
 
 // file
-export const MAX_FILE_SIZE = 10 // 10MB
+export const MAX_FILE_SIZE = 1000 // 1000MB

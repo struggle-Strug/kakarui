@@ -12,7 +12,6 @@ import {
   MODULE_CONFIG_LIST_KEY,
   MODULE_LIST_KEY,
   MODULE_SET_LIST_KEY,
-  STALE_TIME,
 } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
@@ -45,7 +44,7 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
       return response.data
     },
     enabled: Boolean(!isServer),
-    staleTime: STALE_TIME,
+    staleTime: Infinity,
     ...options,
   })
 
@@ -109,7 +108,7 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          timeout: 60000,
+          timeout: 1800000, // 1800s
         }
       )
       return response
@@ -143,7 +142,7 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          timeout: 60000,
+          timeout: 1800000,
         }
       )
       return response

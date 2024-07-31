@@ -12,7 +12,6 @@ import {
   MODULE_CONFIG_LIST_KEY,
   MODULE_LIST_KEY,
   MODULE_SET_LIST_KEY,
-  STALE_TIME,
 } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
@@ -50,7 +49,7 @@ export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
       return response.data
     },
     enabled: Boolean(!isServer && organizationId),
-    staleTime: STALE_TIME,
+    staleTime: Infinity,
     ...options,
   })
 
@@ -124,7 +123,7 @@ export const useModuleConfigDetailQuery = (moduleConfigId) => {
   ])
 
   const data =
-    cacheData && cacheData.moduleset !== undefined
+    cacheData && cacheData.module_configs !== undefined
       ? cacheData.module_configs.find((moduleConfig) => moduleConfig?.id === moduleConfigId)
       : null
 
