@@ -42,8 +42,21 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   })
 
   useEffect(() => {
-    methods.reset(defaultValues)
-  }, [defaultValues])
+    if (data) {
+      const defaultValues = {
+        ...data,
+        config_data: {
+          modules: data.config_data.modules.map((module, i) => {
+            return {
+              ...module,
+              key: `${Date.now()}-${i}`,
+            }
+          }),
+        },
+      }
+      methods.reset(defaultValues)
+    }
+  }, [data])
 
   const { append, remove } = useFieldArray({
     control: methods.control,
@@ -51,6 +64,8 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
+
+  console.log('values', values)
 
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
