@@ -143,7 +143,7 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          timeout: 60000,
+          timeout: 1800000,
         }
       )
       return response
