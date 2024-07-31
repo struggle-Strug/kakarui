@@ -30,4 +30,6 @@ export default {
   DEPLOY_LOG_SHOW_DETAIL: '/log-show/[deploy_id]',
 
   CHECK: '/Check',
+
+  NOT_FOUND: '/404',
 }

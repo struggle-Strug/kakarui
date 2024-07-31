@@ -16,18 +16,11 @@ const ModuleSetCreateContainer = () => {
       router.push(Routes.MODULE_SET)
     },
   })
-
-  const data = {
-    name: '',
-    description: '',
-    moduleset_modules: [],
-  }
-
   return (
     <Container title="モジュールセット登録">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">プロジェクトにモジュールセットを登録します。</p>
-        <ModuleSetForm onSubmit={doCreateModuleSet} data={data} />
+        <ModuleSetForm onSubmit={doCreateModuleSet} data={null} />
       </Spin>
     </Container>
   )

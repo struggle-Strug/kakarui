@@ -2,14 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Space } from 'antd'
 
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
 import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
-import { ModuleForm, ModuleSettingModalButton } from '@/components/module'
+import { ModuleForm, ModuleSettingModal } from '@/components/module'
 import { ModuleSelectionModal } from '@/components/module_selection'
 import { RowDate } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
@@ -24,28 +24,35 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
   const [moduleFormFlag, setModuleFormFlag] = useState(false)
-
-  const defaultValues = useMemo(() => {
-    return {
-      ...data,
-      moduleset_modules: data.moduleset_modules.map((module, i) => {
-        return {
-          ...module,
-          key: `${Date.now()}-${i}`,
-          name: module.module_name,
-        }
-      }),
-    }
-  }, [data])
+  const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
+  const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
+  const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
 
   const methods = useForm({
     resolver: yupResolver(moduleSetSchema),
-    defaultValues,
+    defaultValues: {
+      name: '',
+      description: '',
+      moduleset_modules: [],
+    },
   })
 
   useEffect(() => {
-    methods.reset(defaultValues)
-  }, [defaultValues])
+    if (data) {
+      const defaultValues = {
+        ...data,
+        config_data: {
+          modules: data.config_data.modules.map((module, i) => {
+            return {
+              ...module,
+              key: `${Date.now()}-${i}`,
+            }
+          }),
+        },
+      }
+      methods.reset(defaultValues)
+    }
+  }, [data])
 
   const { append, remove } = useFieldArray({
     control: methods.control,
@@ -115,12 +122,23 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     [values, append, setTableKey, setModuleSelectionModalFlag, methods.setValue, setTableKey]
   )
 
-  const updateModuleSetting = useCallback(
-    (index, value) => {
-      methods.setValue(`moduleset_modules.${index}.default_config_data`, value)
-      setTableKey((prevKey) => prevKey + 1)
+  const moduleSettingModalOpen = useCallback(
+    (index, settingData) => {
+      setModuleSettingModalIndex(index)
+      setModuleSettingModalData(settingData)
+      setModuleSettingModalFlag(true)
     },
-    [methods, setTableKey]
+    [setModuleSettingModalIndex, setModuleSettingModalData, setModuleSettingModalFlag]
+  )
+
+  const moduleSettingModalSetData = useCallback(
+    (value) => {
+      if (moduleSettingModalIndex > -1) {
+        methods.setValue(`moduleset_modules.${moduleSettingModalIndex}.default_config_data`, value)
+        setTableKey((prevKey) => prevKey + 1)
+      }
+    },
+    [moduleSettingModalIndex, methods.setValue, setTableKey]
   )
 
   const onBack = useCallback(() => {
@@ -158,7 +176,6 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[96px]',
       render: (value, record, index) => (
         <Input
-          ref={methods.ref}
           {...methods.register(`moduleset_modules.${index}.tag`)}
           defaultValue={value}
           name={`moduleset_modules.${index}.tag`}
@@ -172,7 +189,6 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[272px]',
       render: (value, record, index) => (
         <Select
-          ref={methods.ref}
           {...methods.register(`moduleset_modules.${index}.type`)}
           defaultValue={value}
           name={`moduleset_modules.${index}.type`}
@@ -194,14 +210,13 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[356px]',
       render: (value, record, index) => (
         <Input
-          ref={methods.ref}
           {...methods.register(`moduleset_modules.${index}.default_config_data`)}
           value={JSON.stringify(value)}
           name={`moduleset_modules.${index}.default_config_data`}
           suffix={
-            <ModuleSettingModalButton
-              data={value}
-              setData={(result) => updateModuleSetting(index, result)}
+            <ButtonIcon
+              icon={<ExternalLinkIcon size={32} />}
+              onClick={() => moduleSettingModalOpen(index, value)}
             />
           }
           disabled
@@ -303,6 +318,12 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         data={null}
         onSuccess={onSuccess}
         onClose={() => setModuleFormFlag(false)}
+      />
+      <ModuleSettingModal
+        open={moduleSettingModalFlag}
+        onClose={() => setModuleSettingModalFlag(false)}
+        data={moduleSettingModalData}
+        setData={moduleSettingModalSetData}
       />
     </FormProvider>
   )

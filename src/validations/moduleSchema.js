@@ -19,12 +19,13 @@ const moduleFormSchema = (isEdit) =>
           .max(50, `50文字以下を入力してください。`),
         [FORM_INFO.DESCRIPTION]: Yup.string()
           .trim()
+          .nullable()
           .max(4000, '無効な入力です。4000文字以下で入力してください。'),
         [FORM_INFO.TAG]: Yup.string()
           .trim()
           .required('タグを入力してください。')
           .max(128, `128文字以下を入力してください。`),
-        [FORM_INFO.FILE]: Yup.mixed().nullable(),
+        [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
       })
     : Yup.object().shape({
         [FORM_INFO.NAME]: Yup.string()
@@ -33,6 +34,7 @@ const moduleFormSchema = (isEdit) =>
           .max(50, `50文字以下を入力してください。`),
         [FORM_INFO.DESCRIPTION]: Yup.string()
           .trim()
+          .nullable()
           .max(4000, '無効な入力です。4000文字以下で入力してください。'),
         [FORM_INFO.TAG]: Yup.string()
           .trim()

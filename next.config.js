@@ -28,11 +28,7 @@ const nextConfig = {
   },
   images: {
     dangerouslyAllowSVG: true,
-    domains: [
-      'xpath-dev.s3.ap-southeast-1.amazonaws.com',
-      'xpath-dev.s3.amazonaws.com',
-      'storage.googleapis.com',
-    ],
+    unoptimized: true,
   },
 }
 

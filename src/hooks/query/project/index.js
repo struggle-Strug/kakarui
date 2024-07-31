@@ -8,7 +8,7 @@ import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
 
 import { API, API_ERRORS, LOCAL_STORAGE_KEYS, PROJECT_LIST_KEY } from '@/constants'
-import { useStubEnabled } from '@/hooks/custom'
+import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback, useSyncLocalStorage } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
@@ -58,9 +58,7 @@ export const useProjectQuery = ({ search, sort, options = {} } = {}) => {
     ...options,
   })
 
-  if (query.isError && query.error) {
-    showAPIErrorMessage(query.error, API_ERRORS.PROJECT_LIST)
-  }
+  useShowErrorOnce(query, API_ERRORS.PROJECT_LIST)
 
   const data = query.data || []
 

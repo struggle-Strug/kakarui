@@ -7,10 +7,9 @@ import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
 
 import { API, API_ERRORS, MODULE_LIST_KEY } from '@/constants'
-import { useStubEnabled } from '@/hooks/custom'
+import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 
 import { tryParseJson } from '@/utils/helper/functions'
-import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -41,9 +40,7 @@ export const useModuleSelectionQuery = ({ search, sort, options = {} } = {}) => 
     ...options,
   })
 
-  if (query.isError && query.error) {
-    showAPIErrorMessage(query.error, API_ERRORS.MODULE_LIST)
-  }
+  useShowErrorOnce(query, API_ERRORS.MODULE_LIST)
 
   const data = query.data?.modules || []
 
