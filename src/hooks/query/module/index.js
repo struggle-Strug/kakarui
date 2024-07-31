@@ -109,7 +109,7 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
-          timeout: 60000,
+          timeout: 1800000, // 1800s
         }
       )
       return response
