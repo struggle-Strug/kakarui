@@ -3,15 +3,14 @@ import { Form, Space } from 'antd'
 import orderBy from 'lodash/orderBy'
 
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
 import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
-import { ModuleSettingModalButton } from '@/components/module'
-import ModuleAddEditModalButton from '@/components/module/ModuleAddEditModalButton'
+import { ModuleForm, ModuleSettingModalButton } from '@/components/module'
 import { ModuleSelectionModal, ModuleSetSelectionModal } from '@/components/module_selection'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
@@ -25,20 +24,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
   const [moduleSetSelectionModalFlag, setModuleSetSelectionModalFlag] = useState(false)
-
-  const defaultValues = useMemo(() => {
-    return {
-      ...data,
-      config_data: {
-        modules: data.config_data.modules.map((module, i) => {
-          return {
-            ...module,
-            key: `${Date.now()}-${i}`,
-          }
-        }),
-      },
-    }
-  }, [data])
+  const [moduleFormFlag, setModuleFormFlag] = useState(false)
 
   const methods = useForm({
     resolver: yupResolver(moduleConfigSchema),
@@ -74,6 +60,8 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
+
+  console.log('values', values)
 
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
@@ -140,6 +128,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           return {
             id: `${Date.now()}-${i}`,
+            key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
             module_name: module.module_name,
@@ -198,7 +187,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[356px]',
       render: (value, record, index) => (
         <Input
-          ref={methods.ref}
           {...methods.register(`config_data.modules.${index}.module_instance`)}
           defaultValue={value}
           name={`config_data.modules.${index}.module_instance`}
@@ -219,7 +207,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[272px]',
       render: (value, record, index) => (
         <Select
-          ref={methods.ref}
           {...methods.register(`config_data.modules.${index}.type`)}
           defaultValue={value}
           name={`config_data.modules.${index}.type`}
@@ -241,7 +228,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[200px]',
       render: (value, record, index) => (
         <Input
-          ref={methods.ref}
           {...methods.register(`config_data.modules.${index}.config_data`)}
           value={JSON.stringify(value)}
           name={`config_data.modules.${index}.config_data`}
@@ -316,7 +302,12 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
             icon={<AddIcon size={36} />}
             onClick={() => moduleCheckSelectionModalOpen()}
           />
-          <ModuleAddEditModalButton label="新規モジュール追加" data={null} onSuccess={onSuccess} />
+          <Button
+            icon={<AddIcon size={36} />}
+            type="outline"
+            label="新規モジュール追加"
+            onClick={() => setModuleFormFlag(true)}
+          />
         </Space>
 
         <Table
@@ -349,6 +340,12 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       <ModuleSetSelectionModal
         open={moduleSetSelectionModalFlag}
         onClose={moduleSetSelectionModalClose}
+      />
+      <ModuleForm
+        open={moduleFormFlag}
+        data={null}
+        onSuccess={onSuccess}
+        onClose={() => setModuleFormFlag(false)}
       />
     </FormProvider>
   )
