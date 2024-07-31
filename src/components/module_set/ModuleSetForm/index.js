@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Space } from 'antd'
+import orderBy from 'lodash/orderBy'
 
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
@@ -17,6 +18,7 @@ import { Button, ButtonIcon, Table } from '@/components/ui'
 import { FORM_MODULE_SET, moduleSetSchema } from '@/validations/moduleSetSchema'
 
 const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
+  console.log('data', data)
   const router = useRouter()
 
   const [tableKey, setTableKey] = useState(0)
@@ -27,6 +29,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
   const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
   const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
+  const [sortedInfo, setSortedInfo] = useState({ field: undefined, order: undefined })
 
   const methods = useForm({
     resolver: yupResolver(moduleSetSchema),
@@ -37,26 +40,9 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
   })
 
-  useEffect(() => {
-    if (data) {
-      const defaultValues = {
-        ...data,
-        config_data: {
-          modules: data.config_data.modules.map((module, i) => {
-            return {
-              ...module,
-              key: `${Date.now()}-${i}`,
-            }
-          }),
-        },
-      }
-      methods.reset(defaultValues)
-    }
-  }, [data])
-
   const { append, remove } = useFieldArray({
     control: methods.control,
-    name: FORM_MODULE_SET.MODULESET_MODULES,
+    name: 'moduleset_modules',
   })
 
   const values = methods.getValues()
@@ -149,15 +135,40 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     setModuleSelectionModalFlag(false)
   }, [setModuleSelectionModalFlag])
 
-  const sorter = (a, b, key) => {
-    return a[key] > b[key] ? 1 : -1
+  const onTableChange = (pagination, filters, sorter) => {
+    setSortedInfo(sorter)
   }
+
+  useEffect(() => {
+    if (data) {
+      const defaultValues = {
+        ...data,
+        moduleset_modules: data.moduleset_modules.map((module, i) => {
+          return {
+            ...module,
+            name: module.module_name,
+            key: `${Date.now()}-${i}`,
+          }
+        }),
+      }
+      methods.reset(defaultValues)
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (sortedInfo.field !== undefined && sortedInfo.field !== undefined) {
+      const column = sortedInfo.field
+      const order = sortedInfo.order === 'descend' ? 'desc' : 'asc'
+      const orderedModules = orderBy(values.moduleset_modules, [column], [order])
+      methods.setValue('moduleset_modules', orderedModules)
+    }
+  }, [sortedInfo])
 
   const columns = [
     {
       title: 'モジュール名',
-      sorter: (a, b) => sorter(a, b, 'name'),
       dataIndex: 'name',
+      sorter: true,
       className: 'min-w-[200px]',
       render: (text, record, index) => (
         <div className="flex w-[240px] cursor-pointer items-center gap-x-4 text-base">
@@ -171,8 +182,8 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: 'タグ',
-      sorter: (a, b) => sorter(a, b, 'tag'),
       dataIndex: 'tag',
+      sorter: true,
       className: 'min-w-[96px]',
       render: (value, record, index) => (
         <Input
@@ -184,8 +195,8 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: 'デプロイ先種別',
-      sorter: (a, b) => sorter(a, b, 'type'),
       dataIndex: 'type',
+      sorter: true,
       className: 'min-w-[272px]',
       render: (value, record, index) => (
         <Select
@@ -205,7 +216,6 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: '設定値',
-      sorter: (a, b) => sorter(a, b, 'default_config_data'),
       dataIndex: 'default_config_data',
       className: 'min-w-[356px]',
       render: (value, record, index) => (
@@ -225,15 +235,15 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     },
     {
       title: '登録日',
-      sorter: (a, b) => sorter(a, b, 'create_date'),
       dataIndex: 'create_date',
+      sorter: true,
       className: 'min-w-[124px]',
       render: (text) => <RowDate item={text} />,
     },
     {
       title: '更新日',
-      sorter: (a, b) => sorter(a, b, 'update_date'),
       dataIndex: 'update_date',
+      sorter: true,
       className: 'min-w-[124px]',
       render: (text) => <RowDate item={text} />,
     },
@@ -297,6 +307,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
           pagination={false}
           columns={columns}
           data={values.moduleset_modules}
+          onChange={onTableChange}
         />
 
         <Space className="flex-end mt-12 gap-x-4">
