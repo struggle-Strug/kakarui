@@ -25,19 +25,9 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
   const [moduleFormFlag, setModuleFormFlag] = useState(false)
-
-  const defaultValues = useMemo(() => {
-    return {
-      ...data,
-      moduleset_modules: data.moduleset_modules.map((module, i) => {
-        return {
-          ...module,
-          key: `${Date.now()}-${i}`,
-          name: module.module_name,
-        }
-      }),
-    }
-  }, [data])
+  const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
+  const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
+  const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
 
   const methods = useForm({
     resolver: yupResolver(moduleSetSchema),

@@ -10,7 +10,7 @@ import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
 import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
-import { ModuleForm, ModuleSettingModalButton } from '@/components/module'
+import { ModuleForm, ModuleSettingModal } from '@/components/module'
 import { ModuleSelectionModal, ModuleSetSelectionModal } from '@/components/module_selection'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
@@ -25,6 +25,9 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
   const [moduleSetSelectionModalFlag, setModuleSetSelectionModalFlag] = useState(false)
   const [moduleFormFlag, setModuleFormFlag] = useState(false)
+  const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
+  const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
+  const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
 
   const methods = useForm({
     resolver: yupResolver(moduleConfigSchema),
@@ -60,8 +63,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
-
-  console.log('values', values)
 
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
@@ -144,12 +145,23 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     [append, setModuleSetSelectionModalFlag]
   )
 
-  const updateModuleSetting = useCallback(
-    (index, value) => {
-      methods.setValue(`config_data.modules.${index}.config_data`, value)
-      setTableKey((prevKey) => prevKey + 1)
+  const moduleSettingModalOpen = useCallback(
+    (index, settingData) => {
+      setModuleSettingModalIndex(index)
+      setModuleSettingModalData(settingData)
+      setModuleSettingModalFlag(true)
     },
-    [methods, setTableKey]
+    [setModuleSettingModalIndex, setModuleSettingModalData, setModuleSettingModalFlag]
+  )
+
+  const moduleSettingModalSetData = useCallback(
+    (value) => {
+      if (moduleSettingModalIndex > -1) {
+        methods.setValue(`config_data.modules.${moduleSettingModalIndex}.config_data`, value)
+        setTableKey((prevKey) => prevKey + 1)
+      }
+    },
+    [moduleSettingModalIndex, methods.setValue, setTableKey]
   )
 
   const onBack = () => {
@@ -232,9 +244,9 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
           value={JSON.stringify(value)}
           name={`config_data.modules.${index}.config_data`}
           suffix={
-            <ModuleSettingModalButton
-              data={value}
-              setData={(result) => updateModuleSetting(index, result)}
+            <ButtonIcon
+              icon={<ExternalLinkIcon size={32} />}
+              onClick={() => moduleSettingModalOpen(index, value)}
             />
           }
           disabled
@@ -346,6 +358,12 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         data={null}
         onSuccess={onSuccess}
         onClose={() => setModuleFormFlag(false)}
+      />
+      <ModuleSettingModal
+        open={moduleSettingModalFlag}
+        onClose={() => setModuleSettingModalFlag(false)}
+        data={moduleSettingModalData}
+        setData={moduleSettingModalSetData}
       />
     </FormProvider>
   )
