@@ -65,6 +65,8 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
 
   const values = methods.getValues()
 
+  console.log('values', values)
+
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
     setModuleSelectionModalFlag(true)
