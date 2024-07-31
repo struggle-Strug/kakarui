@@ -13,7 +13,7 @@ import {
   MODULE_LIST_KEY,
   MODULE_SET_LIST_KEY,
 } from '@/constants'
-import { useStubEnabled } from '@/hooks/custom'
+import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { mapOptionsQuery, tryParseJson } from '@/utils/helper/functions'
@@ -53,9 +53,7 @@ export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
     ...options,
   })
 
-  if (query.isError && query.error) {
-    showAPIErrorMessage(query.error, API_ERRORS.MODULE_CONFIG_LIST)
-  }
+  useShowErrorOnce(query, API_ERRORS.MODULE_CONFIG_LIST)
 
   const data = query.data?.module_configs || []
 

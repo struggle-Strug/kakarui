@@ -12,7 +12,6 @@ import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useSyncLocalStorage } from '@/hooks/share'
 
 import { mapOptionsQuery, tryParseJson } from '@/utils/helper/functions'
-import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
