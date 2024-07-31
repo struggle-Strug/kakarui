@@ -1,18 +1,7 @@
-import { Button, Result } from 'antd'
-
-import { useRouter } from 'next/router'
+import { PageNotFound } from '@/components/common'
 
 const NotFoundPage = () => {
-  const router = useRouter()
-
-  return (
-    <Result
-      status="404"
-      title="404"
-      subTitle="アクセスしたページは存在しません。"
-      extra={<Button onClick={router.back}>メインページに戻る</Button>}
-    />
-  )
+  return <PageNotFound />
 }
 
 export default NotFoundPage

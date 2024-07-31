@@ -56,7 +56,7 @@ const ModuleForm = ({ open, data, onSuccess, onClose }) => {
 
   const onSubmit = useCallback(
     async (values) => {
-      if (data) {
+      if (isEdit) {
         doUpdateModule(values)
         return
       }

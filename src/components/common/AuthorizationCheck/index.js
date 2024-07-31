@@ -1,13 +1,13 @@
-import { Result, Space, Spin } from 'antd'
+import { Spin } from 'antd'
 
 import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo } from 'react'
 
-import { MEMBER_ROLE_BLOCKED_PAGES } from '@/constants'
+import { MEMBER_ROLE_BLOCKED_PAGES, Routes } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useAuth, useGetMe, useOrganizationQuery } from '@/hooks/query'
 
-import { Button } from '@/components/ui'
+import Result from '../Result'
 
 /**
  * Check if is current logged admin is authorized
@@ -54,24 +54,18 @@ const AuthorizationCheck = ({ children }) => {
 
   const isAuthorized = isSystemAdmin || isOrgAdmin || isMember || isDeployAdmin
 
+  const isNotFoundPage = router.pathname === Routes.NOT_FOUND
+
   if ((isLoading || loading || isError) && !stubEnabled) {
     return <Spin className="w-full" />
   }
 
-  if (!isAuthorized || (isFetched && isSuccess && !isPermission)) {
+  if (!isNotFoundPage && (!isAuthorized || (isFetched && isSuccess && !isPermission))) {
     return (
-      <section className="flex-center size-full">
-        <Result
-          status="403"
-          title={<h1 className="bold text-main text-lg">403</h1>}
-          subTitle="申し訳ありませんが、このページにアクセスする権限がありません。"
-          extra={
-            <Space className="flex-center">
-              <Button onClick={router.back}>前のページに戻る</Button>
-            </Space>
-          }
-        />
-      </section>
+      <Result
+        title="403"
+        subTitle="申し訳ありませんが、このページにアクセスする権限がありません。"
+      />
     )
   }
 

@@ -14,7 +14,7 @@ import {
   MODULE_SET_LIST_KEY,
   STALE_TIME,
 } from '@/constants'
-import { useStubEnabled } from '@/hooks/custom'
+import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
@@ -49,9 +49,7 @@ export const useModuleSetQuery = ({ search, sort, options = {} } = {}) => {
     ...options,
   })
 
-  if (query.isError && query.error) {
-    showAPIErrorMessage(query.error, API_ERRORS.MODULE_SET_LIST)
-  }
+  useShowErrorOnce(query, API_ERRORS.MODULE_SET_LIST)
 
   const data = query.data?.moduleset || []
 

@@ -1,46 +1,45 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Modal } from 'antd'
 import { includes, toLower } from 'lodash'
-import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsString, useQueryStates } from 'nuqs'
 
 import { useCallback, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useFlag } from '@/hooks/share'
-
 import { Input } from '@/components/form'
-import { ExternalLinkIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
-import { Button, ButtonIcon, Table } from '@/components/ui'
+import { Button, Table } from '@/components/ui'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
 import configData from '@/services/mock-data/config_data'
 import { moduleSettingSchema } from '@/validations/moduleSchema'
 
-const ModuleSettingForm = ({ open, onClose, data, setData }) => {
+const ModuleSettingModal = ({ open, onClose, data, setData }) => {
   // eslint-disable-next-line no-unused-vars
-  const [{ sort, search }, setQueryState] = useQueryStates({
-    sort: parseAsArrayOf(parseAsString, ',').withDefault(),
+  const [{ search }, setQueryState] = useQueryStates({
     search: parseAsString,
   })
 
-  const defaultValues = useMemo(() => {
+  const methods = useForm({
+    resolver: yupResolver(moduleSettingSchema),
+    defaultValues: {
+      config_data: [],
+    },
+  })
+
+  useEffect(() => {
     const parseData = data && data !== '' && Object.keys(data).length !== 0 ? data : configData
     const parseValues = Object.keys(parseData).map((key, index) => {
       const value =
         typeof parseData[key] === 'string' ? parseData[key] : JSON.stringify(parseData[key])
       return { key, value, index }
     })
-    return {
+    const defaultValues = {
       config_data: parseValues,
     }
+    methods.reset(defaultValues)
   }, [data])
-
-  const methods = useForm({
-    resolver: yupResolver(moduleSettingSchema),
-    defaultValues,
-  })
 
   const values = methods.getValues()
 
@@ -59,8 +58,9 @@ const ModuleSettingForm = ({ open, onClose, data, setData }) => {
         return acc
       }, {})
       setData(objectData)
+      onClose()
     },
-    [setData]
+    [setData, setData]
   )
 
   const filteredData = useMemo(() => {
@@ -132,15 +132,4 @@ const ModuleSettingForm = ({ open, onClose, data, setData }) => {
   )
 }
 
-const ModuleSettingModalButton = ({ data, setData }) => {
-  const [open, onOpen, onClose] = useFlag()
-
-  return (
-    <>
-      <ButtonIcon icon={<ExternalLinkIcon size={32} />} onClick={onOpen} />
-      {open && <ModuleSettingForm open={open} onClose={onClose} data={data} setData={setData} />}
-    </>
-  )
-}
-
-export default ModuleSettingModalButton
+export default ModuleSettingModal

@@ -7,7 +7,7 @@ import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
 
 import { API, API_ERRORS, STALE_TIME, USER_LIST_KEY } from '@/constants'
-import { useStubEnabled } from '@/hooks/custom'
+import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
@@ -42,9 +42,7 @@ export const useUserQuery = ({ search, sort, options = {} } = {}) => {
     ...options,
   })
 
-  if (query.isError && query.error) {
-    showAPIErrorMessage(query.error, API_ERRORS.USER_LIST)
-  }
+  useShowErrorOnce(query, API_ERRORS.USER_LIST)
 
   const data = query.data?.users || []
 
