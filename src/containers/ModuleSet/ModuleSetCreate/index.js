@@ -13,12 +13,10 @@ const ModuleSetCreateContainer = () => {
 
   const { doCreateModuleSet, isPending: loading } = useModuleSetCreate({
     onSuccess: () => {
-      router.push({
-        pathname: Routes.MODULE_SET,
-        query: { reload: 1 },
-      })
+      router.push(Routes.MODULE_SET)
     },
   })
+  
   return (
     <Container title="モジュールセット登録">
       <Spin spinning={loading}>

@@ -23,17 +23,9 @@ const ModuleSetContainer = () => {
     search: parseAsString,
   })
 
-  const { data, filteredData, isLoading, isFetching, refetch } = useModuleSetQuery({ search, sort })
+  const { data, filteredData, isLoading, isFetching } = useModuleSetQuery({ search, sort })
 
   const searchOptions = getSearchOptions(data, ['name'])
-
-  const onRefetch = useDebouncedCallback(refetch)
-
-  useEffect(() => {
-    if (reload === '1') {
-      onRefetch()
-    }
-  }, [reload])
 
   return (
     <Container title="モジュールセット管理">
