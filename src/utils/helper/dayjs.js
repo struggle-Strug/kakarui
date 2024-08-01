@@ -2,6 +2,8 @@ import dayjs from 'dayjs'
 
 import { FORMAT_STRING } from '@/constants'
 
+import { TIMEZONE } from '@/libs/dayjs'
+
 export const compareDate = (date) => {
   if (dayjs().isSame(date)) {
     return 0
@@ -18,7 +20,7 @@ export const getDiff = (date1, date2, unit = 'h', float = false) =>
   dayjs(date1).diff(dayjs(date2), unit, float)
 
 export const formatDate = (date, formatString = FORMAT_STRING.date_str) =>
-  date ? dayjs(date).format(formatString) : ''
+  date ? dayjs.utc(date).tz(TIMEZONE).format(formatString) : ''
 
 export const formatBirthday = (date) => (date ? dayjs(date).format('YYYY-MM-DD') : '')
 

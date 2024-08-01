@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 import { memo, useCallback } from 'react'
 
 import { FORMAT_STRING } from '@/constants'
@@ -7,6 +5,7 @@ import { FORMAT_STRING } from '@/constants'
 import { HeaderTitle } from '@/components/layout/dashboard'
 import { TimeLine } from '@/components/ui'
 
+import { formatDate } from '@/utils/helper/dayjs'
 import { cn } from '@/utils/helper/functions'
 
 const data = [
@@ -55,7 +54,7 @@ const NoticeItem = memo((item) => {
     >
       <div className="flex flex-row gap-2 text-nowrap text-base">
         <div className="w-full max-w-[135px] whitespace-pre-wrap break-keep text-primary">
-          {item?.created ? dayjs(item?.created).format(FORMAT_STRING.date_str) : <>&nbsp;</>}
+          {item?.created ? formatDate(item?.created, FORMAT_STRING.date_str) : <>&nbsp;</>}
         </div>
         <div className="w-full max-w-[170px] whitespace-pre-wrap break-keep text-primary">
           {item?.title}

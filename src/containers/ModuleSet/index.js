@@ -1,11 +1,9 @@
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 import { Routes } from '@/constants'
 import { useModuleSetQuery } from '@/hooks/query'
-import { useDebouncedCallback } from '@/hooks/share'
 
 import { AddIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
@@ -16,7 +14,6 @@ import { getSearchOptions } from '@/utils/helper/functions'
 
 const ModuleSetContainer = () => {
   const router = useRouter()
-  const { reload } = router.query
 
   const [{ sort, search }] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(''),

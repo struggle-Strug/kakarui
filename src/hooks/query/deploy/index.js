@@ -107,6 +107,44 @@ export const useDeployQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getDeployDetail }
 }
 
+export const useDeployByProjectQuery = ({ projectId, options = {} } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const { stubEnabled } = useStubEnabled()
+
+  const query = useQuery({
+    queryKey: [DEPLOY_LIST_KEY, organizationId, projectId, stubEnabled],
+    queryFn: async () => {
+      if (stubEnabled) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return mockData.deploy_list
+      }
+
+      const response = await Axios.get(
+        buildApiURL(API.DEPLOY.LIST, {
+          organization_id: organizationId,
+          project_id: projectId,
+        })
+      )
+
+      return response.data
+    },
+    enabled: Boolean(!isServer && organizationId && projectId),
+    staleTime: STALE_TIME,
+    ...options,
+  })
+
+  useShowErrorOnce(query, API_ERRORS.DEPLOY_LIST)
+
+  const data = query.data?.deploys || []
+
+  // -- get detail --
+  const getDeployDetail = (deployId) => {
+    return data.find((deploy) => deploy?.id === deployId) || null
+  }
+
+  return { ...query, data, getDeployDetail }
+}
+
 const fetchDeployData = async (organizationId, projectId) => {
   try {
     const response = await Axios.get(
