@@ -25,12 +25,12 @@ const ModuleConfigContainer = () => {
 
   const { data, filteredData, isLoading, refetch } = useModuleConfigQuery({ sort, search })
 
-  const searchOptions = getSearchOptions(data, ['name', 'description'])
+  const searchOptions = getSearchOptions(data, ['name'])
 
   const onRefetch = useDebouncedCallback(refetch)
 
   useEffect(() => {
-    if (reload === 1) {
+    if (reload === '1') {
       onRefetch()
     }
   }, [reload])

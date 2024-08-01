@@ -13,7 +13,10 @@ const ModuleSetCreateContainer = () => {
 
   const { doCreateModuleSet, isPending: loading } = useModuleSetCreate({
     onSuccess: () => {
-      router.push(Routes.MODULE_SET)
+      router.push({
+        pathname: Routes.MODULE_SET,
+        query: { reload: 1 },
+      })
     },
   })
   return (

@@ -18,7 +18,6 @@ import { Button, ButtonIcon, Table } from '@/components/ui'
 import { FORM_MODULE_SET, moduleSetSchema } from '@/validations/moduleSetSchema'
 
 const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
-  console.log('data', data)
   const router = useRouter()
 
   const [tableKey, setTableKey] = useState(0)
