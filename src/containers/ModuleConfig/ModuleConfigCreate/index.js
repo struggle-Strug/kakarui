@@ -13,10 +13,7 @@ const ModuleConfigCreateContainer = () => {
 
   const { doCreateModuleConfig, isPending: loading } = useModuleConfigCreate({
     onSuccess: () => {
-      router.push({
-        pathname: Routes.MODULE_CONFIG,
-        query: { reload: 1 },
-      })
+      router.push(Routes.MODULE_CONFIG)
     },
   })
 

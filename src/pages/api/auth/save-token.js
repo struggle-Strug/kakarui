@@ -4,8 +4,6 @@ import { setCookie } from 'nookies'
 
 import { DEV } from '@/constants'
 
-import { DEV } from '@/constants'
-
 const secret = process.env.NEXTAUTH_SECRET
 
 export default async function handler(req, res) {
@@ -41,15 +39,6 @@ export default async function handler(req, res) {
 
       // Encode the session token
       let token = jwt.sign(sessionToken, secret)
-
-      const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
-      const sqlInjectionPattern =
-        // eslint-disable-next-line no-control-regex
-        /(?:\/\*!?|\*\/|[';]--|--[\s\r\n\v\f]|--[^-]*?-|[^&-]#.*?[\s\r\n\v\f]|;?\x00)/
-
-      while (pattern.test(token) || sqlInjectionPattern.test(token)) {
-        token = jwt.sign(sessionToken, secret)
-      }
 
       const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
       const sqlInjectionPattern =

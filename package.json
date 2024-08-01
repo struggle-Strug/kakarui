@@ -50,7 +50,6 @@
     "react-responsive": "^10.0.0",
     "react-show-more-text": "^1.7.1",
     "react-wrap-balancer": "^1.1.1",
-    "sinon": "^18.0.0",
     "socket.io-client": "^4.7.5",
     "tailwind-merge": "^2.3.0",
     "use-debounce": "^10.0.1",

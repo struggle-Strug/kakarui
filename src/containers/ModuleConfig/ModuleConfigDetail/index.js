@@ -17,10 +17,7 @@ const ModuleConfigDetailContainer = () => {
 
   const { doUpdateModuleConfig, isPending: loading } = useModuleConfigUpdate({
     onSuccess: () => {
-      router.push({
-        pathname: Routes.MODULE_CONFIG,
-        query: { reload: 1 },
-      })
+      router.push(Routes.MODULE_CONFIG)
     },
   })
 

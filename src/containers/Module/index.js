@@ -78,8 +78,6 @@ const ModuleContainer = () => {
     },
   ]
 
-  const onRefetch = useDebouncedCallback(refetch)
-
   return (
     <Container title="モジュール管理">
       <div className="flex-between mb-5">

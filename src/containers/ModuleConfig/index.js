@@ -29,20 +29,8 @@ const ModuleConfigContainer = () => {
 
   const onRefetch = useDebouncedCallback(refetch)
 
-  const refreshData = () => {
-    moduleConfigApiStub.getModuleConfig(filter, sort, search, project).then(setModuleConfigs)
-  }
-
   useEffect(() => {
     if (reload === '1') {
-      onRefetch()
-    }
-  }, [reload])
-
-  const onRefetch = useDebouncedCallback(refetch)
-
-  useEffect(() => {
-    if (reload === 1) {
       onRefetch()
     }
   }, [reload])
