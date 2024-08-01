@@ -49,24 +49,6 @@ export default async function handler(req, res) {
         token = jwt.sign(sessionToken, secret)
       }
 
-      const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
-      const sqlInjectionPattern =
-        // eslint-disable-next-line no-control-regex
-        /(?:\/\*!?|\*\/|[';]--|--[\s\r\n\v\f]|--[^-]*?-|[^&-]#.*?[\s\r\n\v\f]|;?\x00)/
-
-      while (pattern.test(token) || sqlInjectionPattern.test(token)) {
-        token = jwt.sign(sessionToken, secret)
-      }
-
-      const pattern = /(?:^|[^\d])0x[a-f\d]{3,}/i
-      const sqlInjectionPattern =
-        // eslint-disable-next-line no-control-regex
-        /(?:\/\*!?|\*\/|[';]--|--[\s\r\n\v\f]|--[^-]*?-|[^&-]#.*?[\s\r\n\v\f]|;?\x00)/
-
-      while (pattern.test(token) || sqlInjectionPattern.test(token)) {
-        token = jwt.sign(sessionToken, secret)
-      }
-
       if (DEV) {
         // Set the session cookie
         setCookie({ res }, 'next-auth.session-token', token, {
