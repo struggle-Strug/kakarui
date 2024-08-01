@@ -17,7 +17,10 @@ const ModuleSetDetailContainer = () => {
 
   const { doUpdateModuleSet, isPending: loading } = useModuleSetUpdate({
     onSuccess: () => {
-      router.push(Routes.MODULE_SET)
+      router.push({
+        pathname: Routes.MODULE_SET,
+        query: { reload: 1 },
+      })
     },
   })
 
