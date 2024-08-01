@@ -6,14 +6,7 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import {
-  API,
-  API_ERRORS,
-  MODULE_CONFIG_LIST_KEY,
-  MODULE_LIST_KEY,
-  MODULE_SET_LIST_KEY,
-  STALE_TIME,
-} from '@/constants'
+import { API, API_ERRORS, MODULE_SET_LIST_KEY } from '@/constants'
 import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 

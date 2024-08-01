@@ -13,6 +13,8 @@ const locales = {
   en: () => import('dayjs/locale/en'),
 }
 
+export const TIMEZONE = 'Asia/Tokyo'
+
 dayjs.extend(duration)
 dayjs.extend(utc)
 dayjs.extend(tz)
@@ -22,7 +24,7 @@ dayjs.extend(updateLocale)
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
-dayjs.tz.setDefault('Asia/Tokyo')
+dayjs.tz.setDefault(TIMEZONE)
 
 export function loadDayjsLocale(locale) {
   locales[locale]().then(() => {

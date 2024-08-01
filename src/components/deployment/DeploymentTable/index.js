@@ -40,7 +40,7 @@ const DeploymentTable = ({ data, total, loading }) => {
         if (!isCompletedStatus || !item?.execute_result_url)
           return <div className="h-[84px] min-w-[154px]" />
 
-        return <ThumbnailLink itemId={item?.id} index={index} />
+        return <ThumbnailLink deployId={item?.id} projectId={item?.project_id} index={index} />
       },
     },
   ]

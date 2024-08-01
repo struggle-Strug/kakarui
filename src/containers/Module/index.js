@@ -4,7 +4,6 @@ import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 import { useState } from 'react'
 
 import { useModuleQuery } from '@/hooks/query'
-import { useDebouncedCallback } from '@/hooks/share'
 
 import { AddIcon, EditIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
@@ -23,11 +22,9 @@ const ModuleContainer = () => {
     search: parseAsString,
   })
 
-  const { data, filteredData, isLoading, isFetching, refetch } = useModuleQuery({ search, sort })
+  const { data, filteredData, isLoading, isFetching } = useModuleQuery({ search, sort })
 
   const searchOptions = getSearchOptions(data, ['name'])
-
-  const onRefetch = useDebouncedCallback(refetch)
 
   const moduleFormOpen = (newModule) => {
     setModule(newModule)
@@ -98,12 +95,7 @@ const ModuleContainer = () => {
         columns={columns}
         data={filteredData}
       />
-      <ModuleForm
-        open={moduleFormFlag}
-        data={module}
-        onSuccess={onRefetch}
-        onClose={() => setModuleFormFlag(false)}
-      />
+      <ModuleForm open={moduleFormFlag} data={module} onClose={() => setModuleFormFlag(false)} />
     </Container>
   )
 }

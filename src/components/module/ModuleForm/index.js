@@ -11,7 +11,7 @@ import { Button } from '@/components/ui'
 
 import { FORM_INFO, moduleFormSchema } from '@/validations/moduleSchema'
 
-const ModuleForm = ({ open, data, onSuccess, onClose }) => {
+const ModuleForm = ({ open, data, onClose }) => {
   const isEdit = useMemo(() => {
     if (data) return true
     return false
@@ -44,13 +44,11 @@ const ModuleForm = ({ open, data, onSuccess, onClose }) => {
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: () => {
       onClose()
-      onSuccess?.()
     },
   })
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
-      onSuccess?.()
     },
   })
 

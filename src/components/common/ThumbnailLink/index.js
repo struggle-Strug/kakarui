@@ -8,11 +8,14 @@ const getThumbnail = (index) => {
   return `images/thumbnail/thumbnail-${random || 0}.png`
 }
 
-const ThumbnailLink = ({ itemId, index }) => (
+const ThumbnailLink = ({ deployId, projectId, index }) => (
   <Link
-    href={{ pathname: Routes.DEPLOY_MOVIE_SHOW_DETAIL, query: { deploy_id: itemId } }}
+    href={{
+      pathname: Routes.DEPLOY_MOVIE_SHOW_DETAIL,
+      query: { deploy_id: deployId, project_id: projectId },
+    }}
     className="flex min-w-[154px] justify-center transition-opacity hover:opacity-75"
-    disabled={!itemId}
+    disabled={!deployId || !projectId}
   >
     <img
       src={getThumbnail(index)}

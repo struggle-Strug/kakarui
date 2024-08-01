@@ -6,13 +6,7 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import {
-  API,
-  API_ERRORS,
-  MODULE_CONFIG_LIST_KEY,
-  MODULE_LIST_KEY,
-  MODULE_SET_LIST_KEY,
-} from '@/constants'
+import { API, API_ERRORS, MODULE_CONFIG_LIST_KEY } from '@/constants'
 import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
@@ -123,9 +117,12 @@ export const useModuleConfigCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false])
-      queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([
+        MODULE_CONFIG_LIST_KEY,
+        organizationId,
+        projectActiveId,
+        false,
+      ])
       onSuccess?.(response)
     },
     onError: (error) => {
@@ -159,9 +156,12 @@ export const useModuleConfigUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false])
-      queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([
+        MODULE_CONFIG_LIST_KEY,
+        organizationId,
+        projectActiveId,
+        false,
+      ])
       onSuccess?.(response)
     },
     onError: (error) => {

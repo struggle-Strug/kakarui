@@ -130,10 +130,6 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     router.replace(Routes.MODULE_SET)
   }, [router])
 
-  const onSuccess = useCallback(() => {
-    setModuleSelectionModalFlag(false)
-  }, [setModuleSelectionModalFlag])
-
   const onTableChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter)
   }
@@ -141,12 +137,19 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   useEffect(() => {
     if (data) {
       const defaultValues = {
-        ...data,
+        id: data.id,
+        name: data.name,
+        description: data.description,
         moduleset_modules: data.moduleset_modules.map((module, i) => {
           return {
-            ...module,
-            name: module.module_name,
             key: `${Date.now()}-${i}`,
+            name: module.module_name,
+            module_id: module.module_id,
+            tag: module.tag,
+            type: module.type,
+            default_config_data: module.default_config_data,
+            create_date: module.create_date,
+            update_date: module.update_date,
           }
         }),
       }
@@ -323,12 +326,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         type={moduleSelectionModalType}
         onClose={moduleCheckSelectionModalClose}
       />
-      <ModuleForm
-        open={moduleFormFlag}
-        data={null}
-        onSuccess={onSuccess}
-        onClose={() => setModuleFormFlag(false)}
-      />
+      <ModuleForm open={moduleFormFlag} data={null} onClose={() => setModuleFormFlag(false)} />
       <ModuleSettingModal
         open={moduleSettingModalFlag}
         onClose={() => setModuleSettingModalFlag(false)}

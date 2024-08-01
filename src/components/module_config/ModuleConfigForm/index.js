@@ -114,7 +114,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       if (newModuleSet) {
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           return {
-            id: `${Date.now()}-${i}`,
             key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
@@ -155,10 +154,6 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     router.replace(Routes.MODULE_CONFIG)
   }
 
-  const onSuccess = useCallback(() => {
-    setModuleSelectionModalFlag(false)
-  }, [setModuleSelectionModalFlag])
-
   const onTableChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter)
   }
@@ -170,8 +165,14 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         config_data: {
           modules: data.config_data.modules.map((module, i) => {
             return {
-              ...module,
               key: `${Date.now()}-${i}`,
+              module_id: module.module_id,
+              module_set_id: module.module_set_id,
+              module_name: module.module_name,
+              module_instance: module.module_instance,
+              tag: module.tag,
+              type: module.type,
+              config_data: module.config_data,
             }
           }),
         },
@@ -368,12 +369,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         open={moduleSetSelectionModalFlag}
         onClose={moduleSetSelectionModalClose}
       />
-      <ModuleForm
-        open={moduleFormFlag}
-        data={null}
-        onSuccess={onSuccess}
-        onClose={() => setModuleFormFlag(false)}
-      />
+      <ModuleForm open={moduleFormFlag} data={null} onClose={() => setModuleFormFlag(false)} />
       <ModuleSettingModal
         open={moduleSettingModalFlag}
         onClose={() => setModuleSettingModalFlag(false)}
