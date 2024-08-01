@@ -5,8 +5,6 @@ import { useDeployQuery } from '@/hooks/query'
 
 import { Container } from '@/components/ui'
 
-import { Container } from '@/components/ui'
-
 const MovieShowDetailContainer = ({ projectId }) => {
   const [detail, setDetail] = useState()
 

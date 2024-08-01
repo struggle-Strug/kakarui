@@ -6,11 +6,6 @@ import { Button } from '@/components/ui'
 
 import MyDeploymentTable from './MyDeploymentTable'
 
-const getThumbnail = (index) => {
-  const num = index % 10
-  return `images/thumbnail/thumbnail-${num}.png`
-}
-
 const DashboardStatus = () => {
   const { data, loading, refetch } = useMyDeployQuery({ limit: 10 })
 
