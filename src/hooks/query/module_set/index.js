@@ -45,7 +45,7 @@ export const useModuleSetQuery = ({ search, sort, options = {} } = {}) => {
       return response.data
     },
     enabled: Boolean(!isServer),
-    staleTime: STALE_TIME,
+    staleTime: Infinity,
     ...options,
   })
 
@@ -94,22 +94,6 @@ export const useModuleSetQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getModuleSetDetail }
 }
 
-export const useModuleSetDetailQuery = (moduleSetId) => {
-  const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
-
-  const queryClient = useQueryClient()
-
-  const cacheData = queryClient.getQueryData([MODULE_SET_LIST_KEY, organizationId, stubEnabled])
-
-  const data =
-    cacheData && cacheData.moduleset !== undefined
-      ? cacheData.moduleset.find((moduleSet) => moduleSet?.id === moduleSetId)
-      : null
-
-  return data
-}
-
 export const useModuleSetCreate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
@@ -123,9 +107,7 @@ export const useModuleSetCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, false])
       queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {
@@ -154,9 +136,7 @@ export const useModuleSetUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, false])
       queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
     },
     onError: (error) => {

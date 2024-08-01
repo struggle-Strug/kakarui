@@ -92,13 +92,12 @@ const MyDeploymentTable = ({ data, total, loading }) => {
     {
       title: <div className="min-w-[100px]">ムービー</div>,
       className: 'min-w-[100px]',
-      render: (item) => {
+      render: (item, _, index) => {
         const isCompletedStatus = item?.status === DEPLOY_STATUS.COMPLETE
 
-        // data có cái nào có "execute_result_url" đâu =))
         if (!isCompletedStatus || !item?.execute_result_url) return <div className="h-[84px]" />
 
-        return <ThumbnailLink itemId={item?.id} />
+        return <ThumbnailLink itemId={item?.id} index={index} />
       },
     },
   ]

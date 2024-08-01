@@ -106,28 +106,6 @@ export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getModuleConfigDetail, getModuleConfigOptions }
 }
 
-export const useModuleConfigDetailQuery = (moduleConfigId) => {
-  const { organizationId } = useOrganizationQuery()
-  const { projectActiveId } = useProjectActive()
-  const { stubEnabled } = useStubEnabled()
-
-  const queryClient = useQueryClient()
-
-  const cacheData = queryClient.getQueryData([
-    MODULE_CONFIG_LIST_KEY,
-    organizationId,
-    projectActiveId,
-    stubEnabled,
-  ])
-
-  const data =
-    cacheData && cacheData.module_configs !== undefined
-      ? cacheData.module_configs.find((moduleConfig) => moduleConfig?.id === moduleConfigId)
-      : null
-
-  return data
-}
-
 export const useModuleConfigCreate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { projectActiveId } = useProjectActive()
@@ -145,7 +123,7 @@ export const useModuleConfigCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false])
       queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
       queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)
@@ -181,7 +159,7 @@ export const useModuleConfigUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, false])
+      queryClient.invalidateQueries([MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false])
       queryClient.invalidateQueries([MODULE_SET_LIST_KEY, organizationId, false])
       queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
       onSuccess?.(response)

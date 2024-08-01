@@ -4,7 +4,8 @@ import { Link } from '@/components/ui'
 
 // DRAFT
 const getThumbnail = (index) => {
-  return `images/thumbnail/thumbnail-${(index % 9) + 1}.png`
+  const random = (index % 9) + 1
+  return `images/thumbnail/thumbnail-${random || 0}.png`
 }
 
 const ThumbnailLink = ({ itemId, index }) => (
