@@ -19,16 +19,6 @@ const data = [
     description: '　お気軽にお問い合わせください。',
     type: 'system',
   },
-  {
-    created: '2024/08/05',
-    title: 'インフォメーション',
-    link: '/KARAKURエントリーキットMVP1利用者マニュアル_DRAFT.pdf',
-    linkText: '利用マニュアル',
-    target: '_blank',
-    download: true,
-    description: '　マニュアルはこちらからダウンロードできます。',
-    type: 'system',
-  },
 ]
 
 const NoticeItem = memo((item) => {
@@ -90,7 +80,7 @@ const DashboardNotification = () => {
       [...data].map((item) => ({
         children: <NoticeItem {...item} />,
         dot: item?.title && renderDot,
-        className: cn('p-0 m-0', item?.title ? '!pb-[46px] last:!pb-[0px] last:!-mb-[30px]' : ''),
+        className: cn('p-0 m-0', item?.title ? '!pb-[46px] last:!pb-[0px] last:!-mb-[45px]' : ''),
       })),
     [data]
   )
