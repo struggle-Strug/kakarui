@@ -22,7 +22,7 @@ const moduleSetSchema = Yup.object().shape({
     .max(50, `50文字以下を入力してください。`),
   [FORM_MODULE_SET.DESCRIPTION]: Yup.string()
     .trim()
-    .max(4000, '無効な入力です。4000文字以下で入力してください。'),
+    .max(4000, '4000文字以下で入力してください。'),
   [FORM_MODULE_SET.MODULESET_MODULES]: Yup.array().of(moduleSchema),
 })
 

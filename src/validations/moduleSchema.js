@@ -16,11 +16,11 @@ const moduleFormSchema = (isEdit) =>
         [FORM_INFO.NAME]: Yup.string()
           .trim()
           .required('モジュール名を入力してください。')
-          .max(50, `50文字以下を入力してください。`),
+          .max(4000, `4000文字以下で入力してください。`),
         [FORM_INFO.DESCRIPTION]: Yup.string()
           .trim()
           .nullable()
-          .max(4000, '無効な入力です。4000文字以下で入力してください。'),
+          .max(4000, '4000文字以下で入力してください。'),
         [FORM_INFO.TAG]: Yup.string()
           .trim()
           .required('タグを入力してください。')
@@ -35,7 +35,7 @@ const moduleFormSchema = (isEdit) =>
         [FORM_INFO.DESCRIPTION]: Yup.string()
           .trim()
           .nullable()
-          .max(4000, '無効な入力です。4000文字以下で入力してください。'),
+          .max(4000, '4000文字以下で入力してください。'),
         [FORM_INFO.TAG]: Yup.string()
           .trim()
           .required('タグを入力してください。')
