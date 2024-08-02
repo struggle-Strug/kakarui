@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { memo, useCallback } from 'react'
 
 import { FORMAT_STRING } from '@/constants'
@@ -10,39 +11,25 @@ import { cn } from '@/utils/helper/functions'
 
 const data = [
   {
-    created: '2024/12/12',
-    title: 'システムメンテナンス',
-    description: '2024年12月20日(金)の14:00〜16:00まで定期システムメンテナンスを行います。',
+    created: '2024/08/05',
+    title: 'インフォメーション',
+    link: 'https://forms.office.com/r/8kpdahCkjC',
+    linkText: 'お問い合わせはこちら',
+    target: '_blank',
+    description: '　お気軽にお問い合わせください。',
     type: 'system',
   },
   {
-    created: '2024/12/12',
+    created: '2024/08/05',
     title: 'インフォメーション',
-    description: 'ロボコンプロジェクトが作成できるようになりました。',
-    type: 'project',
-    project: {
-      id: 1,
-    },
-    projectId: 1,
-  },
-  {
-    created: '2024/12/12',
-    title: 'アップデート',
-    description: '○○機能を追加しました。',
+    link: '/KARAKURエントリーキットMVP1利用者マニュアル_DRAFT.pdf',
+    linkText: '利用マニュアル',
+    target: '_blank',
+    download: true,
+    description: '　マニュアルはこちらからダウンロードできます。',
     type: 'system',
   },
 ]
-
-// const NoticeItemLink = (item) => {
-//   if (item?.type === 'project') {
-//     return (
-//       <Link href={`/project/${item?.project?.id}`} className="font-semibold text-indigo-rainbow">
-//         ロボコンプロジェクトについて見る &gt;
-//       </Link>
-//     )
-//   }
-//   return null
-// }
 
 const NoticeItem = memo((item) => {
   if (!item?.title) return null
@@ -61,7 +48,20 @@ const NoticeItem = memo((item) => {
         </div>
         <div className="grow ">
           <div className="flex flex-col gap-4 text-base">
-            <div className="whitespace-pre-wrap break-keep text-primary">{item?.description}</div>
+            <div className="float-left whitespace-pre-wrap break-keep text-left text-primary">
+              {item?.link && (
+                <Link
+                  href={item?.link}
+                  target={item?.target}
+                  alt={item?.linkText}
+                  download={item?.download}
+                  className="text-xl font-semibold text-indigo-rainbow"
+                >
+                  {item?.linkText}
+                </Link>
+              )}
+              {item?.description || <>&nbsp;</>}
+            </div>
           </div>
         </div>
       </div>

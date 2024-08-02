@@ -60,7 +60,7 @@ const ModuleForm = ({ open, data, onClose }) => {
       }
       doCreateModule(values)
     },
-    [doCreateModule, doUpdateModule]
+    [doCreateModule, doUpdateModule, isEdit]
   )
 
   return (
