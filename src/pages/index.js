@@ -7,7 +7,7 @@ import queryString from 'query-string'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import LoginForm from '@/containers/Auth'
+import LoginContainer from '@/containers/Auth'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -25,7 +25,9 @@ const LoginPage = () => {
           })
           .then((response) => {
             // Redirect to a secure page or home page after processing
-            if (typeof window !== 'undefined') window.location = '/home'
+            setTimeout(() => {
+              if (typeof window !== 'undefined') window.location = '/home'
+            }, 200)
           })
           .catch((error) => {
             console.error('Error sending access token to server:', error)
@@ -36,7 +38,7 @@ const LoginPage = () => {
 
   return (
     <section className="flex-center min-h-screen">
-      <LoginForm />
+      <LoginContainer />
     </section>
   )
 }

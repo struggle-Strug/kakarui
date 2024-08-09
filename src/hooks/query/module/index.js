@@ -106,7 +106,9 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
+      queryClient.refetchQueries({
+        queryKey: [MODULE_LIST_KEY, organizationId, false]
+      })
       onSuccess?.(response)
     },
     onError: (error) => {
@@ -138,7 +140,9 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: (response) => {
-      queryClient.invalidateQueries([MODULE_LIST_KEY, organizationId, false])
+      queryClient.refetchQueries({
+        queryKey: [MODULE_LIST_KEY, organizationId, false]
+      })
       onSuccess?.(response)
     },
     onError: (error) => {

@@ -79,7 +79,7 @@ const ModuleContainer = () => {
     <Container title="モジュール管理">
       <div className="flex-between mb-5">
         <div className="w-full">
-          <SearchBar placeholder="モジュールセット名・説明" options={searchOptions} />
+          <SearchBar placeholder="モジュール名・説明" options={searchOptions} />
         </div>
         <Button
           icon={<AddIcon size={36} />}

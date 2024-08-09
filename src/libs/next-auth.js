@@ -92,8 +92,13 @@ export const authOptions = {
         // eslint-disable-next-line no-control-regex
         /(?:\/\*!?|\*\/|[';]--|--[\s\r\n\v\f]|--[^-]*?-|[^&-]#.*?[\s\r\n\v\f]|;?\x00)/
 
+      let counter = 0
       while (pattern.test(jwtToken) || sqlInjectionPattern.test(jwtToken)) {
+        if (counter > 20) {
+          break
+        }
         jwtToken = jwt.sign(token, secret)
+        counter += 1
       }
       return jwtToken
     },

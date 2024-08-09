@@ -3,7 +3,7 @@ import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useState } from 'react'
 
-import { useModuleSetSelectionQuery } from '@/hooks/query'
+import { useModuleSetQuery } from '@/hooks/query'
 
 import { SearchBar } from '@/components/layout/dashboard'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
@@ -19,7 +19,7 @@ const ModuleSetSelectionModal = ({ open, onClose }) => {
     search: parseAsString,
   })
 
-  const { data, filteredData, isLoading, isFetching } = useModuleSetSelectionQuery({ search, sort })
+  const { data, filteredData, isLoading, isFetching } = useModuleSetQuery({ search, sort })
 
   const searchOptions = getSearchOptions(data, ['name'])
 
