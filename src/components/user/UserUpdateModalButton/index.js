@@ -31,10 +31,8 @@ const UserUpdateModalButton = ({ data, onSuccess, ...props }) => {
 
     const userUpdate = { name, mail, company, role, enable }
 
-    doUpdateUser(userUpdate)
-
     try {
-      await doUpdateUser(data)
+      await doUpdateUser(userUpdate)
 
       await doUpdatePermission({
         main_role: mainRole,

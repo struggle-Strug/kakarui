@@ -45,14 +45,19 @@ export default async function handler(req, res) {
         // eslint-disable-next-line no-control-regex
         /(?:\/\*!?|\*\/|[';]--|--[\s\r\n\v\f]|--[^-]*?-|[^&-]#.*?[\s\r\n\v\f]|;?\x00)/
 
+      let counter = 0
       while (pattern.test(token) || sqlInjectionPattern.test(token)) {
-        token = jwt.sign(sessionToken, secret)
+        if (counter > 20) {
+          break
+        }
+        token = jwt.sign(token, secret)
+        counter += 1
       }
 
       if (DEV) {
         // Set the session cookie
         setCookie({ res }, 'next-auth.session-token', token, {
-          maxAge: 30 * 24 * 60 * 60, // 30 days
+          maxAge: 90 * 60, // 90 minutes
           path: '/',
           httpOnly: true,
           secure: false,
@@ -65,7 +70,7 @@ export default async function handler(req, res) {
           `${process.env.NEXT_PUBLIC_VERCEL_PREFIX || ''}next-auth.session-token`,
           token,
           {
-            maxAge: 30 * 24 * 60 * 60, // 30 days
+            maxAge: 90 * 60, // 90 minutes
             path: '/',
             httpOnly: true,
             secure: true,

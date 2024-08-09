@@ -12,7 +12,7 @@ import { Input, InputTextArea, Select } from '@/components/form'
 import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
 import { ModuleForm, ModuleSettingModal } from '@/components/module'
 import { ModuleSelectionModal } from '@/components/module_selection'
-import { RowDate } from '@/components/table'
+import { RowContent, RowDate } from '@/components/table'
 import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { FORM_MODULE_SET, moduleSetSchema } from '@/validations/moduleSetSchema'
@@ -174,7 +174,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[200px]',
       render: (text, record, index) => (
         <div className="flex w-[240px] cursor-pointer items-center gap-x-4 text-base">
-          <span className="flex-[1_0_0]">{text}</span>
+          <RowContent item={text} className="flex-[1_0_0]" />
           <ExternalLinkIcon
             className="ml-auto shrink-0 cursor-pointer"
             onClick={() => moduleRadioSelectionModalOpen(index)}

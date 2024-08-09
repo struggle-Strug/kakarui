@@ -3,7 +3,7 @@ import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useModuleSelectionQuery } from '@/hooks/query'
+import { useModuleQuery } from '@/hooks/query'
 
 import { SearchBar } from '@/components/layout/dashboard'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
@@ -26,7 +26,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
     setQueryState({ search: '' })
   }, [])
 
-  const { data, filteredData, isLoading, isFetching } = useModuleSelectionQuery({ search, sort })
+  const { data, filteredData, isLoading, isFetching } = useModuleQuery({ search, sort })
 
   const searchOptions = getSearchOptions(data, ['name'])
 
@@ -102,11 +102,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
       title: <ColumnSorter title={<span>モジュール名</span>} field="name" />,
       dataIndex: 'name',
       className: 'min-w-[248px]',
-      render: (text) => (
-        <div className="flex w-[248px] cursor-pointer items-center gap-x-4 text-base">
-          <span>{text.replace(/\\(["'])/g, '$1')}</span>
-        </div>
-      ),
+      render: (text) => <RowContent item={text} className="max-w-[400px]" />,
     },
     {
       title: <ColumnSorter title="タグ" field="latest_tag" />,

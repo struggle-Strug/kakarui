@@ -29,13 +29,13 @@ const userFormSchema = () =>
       .trim()
       .required('メールアドレスを入力してください。')
       .matches(EMAIL_REGEX, 'メールアドレスの形式を正しく入力してください。')
-      .max(MAX_LEN_CONTENT, `${MAX_LEN_CONTENT}文字以下を入力してください。`),
+      .max(64, `${64}文字以下を入力してください。`),
     [FORM_INFO.ROLE]: Yup.string().trim().max(100, `${100}文字以下を入力してください。`),
     [FORM_INFO.COMPANY]: Yup.string()
       .trim()
       .nullable()
       .notRequired()
-      .max(MAX_LEN_CONTENT, `${MAX_LEN_CONTENT}文字以下を入力してください。`),
+      .max(64, `${64}文字以下を入力してください。`),
   })
 
 export { FORM_INFO, userFormSchema, userValues }
