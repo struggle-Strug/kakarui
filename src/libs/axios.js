@@ -21,11 +21,16 @@ instance.interceptors.request.use(async (request) => {
 
 const redirectIfUnAuthorized = async () => {
   if (typeof window !== 'undefined') {
-    await signOut({
-      redirect: false,
-    }).then(() => {
-      window.location.href = Routes.AUTH.LOGIN
-    })
+    try {
+      await signOut({
+        redirect: false,
+      }).then(() => {
+        window.location.href = Routes.AUTH.LOGIN
+      })
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Logout error:', err)
+    }
   }
 }
 

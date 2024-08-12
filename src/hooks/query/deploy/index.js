@@ -13,7 +13,7 @@ import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
 import toLower from 'lodash/toLower'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import {
   API,
@@ -162,8 +162,6 @@ const fetchDeployData = async (organizationId, projectId) => {
 }
 
 export const useMyDeployQuery = ({ limit } = {}) => {
-  const queryClient = useQueryClient()
-
   const { stubEnabled } = useStubEnabled() || {}
   const { organizationId } = useOrganizationQuery() || {}
 
@@ -178,36 +176,6 @@ export const useMyDeployQuery = ({ limit } = {}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isRefetching, setIsRefetching] = useState(false)
 
-  useEffect(() => {
-    const fetchAllDeployData = async () => {
-      if (projectIds.length === 0) return
-
-      setIsLoading(true)
-      const chunkedProjectIds = chunk(projectIds, 5)
-      console.log('Chunked Project IDs:', chunkedProjectIds)
-
-      try {
-        for (const projectChunk of chunkedProjectIds) {
-          await Promise.allSettled(
-            projectChunk.map((projectId) =>
-              queryClient.fetchQuery({
-                queryKey: [DEPLOY_LIST_KEY, organizationId, projectId],
-                queryFn: () => fetchDeployData(organizationId, projectId),
-                staleTime: Infinity,
-              })
-            )
-          )
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (typeof window !== 'undefined' && organizationId && projectIds.length > 0) {
-      fetchAllDeployData()
-    }
-  }, [projectIds, organizationId, queryClient])
-
   // Create a single useQuery to fetch data for all projectIds
   const deployQuery = useQuery({
     queryKey: [DEPLOY_LIST_KEY, organizationId, projectIds],
@@ -217,21 +185,25 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       const chunkedProjectIds = chunk(projectIds, 5)
       const results = []
 
-      for (const projectChunk of chunkedProjectIds) {
-        const chunkResults = await Promise.allSettled(
-          projectChunk.map((projectId) => fetchDeployData(organizationId, projectId))
-        )
+      try {
+        for (const projectChunk of chunkedProjectIds) {
+          const chunkResults = await Promise.allSettled(
+            projectChunk.map((projectId) => fetchDeployData(organizationId, projectId))
+          )
 
-        chunkResults.forEach((result, index) => {
-          if (result.status === 'fulfilled') {
-            results.push(...result.value)
-          } else {
-            console.error(
-              `Error fetching data for projectId ${projectChunk[index]}:`,
-              result.reason
-            )
-          }
-        })
+          chunkResults.forEach((result, index) => {
+            if (result.status === 'fulfilled') {
+              results.push(...result.value)
+            } else {
+              console.error(
+                `Error fetching data for projectId ${projectChunk[index]}:`,
+                result.reason
+              )
+            }
+          })
+        }
+      } finally {
+        setIsLoading(false)
       }
 
       return results
@@ -262,7 +234,7 @@ export const useMyDeployQuery = ({ limit } = {}) => {
       project_name: projectIdToNameMap[deploy.project_id] || null,
     }))
 
-    return orderBy(enhancedResult, ['create_date'], ['asc'])
+    return orderBy(enhancedResult, ['create_date'], ['desc'])
   }, [deployQuery.data, projects])
 
   const refetchAll = useCallback(async () => {
