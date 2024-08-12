@@ -27,7 +27,7 @@ const ModuleContainer = () => {
   const searchOptions = getSearchOptions(data, ['name'])
 
   const moduleFormOpen = (newModule) => {
-    setModule(newModule)
+    setModule({ ...newModule })
     setModuleFormFlag(true)
     return false
   }

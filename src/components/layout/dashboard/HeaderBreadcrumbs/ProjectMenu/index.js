@@ -22,7 +22,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
   const [open, onOpen, onClose] = useFlag()
 
   const { filteredData, isLoading } = useProjectQuery({
-    sort: JSON.stringify([{ field: 'create_date', value: 'asc' }]),
+    sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
   })
 
   const { projectActive, setProjectActive } = useProjectActive()

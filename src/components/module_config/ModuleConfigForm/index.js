@@ -67,14 +67,16 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     (newModules = null) => {
       if (newModules) {
         if (moduleSelectionModalType === 'checkbox') {
+          const moduleNum = values.config_data.modules.length + 1
           const newSelectionModules = newModules
             .map((module, i) =>
               module.tags.map((tag, j) => {
+                const instanceNum = String(moduleNum + i).padStart(3, '0')
                 return {
                   key: `${Date.now()}-${i}-${j}`,
                   module_id: module.id,
                   module_set_id: null,
-                  module_instance: '',
+                  module_instance: `Module-${instanceNum}`,
                   module_name: module.name,
                   tag: tag.name,
                   type: '',
@@ -113,13 +115,15 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   const moduleSetSelectionModalClose = useCallback(
     (newModuleSet) => {
       if (newModuleSet) {
+        const moduleNum = values.config_data.modules.length + 1
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
+          const instanceNum = String(moduleNum + i).padStart(3, '0')
           return {
             key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
             module_name: module.module_name,
-            module_instance: '',
+            module_instance: `Module-${instanceNum}`,
             tag: module.tag,
             type: module.type,
             config_data: module.default_config_data,

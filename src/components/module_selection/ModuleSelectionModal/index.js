@@ -24,7 +24,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
     setSelectedRowKeys([])
     setSelectedModules([])
     setQueryState({ search: '' })
-  }, [])
+  }, [open])
 
   const { data, filteredData, isLoading, isFetching } = useModuleQuery({ search, sort })
 

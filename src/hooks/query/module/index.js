@@ -107,7 +107,7 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
     },
     onSuccess: (response) => {
       queryClient.refetchQueries({
-        queryKey: [MODULE_LIST_KEY, organizationId, false]
+        queryKey: [MODULE_LIST_KEY, organizationId, false],
       })
       onSuccess?.(response)
     },
@@ -141,7 +141,7 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
     },
     onSuccess: (response) => {
       queryClient.refetchQueries({
-        queryKey: [MODULE_LIST_KEY, organizationId, false]
+        queryKey: [MODULE_LIST_KEY, organizationId, false],
       })
       onSuccess?.(response)
     },

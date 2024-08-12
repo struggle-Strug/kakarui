@@ -1,3 +1,4 @@
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -14,6 +15,7 @@ const LoginForm = () => {
 
     setLoading(true)
 
+    signOut({ redirect: false })
     await new Promise((resolve) => {
       setTimeout(resolve, 1500)
     })

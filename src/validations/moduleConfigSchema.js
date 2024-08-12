@@ -1,5 +1,7 @@
 import * as Yup from 'yup'
 
+const japaneseRegex = /[ぁ-んァ-ン々〆〤一-龯]/
+
 const FORM_MODULE_CONFIG = {
   NAME: 'name',
   DESCRIPTION: 'description',
@@ -12,7 +14,11 @@ const moduleSchema = Yup.object().shape({
   module_instance: Yup.string()
     .trim()
     .required('インスタンス名を入力してください。')
-    .max(1024, `1024文字以下を入力してください。`),
+    .max(1024, `1024文字以下を入力してください。`)
+    .matches(
+      new RegExp(`^(?!.*${japaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
+      '日本語は含めないでください。'
+    ),
   type: Yup.string(),
   config_data: Yup.object().required('設定値を入力してください。'),
 })

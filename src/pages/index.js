@@ -1,39 +1,66 @@
 /* eslint-disable no-console */
-
-/* eslint-disable no-unused-vars */
 import axios from 'axios'
 import queryString from 'query-string'
 
+import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+
+import { Routes } from '@/constants'
 
 import LoginContainer from '@/containers/Auth'
 
 const LoginPage = () => {
   const router = useRouter()
 
-  useEffect(() => {
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: false })
+      localStorage.clear()
+    } catch (err) {
+      console.error('Logout error:', err)
+    }
+  }
+
+  const extractTokenFromUrl = () => {
     if (router.asPath && router.asPath.includes('#access_token')) {
       const hash = router.asPath.split('#')[1]
-
       const parsed = queryString.parse(hash)
-      if (parsed.access_token) {
-        axios
-          .post('/api/auth/save-token', {
-            accessToken: parsed.access_token,
-            expiresIn: parsed.expires_in,
-          })
-          .then((response) => {
-            // Redirect to a secure page or home page after processing
-            setTimeout(() => {
-              if (typeof window !== 'undefined') window.location = '/home'
-            }, 200)
-          })
-          .catch((error) => {
-            console.error('Error sending access token to server:', error)
-          })
+      if (parsed.access_token && parsed.expires_in) {
+        return {
+          accessToken: parsed.access_token,
+          expiresIn: parsed.expires_in,
+        }
       }
     }
+    return null
+  }
+
+  const saveTokenAndRedirect = async (tokenData) => {
+    try {
+      await axios.post('/api/auth/save-token', tokenData)
+      setTimeout(() => {
+        window.location.href = Routes.HOME
+      }, 200)
+    } catch (error) {
+      console.error('Error sending access token to server:', error)
+    }
+  }
+
+  const handleTokenFromUrl = async () => {
+    const tokenData = extractTokenFromUrl()
+    if (tokenData) {
+      await saveTokenAndRedirect(tokenData)
+    }
+  }
+
+  const handleInitialActions = async () => {
+    await handleLogout()
+    await handleTokenFromUrl()
+  }
+
+  useEffect(() => {
+    handleInitialActions()
   }, [router.asPath])
 
   return (
