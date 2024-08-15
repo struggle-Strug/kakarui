@@ -25,7 +25,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
   const [moduleSetSelectionModalFlag, setModuleSetSelectionModalFlag] = useState(false)
-  const [moduleFormFlag, setModuleFormFlag] = useState(false)
+  const [moduleFormModalFlag, setModuleFormModalFlag] = useState(false)
   const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
   const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
   const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
@@ -63,29 +63,47 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
     [setModuleSelectionModalChangeIndex, setModuleSelectionModalType, setModuleSelectionModalFlag]
   )
 
+  const appendModulesToConfig = useCallback(
+    (newModules) => {
+      const moduleNum = values.config_data.modules.length + 1
+      const newSelectionModules = newModules
+        .map((module, i) =>
+          module.tags.map((tag, j) => {
+            const instanceNum = String(moduleNum + i).padStart(3, '0')
+            return {
+              key: `${Date.now()}-${i}-${j}`,
+              module_id: module.id,
+              module_set_id: null,
+              module_instance: `Module-${instanceNum}`,
+              module_name: module.name,
+              tag: tag.name,
+              type: '',
+              config_data: {},
+            }
+          })
+        )
+        .flat()
+      append(newSelectionModules)
+    },
+    [values, append]
+  )
+
+  const moduleFormModalClose = useCallback(
+    (module) => {
+      if (module) {
+        appendModulesToConfig([module])
+        setTableKey((prevKey) => prevKey + 1)
+      }
+      setModuleFormModalFlag(false)
+    },
+    [appendModulesToConfig, setTableKey, setModuleFormModalFlag]
+  )
+
   const moduleCheckSelectionModalClose = useCallback(
     (newModules = null) => {
       if (newModules) {
         if (moduleSelectionModalType === 'checkbox') {
-          const moduleNum = values.config_data.modules.length + 1
-          const newSelectionModules = newModules
-            .map((module, i) =>
-              module.tags.map((tag, j) => {
-                const instanceNum = String(moduleNum + i).padStart(3, '0')
-                return {
-                  key: `${Date.now()}-${i}-${j}`,
-                  module_id: module.id,
-                  module_set_id: null,
-                  module_instance: `Module-${instanceNum}`,
-                  module_name: module.name,
-                  tag: tag.name,
-                  type: '',
-                  config_data: {},
-                }
-              })
-            )
-            .flat()
-          append(newSelectionModules)
+          appendModulesToConfig(newModules)
           setTableKey((prevKey) => prevKey + 1)
         }
         if (moduleSelectionModalType === 'radio') {
@@ -133,7 +151,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
       }
       setModuleSetSelectionModalFlag(false)
     },
-    [append, setModuleSetSelectionModalFlag]
+    [values, append, setModuleSetSelectionModalFlag]
   )
 
   const moduleSettingModalOpen = useCallback(
@@ -337,7 +355,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
             icon={<AddIcon size={36} />}
             type="outline"
             label="新規モジュール追加"
-            onClick={() => setModuleFormFlag(true)}
+            onClick={() => setModuleFormModalFlag(true)}
           />
         </Space>
 
@@ -351,9 +369,18 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
           onChange={onTableChange}
         />
 
-        {values.config_data.modules.length === 0 && (
+        {methods.formState.errors.config_data?.modules?.root?.message && (
           <div className="ant-form-item">
-            <div className="ant-form-item-explain-error">モジュールを追加してください。</div>
+            <div className="ant-form-item-explain-error">
+              {methods.formState.errors.config_data?.modules?.root?.message}
+            </div>
+          </div>
+        )}
+        {methods.formState.errors.config_data?.modules?.message && (
+          <div className="ant-form-item">
+            <div className="ant-form-item-explain-error">
+              {methods.formState.errors.config_data?.modules?.message}
+            </div>
           </div>
         )}
         <Space className="flex-end mt-12 gap-x-4">
@@ -374,7 +401,7 @@ const ModuleConfigForm = ({ isEdit, onSubmit, data }) => {
         open={moduleSetSelectionModalFlag}
         onClose={moduleSetSelectionModalClose}
       />
-      <ModuleForm open={moduleFormFlag} data={null} onClose={() => setModuleFormFlag(false)} />
+      <ModuleForm open={moduleFormModalFlag} data={null} onClose={moduleFormModalClose} />
       <ModuleSettingModal
         open={moduleSettingModalFlag}
         onClose={() => setModuleSettingModalFlag(false)}

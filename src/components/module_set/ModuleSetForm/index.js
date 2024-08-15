@@ -24,7 +24,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
   const [moduleSelectionModalFlag, setModuleSelectionModalFlag] = useState(false)
   const [moduleSelectionModalType, setModuleSelectionModalType] = useState('checkbox')
   const [moduleSelectionModalChangeIndex, setModuleSelectionModalChangeIndex] = useState(null)
-  const [moduleFormFlag, setModuleFormFlag] = useState(false)
+  const [moduleFormModalFlag, setModuleFormModalFlag] = useState(false)
   const [moduleSettingModalIndex, setModuleSettingModalIndex] = useState(-1)
   const [moduleSettingModalFlag, setModuleSettingModalFlag] = useState(false)
   const [moduleSettingModalData, setModuleSettingModalData] = useState(null)
@@ -60,27 +60,45 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     [setModuleSelectionModalChangeIndex, setModuleSelectionModalType, setModuleSelectionModalFlag]
   )
 
+  const appendModulesToSet = useCallback(
+    (newModules) => {
+      const newModuleSetModules = newModules
+        .map((module, i) =>
+          module.tags.map((tag, j) => {
+            return {
+              key: `${Date.now()}-${i}-${j}`,
+              name: module.name,
+              module_id: module.id,
+              tag: tag.name,
+              type: '',
+              default_config_data: {},
+              create_date: module.create_date,
+              update_date: module.update_date,
+            }
+          })
+        )
+        .flat()
+      append(newModuleSetModules)
+    },
+    [values, append]
+  )
+
+  const moduleFormModalClose = useCallback(
+    (module) => {
+      if (module) {
+        appendModulesToSet([module])
+        setTableKey((prevKey) => prevKey + 1)
+      }
+      setModuleFormModalFlag(false)
+    },
+    [appendModulesToSet, setTableKey, setModuleFormModalFlag]
+  )
+
   const moduleCheckSelectionModalClose = useCallback(
     (newModules = null) => {
       if (newModules) {
         if (moduleSelectionModalType === 'checkbox') {
-          const newModuleSetModules = newModules
-            .map((module, i) =>
-              module.tags.map((tag, j) => {
-                return {
-                  key: `${Date.now()}-${i}-${j}`,
-                  name: module.name,
-                  module_id: module.id,
-                  tag: tag.name,
-                  type: '',
-                  default_config_data: {},
-                  create_date: module.create_date,
-                  update_date: module.update_date,
-                }
-              })
-            )
-            .flat()
-          append(newModuleSetModules)
+          appendModulesToSet(newModules)
           setTableKey((prevKey) => prevKey + 1)
         }
         if (moduleSelectionModalType === 'radio') {
@@ -298,7 +316,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
             icon={<AddIcon size={36} />}
             type="outline"
             label="新規モジュール追加"
-            onClick={() => setModuleFormFlag(true)}
+            onClick={() => setModuleFormModalFlag(true)}
           />
         </Space>
 
@@ -326,7 +344,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         type={moduleSelectionModalType}
         onClose={moduleCheckSelectionModalClose}
       />
-      <ModuleForm open={moduleFormFlag} data={null} onClose={() => setModuleFormFlag(false)} />
+      <ModuleForm open={moduleFormModalFlag} data={null} onClose={moduleFormModalClose} />
       <ModuleSettingModal
         open={moduleSettingModalFlag}
         onClose={() => setModuleSettingModalFlag(false)}
