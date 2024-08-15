@@ -11,6 +11,14 @@ import { Button } from '@/components/ui'
 
 import { FORM_INFO, moduleFormSchema } from '@/validations/moduleSchema'
 
+const initValue = {
+  id: null,
+  name: '',
+  description: '',
+  tag: '',
+  file: null,
+}
+
 const ModuleForm = ({ open, data, onClose }) => {
   const isEdit = useMemo(() => {
     if (data) return true
@@ -20,30 +28,25 @@ const ModuleForm = ({ open, data, onClose }) => {
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(moduleFormSchema(isEdit)),
-    defaultValues: {
-      id: null,
-      name: '',
-      description: '',
-      tag: '',
-      file: null,
-    },
+    defaultValues: { ...initValue },
   })
 
   useEffect(() => {
-    if (data) {
-      methods.reset({
-        id: data.id,
-        name: data.name,
-        description: data.description,
-        tag: data.latest_tag,
-        file: null,
-      })
-    }
+    const defaultValue = data
+      ? {
+          id: data.id,
+          name: data.name,
+          description: data.description,
+          tag: data.latest_tag,
+          file: null,
+        }
+      : { ...initValue }
+    methods.reset(defaultValue)
   }, [data])
 
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
-    onSuccess: () => {
-      onClose()
+    onSuccess: (module) => {
+      onClose(module)
     },
   })
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({

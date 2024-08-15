@@ -32,7 +32,23 @@ const moduleConfigSchema = Yup.object().shape({
     .trim()
     .max(4000, '4000文字以下で入力してください。'),
   [FORM_MODULE_CONFIG.CONFIG_DATA]: Yup.object().shape({
-    modules: Yup.array().of(moduleSchema).min(1, 'モジュールを追加してください。'),
+    modules: Yup.array()
+      .of(moduleSchema)
+      .min(1, 'モジュールを追加してください。')
+      .test({
+        name: 'checkInstanceName',
+        skipAbsent: true,
+        test(modules, ctx) {
+          if (modules.length) {
+            const instanceNames = modules.map((module) => module.module_instance)
+            const uniqueInstanceNames = new Set(instanceNames)
+            if (instanceNames.length !== uniqueInstanceNames.size) {
+              return ctx.createError({ message: '同じインスタンス名が存在します。' })
+            }
+          }
+          return true
+        },
+      }),
   }),
   // [FORM_MODULE_CONFIG.CREATE_DATE]: Yup.date(),
   // [FORM_MODULE_CONFIG.UPDATE_DATE]: Yup.date(),

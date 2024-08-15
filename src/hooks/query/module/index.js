@@ -105,11 +105,15 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
       )
       return response
     },
-    onSuccess: (response) => {
-      queryClient.refetchQueries({
-        queryKey: [MODULE_LIST_KEY, organizationId, false],
-      })
-      onSuccess?.(response)
+    onSuccess: async ({ data }) => {
+      if (data.status_code === 201) {
+        await queryClient.refetchQueries({
+          queryKey: [MODULE_LIST_KEY, organizationId, false],
+        })
+        const list = queryClient.getQueryData([MODULE_LIST_KEY, organizationId, false])
+        const newModule = list?.modules.find((module) => module.id === data.id) || null
+        onSuccess?.(newModule)
+      }
     },
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
@@ -139,8 +143,8 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
       )
       return response
     },
-    onSuccess: (response) => {
-      queryClient.refetchQueries({
+    onSuccess: async (response) => {
+      await queryClient.refetchQueries({
         queryKey: [MODULE_LIST_KEY, organizationId, false],
       })
       onSuccess?.(response)
