@@ -34,6 +34,7 @@ export const authOptions = {
   session: {
     strategy: 'jwt',
   },
+  useSecureCookies: true,
   providers: [AzureADProvider],
   callbacks: {
     async signIn({ account, profile, email, credentials }) {
