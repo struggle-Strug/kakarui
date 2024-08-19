@@ -77,6 +77,13 @@ export default async function handler(req, res) {
             sameSite: 'lax',
           }
         )
+        setCookie({ res }, `__Secure-next-auth.session-token`, token, {
+          maxAge: 90 * 60, // 90 minutes
+          path: '/',
+          httpOnly: true,
+          secure: true,
+          sameSite: 'lax',
+        })
       }
 
       res.status(200).json({ message: 'Token saved successfully' })

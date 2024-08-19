@@ -26,7 +26,7 @@ const LoginForm = () => {
     const clientId = process.env.NEXT_PUBLIC_AZURE_AD_CLIENT_ID
     const tenantId = process.env.NEXT_PUBLIC_TENANT_ID
 
-    const authUrl = `https://${tenantId}.ciamlogin.com/${tenantId}.onmicrosoft.com/oauth2/v2.0/authorize?client_id=${clientId}&nonce=ebMjd72e3V&redirect_uri=${redirectUrl}&scope=openid%20${clientId}/Api.ReadWrite&response_type=token&prompt=login`
+    const authUrl = `https://${tenantId}.b2clogin.com/${tenantId}.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1_signin&client_id=${clientId}&nonce=ebMjd72e3V&redirect_uri=${redirectUrl}&scope=openid%20https://${tenantId}.onmicrosoft.com/${clientId}/Api.ReadWrite&response_type=token&prompt=login`
     if (typeof window !== 'undefined') window.location = authUrl
     // doLogin({ username: 'admin', password: '123456' })
   }
