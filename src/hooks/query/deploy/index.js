@@ -182,6 +182,7 @@ export const useMyDeployQuery = ({ limit } = {}) => {
     queryFn: async () => {
       if (projectIds.length === 0) return []
 
+      setIsLoading(true)
       const chunkedProjectIds = chunk(projectIds, 5)
       const results = []
 
