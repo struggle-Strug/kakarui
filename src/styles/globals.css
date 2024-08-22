@@ -78,6 +78,10 @@
   .flex-end {
     @apply flex items-center justify-end;
   }
+  
+  .flex-start {
+    @apply flex items-center justify-start;
+  }
 
   .flex-col,
   .flex-row,

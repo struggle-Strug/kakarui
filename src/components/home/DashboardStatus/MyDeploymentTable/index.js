@@ -1,8 +1,11 @@
+import { useRouter } from 'next/router'
+
 import { DEPLOYMENT_TYPE_TEXT, DEPLOY_STATUS, FORMAT_STRING, Routes } from '@/constants'
+import { useModuleConfigQuery, useProjectActive, useProjectQuery } from '@/hooks/query'
 
 import { ThumbnailLink } from '@/components/common'
-import { DeployStatus, RowContent, RowDate, RowTextLink } from '@/components/table'
-import { Link, Table } from '@/components/ui'
+import { DeployStatus, RowContent, RowDate } from '@/components/table'
+import { Button, Link, Table } from '@/components/ui'
 
 import { cn } from '@/utils/helper/functions'
 
@@ -50,6 +53,26 @@ const DeployShowMore = () => (
 )
 
 const MyDeploymentTable = ({ data, total, loading }) => {
+  const router = useRouter()
+  const { filteredData: projectFilteredData } = useProjectQuery({
+    sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
+  })
+  const { refetch: moduleConfigRefetch } = useModuleConfigQuery({
+    sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
+  })
+  const { setProjectActive } = useProjectActive()
+
+  const onClick = (module) => {
+    if (!module?.module_config_id) return
+    const moduleProject = projectFilteredData.find((project) => project.id === module.project_id)
+    if (moduleProject) {
+      setProjectActive(moduleProject)
+      moduleConfigRefetch().then(() => {
+        router.push(`/moduleconfig-manage/${module.module_config_id}`)
+      })
+    }
+  }
+
   const columns = [
     {
       title: <div className="min-w-[232px]">日付</div>,
@@ -68,13 +91,13 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       dataIndex: 'module_config_name',
       width: '60%',
       render: (item, row) => (
-        <RowTextLink
-          pathname={Routes.MODULE_CONFIG_DETAIL}
-          query={{ module_config_id: row?.module_config_id }}
-          disabled={!row?.module_config_id}
+        <Button
+          onClick={() => onClick(row)}
+          type="text"
+          className="flex-start min-w-[240px] max-w-[400px] !p-0"
         >
-          <RowContent item={item} className="min-w-[240px] max-w-[400px]" />
-        </RowTextLink>
+          {item}
+        </Button>
       ),
     },
     {
