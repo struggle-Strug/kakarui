@@ -30,7 +30,7 @@ const ModuleSetDetailContainer = () => {
     <Container title="モジュールセット登録">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">プロジェクトにモジュールセットを登録します。</p>
-        <ModuleSetForm isEdit onSubmit={doUpdateModuleSet} data={detail} />
+        <ModuleSetForm action="edit" onSubmit={doUpdateModuleSet} data={detail} />
       </Spin>
     </Container>
   )

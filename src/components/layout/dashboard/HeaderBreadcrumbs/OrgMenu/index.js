@@ -4,17 +4,13 @@ import noop from 'lodash/noop'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
-import { useGetMe, useOrganizationQuery } from '@/hooks/query'
 
 import { UsersLightIcon } from '@/components/icons'
 
 import { cn } from '@/utils/helper/functions'
 
-const OrgMenu = () => {
+const OrgMenu = ({ organizationDetail, isMember }) => {
   const router = useRouter()
-
-  const { organizationDetail } = useOrganizationQuery()
-  const { isMember } = useGetMe()
 
   const disabledRedirectUser = Boolean(isMember)
 

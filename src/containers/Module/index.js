@@ -3,11 +3,11 @@ import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import { useState } from 'react'
 
-import { useModuleQuery } from '@/hooks/query'
+import { useGetMe, useModuleQuery, useUserActive } from '@/hooks/query'
 
-import { AddIcon, EditIcon } from '@/components/icons'
+import { AddIcon, EditIcon, TrashIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
-import { ModuleForm } from '@/components/module'
+import { ModuleDeleteForm, ModuleForm } from '@/components/module'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
 import { Button, ButtonIcon, Container, Table } from '@/components/ui'
 
@@ -16,6 +16,9 @@ import { getSearchOptions } from '@/utils/helper/functions'
 const ModuleContainer = () => {
   const [module, setModule] = useState(null)
   const [moduleFormFlag, setModuleFormFlag] = useState(false)
+  const [moduleDeleteFormFlag, setModuleDeleteFormFlag] = useState(false)
+  const { isOrgAdmin, isSystemAdmin } = useGetMe()
+  const { userActiveId } = useUserActive()
 
   const [{ sort, search }] = useQueryStates({
     sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
@@ -30,6 +33,12 @@ const ModuleContainer = () => {
     const initModule = newModule ? { ...newModule } : null
     setModule(initModule)
     setModuleFormFlag(true)
+    return false
+  }
+
+  const moduleDeleteFormOpen = (moduleToDelete) => {
+    setModule(moduleToDelete)
+    setModuleDeleteFormFlag(true)
     return false
   }
 
@@ -70,6 +79,11 @@ const ModuleContainer = () => {
       render: (record) => (
         <Space>
           <ButtonIcon icon={<EditIcon size={32} />} onClick={() => moduleFormOpen(record)} />
+          <ButtonIcon
+            icon={<TrashIcon size={32} />}
+            onClick={() => moduleDeleteFormOpen(record)}
+            disabled={!isSystemAdmin && !isOrgAdmin && record.create_user !== userActiveId}
+          />
         </Space>
       ),
       className: 'min-w-[100px]',
@@ -97,6 +111,13 @@ const ModuleContainer = () => {
         data={filteredData}
       />
       <ModuleForm open={moduleFormFlag} data={module} onClose={() => setModuleFormFlag(false)} />
+      {moduleDeleteFormFlag && (
+        <ModuleDeleteForm
+          open={moduleDeleteFormFlag}
+          data={module}
+          onClose={() => setModuleDeleteFormFlag(false)}
+        />
+      )}
     </Container>
   )
 }

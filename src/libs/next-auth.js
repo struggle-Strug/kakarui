@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 import { signIn } from 'next-auth/react'
 
-import { Routes } from '@/constants'
+import { DEV, Routes } from '@/constants'
 
 const AzureADProvider = {
   id: 'azure-ad',
@@ -34,7 +34,7 @@ export const authOptions = {
   session: {
     strategy: 'jwt',
   },
-  useSecureCookies: true,
+  useSecureCookies: !DEV,
   providers: [AzureADProvider],
   callbacks: {
     async signIn({ account, profile, email, credentials }) {

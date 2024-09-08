@@ -42,3 +42,10 @@ export const DEFAULT_PROJECT = {
   update_date: '2024-07-19T07:12:08.972663',
   update_user: 'ad3a7c48-8592-4002-a189-e874e40235e4',
 }
+
+export const EXPIRED_URL = {
+  TIME: Number(process.env.NEXT_PUBLIC_EXPIRE_TIME),
+  UNIT: process.env.NEXT_PUBLIC_EXPIRE_TIME_UNIT,
+}
+
+export const JapaneseRegex = /[ぁ-んァ-ン々〆〤一-龯]/

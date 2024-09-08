@@ -3,13 +3,13 @@ import { Form, Space } from 'antd'
 import orderBy from 'lodash/orderBy'
 
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 
 import { DEPLOYMENT_TYPE_OPTIONS, Routes } from '@/constants'
 
 import { Input, InputTextArea, Select } from '@/components/form'
-import { AddIcon, ExternalLinkIcon, TrashIcon } from '@/components/icons'
+import { AddIcon, ExternalLinkIcon, TrashIcon, WarningIcon } from '@/components/icons'
 import { ModuleForm, ModuleSettingModal } from '@/components/module'
 import { ModuleSelectionModal } from '@/components/module_selection'
 import { RowContent, RowDate } from '@/components/table'
@@ -17,7 +17,7 @@ import { Button, ButtonIcon, Table } from '@/components/ui'
 
 import { FORM_MODULE_SET, moduleSetSchema } from '@/validations/moduleSetSchema'
 
-const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
+const ModuleSetForm = ({ action, onSubmit, data }) => {
   const router = useRouter()
 
   const [tableKey, setTableKey] = useState(0)
@@ -152,6 +152,12 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
     setSortedInfo(sorter)
   }
 
+  const buttonLabel = useMemo(() => {
+    if (action === 'edit') return '保存'
+    if (action === 'delete') return '削除'
+    return '登録'
+  }, [action])
+
   useEffect(() => {
     if (data) {
       const defaultValues = {
@@ -192,10 +198,19 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[200px]',
       render: (text, record, index) => (
         <div className="flex w-[240px] cursor-pointer items-center gap-x-4 text-base">
-          <RowContent item={text} className="flex-[1_0_0]" />
+          <div className="flex-[1_0_0]">
+            <RowContent item={text} className="flex-[1_0_0]" />
+            {record.is_deleted && ( // is_deletedがtrueの場合に表示
+              <div className="mt-2 flex items-center gap-x-2">
+                <WarningIcon className="h-4 w-4" />
+                <span className="text-red-600">削除されたモジュール</span>
+              </div>
+            )}
+          </div>
           <ExternalLinkIcon
             className="ml-auto shrink-0 cursor-pointer"
             onClick={() => moduleRadioSelectionModalOpen(index)}
+            disabled={action === 'delete'}
           />
         </div>
       ),
@@ -210,6 +225,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
           {...methods.register(`moduleset_modules.${index}.tag`)}
           defaultValue={value}
           name={`moduleset_modules.${index}.tag`}
+          disabled={action === 'delete'}
         />
       ),
     },
@@ -231,6 +247,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
               value: '',
             },
           ]}
+          disabled={action === 'delete'}
         />
       ),
     },
@@ -247,6 +264,7 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
             <ButtonIcon
               icon={<ExternalLinkIcon size={32} />}
               onClick={() => moduleSettingModalOpen(index, value)}
+              disabled={action === 'delete'}
             />
           }
           disabled
@@ -274,7 +292,11 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
       className: 'min-w-[96px]',
       render: (id, record, index) => (
         <Space>
-          <ButtonIcon onClick={() => remove(index)} icon={<TrashIcon size={32} />} />
+          <ButtonIcon
+            onClick={() => remove(index)}
+            icon={<TrashIcon size={32} />}
+            disabled={action === 'delete'}
+          />
         </Space>
       ),
     },
@@ -296,12 +318,14 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
             label="モジュールセット名:"
             name={FORM_MODULE_SET.NAME}
             placeholder="モジュールセット名を入力してください。"
+            disabled={action === 'delete'}
           />
           <InputTextArea
             label="説明:"
             name={FORM_MODULE_SET.DESCRIPTION}
             placeholder="説明を入力してください。"
             rows={4}
+            disabled={action === 'delete'}
           />
         </div>
 
@@ -311,12 +335,14 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
             label="モジュールを選択追加"
             icon={<AddIcon size={36} />}
             onClick={() => moduleCheckSelectionModalOpen()}
+            disabled={action === 'delete'}
           />
           <Button
             icon={<AddIcon size={36} />}
             type="outline"
             label="新規モジュール追加"
             onClick={() => setModuleFormModalFlag(true)}
+            disabled={action === 'delete'}
           />
         </Space>
 
@@ -331,11 +357,11 @@ const ModuleSetForm = ({ isEdit, onSubmit, data }) => {
         />
 
         <Space className="flex-end mt-12 gap-x-4">
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
-            <span className="font-semibold">{isEdit ? '保存' : '登録'}</span>
-          </Button>
           <Button type="default" className="min-w-[200px]" onClick={onBack}>
             <span className="font-semibold">キャンセル</span>
+          </Button>
+          <Button type="primary" htmlType="submit" className="min-w-[200px]">
+            <span className="font-semibold">{buttonLabel}</span>
           </Button>
         </Space>
       </Form>

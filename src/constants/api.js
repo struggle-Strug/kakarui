@@ -32,6 +32,7 @@ export default {
     LIST: '/organizations/{organization_id}/modules',
     CREATE: '/organizations/{organization_id}/modules', // POST
     UPDATE: '/organizations/{organization_id}/modules/{module_id}', // PUT
+    DELETE: '/organizations/{organization_id}/modules/{module_id}', // DELETE
   },
 
   MODULE_CONFIG: {
@@ -39,6 +40,8 @@ export default {
     CREATE: '/organizations/{organization_id}/projects/{project_id}/module-configs', // POST
     UPDATE:
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // PUT
+    DELETE:
+      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // DELETE
   },
 
   MODULE_SET: {
@@ -67,5 +70,10 @@ export default {
   ROBOT: {
     LIST: '/organizations/{organization_id}/robots',
   },
+
+  FILE: {
+    URL_CREATE: '/storages/{storage_name}/url', // POST
+  },
+
   // -- END --
 }

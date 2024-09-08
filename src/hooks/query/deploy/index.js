@@ -154,7 +154,7 @@ const fetchDeployData = async (organizationId, projectId) => {
       })
     )
 
-    return response.data.deploys || []
+    return response.data?.deploys || []
   } catch (error) {
     console.error('Error fetching deploy data for project', projectId, ':', error)
     return []
@@ -169,7 +169,6 @@ export const useMyDeployQuery = ({ limit } = {}) => {
 
   const projectIds = useMemo(() => {
     const ids = (projects || []).map((p) => p?.id)
-    console.log('Project IDs:', ids)
     return ids
   }, [projects])
 
@@ -221,7 +220,6 @@ export const useMyDeployQuery = ({ limit } = {}) => {
 
   const deployData = useMemo(() => {
     const result = deployQuery.data || []
-    console.log('Deploy Data Result:', result)
 
     const projectIdToNameMap = (projects || []).reduce((map, project) => {
       if (project?.id && project?.name) {

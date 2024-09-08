@@ -1,4 +1,5 @@
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -18,6 +19,7 @@ import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
 
 import { useOrganizationQuery } from '../organization'
+import { useProjectActive } from '../project'
 
 export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
@@ -150,11 +152,95 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_DELETE)
     },
   })
 
   const doUpdateModule = useDebouncedCallback(mutate)
 
   return { doUpdateModule, isPending, isSuccess }
+}
+
+export const useModuleDelete = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: moduleId }) => {
+      const response = await Axios.delete(
+        buildApiURL(API.MODULE.DELETE, { organization_id: organizationId, module_id: moduleId }),
+        {
+          data: { forced_delete_flag: true },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 1800000,
+        }
+      )
+      return response
+    },
+    onSuccess: async (response) => {
+      await queryClient.refetchQueries({
+        queryKey: [MODULE_LIST_KEY, organizationId, false],
+      })
+      message.success('モジュールを削除しました。')
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
+    },
+  })
+
+  const doDeleteModule = useDebouncedCallback(mutate)
+
+  return { doDeleteModule, isPending, isSuccess }
+}
+
+export const useModuleUsageCheck = ({ moduleId } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
+
+  // モジュール配置のチェック
+  const { data: moduleConfigsData } = useQuery({
+    queryKey: ['moduleConfigs', organizationId, projectActiveId, moduleId],
+    queryFn: async () => {
+      const response = await Axios.get(
+        buildApiURL(API.MODULE_CONFIG.LIST, {
+          organization_id: organizationId,
+          project_id: projectActiveId,
+        })
+      )
+      return response.data?.module_configs
+    },
+    enabled: !!organizationId && !!projectActiveId,
+  })
+
+  const { data: moduleSetsData } = useQuery({
+    queryKey: ['moduleSets', organizationId, moduleId],
+    queryFn: async () => {
+      const response = await Axios.get(
+        buildApiURL(API.MODULE_SET.LIST, { organization_id: organizationId })
+      )
+      return response.data?.moduleset
+    },
+    enabled: !!organizationId,
+  })
+
+  // モジュールが使用されているかのチェック
+  let isUsed = false
+
+  if (moduleConfigsData) {
+    isUsed = moduleConfigsData.some((config) =>
+      config.config_data.modules.some((module) => module.module_id === moduleId)
+    )
+  }
+
+  if (moduleSetsData) {
+    const usedInSets = moduleSetsData.some((set) =>
+      set.moduleset_modules.some((module) => module.module_id === moduleId)
+    )
+    isUsed = isUsed || usedInSets
+  }
+
+  return isUsed
 }

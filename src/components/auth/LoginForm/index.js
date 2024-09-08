@@ -36,11 +36,11 @@ const LoginForm = () => {
       <div className="absolute inset-0 z-0">
         <Image
           src={Assets.COMMON.BACKGROUND_LOGIN}
+          className="object-cover"
           alt="Background"
-          layout="fill"
-          objectFit="cover"
           quality={75}
           priority
+          fill
         />
       </div>
       <div className="relative z-10 h-[416px] w-[378px] flex-col items-center justify-between rounded-2xl bg-white py-[90px] shadow-light">

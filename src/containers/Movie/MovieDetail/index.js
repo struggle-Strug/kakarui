@@ -1,9 +1,11 @@
 import { Empty, Spin } from 'antd'
+import dayjs from 'dayjs'
 
 import { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 
-import { useDeployByProjectQuery } from '@/hooks/query'
+import { EXPIRED_URL, FORMAT_STRING } from '@/constants'
+import { useDeployByProjectQuery, useVideoQuery } from '@/hooks/query'
 
 import { Container } from '@/components/ui'
 
@@ -14,6 +16,22 @@ const MovieShowDetailContainer = ({ projectId, deployId }) => {
 
   const { data, isLoading, getDeployDetail } = useDeployByProjectQuery({ projectId })
 
+  if (detail?.id) {
+    // eslint-disable-next-line no-console
+    console.log('deploy detail', detail)
+  }
+
+  const { data: videoData } = useVideoQuery({
+    projectId,
+    deployId,
+    body: {
+      file_name: detail?.sim_video_file_name,
+      end_date: dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT).format(FORMAT_STRING.datetime_full),
+    },
+  })
+
+  const videoURL = videoData?.url
+
   useEffect(() => {
     setDetail(getDeployDetail(deployId))
   }, [deployId, projectId, data])
@@ -21,10 +39,10 @@ const MovieShowDetailContainer = ({ projectId, deployId }) => {
   return (
     <Container title="ログ表示(動画)">
       <Spin className="w-full" spinning={isLoading}>
-        {detail?.execute_result_url && deployId ? (
+        {videoURL && deployId ? (
           <div className="player-wrapper">
             <ReactPlayer
-              url={detail?.execute_result_url}
+              url={videoURL}
               className="react-player"
               height="100%"
               width="100%"

@@ -1,5 +1,6 @@
 export * from './useBreakpoints'
 export * from './useClickOutside'
+export * from './useCopyToClipboard'
 export * from './useCustomRowSort'
 export * from './useDebouncedCallback'
 export * from './useDidMount'
