@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Modal } from 'antd'
-import { includes, toLower } from 'lodash'
+import includes from 'lodash/includes'
+import toLower from 'lodash/toLower'
 import { parseAsString, useQueryStates } from 'nuqs'
 
 import { useCallback, useEffect, useMemo } from 'react'
@@ -116,7 +117,7 @@ const ModuleSettingModal = ({ open, onClose, data, setData }) => {
         </div>
         <FormProvider {...methods}>
           <Form onFinish={methods.handleSubmit(onSubmit)} layout="horizontal">
-            <Table rowKey="key" pagination={false} columns={columns} data={filteredData} />
+            <Table rowKey="index" pagination={false} columns={columns} data={filteredData} />
             <div className="flex-end mt-12 gap-x-4">
               <Button type="default" className="min-w-[200px]" onClick={onClose}>
                 <span className="font-semibold">キャンセル</span>

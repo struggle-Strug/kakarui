@@ -16,7 +16,31 @@ const nextConfig = {
       preventFullImport: true,
     },
   },
-
+  async headers() {
+    return [
+      {
+        source: '/(.*)', // Apply this header to all routes
+        headers: [
+          {
+            key: 'X-FRAME-OPTIONS',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0', // Disable caching
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: 'Fri, 1 Jan 2010 00:00:00 GMT',
+          },
+        ],
+      },
+    ]
+  },
   // experimental: {
   //   appDir: true,
   //   serverActions: true,

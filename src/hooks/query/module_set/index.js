@@ -145,3 +145,34 @@ export const useModuleSetUpdate = ({ onSuccess } = {}) => {
 
   return { doUpdateModuleSet, isPending, isSuccess }
 }
+
+export const useModuleSetDelete = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: moduleSetId, ...params }) => {
+      const response = await Axios.delete(
+        buildApiURL(API.MODULE_SET.UPDATE, {
+          organization_id: organizationId,
+          module_set_id: moduleSetId,
+        }),
+        { ...params }
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.refetchQueries({
+        queryKey: [MODULE_SET_LIST_KEY, organizationId, false],
+      })
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.MODULE_SET_UPDATE)
+    },
+  })
+
+  const doDeleteModuleSet = useDebouncedCallback(mutate)
+
+  return { doDeleteModuleSet, isPending, isSuccess }
+}

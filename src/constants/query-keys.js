@@ -6,6 +6,14 @@ export const USER_DETAIL_KEY = 'USER_DETAIL_KEY'
 export const DEPLOY_LIST_KEY = 'DEPLOY_LIST_KEY'
 export const DEPLOY_DETAIL_KEY = 'DEPLOY_DETAIL_KEY'
 
+// video
+export const VIDEO_LIST_KEY = 'VIDEO_LIST_KEY'
+export const VIDEO_DETAIL_KEY = 'VIDEO_DETAIL_KEY'
+
+// log
+export const LOG_LIST_KEY = 'LOG_LIST_KEY'
+export const LOG_DETAIL_KEY = 'LOG_DETAIL_KEY'
+
 // project
 export const PROJECT_LIST_KEY = 'PROJECT_LIST_KEY'
 export const PROJECT_DETAIL_KEY = 'PROJECT_DETAIL_KEY'

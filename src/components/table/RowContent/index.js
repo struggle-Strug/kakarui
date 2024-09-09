@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { cn } from '@/utils/helper/functions'
 
 const RowContent = ({ item, className }) => {

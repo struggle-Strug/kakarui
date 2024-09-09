@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
-import { DEPLOYMENT_TYPE_TEXT, DEPLOY_STATUS, FORMAT_STRING, Routes } from '@/constants'
+import { DEPLOYMENT_TYPE_TEXT, FORMAT_STRING, Routes } from '@/constants'
 import { useModuleConfigQuery, useProjectActive, useProjectQuery } from '@/hooks/query'
 
-import { ThumbnailLink } from '@/components/common'
+import { DeployThumbnailLink } from '@/components/deployment'
+import { ModuleConfigAlert } from '@/components/module_config'
 import { DeployStatus, RowContent, RowDate } from '@/components/table'
 import { Button, Link, Table } from '@/components/ui'
 
@@ -54,12 +56,16 @@ const DeployShowMore = () => (
 
 const MyDeploymentTable = ({ data, total, loading }) => {
   const router = useRouter()
+  const [showModuleConfigAlertModal, setShowModuleConfigAlertModal] = useState(false)
+
   const { filteredData: projectFilteredData } = useProjectQuery({
-    sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
+    sort: JSON.stringify([{ field: 'execute_start_date', value: 'desc' }]),
   })
+
   const { refetch: moduleConfigRefetch } = useModuleConfigQuery({
     sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
   })
+
   const { setProjectActive } = useProjectActive()
 
   const onClick = (module) => {
@@ -68,7 +74,12 @@ const MyDeploymentTable = ({ data, total, loading }) => {
     if (moduleProject) {
       setProjectActive(moduleProject)
       moduleConfigRefetch().then(() => {
+        // const moduleConfig = moduleConfigData.find((item) => item.id === module.module_config_id)
+        // if(moduleConfig) {
+        //   setShowModuleConfigAlertModal(true)
+        // } else {
         router.push(`/moduleconfig-manage/${module.module_config_id}`)
+        // }
       })
     }
   }
@@ -90,13 +101,13 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       title: <div className="min-w-[240px]">モジュール配置</div>,
       dataIndex: 'module_config_name',
       width: '60%',
-      render: (item, row) => (
+      render: (text, row) => (
         <Button
-          onClick={() => onClick(row)}
           type="text"
+          onClick={() => onClick(row)}
           className="flex-start min-w-[240px] max-w-[400px] !p-0"
         >
-          {item}
+          {text}
         </Button>
       ),
     },
@@ -112,16 +123,22 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       dataIndex: 'status',
       render: (item) => <DeployStatus className="min-w-[132px]" status={item} />,
     },
+    // {
+    //   title: <div className="min-w-[132px]">メッセージ</div>,
+    //   dataIndex: 'last_desired_status',
+    //   render: (item, { id }) => {
+    //     return <DeployLastDesiredStatus id={id} item={item} />
+    //   },
+    // },
+    // {
+    //   title: <div className="min-w-[132px] text-center">詳細表示</div>,
+    //   render: (item) => <RowLogFileLink item={item} />,
+    // },
     {
-      title: <div className="min-w-[100px]">ムービー</div>,
-      className: 'min-w-[100px]',
-      render: (item, _, index) => {
-        const isCompletedStatus = item?.status === DEPLOY_STATUS.COMPLETE
-
-        if (!isCompletedStatus || !item?.execute_result_url) return <div className="h-[84px]" />
-
-        return <ThumbnailLink deployId={item?.id} projectId={item?.project_id} index={index} />
-      },
+      title: <div className="min-w-[154px]">ムービー</div>,
+      className: 'min-w-[154px]',
+      dataIndex: 'sim_video_thumbnail',
+      render: (thumbnail, item, index) => <DeployThumbnailLink item={item} index={index} />,
     },
   ]
 
@@ -148,6 +165,10 @@ const MyDeploymentTable = ({ data, total, loading }) => {
         bordered={false}
       />
       {!loading && data.length > 0 ? <DeployShowMore /> : null}
+      <ModuleConfigAlert
+        open={showModuleConfigAlertModal}
+        onClose={() => setShowModuleConfigAlertModal(false)}
+      />
     </section>
   )
 }
