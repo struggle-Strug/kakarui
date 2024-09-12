@@ -68,6 +68,9 @@ const MyDeploymentTable = ({ data, total, loading }) => {
 
   const { setProjectActive } = useProjectActive()
 
+  // eslint-disable-next-line no-console
+  console.info('[my-deploy-list]', data)
+
   const onClick = (module) => {
     if (!module?.module_config_id) return
     const moduleProject = projectFilteredData.find((project) => project.id === module.project_id)

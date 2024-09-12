@@ -27,7 +27,7 @@ const ModuleSetDeleteContainer = () => {
   }
 
   return (
-    <Container title="モジュールセット削除画面">
+    <Container title="モジュールセット削除確認">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">
           以下のモジュールセットを削除します。

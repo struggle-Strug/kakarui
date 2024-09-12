@@ -1,4 +1,5 @@
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -193,11 +194,11 @@ export const useModuleConfigDelete = ({ onSuccess } = {}) => {
       queryClient.refetchQueries({
         queryKey: [MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false],
       })
-      queryClient.invalidateQueries()
+      message.success('モジュール配置を削除しました。')
       onSuccess?.(response)
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.MODULE_CONFIG_UPDATE)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_CONFIG_DELETE)
     },
   })
 

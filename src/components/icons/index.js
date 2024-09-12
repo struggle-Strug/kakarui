@@ -66,18 +66,15 @@ export {
   ClockIcon,
   CloseCircleIcon,
   CloseIcon,
-  CopyIcon,
   DashboardIcon,
+  DeleteIcon,
   DeployIcon,
   EditIcon,
   ExternalLinkIcon,
   EyeViewHideIcon,
   EyeViewIcon,
   FileImageIcon,
-  FolderIcon,
   GridNineIcon,
-  LogFileIcon,
-  LogIcon,
   LogOutIcon,
   LoginIcon,
   MenuIcon,
@@ -96,11 +93,9 @@ export {
   SourceCodeIcon,
   TrashIcon,
   TriangleIcon,
-  UserIcon,
   UsersLightIcon,
-  DownloadIcon,
   WarningIcon,
 }
 
 //
-export { DeleteIcon, LoadingIcon, PlusIcon }
+export { CopyIcon, DownloadIcon, FolderIcon, LoadingIcon, LogFileIcon, LogIcon, PlusIcon, UserIcon }

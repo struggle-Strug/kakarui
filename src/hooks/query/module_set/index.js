@@ -1,4 +1,5 @@
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -165,10 +166,11 @@ export const useModuleSetDelete = ({ onSuccess } = {}) => {
       queryClient.refetchQueries({
         queryKey: [MODULE_SET_LIST_KEY, organizationId, false],
       })
+      message.success('モジュールセットを削除しました。')
       onSuccess?.(response)
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.MODULE_SET_UPDATE)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_SET_DELETE)
     },
   })
 

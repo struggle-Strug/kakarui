@@ -1,4 +1,3 @@
-import API from './api'
 import Assets from './assets'
 import httpStatusCode from './http-status-code'
 import Routes from './routes'
@@ -18,4 +17,4 @@ export * from './texts'
 export * from './time'
 export * from './types'
 export * from './validations'
-export { API, Assets, Routes, httpStatusCode }
+export { Assets, Routes, httpStatusCode }

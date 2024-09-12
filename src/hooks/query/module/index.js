@@ -187,7 +187,7 @@ export const useModuleDelete = ({ onSuccess } = {}) => {
       onSuccess?.(response)
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_DELETE)
     },
   })
 
