@@ -156,3 +156,30 @@ export const useProjectUpdate = ({ onSuccess } = {}) => {
 
   return { doUpdateProject, isPending, isSuccess }
 }
+
+export const useProjectDelete = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+  
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: projectId, ...params }) => {
+      const response = await Axios.delete(
+        buildApiURL(API.PROJECT.DELETE, { organization_id: organizationId, project_id: projectId }),
+        { ...params }
+      )
+
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.invalidateQueries([PROJECT_LIST_KEY, organizationId, false])
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.PROJECT_DELETE)
+    },
+  })
+
+  const doDeleteProject = useDebouncedCallback(mutate)
+
+  return { doDeleteProject, isPending, isSuccess }
+}

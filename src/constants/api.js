@@ -5,10 +5,11 @@ export const API_ADMIN_PREFIX = 'admin'
 
 export const TIMEOUT = 30000
 
-export const API = {
+export default {
   API_ROOT,
   TIMEOUT,
 
+  TAG: '/tag',
   UPLOAD: `upload`,
 
   AUTH: {
@@ -25,13 +26,13 @@ export const API = {
     CREATE: '/users/user_create', // POST
     UPDATE: '/users/{user_id}', // PUT
     BY_ORGANIZATION: '/organizations/{organization_id}/users',
+    DELETE: '/users/{entra_id}',
   },
 
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
     CREATE: '/organizations/{organization_id}/modules', // POST
     UPDATE: '/organizations/{organization_id}/modules/{module_id}', // PUT
-    DELETE: '/organizations/{organization_id}/modules/{module_id}', // DELETE
   },
 
   MODULE_CONFIG: {
@@ -39,8 +40,6 @@ export const API = {
     CREATE: '/organizations/{organization_id}/projects/{project_id}/module-configs', // POST
     UPDATE:
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // PUT
-    DELETE:
-      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // DELETE
   },
 
   MODULE_SET: {
@@ -59,6 +58,7 @@ export const API = {
     LIST: '/organizations/{organization_id}/projects',
     CREATE: '/organizations/{organization_id}/projects', // POST
     UPDATE: '/organizations/{organization_id}/projects/{project_id}', // PUT
+    DELETE: '/organizations/{organization_id}/projects/{project_id}', 
   },
 
   PERMISSION: {
@@ -69,15 +69,5 @@ export const API = {
   ROBOT: {
     LIST: '/organizations/{organization_id}/robots',
   },
-
-  FILE: {
-    URL_CREATE: '/storages/{storage_name}/url', // POST
-  },
-
   // -- END --
-}
-
-export const API_MOCK = {
-  DEPLOY_LIST: 'https://karakuri.agecode.dev/deploys',
-  URL_CREATE: 'https://karakuri.agecode.dev/storages/{storage_name}/url',
 }

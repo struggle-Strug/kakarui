@@ -1,11 +1,12 @@
 import { Space } from 'antd'
 import noop from 'lodash/noop'
 
-import { EditIcon } from '@/components/icons'
+import { EditIcon, TrashIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
 import { ButtonIcon, Table } from '@/components/ui'
 
 import ProjectAddEditModal from '../ProjectAddEditModal'
+import ProjectDeleteModal from '../ProjectDeleteModal'
 
 const ProjectTable = ({ data, total, loading, reload }) => {
   const columns = [
@@ -18,6 +19,12 @@ const ProjectTable = ({ data, total, loading, reload }) => {
     {
       title: <ColumnSorter title="説明" field="description" />,
       dataIndex: 'description',
+      className: 'min-w-[320px]',
+      render: (item) => <RowContent item={item} className="max-w-[400px]" />,
+    },
+    {
+      title: <ColumnSorter title="作成者" field="author" />,
+      dataIndex: 'create_user',
       className: 'min-w-[320px]',
       render: (item) => <RowContent item={item} className="max-w-[400px]" />,
     },
@@ -38,6 +45,9 @@ const ProjectTable = ({ data, total, loading, reload }) => {
           <ProjectAddEditModal isEdit data={record} onSuccess={() => reload?.()}>
             <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
           </ProjectAddEditModal>
+          <ProjectDeleteModal data={record} onSuccess={() => reload?.()}>
+            <ButtonIcon onClick={noop} icon={<TrashIcon size={32} />} />
+          </ProjectDeleteModal>
         </Space>
       ),
     },
