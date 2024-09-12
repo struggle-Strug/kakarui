@@ -5,11 +5,10 @@ export const API_ADMIN_PREFIX = 'admin'
 
 export const TIMEOUT = 30000
 
-export default {
+export const API = {
   API_ROOT,
   TIMEOUT,
 
-  TAG: '/tag',
   UPLOAD: `upload`,
 
   AUTH: {
@@ -76,4 +75,9 @@ export default {
   },
 
   // -- END --
+}
+
+export const API_MOCK = {
+  DEPLOY_LIST: 'https://karakuri.agecode.dev/deploys',
+  URL_CREATE: 'https://karakuri.agecode.dev/storages/{storage_name}/url',
 }

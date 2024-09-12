@@ -10,9 +10,9 @@ const DeployStatus = ({ status, className, contentClassName }) => {
       style: 'bg-success border-[#5F7E65]',
       content: DEPLOY_STATUS_TEXT?.[DEPLOY_STATUS.COMPLETE] || status,
     },
-    [DEPLOY_STATUS.PENDING]: {
+    [DEPLOY_STATUS.FAILED]: {
       style: 'bg-pending border-[#7E615F]',
-      content: DEPLOY_STATUS_TEXT?.[DEPLOY_STATUS.PENDING] || status,
+      content: DEPLOY_STATUS_TEXT?.[DEPLOY_STATUS.FAILED] || status,
     },
     [DEPLOY_STATUS.IN_PROGRESS]: {
       style: 'bg-in-progress border-[#5F7E65]',

@@ -22,6 +22,7 @@ export const USER_ROLE = {
 
 export const LOCAL_STORAGE_KEYS = {
   STUB: 'stub', // on/off
+  MOCK_API: 'mock-api', // on/off
   USER: 'user',
   ORGANIZATIONS: 'organizations',
   ORGANIZATIONS_DETAIL: 'organization-detail',
@@ -44,8 +45,10 @@ export const DEFAULT_PROJECT = {
 }
 
 export const EXPIRED_URL = {
-  TIME: Number(process.env.NEXT_PUBLIC_EXPIRE_TIME),
-  UNIT: process.env.NEXT_PUBLIC_EXPIRE_TIME_UNIT,
+  TIME: Number(process.env.NEXT_PUBLIC_EXPIRE_TIME || 1),
+  UNIT: process.env.NEXT_PUBLIC_EXPIRE_TIME_UNIT || 'hours',
 }
+
+export const MAX_LENGTH_LOG_TAIL = Number(process.env.NEXT_PUBLIC_MAX_LENGTH_LOG_TAIL || 10000)
 
 export const JapaneseRegex = /[ぁ-んァ-ン々〆〤一-龯]/

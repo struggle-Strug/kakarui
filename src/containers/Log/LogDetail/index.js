@@ -7,7 +7,13 @@ import { parseAsString, useQueryStates } from 'nuqs'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { EXPIRED_URL, FORMAT_STRING } from '@/constants'
+import {
+  EMPTY_LOG,
+  EXPIRED_URL,
+  FORMAT_STRING,
+  MAX_LENGTH_LOG_TAIL,
+  MAX_LENGTH_LOG_TAIL_TEXT,
+} from '@/constants'
 import { useDeployByProjectQuery, useLogQuery } from '@/hooks/query'
 
 import { Container } from '@/components/ui'
@@ -16,7 +22,7 @@ import { cn } from '@/utils/helper/functions'
 
 import LogDetailHeader from '../LogDetailHeader'
 
-const LogShowDetailContainer = ({ projectId, deployId }) => {
+const LogShowDetailContainer = ({ projectId, deployId, fileName }) => {
   const lastElementRef = useRef()
   const wrapperContentRef = useRef()
 
@@ -30,7 +36,7 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
   })
 
   const [endDateUrl, setEndDateUrl] = useState(
-    dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT).format(FORMAT_STRING.datetime_full)
+    dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT).utc().format()
   )
 
   const {
@@ -42,19 +48,12 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
     projectId,
   })
 
-  if (detail?.id) {
-    // eslint-disable-next-line no-console
-    console.log('deploy detail', detail)
+  const dataRequest = {
+    file_name: fileName || detail?.deploy_log_file_name,
+    end_date: endDateUrl,
   }
 
-  const { data: logData, isLoading: isLoadingLog } = useLogQuery({
-    projectId,
-    deployId,
-    body: {
-      file_name: detail?.deploy_log_file_name,
-      end_date: endDateUrl,
-    },
-  })
+  const { data: logData, isLoading } = useLogQuery({ projectId, deployId, body: dataRequest })
 
   const fileNameLogZip = useMemo(() => {
     const logDirs = logData?.url?.split('/') || []
@@ -64,33 +63,41 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
   const moduleStatus = useMemo(
     () => ({
       ...(logFiles?.reduce((acc, item) => {
+        const [_, moduleValue] =
+          Object.entries(detail?.module_status || {})?.find(
+            ([moduleKey]) => moduleKey !== item.label.toLowerCase()
+          ) || []
+
         return {
           ...acc,
-          [item?.label]: {
-            ...detail?.module_status?.[item?.label],
-            exitCode: detail?.module_status?.[item?.label]?.exitCode,
-            status: detail?.module_status?.[item?.label]?.status,
+          [item?.label?.toLowerCase()]: {
+            ...(moduleValue?.[item?.label?.toLowerCase()] || {}),
+            exitCode: moduleValue?.exitCode,
+            status: moduleValue?.status,
           },
         }
       }, {}) || {}),
     }),
-    [logFiles, detail?.module_status, isLoadingLog, isLoadingDeploys]
+    [logFiles, detail?.module_status, logFiles, isLoadingDeploys]
   )
 
-  const moduleStatusOptions = Object.keys(moduleStatus).map((key, index) => ({
-    label: (
-      <span
-        className={cn(
-          'inline whitespace-nowrap text-nowrap',
-          moduleStatus?.[key]?.exitCode ? 'text-red-500' : ''
-        )}
-      >
-        {`${key} ${moduleStatus?.[key]?.exitCode ? `(エラーコード: ${moduleStatus?.[key]?.exitCode?.replace(/"/gi, '')})` : ''}`}
-      </span>
-    ),
-    exitCode: moduleStatus?.[key]?.exitCode,
-    value: logFiles?.find((item) => item?.label === key)?.value || `${index}`,
-  }))
+  const moduleStatusOptions = Object.keys(moduleStatus).map((moduleKey, index) => {
+    const moduleStatusItem = moduleStatus?.[moduleKey]
+    return {
+      label: (
+        <span
+          className={cn(
+            'inline whitespace-nowrap text-nowrap',
+            moduleStatusItem?.exitCode ? 'text-red-500' : ''
+          )}
+        >
+          {`${moduleKey} ${moduleStatusItem?.exitCode ? `(エラーコード: ${`${moduleStatusItem?.exitCode}`?.replace?.(/"/gi, '') || ''})` : ''}`}
+        </span>
+      ),
+      exitCode: moduleStatus?.[moduleKey]?.exitCode,
+      value: logFiles?.find((item) => item?.label === moduleKey)?.value || `${index}`,
+    }
+  })
 
   useEffect(() => {
     const newDetail = getDeployDetail(deployId)
@@ -104,7 +111,7 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
   const downloadZip = async () => {
     try {
       setReading(true)
-      if (logData?.url && !isLoadingLog) {
+      if (logData?.url && !isLoading) {
         wrapperContentRef.current.innerHTML = ''
         const response = await axios.create().get(logData?.url, {
           responseType: 'arraybuffer',
@@ -131,21 +138,33 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
         if (selectedItem?.log) {
           const zipFile = zipData.file(selectedItem?.log)
           const textLog = await zipFile.async('text')
+          setReading(false)
           const logLines = textLog.split('\n') || []
-          if (!logLines?.length) {
-            wrapperContentRef.current.innerHTML = `<div class="flex grow items-center justify-center text-base">データがありません</div>`
+          const allLength =
+            logLines?.length === 1 && logLines?.[0] === '' ? 0 : logLines?.length || 0
+          if (!allLength) {
+            wrapperContentRef.current.innerHTML = `<div class="flex grow items-center justify-center text-base">${EMPTY_LOG}</div>`
           } else {
-            for (let i = 0; i < logLines?.length; i += 1) {
-              const line = logLines[i]
+            const lastLine = Number(allLength || 1) - 1
+            const firstLine =
+              lastLine - MAX_LENGTH_LOG_TAIL >= 0 ? lastLine - MAX_LENGTH_LOG_TAIL : 0
+
+            for (let i = lastLine; i > firstLine; i -= 1) {
+              const lineContent = logLines?.[i]
               const lineElement = document.createElement('span')
-              lineElement.textContent = line
+              lineElement.textContent = lineContent
               lineElement.appendChild(document.createElement('br'))
+              wrapperContentRef.current.appendChild(lineElement)
+            }
+            if (firstLine > 0) {
+              const lineElement = document.createElement('div')
+              lineElement.className = 'flex grow items-center justify-center text-base'
+              lineElement.textContent = MAX_LENGTH_LOG_TAIL_TEXT
               wrapperContentRef.current.appendChild(lineElement)
             }
           }
 
           setLogContent(textLog)
-          setReading(false)
         }
       }
     } catch (_error) {
@@ -162,7 +181,7 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
 
   useEffect(() => {
     lastElementRef?.current?.scrollIntoView({ behavior: 'instant', block: 'end' })
-  }, [logContent, selectedItem?.log])
+  }, [logContent, selectedItem?.log, isReading])
 
   const logDirectory = () => {
     if (isLoadingDeploys) {
@@ -173,9 +192,7 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
       )
     }
     if (!isLoadingDeploys && !moduleStatusOptions?.length) {
-      return (
-        <div className="flex grow items-center justify-center text-base">データがありません</div>
-      )
+      return <div className="flex grow items-center justify-center text-base">{EMPTY_LOG}</div>
     }
 
     return (
@@ -186,9 +203,7 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
         selectedKeys={selectedItem?.log ? [`root-${selectedItem?.log}`] : []}
         onSelect={(selectKeys) => {
           refetch()
-          setEndDateUrl(
-            dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT).format(FORMAT_STRING.datetime_full)
-          )
+          setEndDateUrl(dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT).utc().format())
           setSelectedItem({
             log: selectKeys?.flatMap((key) => key?.replace('root-', ''))?.[0],
           })
@@ -208,19 +223,6 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
     )
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const content = useMemo(() => {
-    if (!isLoadingLog && !logContent && !isReading) {
-      return (
-        <div className="flex grow items-center justify-center text-base">データがありません</div>
-      )
-    }
-    if (!isLoadingLog && logContent) {
-      return <div className="whitespace-pre-line break-words">{logContent}</div>
-    }
-    return <div />
-  }, [logContent, isLoadingLog, isReading])
-
   return (
     <Container title="ログ表示(ログ)">
       <Spin className="w-full" spinning={isLoadingDeploys}>
@@ -233,9 +235,12 @@ const LogShowDetailContainer = ({ projectId, deployId }) => {
               </div>
             </div>
             <div className="col-span-2">
-              <Spin className="w-full" spinning={isLoadingLog || isReading}>
+              <Spin className="w-full" spinning={isLoading || isReading}>
                 <div className="flex h-full max-h-[60vh] min-h-[60vh] w-full grow flex-col overflow-x-scroll overflow-y-scroll overscroll-auto scroll-smooth rounded-lg border border-solid border-[#d5d3d2] !bg-light-gray p-6 !text-primary ">
-                  <div ref={wrapperContentRef} />
+                  <div
+                    ref={wrapperContentRef}
+                    className="flex h-full w-full flex-col-reverse whitespace-pre-line break-words"
+                  />
                   <div ref={lastElementRef} className="h-1 w-full">
                     &nbsp;
                   </div>

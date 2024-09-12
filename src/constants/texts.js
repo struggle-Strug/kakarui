@@ -29,7 +29,7 @@ export const USER_STATUS_TEXT = {
 export const DEPLOY_STATUS_TEXT = {
   [DEPLOY_STATUS.COMPLETE]: '正常終了',
   [DEPLOY_STATUS.IN_PROGRESS]: '実行中',
-  [DEPLOY_STATUS.PENDING]: '異常終了',
+  [DEPLOY_STATUS.FAILED]: '異常終了',
 }
 
 export const USER_ROLE_TEXT = {
@@ -49,3 +49,7 @@ export const DEPLOYMENT_TYPE_TEXT = {
   [DEPLOYMENT_TYPE.ROBOT]: '実機',
   [DEPLOYMENT_TYPE.SIM]: 'Sim環境',
 }
+
+export const EMPTY_LOG = 'データがありません'
+export const MAX_LENGTH_LOG_TAIL_TEXT =
+  'さらに詳細を確認する場合は、ログをダウンロードしてください。'
