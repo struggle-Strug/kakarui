@@ -8,6 +8,7 @@ const FORM_MODULE_CONFIG = {
   CONFIG_DATA: 'config_data',
   CREATE_DATE: 'create_date',
   UPDATE_DATE: 'update_date',
+  IS_DELETED: 'is_deleted',
 }
 
 const moduleSchema = Yup.object().shape({
@@ -45,6 +46,17 @@ const moduleConfigSchema = Yup.object().shape({
             if (instanceNames.length !== uniqueInstanceNames.size) {
               return ctx.createError({ message: '同じインスタンス名が存在します。' })
             }
+          }
+          return true
+        },
+      })
+      .test({
+        name: 'checkDeletedModules',
+        skipAbsent: true,
+        test(modules, ctx) {
+          const hasDeletedModules = modules.some((module) => module[FORM_MODULE_CONFIG.IS_DELETED])
+          if (hasDeletedModules) {
+            return ctx.createError({ message: '削除されたモジュールが含まれています。' })
           }
           return true
         },

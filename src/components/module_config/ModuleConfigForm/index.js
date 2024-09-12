@@ -32,7 +32,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   const [sortedInfo, setSortedInfo] = useState({ field: undefined, order: undefined })
 
   const methods = useForm({
-    resolver: yupResolver(moduleConfigSchema),
+    resolver: action !== 'delete' ? yupResolver(moduleConfigSchema) : undefined,
     defaultValues: {
       name: '',
       description: '',
@@ -202,6 +202,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
               tag: module.tag,
               type: module.type,
               config_data: module.config_data,
+              is_deleted: module.is_deleted,
             }
           }),
         },

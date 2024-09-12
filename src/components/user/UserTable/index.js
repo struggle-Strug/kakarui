@@ -2,9 +2,11 @@ import { Space } from 'antd'
 
 import { USER_ROLE_TEXT } from '@/constants'
 
+import { TrashIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
-import { Table } from '@/components/ui'
+import { ButtonIcon, Table } from '@/components/ui'
 
+import UserDeleteCheckModalButton from '../UserDeleteCheckModalButton'
 import UserUpdateModalButton from '../UserUpdateModalButton'
 
 const UserTable = ({ data, total, loading, reload }) => {
@@ -39,6 +41,20 @@ const UserTable = ({ data, total, loading, reload }) => {
       align: 'center',
       className: 'min-w-[112px]',
       render: (enable) => <RowContent item={enable ? '有効' : '無効'} />,
+    },
+    {
+      title: '削除',
+      dataIndex: 'id',
+      align: 'center',
+      className: 'min-w-[124px]',
+      render: (id, record) => (
+        <Space>
+          <UserDeleteCheckModalButton isEdit data={record} onSuccess={() => reload?.()}>
+            {/* <ButtonIcon onClick={() => remove(index)} icon={<TrashIcon size={32} />} /> */}
+            <ButtonIcon onClick={() => {}} icon={<TrashIcon size={32} />} />
+          </UserDeleteCheckModalButton>
+        </Space>
+      ),
     },
     {
       title: <ColumnSorter title="登録日" field="create_date" />,

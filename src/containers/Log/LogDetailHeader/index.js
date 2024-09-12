@@ -1,4 +1,7 @@
 import dayjs from 'dayjs'
+import isNaN from 'lodash/isNaN'
+
+import { useMemo } from 'react'
 
 import { FORMAT_STRING } from '@/constants'
 import { useCopyToClipboard } from '@/hooks/share'
@@ -66,7 +69,12 @@ const HeaderCopyButton = ({ logContent }) => {
   )
 }
 
-const LogDetailHeader = ({ detail, logData, fileNameLogZip, logContent }) => {
+const LogDetailHeader = ({ detail, logData, logContent }) => {
+  const fileNameLogZip = useMemo(() => {
+    const logDirs = logData?.url?.split('/') || []
+    return logDirs?.[logDirs?.length && !isNaN(logDirs?.length) ? logDirs.length - 1 : 0]
+  }, [logData?.url])
+
   return (
     <div className="mb-5 mt-7 flex w-full flex-row justify-between gap-2">
       <div className="flex flex-row items-center gap-2">

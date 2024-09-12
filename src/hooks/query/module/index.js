@@ -7,7 +7,13 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, API_ERRORS, MODULE_LIST_KEY } from '@/constants'
+import {
+  API,
+  API_ERRORS,
+  MODULE_CONFIG_LIST_KEY,
+  MODULE_LIST_KEY,
+  MODULE_SET_LIST_KEY,
+} from '@/constants'
 import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
@@ -51,6 +57,9 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
   // -- search and sort --
   const filteredData = useMemo(() => {
     let result = [...(data || [])]
+
+    // 削除されたデータを除外
+    result = result.filter((item) => !item.is_deleted)
 
     if (search) {
       const lowerSearchTerm = toLower(search)
@@ -163,6 +172,7 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
 
 export const useModuleDelete = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
   const queryClient = useQueryClient()
 
   const { mutate, isPending, isSuccess } = useMutation({
@@ -183,6 +193,12 @@ export const useModuleDelete = ({ onSuccess } = {}) => {
       await queryClient.refetchQueries({
         queryKey: [MODULE_LIST_KEY, organizationId, false],
       })
+      await queryClient.refetchQueries({
+        queryKey: [MODULE_SET_LIST_KEY, organizationId, false],
+      })
+      await queryClient.refetchQueries({
+        queryKey: [MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false],
+      })
       message.success('モジュールを削除しました。')
       onSuccess?.(response)
     },
@@ -199,48 +215,52 @@ export const useModuleDelete = ({ onSuccess } = {}) => {
 export const useModuleUsageCheck = ({ moduleId } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { projectActiveId } = useProjectActive()
+  const queryClient = useQueryClient()
 
-  // モジュール配置のチェック
-  const { data: moduleConfigsData } = useQuery({
-    queryKey: ['moduleConfigs', organizationId, projectActiveId, moduleId],
-    queryFn: async () => {
-      const response = await Axios.get(
-        buildApiURL(API.MODULE_CONFIG.LIST, {
-          organization_id: organizationId,
-          project_id: projectActiveId,
-        })
+  const checkModuleUsage = async () => {
+    // クエリの再取得
+    await queryClient.refetchQueries({
+      queryKey: [MODULE_SET_LIST_KEY, organizationId, false],
+    })
+
+    await queryClient.refetchQueries({
+      queryKey: [MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false],
+    })
+
+    // モジュールセットデータを取得
+    const moduleSetsData = queryClient.getQueryData([MODULE_SET_LIST_KEY, organizationId, false])
+    const moduleConfigsData = queryClient.getQueryData([
+      MODULE_CONFIG_LIST_KEY,
+      organizationId,
+      projectActiveId,
+      false,
+    ])
+
+    // モジュールが使用されているかチェック
+    let isUsed = false
+
+    // 取得した moduleSetsData を使用してモジュールが使われているか確認
+    if (moduleSetsData) {
+      const usedInSets = moduleSetsData.some((set) =>
+        set.moduleset_modules.some((module) => module.module_id === moduleId)
       )
-      return response.data?.module_configs
-    },
-    enabled: !!organizationId && !!projectActiveId,
-  })
+      isUsed = isUsed || usedInSets
+    }
 
-  const { data: moduleSetsData } = useQuery({
-    queryKey: ['moduleSets', organizationId, moduleId],
-    queryFn: async () => {
-      const response = await Axios.get(
-        buildApiURL(API.MODULE_SET.LIST, { organization_id: organizationId })
+    if (moduleConfigsData) {
+      const usedInConfigs = moduleConfigsData.some((config) =>
+        config.config_data.modules.some((module) => module.module_id === moduleId)
       )
-      return response.data?.moduleset
-    },
-    enabled: !!organizationId,
-  })
+      isUsed = isUsed || usedInConfigs
+    }
 
-  // モジュールが使用されているかのチェック
-  let isUsed = false
-
-  if (moduleConfigsData) {
-    isUsed = moduleConfigsData.some((config) =>
-      config.config_data.modules.some((module) => module.module_id === moduleId)
-    )
+    return isUsed
   }
 
-  if (moduleSetsData) {
-    const usedInSets = moduleSetsData.some((set) =>
-      set.moduleset_modules.some((module) => module.module_id === moduleId)
-    )
-    isUsed = isUsed || usedInSets
-  }
-
-  return isUsed
+  // データのチェックを行うフック
+  return useQuery({
+    queryKey: ['moduleUsageCheck', organizationId, moduleId],
+    queryFn: checkModuleUsage,
+    enabled: !!organizationId && !!moduleId,
+  })
 }

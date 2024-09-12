@@ -9,6 +9,7 @@ export const API = {
   API_ROOT,
   TIMEOUT,
 
+  TAG: '/tag',
   UPLOAD: `upload`,
 
   AUTH: {
@@ -25,6 +26,7 @@ export const API = {
     CREATE: '/users/user_create', // POST
     UPDATE: '/users/{user_id}', // PUT
     BY_ORGANIZATION: '/organizations/{organization_id}/users',
+    DELETE: '/users/{entra_id}',
   },
 
   MODULE: {
@@ -59,6 +61,7 @@ export const API = {
     LIST: '/organizations/{organization_id}/projects',
     CREATE: '/organizations/{organization_id}/projects', // POST
     UPDATE: '/organizations/{organization_id}/projects/{project_id}', // PUT
+    DELETE: '/organizations/{organization_id}/projects/{project_id}',
   },
 
   PERMISSION: {

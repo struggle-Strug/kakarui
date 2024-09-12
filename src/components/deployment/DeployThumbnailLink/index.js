@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { DEPLOY_STATUS } from '@/constants'
 
 import { ThumbnailLink } from '@/components/common'

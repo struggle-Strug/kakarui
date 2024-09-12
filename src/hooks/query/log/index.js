@@ -24,7 +24,7 @@ export const useVideoQuery = ({ projectId, options = {}, body = {} } = {}) => {
 
   const query = useQuery({
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: [VIDEO_LIST_KEY, organizationId, projectId, body],
+    queryKey: [VIDEO_LIST_KEY, organizationId, projectId],
     queryFn: async () => {
       const API_URI = mockApiEnabled ? API_MOCK.URL_CREATE : API.FILE.URL_CREATE
 
@@ -59,7 +59,7 @@ export const useLogQuery = ({ projectId, options = {}, body = {} } = {}) => {
 
   const query = useQuery({
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: [LOG_LIST_KEY, organizationId, projectId, body],
+    queryKey: [LOG_LIST_KEY, organizationId, projectId],
     queryFn: async () => {
       const API_URI = mockApiEnabled ? API_MOCK.URL_CREATE : API.FILE.URL_CREATE
 
