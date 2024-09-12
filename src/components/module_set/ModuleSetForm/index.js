@@ -31,7 +31,7 @@ const ModuleSetForm = ({ action, onSubmit, data }) => {
   const [sortedInfo, setSortedInfo] = useState({ field: undefined, order: undefined })
 
   const methods = useForm({
-    resolver: yupResolver(moduleSetSchema),
+    resolver: action !== 'delete' ? yupResolver(moduleSetSchema) : undefined,
     defaultValues: {
       name: '',
       description: '',
@@ -174,6 +174,7 @@ const ModuleSetForm = ({ action, onSubmit, data }) => {
             default_config_data: module.default_config_data,
             create_date: module.create_date,
             update_date: module.update_date,
+            is_deleted: module.is_deleted,
           }
         }),
       }
@@ -355,6 +356,13 @@ const ModuleSetForm = ({ action, onSubmit, data }) => {
           data={values.moduleset_modules}
           onChange={onTableChange}
         />
+        {methods.formState.errors.moduleset_modules?.root?.message && (
+          <div className="ant-form-item">
+            <div className="ant-form-item-explain-error">
+              {methods.formState.errors.moduleset_modules?.root?.message}
+            </div>
+          </div>
+        )}
 
         <Space className="flex-end mt-12 gap-x-4">
           <Button type="default" className="min-w-[200px]" onClick={onBack}>
