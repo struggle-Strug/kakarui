@@ -1,17 +1,17 @@
-import { Form, Modal,message } from 'antd'
+import { Form, Modal, message } from 'antd'
 
 import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE_OPTIONS, USER_ROLE} from '@/constants'
-import { useGetMe, useUserDelete } from '@/hooks/query'
+import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE, USER_ROLE_OPTIONS } from '@/constants'
+import { useUserDelete } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Checkbox, Input, Select } from '@/components/form'
 import { TrashIcon } from '@/components/icons'
 import { Button, ButtonIcon } from '@/components/ui'
 
-import { FORM_INFO, userFormSchema, userValues } from '@/validations/userSchema'
+import { FORM_INFO } from '@/validations/userSchema'
 
 const formText = {
   title: 'ユーザー削除確認',
@@ -27,12 +27,10 @@ const formText = {
   cancel_button: 'キャンセル',
 }
 
-const UserDeleteCheckModalButton = ({ data, onSuccess, ...props }) => {
+const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
   const [open, onOpen, onClose] = useFlag()
 
-  const defaultValues = useMemo(
-    () => (data)
-  )
+  const defaultValues = useMemo(() => data)
 
   const { doDeleteUser } = useUserDelete({
     onSuccess: () => {
@@ -42,13 +40,13 @@ const UserDeleteCheckModalButton = ({ data, onSuccess, ...props }) => {
     },
   })
 
-  const methods = useForm(defaultValues,)
+  const methods = useForm(defaultValues)
 
   useEffect(() => {
     methods.reset(defaultValues)
   }, [defaultValues])
 
-  const onSubmit =  async (values) => {
+  const onSubmit = async (values) => {
     doDeleteUser(values)
   }
 
@@ -71,7 +69,8 @@ const UserDeleteCheckModalButton = ({ data, onSuccess, ...props }) => {
           disabled
         />
 
-        <Input name={FORM_INFO.NAME}
+        <Input
+          name={FORM_INFO.NAME}
           label={formText.name_label}
           placeholder="氏名を入力してください。"
           disabled
@@ -93,7 +92,10 @@ const UserDeleteCheckModalButton = ({ data, onSuccess, ...props }) => {
           disabled
         />
 
-        <Checkbox name={FORM_INFO.SUB_ROLE} label={formText.sub_role_label} title="デプロイ管理者"
+        <Checkbox
+          name={FORM_INFO.SUB_ROLE}
+          label={formText.sub_role_label}
+          title="デプロイ管理者"
           disabled
         />
 
@@ -116,7 +118,6 @@ const UserDeleteCheckModalButton = ({ data, onSuccess, ...props }) => {
         </div>
       </Form>
     </FormProvider>
-    
   )
 
   return (

@@ -142,14 +142,13 @@ export const useUserDelete = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
   const queryClient = useQueryClient()
-  
+
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async ({ id: entraId, ...params }) => {
-      const response = await Axios.delete(
-        buildApiURL(API.USER.DELETE, { entra_id: entraId}),
-        { ...params }
-      )
-      
+      const response = await Axios.delete(buildApiURL(API.USER.DELETE, { entra_id: entraId }), {
+        ...params,
+      })
+
       return response
     },
     onSuccess: (response) => {

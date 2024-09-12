@@ -4,10 +4,10 @@ import { USER_ROLE_TEXT } from '@/constants'
 
 import { TrashIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
-import { Table, ButtonIcon } from '@/components/ui'
+import { ButtonIcon, Table } from '@/components/ui'
 
-import UserUpdateModalButton from '../UserUpdateModalButton'
 import UserDeleteCheckModalButton from '../UserDeleteCheckModalButton'
+import UserUpdateModalButton from '../UserUpdateModalButton'
 
 const UserTable = ({ data, total, loading, reload }) => {
   const columns = [
@@ -47,10 +47,11 @@ const UserTable = ({ data, total, loading, reload }) => {
       dataIndex: 'id',
       align: 'center',
       className: 'min-w-[124px]',
-      render: (id, record, index) => (
+      render: (id, record) => (
         <Space>
           <UserDeleteCheckModalButton isEdit data={record} onSuccess={() => reload?.()}>
-            <ButtonIcon onClick={() => remove(index)} icon={<TrashIcon size={32} />} />
+            {/* <ButtonIcon onClick={() => remove(index)} icon={<TrashIcon size={32} />} /> */}
+            <ButtonIcon onClick={() => {}} icon={<TrashIcon size={32} />} />
           </UserDeleteCheckModalButton>
         </Space>
       ),
