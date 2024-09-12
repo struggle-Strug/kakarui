@@ -52,6 +52,9 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
   const filteredData = useMemo(() => {
     let result = [...(data || [])]
 
+    // 削除されたデータを除外
+    result = result.filter(item => !item.is_deleted)
+
     if (search) {
       const lowerSearchTerm = toLower(search)
       result = result.filter(
