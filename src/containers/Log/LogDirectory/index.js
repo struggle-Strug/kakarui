@@ -16,6 +16,7 @@ const LogDirectory = ({
   setSelectedItem,
   selectedItem,
 }) => {
+  console.log(logFiles)
   const moduleStatus = useMemo(() => {
     const modules = Object.entries(detail?.module_status || {})
     const logFileNames = logFiles.map((logFile) => logFile.name.toLowerCase())
@@ -34,24 +35,29 @@ const LogDirectory = ({
   }, [logFiles, detail?.module_status])
 
   const moduleStatusOptions = Object.keys(moduleStatus)
-    ?.filter((moduleKey) => moduleStatus?.[moduleKey]?.visible)
+    .filter((moduleKey) => moduleStatus[moduleKey]?.visible)
     .map((moduleKey, index) => {
-      const moduleStatusItem = moduleStatus?.[moduleKey?.toLowerCase()]
+      const lowerModuleKey = moduleKey?.toLowerCase()
+      const moduleStatusItem = moduleStatus[lowerModuleKey]
+
+      const exitCode = moduleStatusItem?.exitCode
+      const exitCodeText = exitCode
+        ? `(エラーコード: ${exitCode.toString().replace(/"/g, '')})`
+        : ''
+
+      const label = (
+        <span className={cn('inline whitespace-nowrap', exitCode ? 'text-red-500' : '')}>
+          {`${moduleKey} ${exitCodeText}`}
+        </span>
+      )
+
+      const value =
+        logFiles?.find((item) => item.label?.toLowerCase() === lowerModuleKey)?.value || `${index}`
+
       return {
-        label: (
-          <span
-            className={cn(
-              'inline whitespace-nowrap text-nowrap',
-              moduleStatusItem?.exitCode ? 'text-red-500' : ''
-            )}
-          >
-            {`${moduleKey} ${moduleStatusItem?.exitCode ? `(エラーコード: ${`${moduleStatusItem?.exitCode}`?.replace?.(/"/gi, '') || ''})` : ''}`}
-          </span>
-        ),
-        exitCode: moduleStatus?.[moduleKey]?.exitCode,
-        value:
-          logFiles?.find((item) => item?.label?.toLowerCase() === moduleKey?.toLowerCase())
-            ?.value || `${index}`,
+        label,
+        exitCode,
+        value,
       }
     })
 
