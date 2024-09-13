@@ -16,46 +16,49 @@ const LogDirectory = ({
   setSelectedItem,
   selectedItem,
 }) => {
-  const moduleRows = Object.entries(detail?.module_status || {})
-
   const moduleStatus = useMemo(() => {
-    return {
-      ...(moduleRows?.reduce((acc, item) => {
-        const [moduleKey, moduleValue] = item
+    const modules = Object.entries(detail?.module_status || {})
 
-        return {
-          ...acc,
-          [moduleKey?.toLowerCase()]: {
-            ...(moduleValue || {}),
-            exitCode: moduleValue?.exitCode,
-            status: moduleValue?.status,
-            visible:
-              logFiles?.findIndex(
-                (logFile) => logFile?.name?.toLowerCase() === moduleKey?.toLowerCase()
-              ) > -1,
-          },
-        }
-      }, {}) || {}),
-    }
-  }, [logFiles, detail?.module_status, logFiles, isLoadingDeploys])
+    const logFileNames = (logFiles || []).map((logFile) => logFile?.name?.toLowerCase?.())
+
+    return modules.reduce((acc, [moduleKey, moduleValue]) => {
+      const visible = logFileNames?.includes?.(moduleKey?.toLowerCase?.())
+
+      acc[moduleKey?.toLowerCase?.()] = {
+        exitCode: moduleValue.exitCode,
+        status: moduleValue.status,
+        visible,
+      }
+
+      return acc
+    }, {})
+  }, [logFiles, detail?.module_status])
 
   const moduleStatusOptions = Object.keys(moduleStatus)
-    ?.filter((moduleKey) => moduleStatus?.[moduleKey]?.visible)
+    .filter((moduleKey) => moduleStatus?.[moduleKey]?.visible)
     .map((moduleKey, index) => {
-      const moduleStatusItem = moduleStatus?.[moduleKey]
+      const lowerModuleKey = moduleKey?.toLowerCase?.()
+      const moduleStatusItem = moduleStatus?.[lowerModuleKey] || {}
+
+      const exitCode = moduleStatusItem?.exitCode
+      const exitCodeText = exitCode
+        ? `(エラーコード: ${exitCode.toString().replace(/"/g, '')})`
+        : ''
+
+      const label = (
+        <span className={cn('inline whitespace-nowrap', exitCode ? 'text-red-500' : '')}>
+          {`${moduleKey} ${exitCodeText}`}
+        </span>
+      )
+
+      const value =
+        (logFiles || []).find((item) => item?.label?.toLowerCase?.() === lowerModuleKey)?.value ||
+        `${index}`
+
       return {
-        label: (
-          <span
-            className={cn(
-              'inline whitespace-nowrap text-nowrap',
-              moduleStatusItem?.exitCode ? 'text-red-500' : ''
-            )}
-          >
-            {`${moduleKey} ${moduleStatusItem?.exitCode ? `(エラーコード: ${`${moduleStatusItem?.exitCode}`?.replace?.(/"/gi, '') || ''})` : ''}`}
-          </span>
-        ),
-        exitCode: moduleStatus?.[moduleKey]?.exitCode,
-        value: logFiles?.find((item) => item?.label === moduleKey)?.value || `${index}`,
+        label,
+        exitCode,
+        value,
       }
     })
 

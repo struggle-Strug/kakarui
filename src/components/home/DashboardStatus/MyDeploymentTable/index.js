@@ -62,7 +62,7 @@ const MyDeploymentTable = ({ data, total, loading }) => {
     sort: JSON.stringify([{ field: 'execute_start_date', value: 'desc' }]),
   })
 
-  const { refetch: moduleConfigRefetch } = useModuleConfigQuery({
+  const { data: moduleConfigData, refetch: moduleConfigRefetch } = useModuleConfigQuery({
     sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
   })
 
@@ -77,12 +77,12 @@ const MyDeploymentTable = ({ data, total, loading }) => {
     if (moduleProject) {
       setProjectActive(moduleProject)
       moduleConfigRefetch().then(() => {
-        // const moduleConfig = moduleConfigData.find((item) => item.id === module.module_config_id)
-        // if(moduleConfig) {
-        //   setShowModuleConfigAlertModal(true)
-        // } else {
-        router.push(`/moduleconfig-manage/${module.module_config_id}`)
-        // }
+        const moduleConfig = moduleConfigData.find((item) => item.id === module.module_config_id)
+        if (moduleConfig) {
+          router.push(`/moduleconfig-manage/${module.module_config_id}`)
+        } else {
+          setShowModuleConfigAlertModal(true)
+        }
       })
     }
   }
