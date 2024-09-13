@@ -237,8 +237,8 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
               </div>
             )}
           </div>
-          <ExternalLinkIcon
-            className="ml-auto shrink-0 cursor-pointer"
+          <ButtonIcon
+            icon={<ExternalLinkIcon size={32} />}
             onClick={() => moduleRadioSelectionModalOpen(index)}
             disabled={action === 'delete'}
           />
