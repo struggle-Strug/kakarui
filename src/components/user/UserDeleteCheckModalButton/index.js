@@ -3,7 +3,7 @@ import { Form, Modal, message } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE, USER_ROLE_OPTIONS } from '@/constants'
+import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE_OPTIONS } from '@/constants'
 import { useUserDelete } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
@@ -30,7 +30,14 @@ const formText = {
 const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
   const [open, onOpen, onClose] = useFlag()
 
-  const defaultValues = useMemo(() => data)
+  const defaultValues = useMemo(
+    () => ({
+      ...(data || {}),
+    }),
+    [data]
+  )
+
+  const role = data?.main_role
 
   const { doDeleteUser } = useUserDelete({
     onSuccess: () => {
@@ -88,7 +95,7 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
           label={formText.role_label}
           options={USER_ROLE_OPTIONS}
           placeholder="ロールを選択してください。"
-          defaultValue={USER_ROLE.MEMBER}
+          defaultValue={role}
           disabled
         />
 
