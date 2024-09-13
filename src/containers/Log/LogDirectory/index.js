@@ -16,15 +16,15 @@ const LogDirectory = ({
   setSelectedItem,
   selectedItem,
 }) => {
-  console.log(logFiles)
   const moduleStatus = useMemo(() => {
     const modules = Object.entries(detail?.module_status || {})
-    const logFileNames = logFiles.map((logFile) => logFile.name.toLowerCase())
+
+    const logFileNames = (logFiles || []).map((logFile) => logFile?.name?.toLowerCase?.())
 
     return modules.reduce((acc, [moduleKey, moduleValue]) => {
-      const visible = logFileNames.includes(moduleKey.toLowerCase())
+      const visible = logFileNames?.includes?.(moduleKey?.toLowerCase?.())
 
-      acc[moduleKey.toLowerCase()] = {
+      acc[moduleKey?.toLowerCase?.()] = {
         exitCode: moduleValue.exitCode,
         status: moduleValue.status,
         visible,
@@ -35,10 +35,10 @@ const LogDirectory = ({
   }, [logFiles, detail?.module_status])
 
   const moduleStatusOptions = Object.keys(moduleStatus)
-    .filter((moduleKey) => moduleStatus[moduleKey]?.visible)
+    .filter((moduleKey) => moduleStatus?.[moduleKey]?.visible)
     .map((moduleKey, index) => {
-      const lowerModuleKey = moduleKey?.toLowerCase()
-      const moduleStatusItem = moduleStatus[lowerModuleKey]
+      const lowerModuleKey = moduleKey?.toLowerCase?.()
+      const moduleStatusItem = moduleStatus?.[lowerModuleKey] || {}
 
       const exitCode = moduleStatusItem?.exitCode
       const exitCodeText = exitCode
@@ -52,7 +52,8 @@ const LogDirectory = ({
       )
 
       const value =
-        logFiles?.find((item) => item.label?.toLowerCase() === lowerModuleKey)?.value || `${index}`
+        (logFiles || []).find((item) => item?.label?.toLowerCase?.() === lowerModuleKey)?.value ||
+        `${index}`
 
       return {
         label,

@@ -28,7 +28,7 @@ const RowContentModal = ({ item, className, copyContent, isShowModal = true }) =
   return (
     <>
       <Space className="flex-between">
-        <RowContent item={item} className={cn('line-clamp-3 min-w-[200px]', className)} />
+        <RowContent item={item} className={cn('line-clamp-3 min-w-[240px]', className)} />
         {item ? (
           <ButtonIcon
             icon={<ExternalLinkIcon size={32} />}
