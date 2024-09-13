@@ -34,25 +34,30 @@ const processLogContent = (textLog, wrapperContentRef) => {
   const logLines = textLog.split('\n') || []
   const allLength = logLines.length === 1 && logLines[0] === '' ? 0 : logLines.length || 0
 
+  wrapperContentRef.current.innerHTML = ''
+
   if (!allLength) {
     wrapperContentRef.current.innerHTML = `<div class="flex grow items-center justify-center text-base">${EMPTY_LOG}</div>`
   } else {
+    const fragment = document.createDocumentFragment()
     const lastLine = Number(allLength || 1) - 1
     const firstLine = lastLine - MAX_LENGTH_LOG_TAIL >= 0 ? lastLine - MAX_LENGTH_LOG_TAIL : 0
 
-    for (let i = lastLine; i > firstLine; i -= 1) {
+    for (let i = lastLine; i >= firstLine; i -= 1) {
       const lineContent = logLines[i]
       const lineElement = document.createElement('p')
       lineElement.textContent = lineContent
-      lineElement.appendChild(document.createElement('br'))
-      wrapperContentRef.current.appendChild(lineElement)
+
+      fragment.appendChild(lineElement)
     }
     if (firstLine > 0) {
       const lineElement = document.createElement('div')
       lineElement.className = 'flex grow items-center justify-center text-base'
       lineElement.textContent = MAX_LENGTH_LOG_TAIL_TEXT
-      wrapperContentRef.current.appendChild(lineElement)
+      fragment.appendChild(lineElement)
     }
+
+    wrapperContentRef.current.appendChild(fragment)
   }
 }
 

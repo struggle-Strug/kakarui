@@ -16,33 +16,27 @@ const LogDirectory = ({
   setSelectedItem,
   selectedItem,
 }) => {
-  const moduleRows = Object.entries(detail?.module_status || {})
-
   const moduleStatus = useMemo(() => {
-    return {
-      ...(moduleRows?.reduce((acc, item) => {
-        const [moduleKey, moduleValue] = item
+    const modules = Object.entries(detail?.module_status || {})
+    const logFileNames = logFiles.map((logFile) => logFile.name.toLowerCase())
 
-        return {
-          ...acc,
-          [moduleKey?.toLowerCase()]: {
-            ...(moduleValue || {}),
-            exitCode: moduleValue?.exitCode,
-            status: moduleValue?.status,
-            visible:
-              logFiles?.findIndex(
-                (logFile) => logFile?.name?.toLowerCase() === moduleKey?.toLowerCase()
-              ) > -1,
-          },
-        }
-      }, {}) || {}),
-    }
-  }, [logFiles, detail?.module_status, logFiles, isLoadingDeploys])
+    return modules.reduce((acc, [moduleKey, moduleValue]) => {
+      const visible = logFileNames.includes(moduleKey.toLowerCase())
+
+      acc[moduleKey.toLowerCase()] = {
+        exitCode: moduleValue.exitCode,
+        status: moduleValue.status,
+        visible,
+      }
+
+      return acc
+    }, {})
+  }, [logFiles, detail?.module_status])
 
   const moduleStatusOptions = Object.keys(moduleStatus)
     ?.filter((moduleKey) => moduleStatus?.[moduleKey]?.visible)
     .map((moduleKey, index) => {
-      const moduleStatusItem = moduleStatus?.[moduleKey]
+      const moduleStatusItem = moduleStatus?.[moduleKey?.toLowerCase()]
       return {
         label: (
           <span
@@ -55,7 +49,9 @@ const LogDirectory = ({
           </span>
         ),
         exitCode: moduleStatus?.[moduleKey]?.exitCode,
-        value: logFiles?.find((item) => item?.label === moduleKey)?.value || `${index}`,
+        value:
+          logFiles?.find((item) => item?.label?.toLowerCase() === moduleKey?.toLowerCase())
+            ?.value || `${index}`,
       }
     })
 
