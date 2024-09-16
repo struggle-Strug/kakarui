@@ -125,6 +125,10 @@
   box-shadow: none !important;
 }
 
+.search-bar .ant-select-selection-search {
+  @apply pr-16;
+}
+
 /* button icon disabled */
 button.ant-btn.ant-btn-icon-only:disabled svg path {
   stroke: #cfcecd;

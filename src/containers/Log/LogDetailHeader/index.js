@@ -20,14 +20,14 @@ const HeaderTimer = ({ detail }) => {
         <span>実施日時:</span>
         &nbsp;
         <span className="min-w-[220px]">
-          {startDate && formatDate(dayjs(startDate), FORMAT_STRING.datetime_full_str)}
+          {startDate && formatDate(startDate, FORMAT_STRING.datetime_full_str)}
         </span>
       </div>
       <div className="flex flex-row">
         <span>完了日時:</span>
         &nbsp;
         <span className="min-w-[220px]">
-          {endDate && formatDate(dayjs(endDate), FORMAT_STRING.datetime_full_str)}
+          {endDate && formatDate(endDate, FORMAT_STRING.datetime_full_str)}
         </span>
       </div>
     </div>

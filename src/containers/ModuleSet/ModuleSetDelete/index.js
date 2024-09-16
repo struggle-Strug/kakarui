@@ -32,7 +32,7 @@ const ModuleSetDeleteContainer = () => {
         <p className="-mt-6 mb-10 text-lg">
           以下のモジュールセットを削除します。
           <br />
-          削除したモジュールセットを利用していいるモジュール配置には影響はありません。
+          削除したモジュールセットを利用しているモジュール配置には影響はありません。
         </p>
         <ModuleSetForm action="delete" onSubmit={doDeleteModuleSet} data={detail} />
       </Spin>
