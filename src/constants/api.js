@@ -1,5 +1,4 @@
 export const API_ROOT = process.env.NEXT_PUBLIC_HOST
-export const SOCKET_IO = process.env.NEXT_PUBLIC_SERVER_URL
 export const ROOT_URL = process.env.NEXT_PUBLIC_WEB_URL
 export const API_ADMIN_PREFIX = 'admin'
 
