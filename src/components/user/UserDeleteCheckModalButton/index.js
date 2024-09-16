@@ -1,10 +1,10 @@
 import { Form, Modal, message } from 'antd'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE_OPTIONS } from '@/constants'
-import { useUserDelete } from '@/hooks/query'
+import { useAuth, usePermissionDelete, useUserDelete, useUserDetailCount } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Checkbox, Input, Select } from '@/components/form'
@@ -28,6 +28,8 @@ const formText = {
 }
 
 const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
+  const { id } = useAuth()
+  const [userCount, setUserCount] = useState(null)
   const [open, onOpen, onClose] = useFlag()
 
   const defaultValues = useMemo(
@@ -39,10 +41,26 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
 
   const role = data?.main_role
 
-  const { doDeleteUser } = useUserDelete({
+  const { doDeleteUser, isPending } = useUserDelete({
     onSuccess: () => {
       message.success('ユーザを削除しました。')
       onClose()
+      onSuccess?.()
+    },
+  })
+
+  const { doDetailUserCount } = useUserDetailCount({
+    onSuccess: (count) => {
+      setUserCount(count)
+    },
+  })
+
+  const { doDeletePermission } = usePermissionDelete({
+    onSuccess: () => {
+      if (userCount !== 1) {
+        message.success('ユーザを削除しました。')
+        onClose()
+      }
       onSuccess?.()
     },
   })
@@ -54,7 +72,27 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
   }, [defaultValues])
 
   const onSubmit = async (values) => {
-    doDeleteUser(values)
+    try {
+      await doDetailUserCount(values)
+
+      await new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (userCount !== null) {
+            clearInterval(interval)
+            resolve()
+          }
+        }, 100)
+      })
+
+      await doDeletePermission(values)
+
+      if (userCount === 1) {
+        await doDeleteUser(values)
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error delete user:', error)
+    }
   }
 
   const renderForm = (
@@ -119,7 +157,7 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
           <Button type="default" className="min-w-[200px]" onClick={onClose}>
             <span className="font-semibold">{formText.cancel_button}</span>
           </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
+          <Button type="primary" htmlType="submit" className="min-w-[200px]" loading={isPending}>
             <span className="font-semibold">{formText.delete_button}</span>
           </Button>
         </div>
@@ -129,7 +167,7 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
 
   return (
     <>
-      <ButtonIcon icon={<TrashIcon />} onClick={onOpen} />
+      <ButtonIcon icon={<TrashIcon />} onClick={onOpen} disabled={id === data.entra_id} />
       <Modal
         open={open}
         onCancel={onClose}
@@ -137,6 +175,7 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
         className="rounded-3xl"
         footer={null}
         width={698}
+        data={data}
       >
         <p className="px-12 text-lg font-light text-primary">{formText.description}</p>
         <p className="px-12 text-lg font-light text-primary">{formText.description2}</p>
