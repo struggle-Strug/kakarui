@@ -49,8 +49,8 @@ const UserTable = ({ data, total, loading, reload }) => {
       className: 'min-w-[124px]',
       render: (id, record) => (
         <Space>
-          <UserDeleteCheckModalButton isEdit data={record} onSuccess={() => reload?.()}>
-            {/* <ButtonIcon onClick={() => remove(index)} icon={<TrashIcon size={32} />} /> */}
+          <UserDeleteCheckModalButton data={record} onSuccess={() => reload?.()}>
+            {/* <ButtonIcon onClick={() => remove(index)} icon={<TrashIcon size={32} />} /> // WARNING: Where did the "remove" function come from and why do you keep attaching it here? */}
             <ButtonIcon onClick={() => {}} icon={<TrashIcon size={32} />} />
           </UserDeleteCheckModalButton>
         </Space>

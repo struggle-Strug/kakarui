@@ -26,7 +26,7 @@ export const API = {
     CREATE: '/users/user_create', // POST
     UPDATE: '/users/{user_id}', // PUT
     BY_ORGANIZATION: '/organizations/{organization_id}/users',
-    DELETE: '/users/{entra_id}',
+    DELETE: '/users/{user_id}',
   },
 
   MODULE: {
@@ -67,6 +67,7 @@ export const API = {
   PERMISSION: {
     CREATE: '/organizations/{organization_id}/users/{user_id}/permission', // POST
     UPDATE: '/organizations/{organization_id}/users/{user_id}/permission/{organization_user_id}', // PUT
+    DELETE: '/organizations/{organization_id}/users/{user_id}/permission',
   },
 
   ROBOT: {

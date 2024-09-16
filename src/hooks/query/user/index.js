@@ -144,11 +144,10 @@ export const useUserDelete = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async ({ id: entraId, ...params }) => {
-      const response = await Axios.delete(buildApiURL(API.USER.DELETE, { entra_id: entraId }), {
-        ...params,
-      })
-
+    mutationFn: async (params) => {
+      const response = await Axios.delete(
+        buildApiURL(API.USER.DELETE, { user_id: params.entra_id })
+      )
       return response
     },
     onSuccess: (response) => {
@@ -163,4 +162,23 @@ export const useUserDelete = ({ onSuccess } = {}) => {
   const doDeleteUser = useDebouncedCallback(mutate)
 
   return { doDeleteUser, isPending, isSuccess }
+}
+
+export const useUserDetailCount = ({ onSuccess } = {}) => {
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async (params) => {
+      const response = await Axios.get(buildApiURL(API.USER.DETAIL, { user_id: params.entra_id }))
+      return response.data?.user.organizations.length
+    },
+    onSuccess: (response) => {
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.USER_DETAIL)
+    },
+  })
+
+  const doDetailUserCount = useDebouncedCallback(mutate)
+
+  return { doDetailUserCount, isPending, isSuccess }
 }
