@@ -40,7 +40,13 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
       }
 
       const response = await Axios.get(
-        buildApiURL(API.MODULE.LIST, { organization_id: organizationId })
+        buildApiURL(API.MODULE.LIST, { organization_id: organizationId }),
+        {
+          timeout: 60000,
+          params: {
+            is_deleted: false,  // クエリパラメータを追加
+          },
+        }
       )
 
       return response.data
@@ -58,8 +64,6 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
   const filteredData = useMemo(() => {
     let result = [...(data || [])]
 
-    // 削除されたデータを除外
-    result = result.filter((item) => !item.is_deleted)
 
     if (search) {
       const lowerSearchTerm = toLower(search)
