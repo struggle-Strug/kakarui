@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE_OPTIONS } from '@/constants'
-import { useAuth, usePermissionDelete, useUserDelete, useUserDetailCount } from '@/hooks/query'
+import { fetchMe, useAuth, usePermissionDelete, useUserDelete } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Checkbox, Input, Select } from '@/components/form'
@@ -49,12 +49,6 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
     },
   })
 
-  const { doDetailUserCount } = useUserDetailCount({
-    onSuccess: (count) => {
-      setUserCount(count)
-    },
-  })
-
   const { doDeletePermission } = usePermissionDelete({
     onSuccess: () => {
       if (userCount !== 1) {
@@ -73,20 +67,26 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
 
   const onSubmit = async (values) => {
     try {
-      await doDetailUserCount(values)
+      const userDetail = await fetchMe({ meId: values.entra_id })
+      const totalOrgs = userDetail.organizations?.length
+      setUserCount(userDetail.organizations?.length)
 
       await new Promise((resolve) => {
         const interval = setInterval(() => {
-          if (userCount !== null) {
-            clearInterval(interval)
-            resolve()
-          }
-        }, 100)
+          clearInterval(interval)
+          resolve()
+        }, 300)
       })
 
       await doDeletePermission(values)
 
-      if (userCount === 1) {
+      await new Promise((resolve) => {
+        const interval = setInterval(() => {
+          clearInterval(interval)
+          resolve()
+        }, 1500)
+      })
+      if (totalOrgs === 1) {
         await doDeleteUser(values)
       }
     } catch (error) {
