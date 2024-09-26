@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE_OPTIONS } from '@/constants'
-import { fetchMe, useAuth, usePermissionDelete, useUserDelete } from '@/hooks/query'
+import { useAuth, usePermissionDelete, useUserDelete, useUserDetail } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Checkbox, Input, Select } from '@/components/form'
@@ -27,19 +27,11 @@ const formText = {
   cancel_button: 'キャンセル',
 }
 
-const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
-  const { id } = useAuth()
+const UserDeleteModalForm = ({ open, onClose, data, onSuccess }) => {
+  const { data: user } = useUserDetail({ userId: data?.entra_id })
+  const { organizations = [] } = user || {}
+
   const [userCount, setUserCount] = useState(null)
-  const [open, onOpen, onClose] = useFlag()
-
-  const defaultValues = useMemo(
-    () => ({
-      ...(data || {}),
-    }),
-    [data]
-  )
-
-  const role = data?.main_role
 
   const { doDeleteUser, isPending } = useUserDelete({
     onSuccess: () => {
@@ -59,34 +51,17 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
     },
   })
 
-  const methods = useForm(defaultValues)
-
-  useEffect(() => {
-    methods.reset(defaultValues)
-  }, [defaultValues])
-
   const onSubmit = async (values) => {
     try {
-      const userDetail = await fetchMe({ meId: values.entra_id })
-      const totalOrgs = userDetail.organizations?.length
-      setUserCount(userDetail.organizations?.length)
+      const totalOrgs = organizations?.length || 0
+      setUserCount(totalOrgs)
 
-      await new Promise((resolve) => {
-        const interval = setInterval(() => {
-          clearInterval(interval)
-          resolve()
-        }, 300)
-      })
-
+      // Ensure PermissionDelete is called first
       await doDeletePermission(values)
 
-      await new Promise((resolve) => {
-        const interval = setInterval(() => {
-          clearInterval(interval)
-          resolve()
-        }, 1500)
-      })
+      // Check if the user belongs to only one organization
       if (totalOrgs === 1) {
+        // Call UserDelete if the user is in only one organization
         await doDeleteUser(values)
       }
     } catch (error) {
@@ -94,6 +69,20 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
       console.error('Error delete user:', error)
     }
   }
+  const defaultValues = useMemo(
+    () => ({
+      ...(data || {}),
+    }),
+    [data]
+  )
+
+  const role = data?.main_role
+
+  const methods = useForm(defaultValues)
+
+  useEffect(() => {
+    methods.reset(defaultValues)
+  }, [defaultValues])
 
   const renderForm = (
     <FormProvider {...methods}>
@@ -166,21 +155,31 @@ const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
   )
 
   return (
+    <Modal
+      open={open}
+      onCancel={onClose}
+      title={<h1 className="text-lg font-semibold text-dark-gray-3">{formText.title}</h1>}
+      className="rounded-3xl"
+      footer={null}
+      width={698}
+      data={data}
+    >
+      <p className="px-12 text-lg font-light text-primary">{formText.description}</p>
+      <p className="px-12 text-lg font-light text-primary">{formText.description2}</p>
+      <div className="p-12 font-light">{renderForm}</div>
+    </Modal>
+  )
+}
+
+const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
+  const [open, onOpen, onClose] = useFlag()
+
+  const { id: meId } = useAuth()
+
+  return (
     <>
-      <ButtonIcon icon={<TrashIcon />} onClick={onOpen} disabled={id === data.entra_id} />
-      <Modal
-        open={open}
-        onCancel={onClose}
-        title={<h1 className="text-lg font-semibold text-dark-gray-3">{formText.title}</h1>}
-        className="rounded-3xl"
-        footer={null}
-        width={698}
-        data={data}
-      >
-        <p className="px-12 text-lg font-light text-primary">{formText.description}</p>
-        <p className="px-12 text-lg font-light text-primary">{formText.description2}</p>
-        <div className="p-12 font-light">{renderForm}</div>
-      </Modal>
+      <ButtonIcon icon={<TrashIcon />} onClick={onOpen} disabled={meId === data?.entra_id} />
+      {open && <UserDeleteModalForm {...{ open, onClose, data, onSuccess }} />}
     </>
   )
 }

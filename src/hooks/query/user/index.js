@@ -6,7 +6,7 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, API_ERRORS, STALE_TIME, USER_LIST_KEY } from '@/constants'
+import { API, API_ERRORS, STALE_TIME, USER_DETAIL_KEY, USER_LIST_KEY } from '@/constants'
 import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
@@ -87,6 +87,17 @@ export const useUserQuery = ({ search, sort, options = {} } = {}) => {
   }
 
   return { ...query, data, filteredData, getUserDetail }
+}
+
+export const useUserDetail = ({ userId } = {}) => {
+  return useQuery({
+    queryKey: [USER_DETAIL_KEY, userId],
+    queryFn: async () => {
+      const response = await Axios.get(buildApiURL(API.USER.DETAIL, { user_id: userId }))
+      return response.data?.user || {}
+    },
+    enabled: Boolean(userId),
+  })
 }
 
 export const useUserCreate = ({ onSuccess } = {}) => {
