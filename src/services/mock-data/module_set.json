@@ -1,326 +1,282 @@
 {
-    "status_code": 200,
-    "message": "Modulesets infomation get success.",
-    "moduleset": [
+  "status_code": 200,
+  "message": "Modulesets infomation get success.",
+  "moduleset": [
+    {
+      "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "name": "moduleset A",
+      "description": "This is moduleset A.",
+      "create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "create_date": "2024-06-18T12:22:34.024",
+      "update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "update_date": "2024-06-18T12:22:34.024",
+      "moduleset_modules": [
         {
-            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-            "name": "moduleset A",
-            "description": "This is moduleset A.",
-            "create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-            "create_date": "2024-06-18T12:22:34.024",
-            "update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-            "update_date": "2024-06-18T12:22:34.024",
-            "moduleset_modules": [
-                {
-                    "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                    "name": "module A",
-                    "description": "This is module A.",
-                    "repository_id": "acr.azurecr-test.io",
-                    "tag": "v1.0",
-                    "type": "sim",
-                    "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_create_date": "2024-06-18T12:22:34.024",
-                    "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_update_date": "2024-06-18T12:22:34.024",
-                    "default_config_data": {
-                        "status": "running",
-                        "restartPolicy": "always",
-                        "startupOrder": 1,
-                        "env": {},
-                        "settings": {
-                            "createOptions": {
-                                "ExposedPorts": {
-                                    "22/tcp": {}
-                                },
-                                "Env": [
-                                    "FOO=bar",
-                                    "BAZ=quux"
-                                ],
-                                "Cmd": [
-                                    "date"
-                                ],
-                                "Volumes": {
-                                    "/volumes/data": {}
-                                },
-                                "HostConfig": {
-                                    "Devices": [
-                                        {
-                                            "PathOnHost": "/dev/sda",
-                                            "PathInContainer": "/dev/xvda",
-                                            "CgroupPermissions": "rwm"
-                                        }
-                                    ],
-                                    "DeviceRequests": [
-                                        {
-                                            "Count": -1,
-                                            "Capabilities": [
-                                                [
-                                                    "gpu"
-                                                ]
-                                            ]
-                                        }
-                                    ],
-                                    "Binds": [
-                                        "/tmp:/tmp"
-                                    ],
-                                    "PortBindings": {
-                                        "8080/tcp": [
-                                            {
-                                                "HostPort": "80"
-                                            }
-                                        ]
-                                    },
-                                    "RestartPolicy": {
-                                        "Name": "",
-                                        "MaximumRetryCount": 0
-                                    },
-                                    "Mounts": [
-                                        {
-                                            "Target": "/ModuleStoragePath",
-                                            "Source": "/HostStoragePath",
-                                            "Type": "bind",
-                                            "ReadOnly": false
-                                        }
-                                    ],
-                                    "Runtime": "nvidia"
-                                }
-                            }
-                        }
-                    }
+          "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+          "name": "module A",
+          "description": "This is module A.",
+          "repository_id": "acr.azurecr-test.io",
+          "tag": "v1.0",
+          "type": "sim",
+          "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_create_date": "2024-06-18T12:22:34.024",
+          "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_update_date": "2024-06-18T12:22:34.024",
+          "default_config_data": {
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 1,
+            "env": {},
+            "settings": {
+              "createOptions": {
+                "ExposedPorts": {
+                  "22/tcp": {}
                 },
-                {
-                    "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                    "tag": "v2.0",
-                    "type": "robot",
-                    "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_create_date": "2024-06-18T12:22:34.024",
-                    "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "default_config_data": {
-                        "status": "running",
-                        "restartPolicy": "always",
-                        "startupOrder": 1,
-                        "env": {},
-                        "settings": {
-                            "createOptions": {
-                                "ExposedPorts": {
-                                    "22/tcp": {}
-                                },
-                                "Env": [
-                                    "FOO=bar",
-                                    "BAZ=quux"
-                                ],
-                                "Cmd": [
-                                    "date"
-                                ],
-                                "Volumes": {
-                                    "/volumes/data": {}
-                                },
-                                "HostConfig": {
-                                    "Devices": [
-                                        {
-                                            "PathOnHost": "/dev/sda",
-                                            "PathInContainer": "/dev/xvda",
-                                            "CgroupPermissions": "rwm"
-                                        }
-                                    ],
-                                    "DeviceRequests": [
-                                        {
-                                            "Count": -1,
-                                            "Capabilities": [
-                                                [
-                                                    "gpu"
-                                                ]
-                                            ]
-                                        }
-                                    ],
-                                    "Binds": [
-                                        "/tmp:/tmp"
-                                    ],
-                                    "PortBindings": {
-                                        "8080/tcp": [
-                                            {
-                                                "HostPort": "80"
-                                            }
-                                        ]
-                                    },
-                                    "RestartPolicy": {
-                                        "Name": "",
-                                        "MaximumRetryCount": 0
-                                    },
-                                    "Mounts": [
-                                        {
-                                            "Target": "/ModuleStoragePath",
-                                            "Source": "/HostStoragePath",
-                                            "Type": "bind",
-                                            "ReadOnly": false
-                                        }
-                                    ],
-                                    "Runtime": "nvidia"
-                                }
-                            }
-                        }
+                "Env": ["FOO=bar", "BAZ=quux"],
+                "Cmd": ["date"],
+                "Volumes": {
+                  "/volumes/data": {}
+                },
+                "HostConfig": {
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/sda",
+                      "PathInContainer": "/dev/xvda",
+                      "CgroupPermissions": "rwm"
                     }
+                  ],
+                  "DeviceRequests": [
+                    {
+                      "Count": -1,
+                      "Capabilities": [["gpu"]]
+                    }
+                  ],
+                  "Binds": ["/tmp:/tmp"],
+                  "PortBindings": {
+                    "8080/tcp": [
+                      {
+                        "HostPort": "80"
+                      }
+                    ]
+                  },
+                  "RestartPolicy": {
+                    "Name": "",
+                    "MaximumRetryCount": 0
+                  },
+                  "Mounts": [
+                    {
+                      "Target": "/ModuleStoragePath",
+                      "Source": "/HostStoragePath",
+                      "Type": "bind",
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Runtime": "nvidia"
                 }
-            ]
+              }
+            }
+          }
         },
         {
-            "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-            "name": "moduleset A",
-            "description": "This is moduleset A.",
-            "create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-            "create_date": "2024-06-18T12:22:34.024",
-            "update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-            "update_date": "2024-06-18T12:22:34.024",
-            "moduleset_modules": [
-                {
-                    "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                    "tag": "v1.0",
-                    "type": "sim",
-                    "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_create_date": "2024-06-18T12:22:34.024",
-                    "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_update_date": "2024-06-18T12:22:34.024",
-                    "default_config_data": {
-                        "status": "running",
-                        "restartPolicy": "always",
-                        "startupOrder": 1,
-                        "env": {},
-                        "settings": {
-                            "createOptions": {
-                                "ExposedPorts": {
-                                    "22/tcp": {}
-                                },
-                                "Env": [
-                                    "FOO=bar",
-                                    "BAZ=quux"
-                                ],
-                                "Cmd": [
-                                    "date"
-                                ],
-                                "Volumes": {
-                                    "/volumes/data": {}
-                                },
-                                "HostConfig": {
-                                    "Devices": [
-                                        {
-                                            "PathOnHost": "/dev/sda",
-                                            "PathInContainer": "/dev/xvda",
-                                            "CgroupPermissions": "rwm"
-                                        }
-                                    ],
-                                    "DeviceRequests": [
-                                        {
-                                            "Count": -1,
-                                            "Capabilities": [
-                                                [
-                                                    "gpu"
-                                                ]
-                                            ]
-                                        }
-                                    ],
-                                    "Binds": [
-                                        "/tmp:/tmp"
-                                    ],
-                                    "PortBindings": {
-                                        "8080/tcp": [
-                                            {
-                                                "HostPort": "80"
-                                            }
-                                        ]
-                                    },
-                                    "RestartPolicy": {
-                                        "Name": "",
-                                        "MaximumRetryCount": 0
-                                    },
-                                    "Mounts": [
-                                        {
-                                            "Target": "/ModuleStoragePath",
-                                            "Source": "/HostStoragePath",
-                                            "Type": "bind",
-                                            "ReadOnly": false
-                                        }
-                                    ],
-                                    "Runtime": "nvidia"
-                                }
-                            }
-                        }
-                    }
+          "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+          "tag": "v2.0",
+          "type": "robot",
+          "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_create_date": "2024-06-18T12:22:34.024",
+          "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "default_config_data": {
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 1,
+            "env": {},
+            "settings": {
+              "createOptions": {
+                "ExposedPorts": {
+                  "22/tcp": {}
                 },
-                {
-                    "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                    "tag": "v2.0",
-                    "type": "robot",
-                    "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_create_date": "2024-06-18T12:22:34.024",
-                    "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
-                    "module_update_date": "2024-06-18T12:22:34.024",
-                    "default_config_data": {
-                        "status": "running",
-                        "restartPolicy": "always",
-                        "startupOrder": 1,
-                        "env": {},
-                        "settings": {
-                            "createOptions": {
-                                "ExposedPorts": {
-                                    "22/tcp": {}
-                                },
-                                "Env": [
-                                    "FOO=bar",
-                                    "BAZ=quux"
-                                ],
-                                "Cmd": [
-                                    "date"
-                                ],
-                                "Volumes": {
-                                    "/volumes/data": {}
-                                },
-                                "HostConfig": {
-                                    "Devices": [
-                                        {
-                                            "PathOnHost": "/dev/sda",
-                                            "PathInContainer": "/dev/xvda",
-                                            "CgroupPermissions": "rwm"
-                                        }
-                                    ],
-                                    "DeviceRequests": [
-                                        {
-                                            "Count": -1,
-                                            "Capabilities": [
-                                                [
-                                                    "gpu"
-                                                ]
-                                            ]
-                                        }
-                                    ],
-                                    "Binds": [
-                                        "/tmp:/tmp"
-                                    ],
-                                    "PortBindings": {
-                                        "8080/tcp": [
-                                            {
-                                                "HostPort": "80"
-                                            }
-                                        ]
-                                    },
-                                    "RestartPolicy": {
-                                        "Name": "",
-                                        "MaximumRetryCount": 0
-                                    },
-                                    "Mounts": [
-                                        {
-                                            "Target": "/ModuleStoragePath",
-                                            "Source": "/HostStoragePath",
-                                            "Type": "bind",
-                                            "ReadOnly": false
-                                        }
-                                    ],
-                                    "Runtime": "nvidia"
-                                }
-                            }
-                        }
+                "Env": ["FOO=bar", "BAZ=quux"],
+                "Cmd": ["date"],
+                "Volumes": {
+                  "/volumes/data": {}
+                },
+                "HostConfig": {
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/sda",
+                      "PathInContainer": "/dev/xvda",
+                      "CgroupPermissions": "rwm"
                     }
+                  ],
+                  "DeviceRequests": [
+                    {
+                      "Count": -1,
+                      "Capabilities": [["gpu"]]
+                    }
+                  ],
+                  "Binds": ["/tmp:/tmp"],
+                  "PortBindings": {
+                    "8080/tcp": [
+                      {
+                        "HostPort": "80"
+                      }
+                    ]
+                  },
+                  "RestartPolicy": {
+                    "Name": "",
+                    "MaximumRetryCount": 0
+                  },
+                  "Mounts": [
+                    {
+                      "Target": "/ModuleStoragePath",
+                      "Source": "/HostStoragePath",
+                      "Type": "bind",
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Runtime": "nvidia"
                 }
-            ]
+              }
+            }
+          }
         }
-    ]
+      ]
+    },
+    {
+      "id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+      "name": "moduleset A",
+      "description": "This is moduleset A.",
+      "create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "create_date": "2024-06-18T12:22:34.024",
+      "update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+      "update_date": "2024-06-18T12:22:34.024",
+      "moduleset_modules": [
+        {
+          "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+          "tag": "v1.0",
+          "type": "sim",
+          "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_create_date": "2024-06-18T12:22:34.024",
+          "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_update_date": "2024-06-18T12:22:34.024",
+          "default_config_data": {
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 1,
+            "env": {},
+            "settings": {
+              "createOptions": {
+                "ExposedPorts": {
+                  "22/tcp": {}
+                },
+                "Env": ["FOO=bar", "BAZ=quux"],
+                "Cmd": ["date"],
+                "Volumes": {
+                  "/volumes/data": {}
+                },
+                "HostConfig": {
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/sda",
+                      "PathInContainer": "/dev/xvda",
+                      "CgroupPermissions": "rwm"
+                    }
+                  ],
+                  "DeviceRequests": [
+                    {
+                      "Count": -1,
+                      "Capabilities": [["gpu"]]
+                    }
+                  ],
+                  "Binds": ["/tmp:/tmp"],
+                  "PortBindings": {
+                    "8080/tcp": [
+                      {
+                        "HostPort": "80"
+                      }
+                    ]
+                  },
+                  "RestartPolicy": {
+                    "Name": "",
+                    "MaximumRetryCount": 0
+                  },
+                  "Mounts": [
+                    {
+                      "Target": "/ModuleStoragePath",
+                      "Source": "/HostStoragePath",
+                      "Type": "bind",
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Runtime": "nvidia"
+                }
+              }
+            }
+          }
+        },
+        {
+          "module_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+          "tag": "v2.0",
+          "type": "robot",
+          "module_create_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_create_date": "2024-06-18T12:22:34.024",
+          "module_update_user": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+          "module_update_date": "2024-06-18T12:22:34.024",
+          "default_config_data": {
+            "status": "running",
+            "restartPolicy": "always",
+            "startupOrder": 1,
+            "env": {},
+            "settings": {
+              "createOptions": {
+                "ExposedPorts": {
+                  "22/tcp": {}
+                },
+                "Env": ["FOO=bar", "BAZ=quux"],
+                "Cmd": ["date"],
+                "Volumes": {
+                  "/volumes/data": {}
+                },
+                "HostConfig": {
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/sda",
+                      "PathInContainer": "/dev/xvda",
+                      "CgroupPermissions": "rwm"
+                    }
+                  ],
+                  "DeviceRequests": [
+                    {
+                      "Count": -1,
+                      "Capabilities": [["gpu"]]
+                    }
+                  ],
+                  "Binds": ["/tmp:/tmp"],
+                  "PortBindings": {
+                    "8080/tcp": [
+                      {
+                        "HostPort": "80"
+                      }
+                    ]
+                  },
+                  "RestartPolicy": {
+                    "Name": "",
+                    "MaximumRetryCount": 0
+                  },
+                  "Mounts": [
+                    {
+                      "Target": "/ModuleStoragePath",
+                      "Source": "/HostStoragePath",
+                      "Type": "bind",
+                      "ReadOnly": false
+                    }
+                  ],
+                  "Runtime": "nvidia"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
 }

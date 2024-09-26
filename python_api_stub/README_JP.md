@@ -1,9 +1,9 @@
-
 # Flaskアプリケーションセットアップガイド
 
 ## Windows版
 
 ### 1. Pythonのインストール
+
 1. Python公式サイトにアクセスして、最新バージョンのPythonをダウンロードします。
 2. ダウンロードしたインストーラーを実行し、「Add Python to PATH」にチェックを入れてから「Install Now」をクリックします。
 3. インストールが完了したら、コマンドプロンプト（Windows + R → cmd → Enter）またはPowerShellを開き、以下のコマンドを実行してPythonが正しくインストールされていることを確認します。
@@ -12,6 +12,7 @@
    ```
 
 ### 2. 仮想環境の作成
+
 1. プロジェクト用のディレクトリを作成します。例として、`C:\Users\<ユーザー名>\flask_project`に移動してディレクトリを作成します。
    ```bash
    $ mkdir flask_project
@@ -32,9 +33,11 @@
    ```
 
 ### 3. Flaskアプリケーションの作成
+
 **(既に作成済みの場合はこの手順をスキップ)**
 
 Flaskアプリケーションを作成します:
+
 ```python
 from flask import Flask, request, jsonify
 
@@ -72,6 +75,7 @@ if __name__ == '__main__':
 ```
 
 ### 4. Flaskアプリケーションの実行
+
 1. Flaskアプリケーションを起動するために、コマンドプロンプトで以下のコマンドを実行します:
    ```bash
    $ python main.py
@@ -90,9 +94,11 @@ if __name__ == '__main__':
 ## Mac版
 
 ### 1. Pythonのインストール
+
 1. Python公式サイトから最新バージョンのPythonをダウンロードします。
 2. ダウンロードした `.pkg` ファイルを開き、インストールウィザードに従ってインストールします。
 3. インストール後、ターミナルを開き（Finder → アプリケーション → ユーティリティ → ターミナル）、以下のコマンドを実行してPythonが正しくインストールされているか確認します。
+
    ```bash
    $ python3 --version
    ```
@@ -106,6 +112,7 @@ if __name__ == '__main__':
 **注**: Macでは `python` を `python3` に置き換えてください。
 
 ## 単体試験準備（フロントエンド）
+
 ```javascript
 const response = await Axios.delete(
   buildApiURL(API.MODULE.DELETE, { organization_id: organizationId, module_id: moduleId }),
@@ -116,17 +123,22 @@ const response = await Axios.delete(
     },
     timeout: 1800000,
   }
-);
+)
 ```
+
 以下に置き換えます:
+
 ```javascript
 buildApiURL(API.MODULE.DELETE, { organization_id: organizationId, module_id: moduleId })
 ```
+
 を:
+
 ```
 http://127.0.0.1:5000/organizations/111/modules/222
 ```
 
 ## 備考:
+
 - URLのパラメータでエラーの制御を行っています。
 - 想定外のメソッドやリソースにアクセスした場合のエラーハンドリングが含まれているため、エラーが正しく返されることを確認してください。

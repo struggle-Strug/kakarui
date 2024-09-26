@@ -1,14 +1,7 @@
 export default {
   COMMON: {
     LOGO: '/images/logo.png',
-    LOGO_LOGIN: '/images/logo-login.png',
-    AVATAR: '/images/icons/user.png',
-    STORE: '/images/icons/store.png',
     BACKGROUND_LOGIN: '/images/background-login.png',
-    NOTIFICATION: '/images/icons/notification.png',
-    REFRESH: '/images/icons/refresh.png',
-    VIDEO: '/images/icons/video.png',
-    LOG: '/images/icons/log.png',
   },
   MENU: {
     module_config: '/images/menu/module_config.png',
@@ -21,9 +14,5 @@ export default {
     device_result: '/images/menu/device_result.png',
     source_code: '/images/menu/source_code.png',
     project_setting: '/images/menu/project_setting.png',
-  },
-  ICONS: {
-    search: '/images/icons/search.png',
-    close: '/images/icons/close.png',
   },
 }
