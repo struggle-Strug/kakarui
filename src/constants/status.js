@@ -1,8 +1,3 @@
-export const USER_STATUS = {
-  ACTIVE: 'active',
-  BANNED: 'banned',
-}
-
 export const ACTIVE_STATUS = {
   ENABLE: true,
   DISABLE: false,

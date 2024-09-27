@@ -1,9 +1,9 @@
-
 # Flask Application Setup Guide
 
 ## Windows Setup
 
 ### 1. Python Installation
+
 1. Access the official Python website and download the latest version of Python.
 2. Run the downloaded installer and ensure you check "Add Python to PATH" before clicking "Install Now."
 3. After installation, open the command prompt (Windows + R → type `cmd` → press Enter) or PowerShell, and execute the following command to verify that Python is installed correctly:
@@ -12,6 +12,7 @@
    ```
 
 ### 2. Creating a Virtual Environment
+
 1. Create a project directory. For example, move to `C:\Users\<Username>\flask_project` and create the directory:
    ```bash
    $ mkdir flask_project
@@ -32,9 +33,11 @@
    ```
 
 ### 3. Flask Application Creation
+
 **(Skip this step if already created)**
 
 Create a Flask application:
+
 ```python
 from flask import Flask, request, jsonify
 
@@ -72,6 +75,7 @@ if __name__ == '__main__':
 ```
 
 ### 4. Running the Flask Application
+
 1. To start the Flask application, run the following command in the command prompt:
    ```bash
    $ python main.py
@@ -90,9 +94,11 @@ if __name__ == '__main__':
 ## Mac Setup
 
 ### 1. Python Installation
+
 1. Download the latest version of Python from the official Python website.
 2. Open the downloaded `.pkg` file and follow the installation wizard.
 3. After installation, open Terminal (Finder → Applications → Utilities → Terminal), and run the following command to verify that Python is installed:
+
    ```bash
    $ python3 --version
    ```
@@ -102,10 +108,11 @@ if __name__ == '__main__':
    $ source venv/bin/activate
    ```
 
-Continue following the Windows setup from step 2 onwards. 
+Continue following the Windows setup from step 2 onwards.
 Please replace any instance of `python` with `python3` for Mac.
 
 ## Single Test Preparation (Front-End)
+
 ```javascript
 const response = await Axios.delete(
   buildApiURL(API.MODULE.DELETE, { organization_id: organizationId, module_id: moduleId }),
@@ -116,17 +123,22 @@ const response = await Axios.delete(
     },
     timeout: 1800000,
   }
-);
+)
 ```
+
 Replace:
+
 ```javascript
 buildApiURL(API.MODULE.DELETE, { organization_id: organizationId, module_id: moduleId })
 ```
+
 with:
+
 ```
 http://127.0.0.1:5000/organizations/111/modules/222
 ```
 
 ## Notes:
+
 - Error control is managed through URL parameters.
 - Error handling is in place for unexpected methods or resources, so please ensure correct errors are returned.

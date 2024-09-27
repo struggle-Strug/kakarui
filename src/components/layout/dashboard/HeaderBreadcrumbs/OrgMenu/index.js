@@ -17,7 +17,7 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
   const items = [
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 font-semibold text-dark-gray-2">
+        <div className="border-bottom-gray mx-3 flex w-[400px] cursor-default items-center px-3 py-4 font-semibold text-dark-gray-2">
           <UsersLightIcon size={40} />
           <div className="pl-1.5">
             <div>組織サブメニュー</div>

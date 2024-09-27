@@ -141,7 +141,7 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       title: <div className="min-w-[154px]">ムービー</div>,
       className: 'min-w-[154px]',
       dataIndex: 'sim_video_thumbnail',
-      render: (thumbnail, item, index) => <DeployThumbnailLink item={item} index={index} />,
+      render: (thumbnail, item) => <DeployThumbnailLink item={item} />,
     },
   ]
 

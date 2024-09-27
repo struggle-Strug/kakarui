@@ -130,7 +130,7 @@ export const useDeployByProjectQuery = ({ projectId, options = {} } = {}) => {
         return mockData.deploy_list
       }
 
-      const API_URI = mockApiEnabled ? buildURL(API_MOCK.DEPLOY_LIST) : API.DEPLOY.LIST
+      const API_URI = mockApiEnabled ? API_MOCK.DEPLOY_LIST : API.DEPLOY.LIST
 
       const response = await Axios.get(
         buildApiURL(API_URI, {

@@ -44,7 +44,7 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
         {
           timeout: 60000,
           params: {
-            is_deleted: false,  // クエリパラメータを追加
+            is_deleted: false, // クエリパラメータを追加
           },
         }
       )
@@ -63,7 +63,6 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
   // -- search and sort --
   const filteredData = useMemo(() => {
     let result = [...(data || [])]
-
 
     if (search) {
       const lowerSearchTerm = toLower(search)
