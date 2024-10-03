@@ -6,7 +6,7 @@ import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import { DEV, Routes } from '@/constants'
+import { Routes } from '@/constants'
 
 import LoginContainer from '@/containers/Auth'
 
@@ -23,23 +23,16 @@ const LoginPage = () => {
   }
 
   const extractTokenFromUrl = () => {
-    if (!router.asPath || !router.asPath.includes('#access_token')) {
-      return null
-    }
-
-    const hash = router.asPath.split('#')[1]
-    const parsed = queryString.parse(hash)
-
-    const accessToken = parsed?.access_token
-    const expiresIn = parsed?.expires_in
-
-    if (accessToken && (DEV || expiresIn)) {
-      return {
-        accessToken,
-        expiresIn,
+    if (router.asPath && router.asPath.includes('#access_token')) {
+      const hash = router.asPath.split('#')[1]
+      const parsed = queryString.parse(hash)
+      if (parsed?.access_token) {
+        return {
+          accessToken: parsed.access_token,
+          expiresIn: parsed.expires_in,
+        }
       }
     }
-
     return null
   }
 
@@ -62,7 +55,7 @@ const LoginPage = () => {
   }
 
   const handleInitialActions = async () => {
-    await handleLogout()
+    // await handleLogout()
     await handleTokenFromUrl()
   }
 

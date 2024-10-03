@@ -93,23 +93,6 @@
   @apply absolute inset-0 max-h-full overflow-hidden rounded-lg;
 }
 
-/* HIDE DEFAULT CONTROLS OF REACT-PLAYER */
-/* .react-player video::-webkit-media-controls-panel,
-.react-player video::-webkit-media-controls-play-button,
-.react-player video::-webkit-media-controls-volume-slider,
-.react-player video::-webkit-media-controls-mute-button,
-.react-player video::-webkit-media-controls-timeline,
-.react-player video::-webkit-media-controls-current-time-display,
-.react-player video::-webkit-media-controls-time-remaining-display,
-.react-player video::-webkit-media-controls-fullscreen-button {
-  display: none !important;
-} */
-
-.react-player video::-webkit-media-controls-volume-slider,
-.react-player video::-webkit-media-controls-mute-button {
-  display: none !important;
-}
-
 /* for search bar */
 .search-bar .ant-select .ant-select-clear {
   top: 18px;
@@ -123,10 +106,6 @@
 
 .search-bar input {
   box-shadow: none !important;
-}
-
-.search-bar .ant-select-selection-search {
-  @apply pr-16;
 }
 
 /* button icon disabled */

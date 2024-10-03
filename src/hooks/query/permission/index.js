@@ -72,6 +72,7 @@ export const usePermissionUpdate = ({ userId, organizationUserId, onSuccess } = 
 }
 
 export const usePermissionDelete = ({ onSuccess } = {}) => {
+  let date1 = new Date();
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
   const { mutate, isPending, isSuccess } = useMutation({
@@ -82,8 +83,11 @@ export const usePermissionDelete = ({ onSuccess } = {}) => {
           user_id: params.user_id,
         }),
         params
-      )
+        // "http://127.0.0.1:5000/organization/1/users/1/permission"
+        // "http://127.0.0.1:5000/organization/"+organizationId+"/users/"+params.user_id+"/permission"
 
+      )
+      console.log("usePermissionDelete API ",date1.getSeconds(),date1.getMilliseconds())
       return response
     },
     onSuccess: (response) => {

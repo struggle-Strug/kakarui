@@ -78,7 +78,7 @@
   .flex-end {
     @apply flex items-center justify-end;
   }
-
+  
   .flex-start {
     @apply flex items-center justify-start;
   }
@@ -454,4 +454,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-color: var(--secondary);
   border-radius: 10px;
   border: 3px solid var(--white);
+}
+
+.react-flow__attribution {
+  display: none;
 }

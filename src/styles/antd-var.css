@@ -118,10 +118,6 @@
   @apply flex h-10 w-10 items-center justify-center;
 }
 
-.ant-btn.ant-btn-icon-only .anticon {
-  @apply text-[32px];
-}
-
 .ant-btn {
   @apply h-10 rounded-lg px-4 text-base font-normal shadow-none;
 }
@@ -493,23 +489,6 @@ table :where(th, td) {
   @apply text-lg;
 }
 
-.row_content_modal.ant-modal .ant-modal-content {
-  @apply rounded-[8px];
-}
-
-.row_content_modal.ant-modal .ant-modal-header {
-  @apply rounded-t-[8px] px-4 py-3;
-}
-
-.row_content_modal.ant-modal .ant-modal-header .ant-modal-title {
-  @apply text-primary;
-}
-
-.row_content_modal.ant-modal .ant-modal-close {
-  inset-inline-end: 8px;
-  top: 8px;
-}
-
 /* BREADCRUMBS */
 .ant-breadcrumb-separator {
   color: var(--dark-gray-3) !important;
@@ -546,22 +525,4 @@ div.ant-typography-h3 > textarea,
 
 #table_form .ant-table-cell .ant-form-item {
   margin: 0;
-}
-
-.directory_log .ant-tree-treenode-selected,
-.directory_log .ant-tree-treenode-selected::before {
-  @apply !bg-transparent !font-semibold !text-primary;
-}
-
-.directory_log .error .ant-tree-treenode-selected,
-.directory_log .error .ant-tree-treenode-selected::before {
-  @apply !bg-transparent !font-semibold !text-primary;
-}
-
-.directory_log .ant-tree-node-selected {
-  @apply !font-semibold !text-primary;
-}
-
-.directory_log .ant-tree-node-selected .error {
-  @apply !font-semibold !text-red-500;
 }

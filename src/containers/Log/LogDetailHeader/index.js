@@ -1,6 +1,4 @@
-import isNaN from 'lodash/isNaN'
-
-import { useMemo } from 'react'
+import dayjs from 'dayjs'
 
 import { FORMAT_STRING } from '@/constants'
 import { useCopyToClipboard } from '@/hooks/share'
@@ -19,14 +17,14 @@ const HeaderTimer = ({ detail }) => {
         <span>実施日時:</span>
         &nbsp;
         <span className="min-w-[220px]">
-          {startDate && formatDate(startDate, FORMAT_STRING.datetime_full_str)}
+          {startDate && formatDate(dayjs(startDate), FORMAT_STRING.datetime_full_str)}
         </span>
       </div>
       <div className="flex flex-row">
         <span>完了日時:</span>
         &nbsp;
         <span className="min-w-[220px]">
-          {endDate && formatDate(endDate, FORMAT_STRING.datetime_full_str)}
+          {endDate && formatDate(dayjs(endDate), FORMAT_STRING.datetime_full_str)}
         </span>
       </div>
     </div>
@@ -68,12 +66,7 @@ const HeaderCopyButton = ({ logContent }) => {
   )
 }
 
-const LogDetailHeader = ({ detail, logData, logContent }) => {
-  const fileNameLogZip = useMemo(() => {
-    const logDirs = logData?.url?.split('/') || []
-    return logDirs?.[logDirs?.length && !isNaN(logDirs?.length) ? logDirs.length - 1 : 0]
-  }, [logData?.url])
-
+const LogDetailHeader = ({ detail, logData, fileNameLogZip, logContent }) => {
   return (
     <div className="mb-5 mt-7 flex w-full flex-row justify-between gap-2">
       <div className="flex flex-row items-center gap-2">

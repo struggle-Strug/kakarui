@@ -16,7 +16,7 @@ import { mockData } from '@/services/mock-data'
 
 import { useOrganizationQuery } from '../organization'
 
-export const fetchMe = async ({ meId } = {}) => {
+export const fetchMe = async ({ meId }) => {
   try {
     const response = await Axios.get(buildApiURL(API.USER.DETAIL, { user_id: meId }))
     return response

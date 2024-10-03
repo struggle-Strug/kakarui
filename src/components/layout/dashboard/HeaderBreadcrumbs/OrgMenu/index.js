@@ -4,20 +4,24 @@ import noop from 'lodash/noop'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
+import { useGetMe, useOrganizationQuery } from '@/hooks/query'
 
 import { UsersLightIcon } from '@/components/icons'
 
 import { cn } from '@/utils/helper/functions'
 
-const OrgMenu = ({ organizationDetail, isMember }) => {
+const OrgMenu = () => {
   const router = useRouter()
+
+  const { organizationDetail } = useOrganizationQuery()
+  const { isMember } = useGetMe()
 
   const disabledRedirectUser = Boolean(isMember)
 
   const items = [
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[400px] cursor-default items-center px-3 py-4 font-semibold text-dark-gray-2">
+        <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 font-semibold text-dark-gray-2">
           <UsersLightIcon size={40} />
           <div className="pl-1.5">
             <div>組織サブメニュー</div>

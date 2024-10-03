@@ -57,7 +57,11 @@
             "restartPolicy": "always",
             "settings": {
               "createOptions": {
-                "Cmd": ["bash", "-c", "roscore"],
+                "Cmd": [
+                  "bash",
+                  "-c",
+                  "roscore"
+                ],
                 "HostConfig": {
                   "NetworkMode": "host"
                 },

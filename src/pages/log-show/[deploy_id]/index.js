@@ -4,9 +4,10 @@ import LogShowDetailContainer from '@/containers/Log/LogDetail'
 
 const LogShowDetailPage = () => {
   const router = useRouter()
-  const { project_id: projectId, deploy_id: deployId, file_name: fileName } = router.query || {}
+  const projectId = router.query?.project_id
+  const deployId = router.query?.deploy_id
 
-  return <LogShowDetailContainer projectId={projectId} deployId={deployId} fileName={fileName} />
+  return <LogShowDetailContainer projectId={projectId} deployId={deployId} />
 }
 
 export default LogShowDetailPage

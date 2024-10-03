@@ -11,11 +11,6 @@ import { cn } from '@/utils/helper/functions'
 
 const data = [
   {
-    created: '2024/09/17',
-    title: 'アップデート',
-    description: `KARAKURIのアップデートを行いました。アップデート内容は次の通りです。（v1.0.1）\n・デプロイ管理機能へムービー生成、ログ表示の追加\n・削除（モジュール、モジュールセット、モジュール配置、プロジェクト）の追加`,
-  },
-  {
     created: '2024/08/05',
     title: 'インフォメーション',
     link: 'https://forms.office.com/r/8kpdahCkjC',

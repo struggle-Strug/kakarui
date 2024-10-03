@@ -1,7 +1,5 @@
 import * as Yup from 'yup'
 
-import { JapaneseRegex } from '@/constants'
-
 const FORM_INFO = {
   ID: 'id',
   NAME: 'name',
@@ -26,11 +24,7 @@ const moduleFormSchema = (isEdit) =>
         [FORM_INFO.TAG]: Yup.string()
           .trim()
           .required('タグを入力してください。')
-          .max(128, `128文字以下を入力してください。`)
-          .matches(
-            new RegExp(`^(?!.*${JapaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
-            '日本語は含めないでください。'
-          ),
+          .max(128, `128文字以下を入力してください。`),
         [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
       })
     : Yup.object().shape({
@@ -45,11 +39,7 @@ const moduleFormSchema = (isEdit) =>
         [FORM_INFO.TAG]: Yup.string()
           .trim()
           .required('タグを入力してください。')
-          .max(128, `128文字以下を入力してください。`)
-          .matches(
-            new RegExp(`^(?!.*${JapaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
-            '日本語は含めないでください。'
-          ),
+          .max(128, `128文字以下を入力してください。`),
         [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
       })
 

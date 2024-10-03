@@ -22,12 +22,13 @@ const ProjectTable = ({ data, total, loading, reload }) => {
       className: 'min-w-[320px]',
       render: (item) => <RowContent item={item} className="max-w-[400px]" />,
     },
-    {
-      title: <ColumnSorter title="作成者" field="author" />,
-      dataIndex: 'create_user',
-      className: 'min-w-[320px]',
-      render: (item) => <RowContent item={item} className="max-w-[400px]" />,
-    },
+    // TODO MVP1.3対応予定
+    // {
+    //   title: <ColumnSorter title="作成者" field="author" />,
+    //   dataIndex: 'create_user',
+    //   className: 'min-w-[320px]',
+    //   render: (item) => <RowContent item={item} className="max-w-[400px]" />,
+    // },
     {
       title: <ColumnSorter title="作成日" field="create_date" />,
       dataIndex: 'create_date',

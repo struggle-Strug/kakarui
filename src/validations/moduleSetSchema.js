@@ -13,7 +13,6 @@ const moduleSchema = Yup.object().shape({
     .required('タグを入力してください。'),
   type: Yup.string(),
   default_config_data: Yup.object().required('設定値を入力してください。'),
-  is_deleted: Yup.bool(),
 })
 
 const moduleSetSchema = Yup.object().shape({
@@ -22,13 +21,7 @@ const moduleSetSchema = Yup.object().shape({
     .required('モジュールセット名を入力してください。')
     .max(50, `50文字以下を入力してください。`),
   [FORM_MODULE_SET.DESCRIPTION]: Yup.string().trim().max(4000, '4000文字以下で入力してください。'),
-  [FORM_MODULE_SET.MODULESET_MODULES]: Yup.array()
-    .of(moduleSchema)
-    .test(
-      'no-deleted-modules',
-      '削除されたモジュールが含まれています。',
-      (modules) => modules.every((module) => !module.is_deleted) // 配列内に is_deleted が true のモジュールがないことを確認
-    ),
+  [FORM_MODULE_SET.MODULESET_MODULES]: Yup.array().of(moduleSchema),
 })
 
 export { moduleSetSchema, FORM_MODULE_SET }
