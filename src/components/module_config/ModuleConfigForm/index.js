@@ -48,7 +48,8 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
-
+  console.log("values", values);
+  
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
     setModuleSelectionModalFlag(true)
@@ -221,6 +222,16 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   }, [sortedInfo])
 
   const columns = [
+    {
+      title: 'モジュールセット名',
+      dataIndex: 'moduleset_name',
+      sorter: true,
+      className: 'min-w-[160px]',
+      render: (text, record, index) => (
+        <div className="flex cursor-pointer items-center gap-x-4 text-base">
+        </div>
+      ),
+    },
     {
       title: 'モジュール名',
       dataIndex: 'module_name',

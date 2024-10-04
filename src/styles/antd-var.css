@@ -363,11 +363,50 @@
 .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
   @apply m-0 border-none;
 }
+.module .ant-upload-wrapper .ant-upload div{
+  @apply w-20
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+  @apply text-[0.8rem]
+}
+
+.module .ant-upload-list-item-actions{
+  @apply pr-[0.7rem]
+}
+
+.module .ant-upload-list-text{
+  @apply w-[12rem] ml-[3rem]
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-container{
+  @apply w-[6rem]
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-actions .ant-upload-list-item-action.ant-btn {
+  @apply h-6
+}
+
+.module .ant-btn.ant-btn-icon-only .anticon {
+  @apply text-[1rem]
+}
+
+.module .ant-btn.ant-btn-icon-only{
+  @apply w-[1rem]
+}
+
+.module .ant-form-item {
+  @apply mb-0
+}
 
 .ant-radio-group {
   @apply text-base;
 }
 
+/* ERRORMESSAGE */
+.module .ant-form-item .ant-form-item-explain-error{
+  @apply w-[13rem]
+}
 /* SELECT */
 .ant-select-single.ant-select-lg {
   height: 40px;
