@@ -3,6 +3,8 @@ import { Suspense, useEffect, useMemo } from 'react'
 import { Background, Controls, MiniMap, ReactFlow, useEdgesState, useNodesState } from 'reactflow'
 import 'reactflow/dist/style.css'
 
+import { LowCodeEditorPresenter } from './LowCodeEditorPresenter'
+
 // 初期ノードとエッジの設定
 const initialNodes = [
   {
@@ -172,81 +174,82 @@ const DnDFlow = () => {
   }
 
   return (
-    <div className="dndflow">
-      {/* ドラッグ可能なノードパレット */}
-      <div className="reactflow-wrapper" style={{ display: 'flex', height: '100vh' }}>
-        <div style={{ width: '200px', background: '#f0f0f0', padding: '10px' }}>
-          <div
-            className="dndnode input"
-            onDragStart={(event) => onDragStart(event, 'Selector')}
-            draggable
-            style={{
-              marginBottom: '10px',
-              padding: '10px',
-              background: '#9c88ff',
-              cursor: 'pointer',
-            }}
-          >
-            Selector
-          </div>
-          <div
-            className="dndnode output"
-            onDragStart={(event) => onDragStart(event, 'Sequence')}
-            draggable
-            style={{ padding: '10px', background: '#00a8ff', cursor: 'pointer' }}
-          >
-            Sequence
-          </div>
-        </div>
+    // <div className="dndflow">
+    //   {/* ドラッグ可能なノードパレット */}
+    //   <div className="reactflow-wrapper" style={{ display: 'flex', height: '100vh' }}>
+    //     <div style={{ width: '200px', background: '#f0f0f0', padding: '10px' }}>
+    //       <div
+    //         className="dndnode input"
+    //         onDragStart={(event) => onDragStart(event, 'Selector')}
+    //         draggable
+    //         style={{
+    //           marginBottom: '10px',
+    //           padding: '10px',
+    //           background: '#9c88ff',
+    //           cursor: 'pointer',
+    //         }}
+    //       >
+    //         Selector
+    //       </div>
+    //       <div
+    //         className="dndnode output"
+    //         onDragStart={(event) => onDragStart(event, 'Sequence')}
+    //         draggable
+    //         style={{ padding: '10px', background: '#00a8ff', cursor: 'pointer' }}
+    //       >
+    //         Sequence
+    //       </div>
+    //     </div>
 
-        {/* ノードのキャンバス */}
-        <div
-          className="reactflow-wrapper"
-          style={{ flexGrow: 1, height: '100%' }}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          ref={reactFlowWrapper}
-        >
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesState}
-            onNodesDelete={onNodesDelete} // ノード削除イベントを追加
-            onNodeClick={onNodeClick} // ノードクリックイベントハンドラを追加
-            attributionPosition={null}
-            onNodeContextMenu={onNodeContextMenu} // 右クリックイベントを追加
-          >
-            <MiniMap />
-            <Controls />
-            <Background />
-          </ReactFlow>
-        </div>
-      </div>
+    //     {/* ノードのキャンバス */}
+    //     <div
+    //       className="reactflow-wrapper"
+    //       style={{ flexGrow: 1, height: '100%' }}
+    //       onDrop={onDrop}
+    //       onDragOver={onDragOver}
+    //       ref={reactFlowWrapper}
+    //     >
+    //       <ReactFlow
+    //         nodes={nodes}
+    //         edges={edges}
+    //         onNodesChange={onNodesChange}
+    //         onEdgesChange={onEdgesState}
+    //         onNodesDelete={onNodesDelete} // ノード削除イベントを追加
+    //         onNodeClick={onNodeClick} // ノードクリックイベントハンドラを追加
+    //         attributionPosition={null}
+    //         onNodeContextMenu={onNodeContextMenu} // 右クリックイベントを追加
+    //       >
+    //         <MiniMap />
+    //         <Controls />
+    //         <Background />
+    //       </ReactFlow>
+    //     </div>
+    //   </div>
 
-      {/* サブメニュー */}
-      {menuPosition && (
-        <div
-          style={{
-            position: 'absolute',
-            left: menuPosition.x,
-            top: menuPosition.y,
-            background: 'white',
-            border: '1px solid #ccc',
-            boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-            zIndex: 1000,
-            padding: '10px',
-          }}
-          onMouseLeave={closeMenu} // マウスが外れたときにメニューを閉じる
-        >
-          <h4>Properties</h4>
-          <p>Node ID: {selectedNode?.id}</p>
-          <p>Node Label: {selectedNode?.data.label}</p>
-          {/* その他の設定項目 */}
-          <button onClick={closeMenu}>Close</button>
-        </div>
-      )}
-    </div>
+    //   {/* サブメニュー */}
+    //   {menuPosition && (
+    //     <div
+    //       style={{
+    //         position: 'absolute',
+    //         left: menuPosition.x,
+    //         top: menuPosition.y,
+    //         background: 'white',
+    //         border: '1px solid #ccc',
+    //         boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+    //         zIndex: 1000,
+    //         padding: '10px',
+    //       }}
+    //       onMouseLeave={closeMenu} // マウスが外れたときにメニューを閉じる
+    //     >
+    //       <h4>Properties</h4>
+    //       <p>Node ID: {selectedNode?.id}</p>
+    //       <p>Node Label: {selectedNode?.data.label}</p>
+    //       {/* その他の設定項目 */}
+    //       <button onClick={closeMenu}>Close</button>
+    //     </div>
+    //   )}
+    // </div>
+    <LowCodeEditorPresenter />
   )
 }
 
