@@ -65,6 +65,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
 
   const appendModulesToConfig = useCallback(
     (newModules) => {
+      
       const moduleNum = values.config_data.modules.length + 1
       const newSelectionModules = newModules
         .map((module, i) =>
@@ -73,6 +74,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
             return {
               key: `${Date.now()}-${i}-${j}`,
               module_id: module.id,
+              module_set_name: "なし",
               module_set_id: null,
               module_set_name: "なし",
               module_instance: `Module-${instanceNum}`,
@@ -136,14 +138,13 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
     (newModuleSet) => {
       if (newModuleSet) {
         const moduleNum = values.config_data.modules.length + 1
-        const moduleSetName = newModuleSet.name
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           const instanceNum = String(moduleNum + i).padStart(3, '0')
           return {
             key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
-            module_set_name: moduleSetName,
+            module_set_name: newModuleSet.name,
             module_name: module.module_name,
             module_instance: `Module-${instanceNum}`,
             tag: module.tag,
@@ -232,7 +233,8 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
       className: 'min-w-[160px]',
       render: (text, record, index) => (
         <div className="flex cursor-pointer items-center gap-x-4 text-base">
-            <RowContent item={text} />
+
+          <RowContent item={text} />
         </div>
       ),
     },
