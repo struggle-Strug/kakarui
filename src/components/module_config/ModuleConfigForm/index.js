@@ -48,7 +48,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
-  console.log("values", values);
   
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
@@ -75,6 +74,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
               key: `${Date.now()}-${i}-${j}`,
               module_id: module.id,
               module_set_id: null,
+              module_set_name: "なし",
               module_instance: `Module-${instanceNum}`,
               module_name: module.name,
               tag: tag.name,
@@ -115,6 +115,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
               key: `${Date.now()}`,
               module_id: newModule.id,
               module_set_id: null,
+              module_set_name: "なし",
               module_name: newModule.name,
               module_instance: oldModule.module_instance,
               tag: newModule.tags[0].name,
@@ -135,12 +136,14 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
     (newModuleSet) => {
       if (newModuleSet) {
         const moduleNum = values.config_data.modules.length + 1
+        const moduleSetName = newModuleSet.name
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           const instanceNum = String(moduleNum + i).padStart(3, '0')
           return {
             key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
+            module_set_name: moduleSetName,
             module_name: module.module_name,
             module_instance: `Module-${instanceNum}`,
             tag: module.tag,
@@ -224,11 +227,12 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   const columns = [
     {
       title: 'モジュールセット名',
-      dataIndex: 'moduleset_name',
+      dataIndex: 'module_set_name',
       sorter: true,
       className: 'min-w-[160px]',
       render: (text, record, index) => (
         <div className="flex cursor-pointer items-center gap-x-4 text-base">
+            <RowContent item={text} />
         </div>
       ),
     },
