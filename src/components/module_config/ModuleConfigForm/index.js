@@ -116,7 +116,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
               key: `${Date.now()}`,
               module_id: newModule.id,
               module_set_id: null,
-              module_set_name: "なし",
               module_name: newModule.name,
               module_instance: oldModule.module_instance,
               tag: newModule.tags[0].name,
@@ -137,7 +136,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
     (newModuleSet) => {
       if (newModuleSet) {
         const moduleNum = values.config_data.modules.length + 1
-        
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           const instanceNum = String(moduleNum + i).padStart(3, '0')
           return {
@@ -233,6 +231,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
       className: 'min-w-[160px]',
       render: (text, record, index) => (
         <div className="flex cursor-pointer items-center gap-x-4 text-base">
+
           <RowContent item={text} />
         </div>
       ),
