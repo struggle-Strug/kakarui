@@ -1,15 +1,8 @@
-import {
-  Background,
-  Controls,
-  ReactFlow,
-  addEdge,
-  useEdgesState,
-  useNodesState,
-} from '@xyflow/react'
+import { ReactFlow, addEdge, useEdgesState, useNodesState } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
 import Image from 'next/image'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 
 import { Assets } from '@/constants'
 
@@ -48,7 +41,9 @@ const initialNodes = [
       image: Assets.LOWCODEEDITOR.skillIcon,
       skillName: 'Move to 001',
       skillType: 'Action / Move',
-      customProperties: 'S01の前まで移動する。',
+      siteData: ['S01', 'S02'],
+      // customProperties: ['の前まで移動する', 'の後ろに移動する'],
+      customProperties: 'の前まで移動する',
       userName: '羽田美希',
       updatedAt: '2024/9/4 18:22',
     },
@@ -175,7 +170,7 @@ const Flow = () => {
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
       {/* <div className="w-1/4 p-4 bg-gray-200">
         <div
@@ -214,7 +209,7 @@ const Flow = () => {
         />
 
         {/* 再生・停止ボタン */}
-        <div className="absolute left-0 flex justify-center w-full gap-4 bottom-4">
+        <div className="absolute left-0 flex justify-center w-full gap-4 bottom-8">
           <div className="flex shadow">
             <button
               disabled={true}

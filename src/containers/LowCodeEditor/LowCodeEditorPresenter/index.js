@@ -1,10 +1,9 @@
-import { AudioOutlined, CloseOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons'
-import { Divider, Drawer, Input } from 'antd'
+import { Divider, Input, Tooltip } from 'antd'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Assets } from '@/constants'
 import { useModuleConfigQuery } from '@/hooks/query'
@@ -35,10 +34,30 @@ export const LowCodeEditorPresenter = () => {
     setOpen(!open)
   }
   const searchOptions = getSearchOptions(data, ['name'])
+
+  const seqId = '550e8400-e29b-41d4-a716-43333ddddd'
+  const [visible, setVisible] = useState(false)
+
+  // クリップボードにコピーする関数
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(seqId).then(() => {
+      setVisible(true) // ツールチップを表示
+      setTimeout(() => {
+        setVisible(false) // 2秒後に非表示
+      }, 1000)
+    })
+  }
+  const [name, setName] = useState('Move to 001') // 初期値を設定
+
+  // 入力が変更された時の処理
+  const handleInputChange = (event) => {
+    setName(event.target.value) // 入力内容を更新
+  }
+
   return (
-    <div className="h-full">
-      {/* ヘッダー */}
-      <div className="text-wh1te flex w-full items-center justify-between !bg-[#413D39] bg-black px-6 py-2">
+    <div className="h-screen">
+      {/* SECTION - ヘッダー */}
+      <div className="text-wh1te flex h-[5%] min-h-[60px] w-full items-center justify-between !bg-[#413D39] bg-black px-6 py-2">
         <div className="flex items-center gap-4 text-white">
           <div className="flex items-center">
             <Image
@@ -61,10 +80,10 @@ export const LowCodeEditorPresenter = () => {
         </div>
       </div>
 
-      <div className="flex justify-between w-full h-full">
+      <div className="flex h-[95%] w-full justify-between">
         {/* SECTION - 左サイドバー */}
         {/* TODO - 横幅固定にしているのでmax widthにするか検討 */}
-        <div className="w-[360px] bg-[#F4F4F4]">
+        <div className="w-[350px] bg-[#F4F4F4]">
           {/* Selectorからスキル名検索 */}
           <div className="px-3 py-5 bg-white">
             {/* 3つのモジュールアイコン */}
@@ -147,7 +166,7 @@ export const LowCodeEditorPresenter = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-6 px-4 pt-6">
+          <div className="flex flex-col gap-6 px-4 py-6 overflow-y-auto h-3/4">
             {/* Sensor / Temperature */}
             <div>
               <div className="flex items-start gap-1 mb-3">
@@ -340,6 +359,70 @@ export const LowCodeEditorPresenter = () => {
                     </div>
                   </div>
                 </div>
+                {/* カード4 */}
+                <div className="pl-2">
+                  <div className="rounded-md border-2 border-solid border-[#E3E3E4] bg-white py-2 pl-2 pr-1">
+                    <div className="flex w-[230px] items-center gap-2">
+                      <Image
+                        src={Assets.LOWCODEEDITOR.dragDot}
+                        className="h-[14px]"
+                        alt=""
+                        width={14}
+                        height={4}
+                      />
+                      <div>
+                        {/* スキルアイコンとタイトル */}
+                        <div className="flex items-center">
+                          <Image
+                            src={Assets.LOWCODEEDITOR.skillsIcon}
+                            className="h-[18px]"
+                            alt=""
+                            width={18}
+                            height={4}
+                          />
+                          <div className="!text-[12px] font-bold text-[#796E66]">
+                            気温を取得し、P01にセット
+                          </div>
+                        </div>
+                        <div className="pl-4 text-[12px] text-[#796E66]">
+                          搭載センサーから気温を取得してProject Data KeysのP01にセットする。
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* カード4 */}
+                <div className="pl-2">
+                  <div className="rounded-md border-2 border-solid border-[#E3E3E4] bg-white py-2 pl-2 pr-1">
+                    <div className="flex w-[230px] items-center gap-2">
+                      <Image
+                        src={Assets.LOWCODEEDITOR.dragDot}
+                        className="h-[14px]"
+                        alt=""
+                        width={14}
+                        height={4}
+                      />
+                      <div>
+                        {/* スキルアイコンとタイトル */}
+                        <div className="flex items-center">
+                          <Image
+                            src={Assets.LOWCODEEDITOR.skillsIcon}
+                            className="h-[18px]"
+                            alt=""
+                            width={18}
+                            height={4}
+                          />
+                          <div className="!text-[12px] font-bold text-[#796E66]">
+                            気温を取得し、P01にセット
+                          </div>
+                        </div>
+                        <div className="pl-4 text-[12px] text-[#796E66]">
+                          搭載センサーから気温を取得してProject Data KeysのP01にセットする。
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -352,7 +435,7 @@ export const LowCodeEditorPresenter = () => {
 
         {/* SECTION - drawer/ドロワー */}
         <div
-          className="flex h-full cursor-pointer items-center justify-center bg-[#E4E4E4]"
+          className="flex h-full cursor-pointer items-center justify-center overflow-y-auto bg-[#E4E4E4]"
           onClick={toggleDrawer}
         >
           <div className="mb-8 flex h-[120px] w-[26px] items-center justify-center rounded-l-3xl bg-white">
@@ -369,7 +452,7 @@ export const LowCodeEditorPresenter = () => {
         {/* SECTION - 右サイドバー */}
 
         {open && (
-          <div className="h-full w-full max-w-[350px] bg-white px-4 py-6">
+          <div className="h-full w-full max-w-[350px] overflow-y-auto bg-white px-4 py-6">
             {/* Data Keys */}
             <div className="w-full">
               <div className="mb-2 text-[16px] font-bold">Data Keys</div>
@@ -420,38 +503,46 @@ export const LowCodeEditorPresenter = () => {
                   <div className="w-1/3 text-[13px] font-bold text-[#796E66]">Seq ID</div>
                   <span className="text-[#D3D3D3]">|</span>
                   <div className="flex w-2/3 items-center pl-2  text-[13px] text-[#796E66]">
-                    <span className="w-full overflow-hidden truncate text-ellipsis">
-                      550e8400-e29b-41d4-a716-43333ddddd
-                    </span>
-                    <Image
-                      src={Assets.LOWCODEEDITOR.copy}
-                      className="h-[18px] w-[18px]"
-                      alt=""
-                      width={18}
-                      height={18}
-                    />
+                    <span className="w-full overflow-hidden truncate text-ellipsis">{seqId}</span>
+
+                    <Tooltip color="black" title="コピーしました" visible={visible}>
+                      <Image
+                        src={Assets.LOWCODEEDITOR.copy}
+                        className="h-[18px] w-[18px] cursor-pointer"
+                        alt=""
+                        width={18}
+                        height={18}
+                        onClick={copyToClipboard}
+                      />
+                    </Tooltip>
                   </div>
                 </div>
                 {/* name */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Name</div>
                   <span className="text-[#D3D3D3]">|</span>
-                  <div className="flex pl-2 text-[13px] text-[#796E66]">Move to 001</div>
+                  {/* <div className="flex pl-2 text-[13px] text-[#796E66]">Move to 001</div> */}
+                  <Input
+                    type="text"
+                    value={name}
+                    onChange={handleInputChange}
+                    className="w-2/3 border-none bg-white pl-2 text-[13px]"
+                  />
                 </div>
                 {/* type */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Type</div>
                   <span className="text-[#D3D3D3]">|</span>
                   <div className="flex pl-2 text-[13px] text-[#796E66]">Skill / Action / Move</div>
                 </div>
                 {/* Author */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Author</div>
                   <span className="text-[#D3D3D3]">|</span>
                   <div className="flex pl-2 text-[13px] text-[#796E66]">田中義雄</div>
                 </div>
                 {/* Publish Date */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">
                     Publish Date
                   </div>
@@ -459,13 +550,13 @@ export const LowCodeEditorPresenter = () => {
                   <div className="flex pl-2 text-[13px] text-[#796E66]">2024/7/13 13:45</div>
                 </div>
                 {/* Update User */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Update User</div>
                   <span className="text-[#D3D3D3]">|</span>
                   <div className="flex pl-2 text-[13px] text-[#796E66]">羽田美希</div>
                 </div>
                 {/* Update Date */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Update Date</div>
                   <span className="text-[#D3D3D3]">|</span>
                   <div className="flex pl-2 text-[13px] text-[#796E66]">2024/9/4 18:22</div>
@@ -476,12 +567,36 @@ export const LowCodeEditorPresenter = () => {
             <Divider className="p-0 mt-6 mb-6" />
 
             {/* Custom Properties */}
-            <div className="w-full ">
+            <div className="w-full">
               <div className="mb-2 text-[16px] font-bold">Custom Properties</div>
               {/* keyと値の一覧 */}
               <div className="flex flex-col gap-1.5">
                 {/* seq ID */}
-                <div className="flex rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                  <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Move to</div>
+                  <span className="text-[#D3D3D3]">|</span>
+                  <div className="flex pl-2 text-[13px] text-[#796E66]">S01(Position)</div>
+                </div>
+                {/* seq ID */}
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                  <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Move to</div>
+                  <span className="text-[#D3D3D3]">|</span>
+                  <div className="flex pl-2 text-[13px] text-[#796E66]">S01(Position)</div>
+                </div>
+                {/* seq ID */}
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                  <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Move to</div>
+                  <span className="text-[#D3D3D3]">|</span>
+                  <div className="flex pl-2 text-[13px] text-[#796E66]">S01(Position)</div>
+                </div>
+                {/* seq ID */}
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
+                  <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Move to</div>
+                  <span className="text-[#D3D3D3]">|</span>
+                  <div className="flex pl-2 text-[13px] text-[#796E66]">S01(Position)</div>
+                </div>
+                {/* seq ID */}
+                <div className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]">
                   <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">Move to</div>
                   <span className="text-[#D3D3D3]">|</span>
                   <div className="flex pl-2 text-[13px] text-[#796E66]">S01(Position)</div>

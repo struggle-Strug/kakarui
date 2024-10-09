@@ -2,7 +2,7 @@ import { Handle, Position } from '@xyflow/react'
 import { Divider } from 'antd'
 
 import Image from 'next/image'
-import React, { memo } from 'react'
+import { memo, useState } from 'react'
 
 import { Assets } from '@/constants'
 
@@ -17,6 +17,22 @@ const typeToBgColor = {
 
 // カスタムノードコンポーネント
 const CustomNode = ({ data }) => {
+  // Skillノードの場合のみ、siteDataとcustomPropertiesを管理
+  const [selectedSiteData, setSelectedSiteData] = useState(
+    data.type === 'Skill' && data.siteData ? data.siteData[0] : ''
+  )
+  const [selectedCustomProperty, setSelectedCustomProperty] = useState(
+    data.type === 'Skill' && data.customProperties ? data.customProperties[0] : ''
+  )
+
+  const handleSiteDataChange = (event) => {
+    setSelectedSiteData(event.target.value)
+  }
+
+  const handleCustomPropertyChange = (event) => {
+    setSelectedCustomProperty(event.target.value)
+  }
+
   // 背景色を取得
   const bgColor = typeToBgColor[data.type] || '#413D39'
 
@@ -47,12 +63,23 @@ const CustomNode = ({ data }) => {
         {/* Skillノードの詳細情報 */}
         {data.type === 'Skill' && (
           <div className="p-2">
-            <div className="text-[14px] font-bold">Name: {data.skillName}</div>
-            <div className="text-[14px] font-bold">Type: {data.skillType}</div>
+            <div className="flex flex-col gap-2 p-2">
+              <div className="text-[14px] font-bold">Name: {data.skillName}</div>
+              <div className="text-[14px] font-bold">Type: {data.skillType}</div>{' '}
+            </div>
             <Divider className="p-0 my-2" />
 
-            <div className="text-[14px] font-bold">{data.customProperties}</div>
-
+            <div className="flex items-center justify-start gap-1">
+              <select className="rounded border-2 border-solid border-[#E3E3E4] p-1 text-[14px]">
+                {data.siteData &&
+                  data.siteData.map((site, index) => (
+                    <option key={index} value={site}>
+                      {site}
+                    </option>
+                  ))}
+              </select>
+              <div className="text-[14px] font-bold">{data.customProperties}</div>
+            </div>
             <div className="flex items-center gap-3 mt-4">
               <div className="flex items-center gap-1">
                 <Image
@@ -62,7 +89,7 @@ const CustomNode = ({ data }) => {
                   width={20}
                   height={20}
                 />
-                {data.userName}
+                <div className="truncate text-[14px]">{data.userName}</div>
               </div>
               <div className="flex items-center gap-1">
                 <Image
@@ -72,7 +99,7 @@ const CustomNode = ({ data }) => {
                   width={20}
                   height={20}
                 />
-                {data.updatedAt}
+                <div className="truncate text-[14px]">{data.updatedAt}</div>
               </div>
             </div>
           </div>
@@ -120,7 +147,7 @@ const CustomNode = ({ data }) => {
                   width={20}
                   height={20}
                 />
-                {data.userName}
+                <div className="truncate text-[14px]">{data.userName}</div>
               </div>
               <div className="flex items-center gap-1">
                 <Image
@@ -130,7 +157,7 @@ const CustomNode = ({ data }) => {
                   width={20}
                   height={20}
                 />
-                {data.updatedAt}
+                <div className="truncate text-[14px]">{data.updatedAt}</div>
               </div>
             </div>
           </div>
