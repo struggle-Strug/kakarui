@@ -604,3 +604,8 @@ div.ant-typography-h3 > textarea,
 .directory_log .ant-tree-node-selected .error {
   @apply !font-semibold !text-red-500;
 }
+
+/* ICON */
+.setting svg{
+  @apply w-12 h-8 fill-white
+}
