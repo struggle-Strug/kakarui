@@ -6,6 +6,7 @@ import { UserIcon } from '@/components/icons'
 
 import Logo from '../../common/Logo'
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs'
+import Notification from './Notification'
 
 const Header = () => {
   const renderLogo = (
@@ -45,7 +46,10 @@ const Header = () => {
       <div className="flex-between item-center flex size-full gap-x-0 px-4">
         {renderLogo}
         {renderBreadcrumbs}
-        <div className="flex items-center justify-end">{renderAuthenticated}</div>
+        <div className="flex items-center gap-4 justify-end">
+          <Notification />
+          {renderAuthenticated}
+        </div>
       </div>
     </Layout.Header>
   )

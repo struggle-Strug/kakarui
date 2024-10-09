@@ -604,3 +604,21 @@ div.ant-typography-h3 > textarea,
 .directory_log .ant-tree-node-selected .error {
   @apply !font-semibold !text-red-500;
 }
+
+/* ICON */
+.setting svg{
+  @apply w-12 h-8 fill-white
+}
+
+.bell svg{
+  @apply w-12 h-8
+}
+
+/* DROPDOWN */
+.notifi{
+  --arrow-x: 282px; 
+    --arrow-y: -2px;
+    inset: 58px 0px auto auto !important; 
+    box-sizing: border-box;
+    min-width: 48px;
+}
