@@ -1,13 +1,15 @@
 import { ReactFlow, addEdge, useEdgesState, useNodesState } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
-import Image from 'next/image'
 import { useCallback } from 'react'
 
 import { Assets } from '@/constants'
 
+import ControlButtons from '../ControlButton'
 import CustomNode from './../Node'
 
+let nodeId = 1
+const getId = () => `node-${nodeId++}`
 // カスタムノードのタイプ設定
 const nodeTypes = {
   custom: CustomNode,
@@ -90,12 +92,6 @@ const Flow = () => {
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [])
 
-  // ドラッグを開始したときの処理
-  const onDragStart = (event, nodeType) => {
-    event.dataTransfer.setData('application/reactflow', nodeType)
-    event.dataTransfer.effectAllowed = 'move'
-  }
-
   // ドロップしたときの処理
   const onDrop = (event) => {
     event.preventDefault()
@@ -103,24 +99,36 @@ const Flow = () => {
     const reactFlowBounds = event.target.getBoundingClientRect()
     const type = event.dataTransfer.getData('application/reactflow')
 
+    // typeが存在しない場合、何も処理をしない
+    if (!type) return
+
     // マウスの位置を取得してフィールドの座標に変換
     const position = {
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
+      x: event.clientX - reactFlowBounds.left || 0,
+      y: event.clientY - reactFlowBounds.top || 0,
     }
 
     // 新しいノードのデータを生成
-    const newNode = generateNode(type, nodes.length + 1, position)
+    const newNode = generateNode(type, position)
+    if (newNode) {
+      setNodes((prevNodes) => [...prevNodes, newNode])
+    }
+  }
 
-    setNodes((prevNodes) => [...prevNodes, newNode])
+  // ドラッグオーバー時の処理（ドロップ可能領域を有効にする）
+  const onDragOver = (event) => {
+    event.preventDefault()
+    event.dataTransfer.dropEffect = 'move'
   }
 
   // ノードのデータを生成する関数
-  const generateNode = (type, id, position) => {
+  const generateNode = (type, position) => {
+    const id = getId() // ユニークなIDを生成
+
     switch (type) {
       case 'Decorator':
         return {
-          id: `node-${id}`,
+          id,
           type: 'custom',
           data: {
             type: 'Decorator',
@@ -135,7 +143,7 @@ const Flow = () => {
         }
       case 'Sequence':
         return {
-          id: `node-${id}`,
+          id,
           type: 'custom',
           data: {
             type: 'Sequence',
@@ -145,7 +153,7 @@ const Flow = () => {
         }
       case 'Skill':
         return {
-          id: `node-${id}`,
+          id,
           type: 'custom',
           data: {
             type: 'Skill',
@@ -162,13 +170,6 @@ const Flow = () => {
         return null
     }
   }
-
-  // ドラッグ中のイベントハンドリング
-  const onDragOver = (event) => {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = 'move'
-  }
-
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
@@ -209,72 +210,7 @@ const Flow = () => {
         />
 
         {/* 再生・停止ボタン */}
-        <div className="absolute left-0 flex justify-center w-full gap-4 bottom-8">
-          <div className="flex shadow">
-            <button
-              disabled={true}
-              className="rounded-l border border-solid border-[#D3D3D3] bg-[#EDEDED] px-2 py-2"
-            >
-              <Image
-                src={Assets.LOWCODEEDITOR.caretRight2}
-                className="h-[30px] w-[30px] shrink-0 "
-                alt="gen3p"
-                width={30}
-                height={30}
-              />
-            </button>
-            <button
-              disabled={true}
-              className="border border-solid border-[#D3D3D3] bg-[#EDEDED] px-2 py-2"
-            >
-              <Image
-                src={Assets.LOWCODEEDITOR.pause}
-                className="h-[30px] w-[30px] shrink-0 "
-                alt="gen3p"
-                width={30}
-                height={30}
-              />
-            </button>
-            <button
-              disabled={true}
-              className="rounded-r border border-solid border-[#D3D3D3] bg-[#EDEDED] px-2 py-2"
-            >
-              <Image
-                src={Assets.LOWCODEEDITOR.square}
-                className="h-[30px] w-[30px] shrink-0 "
-                alt="gen3p"
-                width={30}
-                height={30}
-              />
-            </button>
-          </div>
-          <div className="flex shadow">
-            <button
-              disabled={true}
-              className="rounded-l border border-solid border-[#D3D3D3] bg-[#EDEDED] px-2 py-2"
-            >
-              <Image
-                src={Assets.LOWCODEEDITOR.stepBack}
-                className="h-[30px] w-[30px] shrink-0 "
-                alt="gen3p"
-                width={30}
-                height={30}
-              />
-            </button>
-            <button
-              disabled={true}
-              className="rounded-r border border-solid border-[#D3D3D3] bg-[#EDEDED] px-2 py-2"
-            >
-              <Image
-                src={Assets.LOWCODEEDITOR.stepForward}
-                className="h-[30px] w-[30px] shrink-0 "
-                alt="gen3p"
-                width={30}
-                height={30}
-              />
-            </button>
-          </div>
-        </div>
+        <ControlButtons />
       </div>
     </div>
   )
