@@ -1,3 +1,4 @@
+import { ReactFlowProvider } from '@xyflow/react'
 import { Divider, Input, Tooltip } from 'antd'
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs'
 
@@ -60,14 +61,16 @@ export const LowCodeEditorPresenter = () => {
       <Header />
 
       <div className="flex h-[95%] w-full justify-between">
-        {/* SECTION - 左サイドバー */}
-        {/* TODO - 横幅固定にしているのでmax widthにするか検討 */}
-        <Sidebar />
+        <ReactFlowProvider>
+          {/* SECTION - 左サイドバー */}
+          {/* TODO - 横幅固定にしているのでmax widthにするか検討 */}
+          <Sidebar />
 
-        {/* SECTION - シーケンス */}
-        <div className="w-full bg-[#E4E4E4]">
-          <Flow />
-        </div>
+          {/* SECTION - シーケンス */}
+          <div className="w-full bg-[#E4E4E4]">
+            <Flow />
+          </div>
+        </ReactFlowProvider>
 
         {/* SECTION - drawer/ドロワー */}
         <div className="flex h-full items-center justify-center bg-[#E4E4E4]">

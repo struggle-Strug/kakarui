@@ -78,7 +78,7 @@
   .flex-end {
     @apply flex items-center justify-end;
   }
-  
+
   .flex-start {
     @apply flex items-center justify-start;
   }
@@ -458,4 +458,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .react-flow__attribution {
   display: none;
+}
+
+.react-flow__edge-path {
+  stroke: #333;
+  stroke-width: 2;
+}
+
+.temp .react-flow__edge-path {
+  stroke: #bbb;
+  stroke-dasharray: 5 5;
 }
