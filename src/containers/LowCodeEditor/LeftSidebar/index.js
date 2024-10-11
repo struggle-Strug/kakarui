@@ -5,7 +5,7 @@ import { Assets } from '@/constants'
 
 import ModulesSelector from '../ModulesSelector/index'
 
-const Sidebar = () => {
+const LeftSidebar = () => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
@@ -40,7 +40,7 @@ const Sidebar = () => {
       <div className="flex h-[calc(100%-250px)] w-full flex-col gap-6 overflow-y-auto px-4 py-6">
         {/* Sensor / Temperature */}
         <div>
-          <div className="mb-3 flex items-start gap-1">
+          <div className="flex items-start gap-1 mb-3">
             <Image
               src={Assets.LOWCODEEDITOR.caretDown}
               className="shrink-0"
@@ -85,8 +85,8 @@ const Sidebar = () => {
           </div>
         </div>
         {/* Utility / Get Information */}
-        <div className="flex h-full flex-col">
-          <div className="mb-4 flex items-start gap-1">
+        <div className="flex flex-col h-full">
+          <div className="flex items-start gap-1 mb-4">
             <Image
               src={Assets.LOWCODEEDITOR.caretRight}
               className="shrink-0"
@@ -135,4 +135,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default LeftSidebar

@@ -1,11 +1,4 @@
-import {
-  ReactFlow,
-  addEdge,
-  useEdgesState,
-  useNodesState,
-  useReactFlow,
-  useStoreApi,
-} from '@xyflow/react'
+import { ReactFlow, addEdge, useEdgesState, useNodesState } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
 import { useCallback } from 'react'
@@ -25,17 +18,17 @@ const nodeTypes = {
 const MIN_DISTANCE = 300
 
 const Flow = () => {
-  const store = useStoreApi()
+  // const store = useStoreApi()
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const { getInternalNode } = useReactFlow()
+  // const { getInternalNode } = useReactFlow()
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])
 
   const getClosestEdge = useCallback((node) => {
     const { nodeLookup } = store.getState()
-    const internalNode = getInternalNode(node.id)
+    // const internalNode = getInternalNode(node.id)
     const nodeHeight = 100 // ノードの高さを仮定（実際の高さに変更してください）
 
     const closestNode = Array.from(nodeLookup.values()).reduce(
@@ -201,7 +194,7 @@ const Flow = () => {
       {/* 左側のドラック可能な要素 */}
 
       {/* 右側のReactFlowフィールド */}
-      <div className="relative w-full h-full bg-gray-50" onDragOver={onDragOver} onDrop={onDrop}>
+      <div className="bg-gray-50 relative h-full w-full" onDragOver={onDragOver} onDrop={onDrop}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
