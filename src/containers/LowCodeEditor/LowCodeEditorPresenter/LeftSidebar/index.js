@@ -3,9 +3,9 @@ import { useState } from 'react'
 
 import { Assets } from '@/constants'
 
-import ModulesSelector from '../ModulesSelector/index'
+import ModulesSelector from './ModulesSelector/index'
 
-const Sidebar = () => {
+const LeftSidebar = () => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
@@ -135,4 +135,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default LeftSidebar

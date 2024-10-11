@@ -5,9 +5,9 @@ import { useCallback } from 'react'
 
 import { Assets } from '@/constants'
 
-import ControlButtons from '../ControlButton'
-import CustomNode from './../Node'
-import { initialEdges, initialNodes } from './../nodes-and-edges'
+import ControlButtons from '../../ControlButton'
+import { initialEdges, initialNodes } from '../../nodes-and-edges'
+import CustomNode from './Node'
 
 let nodeId = 1
 const getId = () => `node-${nodeId++}`
@@ -194,7 +194,7 @@ const Flow = () => {
       {/* 左側のドラック可能な要素 */}
 
       {/* 右側のReactFlowフィールド */}
-      <div className="bg-gray-50 relative h-full w-full" onDragOver={onDragOver} onDrop={onDrop}>
+      <div className="relative w-full h-full bg-gray-50" onDragOver={onDragOver} onDrop={onDrop}>
         <ReactFlow
           nodes={nodes}
           edges={edges}

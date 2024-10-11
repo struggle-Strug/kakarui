@@ -50,7 +50,7 @@ const ModulesSelector = ({ onDragStart }) => {
       </div>
 
       <div>
-        <Divider className="p-0 my-3" />
+        <Divider className="my-3 p-0" />
       </div>
 
       <div className="flex flex-col gap-3">

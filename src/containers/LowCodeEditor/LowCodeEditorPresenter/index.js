@@ -9,10 +9,10 @@ import { useModuleConfigQuery } from '@/hooks/query'
 
 import { getSearchOptions } from '@/utils/helper/functions'
 
-import Header from '../Header'
-import LeftSidebar from '../LeftSidebar'
-import RightSidebar from '../RightSidebar'
-import Flow from '../Sequence'
+import Header from './Header'
+import LeftSidebar from './LeftSidebar'
+import RightSidebar from './RightSidebar'
+import Flow from './Sequence'
 
 export const LowCodeEditorPresenter = () => {
   const router = useRouter()
@@ -54,7 +54,7 @@ export const LowCodeEditorPresenter = () => {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex h-screen flex-col">
       {/* SECTION - ヘッダー */}
       <Header />
 
@@ -68,7 +68,7 @@ export const LowCodeEditorPresenter = () => {
         </div>
 
         {/* SECTION - drawer/ドロワー */}
-        <div className="relative flex items-center justify-center h-full bg-white ">
+        <div className="relative flex h-full items-center justify-center bg-white ">
           <div
             className="absolute mb-8 mr-6 flex h-[120px] w-[26px] cursor-pointer items-center justify-center rounded-l-3xl bg-white"
             onClick={toggleDrawer}
