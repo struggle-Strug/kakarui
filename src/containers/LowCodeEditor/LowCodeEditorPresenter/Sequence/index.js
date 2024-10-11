@@ -6,8 +6,8 @@ import { useCallback } from 'react'
 import { Assets } from '@/constants'
 
 import ControlButtons from '../../ControlButton'
-import { initialEdges, initialNodes } from '../../nodes-and-edges'
 import CustomNode from './Node'
+import { initialEdges, initialNodes } from './nodes-and-edges'
 
 let nodeId = 1
 const getId = () => `node-${nodeId++}`
