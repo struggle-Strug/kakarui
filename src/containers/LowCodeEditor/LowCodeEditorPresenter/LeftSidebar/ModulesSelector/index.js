@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 import { Assets } from '@/constants'
 
-const ModulesSelector = ({ onDragStart }) => {
+const ModulesSelector = ({ onDragStart, onFilter }) => {
   return (
     <div className="h-[250px] bg-white px-3 py-5">
       {/* 3つのモジュールアイコン */}
@@ -88,6 +88,7 @@ const ModulesSelector = ({ onDragStart }) => {
                 height={12}
               />
             }
+            onChange={(e) => onFilter(e.target.value)}
           />
         </div>
       </div>

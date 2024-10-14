@@ -37,7 +37,7 @@ const CustomNode = ({ data }) => {
   const bgColor = typeToBgColor[data.type] || '#413D39'
 
   return (
-    <div className="border border-solid p-8">
+    <div className="">
       <div className="rounded-md border-2 border-solid border-stone-400 bg-white px-2 py-2 shadow-md">
         {/* ノードの内容 */}
         <div className="w-[250px]">
@@ -46,7 +46,7 @@ const CustomNode = ({ data }) => {
             <Handle
               type="source"
               position={Position.Top}
-              className="w-24 !border !border-solid !border-[#796E66] !bg-white p-2"
+              className="w-24 !border !border-solid !border-[#796E66] !bg-white p-1"
             />
           )}
           <div
@@ -180,7 +180,7 @@ const CustomNode = ({ data }) => {
           <Handle
             type="target"
             position={Position.Bottom}
-            className="w-24 !border !border-solid !border-[#796E66] !bg-white p-2"
+            className="w-24 !border !border-solid !border-[#796E66] !bg-white p-1"
           />
         </div>
       </div>
