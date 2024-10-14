@@ -70,4 +70,57 @@ const initialEdges = [
   { id: 'e2-3', source: '2', target: '3' },
   { id: 'e2-4', source: '2', target: '4' },
 ]
-export { initialEdges, initialNodes }
+
+let nodeId = 1
+const getId = () => `node-${nodeId++}`
+// ノードのデータを生成する関数
+const generateNode = (type, position) => {
+  const id = getId() // ユニークなIDを生成
+
+  switch (type) {
+    case 'Decorator':
+      return {
+        id,
+        type: 'custom',
+        data: {
+          type: 'Decorator',
+          image: Assets.LOWCODEEDITOR.decoratorIcon,
+          conditionalType: ['もしA=Bならば', 'もしA=Bでなければ'], // 条件文の選択肢
+          aValues: ['選択 1', '選択 2'], // Aの選択肢
+          bValues: ['選択 A', '選択 B'], // Bの選択肢
+          userName: '新規ユーザー',
+          updatedAt: '2024/10/05',
+        },
+        position,
+      }
+    case 'Sequence':
+      return {
+        id,
+        type: 'custom',
+        data: {
+          type: 'Sequence',
+          image: Assets.LOWCODEEDITOR.sequenceIcon,
+        },
+        position,
+      }
+    case 'Skill':
+      return {
+        id,
+        type: 'custom',
+        data: {
+          type: 'Skill',
+          image: Assets.LOWCODEEDITOR.skillIcon,
+          skillName: 'New Skill',
+          skillType: 'Action / New Move',
+          customProperties: '新しい動作を実行します。',
+          userName: '新規スキルユーザー',
+          updatedAt: '2024/10/05',
+        },
+        position,
+      }
+    default:
+      return null
+  }
+}
+
+export { generateNode, initialEdges, initialNodes }

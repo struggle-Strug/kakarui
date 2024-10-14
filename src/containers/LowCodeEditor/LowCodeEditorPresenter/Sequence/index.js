@@ -1,16 +1,19 @@
-import { ReactFlow, addEdge, useEdgesState, useNodesState } from '@xyflow/react'
+import {
+  ReactFlow,
+  addEdge,
+  useEdgesState,
+  useNodesState,
+  useReactFlow,
+  useStoreApi,
+} from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
 import { useCallback } from 'react'
 
-import { Assets } from '@/constants'
-
 import ControlButtons from '../../ControlButton'
 import CustomNode from './Node'
-import { initialEdges, initialNodes } from './nodes-and-edges'
+import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 
-let nodeId = 1
-const getId = () => `node-${nodeId++}`
 // カスタムノードのタイプ設定
 const nodeTypes = {
   custom: CustomNode,
@@ -18,30 +21,45 @@ const nodeTypes = {
 const MIN_DISTANCE = 300
 
 const Flow = () => {
-  // const store = useStoreApi()
+  const store = useStoreApi()
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  // const { getInternalNode } = useReactFlow()
+  const { getInternalNode } = useReactFlow()
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])
 
   const getClosestEdge = useCallback((node) => {
     const { nodeLookup } = store.getState()
-    // const internalNode = getInternalNode(node.id)
-    const nodeHeight = 100 // ノードの高さを仮定（実際の高さに変更してください）
-
+    const internalNode = getInternalNode(node.id)
     const closestNode = Array.from(nodeLookup.values()).reduce(
       (res, n) => {
         if (n.id !== internalNode.id) {
           const dx = n.internals.positionAbsolute.x - internalNode.internals.positionAbsolute.x
           const dy =
-            n.internals.positionAbsolute.y + nodeHeight - internalNode.internals.positionAbsolute.y
-          const d = Math.sqrt(dx * dx + dy * dy)
+            n.internals.positionAbsolute.y +
+            n.measured.height -
+            internalNode.internals.positionAbsolute.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (d < res.distance && d < MIN_DISTANCE) {
-            res.distance = d
-            res.node = n
+          console.log('n.internals.positionAbsolute.y:', n.internals.positionAbsolute.y)
+          console.log('n.measured.height:', n.measured.height)
+          console.log(
+            'internalNode.internals.positionAbsolute.y:',
+            internalNode.internals.positionAbsolute.y
+          )
+          console.log('距離:', distance)
+
+          // ターゲットノードの下部がソースノードの上部より上にあるかを確認
+          if (
+            n.internals.positionAbsolute.y + n.measured.height <
+            internalNode.internals.positionAbsolute.y
+          ) {
+            // 最も近いノードをターゲットとして保存
+            if (distance < res.distance) {
+              res.distance = distance // 最も近い距離を更新
+              res.node = n // 最も近いノードを更新
+            }
           }
         }
 
@@ -57,16 +75,19 @@ const Flow = () => {
       return null
     }
 
-    const closeNodeIsSource =
-      closestNode.node.internals.positionAbsolute.x < internalNode.internals.positionAbsolute.x
+    const closeNodeIsTarget =
+      closestNode.node.internals.positionAbsolute.y > internalNode.internals.positionAbsolute.y
 
-    // デフォルトのsource, targetだけを使う
+    // if (!closeNodeIsTarget) {
+    //   return null
+    // }
+
     return {
-      id: closeNodeIsSource
-        ? `${closestNode.node.id}-${node.id}`
-        : `${node.id}-${closestNode.node.id}`,
-      source: closeNodeIsSource ? closestNode.node.id : node.id,
-      target: closeNodeIsSource ? node.id : closestNode.node.id,
+      id: closeNodeIsTarget
+        ? `${node.id}-${closestNode.node.id}`
+        : `${closestNode.node.id}-${node.id}`,
+      source: node.id, // 掴んでいるノードの上部から接続
+      target: closestNode.node.id, // ターゲットノードの下部に接続
     }
   }, [])
 
@@ -90,7 +111,6 @@ const Flow = () => {
     },
     [getClosestEdge, setEdges]
   )
-
   const onNodeDragStop = useCallback(
     (_, node) => {
       const closeEdge = getClosestEdge(node)
@@ -140,61 +160,12 @@ const Flow = () => {
     event.dataTransfer.dropEffect = 'move'
   }
 
-  // ノードのデータを生成する関数
-  const generateNode = (type, position) => {
-    const id = getId() // ユニークなIDを生成
-
-    switch (type) {
-      case 'Decorator':
-        return {
-          id,
-          type: 'custom',
-          data: {
-            type: 'Decorator',
-            image: Assets.LOWCODEEDITOR.decoratorIcon,
-            conditionalType: ['もしA=Bならば', 'もしA=Bでなければ'], // 条件文の選択肢
-            aValues: ['選択 1', '選択 2'], // Aの選択肢
-            bValues: ['選択 A', '選択 B'], // Bの選択肢
-            userName: '新規ユーザー',
-            updatedAt: '2024/10/05',
-          },
-          position,
-        }
-      case 'Sequence':
-        return {
-          id,
-          type: 'custom',
-          data: {
-            type: 'Sequence',
-            image: Assets.LOWCODEEDITOR.sequenceIcon,
-          },
-          position,
-        }
-      case 'Skill':
-        return {
-          id,
-          type: 'custom',
-          data: {
-            type: 'Skill',
-            image: Assets.LOWCODEEDITOR.skillIcon,
-            skillName: 'New Skill',
-            skillType: 'Action / New Move',
-            customProperties: '新しい動作を実行します。',
-            userName: '新規スキルユーザー',
-            updatedAt: '2024/10/05',
-          },
-          position,
-        }
-      default:
-        return null
-    }
-  }
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
 
       {/* 右側のReactFlowフィールド */}
-      <div className="relative w-full h-full bg-gray-50" onDragOver={onDragOver} onDrop={onDrop}>
+      <div className="bg-gray-50 relative h-full w-full" onDragOver={onDragOver} onDrop={onDrop}>
         <ReactFlow
           nodes={nodes}
           edges={edges}

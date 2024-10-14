@@ -11,6 +11,16 @@ const customProperties = [
   { label: 'Move to', value: 'S03(Position)' },
   { label: 'Move to', value: 'S04(Position)' },
 ]
+const projectDataKeys = [
+  'P01:XXX',
+  'P02:XXX',
+  'P03:XXX',
+  'P05:XXX',
+  'P06:XXX',
+  'P07:XXX',
+  'P08:XXX',
+]
+const siteDataKeys = ['s01:XXX', 's02:XXX', 's03:XXX', 's04:XXX', 's05:XXX', 's06:XXX', 's07:XXX']
 
 const RightSidebar = () => {
   const seqId = '550e8400-e29b-41d4-a716-43333ddddd'
@@ -35,16 +45,7 @@ const RightSidebar = () => {
     { label: 'Update User', value: '羽田美希', isEditable: false, isCopyable: false },
     { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
   ])
-  const projectDataKeys = [
-    'P01:XXX',
-    'P02:XXX',
-    'P03:XXX',
-    'P05:XXX',
-    'P06:XXX',
-    'P07:XXX',
-    'P08:XXX',
-  ]
-  const siteDataKeys = ['s01:XXX', 's02:XXX', 's03:XXX', 's04:XXX', 's05:XXX', 's06:XXX', 's07:XXX']
+
   // 入力が変更された時の処理
   const handleInputChange = (event) => {
     setName(event.target.value) // 入力内容を更新

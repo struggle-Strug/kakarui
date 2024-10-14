@@ -5,42 +5,44 @@ import { Assets } from '@/constants'
 
 import ModulesSelector from './ModulesSelector/index'
 
+const cardData = [
+  {
+    id: 1,
+    title: '気温を取得し、P01にセット',
+    description: '搭載センサーから気温を取得してProject Data KeysのP01にセットする。',
+  },
+  {
+    id: 2,
+    title: '湿度を取得し、P02にセット',
+    description: '搭載センサーから湿度を取得してProject Data KeysのP02にセットする。',
+  },
+  {
+    id: 3,
+    title: '気圧を取得し、P03にセット',
+    description: '搭載センサーから気圧を取得してProject Data KeysのP03にセットする。',
+  },
+  {
+    id: 3,
+    title: '気圧を取得し、P03にセット',
+    description: '搭載センサーから気圧を取得してProject Data KeysのP03にセットする。',
+  },
+]
+
 const LeftSidebar = () => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
   }
 
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      title: '気温を取得し、P01にセット',
-      description: '搭載センサーから気温を取得してProject Data KeysのP01にセットする。',
-    },
-    {
-      id: 2,
-      title: '湿度を取得し、P02にセット',
-      description: '搭載センサーから湿度を取得してProject Data KeysのP02にセットする。',
-    },
-    {
-      id: 3,
-      title: '気圧を取得し、P03にセット',
-      description: '搭載センサーから気圧を取得してProject Data KeysのP03にセットする。',
-    },
-    {
-      id: 3,
-      title: '気圧を取得し、P03にセット',
-      description: '搭載センサーから気圧を取得してProject Data KeysのP03にセットする。',
-    },
-  ])
+  const [cards, setCards] = useState(cardData)
   return (
     <div className="h-full w-full max-w-[300px] bg-[#F4F4F4]">
       {/* Selectorからスキル名検索 */}
-      <ModulesSelector />
+      <ModulesSelector onDragStart={onDragStart} />
       <div className="flex h-[calc(100%-250px)] w-full flex-col gap-6 overflow-y-auto px-4 py-6">
         {/* Sensor / Temperature */}
         <div>
-          <div className="mb-3 flex items-start gap-1">
+          <div className="flex items-start gap-1 mb-3">
             <Image
               src={Assets.LOWCODEEDITOR.caretDown}
               className="shrink-0"
@@ -85,8 +87,8 @@ const LeftSidebar = () => {
           </div>
         </div>
         {/* Utility / Get Information */}
-        <div className="flex h-full flex-col">
-          <div className="mb-4 flex items-start gap-1">
+        <div className="flex flex-col h-full">
+          <div className="flex items-start gap-1 mb-4">
             <Image
               src={Assets.LOWCODEEDITOR.caretRight}
               className="shrink-0"
