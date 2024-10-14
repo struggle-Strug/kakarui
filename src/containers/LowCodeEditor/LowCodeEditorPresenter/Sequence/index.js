@@ -8,7 +8,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 
 import ControlButtons from '../../ControlButton'
 import CustomNode from './Node'
@@ -18,20 +18,21 @@ import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 const nodeTypes = {
   custom: CustomNode,
 }
-const MIN_DISTANCE = 300
+const MIN_DISTANCE = 600
 
 const Flow = () => {
   const store = useStoreApi()
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const { getInternalNode } = useReactFlow()
+  const { getInternalNode, getNodes, getEdges } = useReactFlow()
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])
 
   const getClosestEdge = useCallback((node) => {
-    const { nodeLookup } = store.getState()
+    const { nodeLookup, connectionLookup } = store.getState()
     const internalNode = getInternalNode(node.id)
+
     const closestNode = Array.from(nodeLookup.values()).reduce(
       (res, n) => {
         if (n.id !== internalNode.id) {
@@ -42,21 +43,15 @@ const Flow = () => {
             internalNode.internals.positionAbsolute.y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          console.log('n.internals.positionAbsolute.y:', n.internals.positionAbsolute.y)
-          console.log('n.measured.height:', n.measured.height)
-          console.log(
-            'internalNode.internals.positionAbsolute.y:',
-            internalNode.internals.positionAbsolute.y
-          )
-          console.log('距離:', distance)
-
+          // console.log('connectionLookup:', connectionLookup)
           // ターゲットノードの下部がソースノードの上部より上にあるかを確認
           if (
+            // !isConnected &&
             n.internals.positionAbsolute.y + n.measured.height <
             internalNode.internals.positionAbsolute.y
           ) {
             // 最も近いノードをターゲットとして保存
-            if (distance < res.distance) {
+            if (distance < res.distance && distance < MIN_DISTANCE) {
               res.distance = distance // 最も近い距離を更新
               res.node = n // 最も近いノードを更新
             }
@@ -78,10 +73,6 @@ const Flow = () => {
     const closeNodeIsTarget =
       closestNode.node.internals.positionAbsolute.y > internalNode.internals.positionAbsolute.y
 
-    // if (!closeNodeIsTarget) {
-    //   return null
-    // }
-
     return {
       id: closeNodeIsTarget
         ? `${node.id}-${closestNode.node.id}`
@@ -91,14 +82,21 @@ const Flow = () => {
     }
   }, [])
 
+  // ドラッグ中に接続候補のエッジを描画する処理
   const onNodeDrag = useCallback(
     (_, node) => {
+      const { edges: currentEdges } = store.getState()
+      const isConnected = currentEdges.some(
+        (edge) => edge.source === node.id || edge.target === node.id
+      )
+
       const closeEdge = getClosestEdge(node)
 
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
 
         if (
+          !isConnected &&
           closeEdge &&
           !nextEdges.find((ne) => ne.source === closeEdge.source && ne.target === closeEdge.target)
         ) {
@@ -111,14 +109,21 @@ const Flow = () => {
     },
     [getClosestEdge, setEdges]
   )
+
+  // ドラッグ終了時に接続候補のエッジを確定させる処理
   const onNodeDragStop = useCallback(
     (_, node) => {
+      const { edges: currentEdges } = store.getState()
+      const isConnected = currentEdges.some(
+        (edge) => edge.source === node.id || edge.target === node.id
+      )
       const closeEdge = getClosestEdge(node)
 
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
 
         if (
+          !isConnected &&
           closeEdge &&
           !nextEdges.find((ne) => ne.source === closeEdge.source && ne.target === closeEdge.target)
         ) {
@@ -159,7 +164,17 @@ const Flow = () => {
     event.preventDefault()
     event.dataTransfer.dropEffect = 'move'
   }
-
+  const isValidConnection = useCallback(
+    (connection) => {
+      //  const { edges: currentEdges } = store.getState()
+      //  const isConnected = currentEdges.some(
+      //    (edge) => edge.source === node.id || edge.target === node.id
+      //  )
+      console.log('connection', connection)
+      return false
+    },
+    [getNodes, getEdges, onNodeDragStop]
+  )
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
@@ -173,6 +188,7 @@ const Flow = () => {
           onEdgesChange={onEdgesChange}
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
+          isValidConnection={isValidConnection}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
@@ -185,4 +201,4 @@ const Flow = () => {
   )
 }
 
-export default Flow
+export default memo(Flow)
