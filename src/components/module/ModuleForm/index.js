@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Modal, Spin, Radio } from 'antd'
+import { Form, Modal, Spin } from 'antd'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useModuleCreate, useModuleUpdate } from '@/hooks/query'
@@ -24,11 +24,10 @@ const ModuleForm = ({ open, data, onClose }) => {
     if (data) return true
     return false
   }, [data])
-  const [initialValue, setInitialValue] = useState("single");
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
+    resolver: yupResolver(moduleFormSchema(isEdit)),
     defaultValues: { ...initValue },
   })
 
@@ -95,26 +94,7 @@ const ModuleForm = ({ open, data, onClose }) => {
                 placeholder="モジュール名を入力してください。"
               />
 
-              <Radio.Group className='flex justify-center gap-8 w-full pl-36' defaultValue={initialValue} >
-                <Radio value={"single"} autoFocus={true} className='text-sm' onChange={() => setInitialValue("single")}>シングルアーキテクチャ</Radio>
-                <Radio value={"multi"} onChange={() => setInitialValue("multi")}>マルチアーキテクチャ</Radio>
-              </Radio.Group> 
-
-              <div className='module flex gap-24 w-full' >
-                <div className='flex pt-4 w-[40%]' >
-                 <InputTarFile name={FORM_INFO.SINGLEFILE} label="モジュール: " disabled={initialValue == "multi" && true}/>
-                </div>
-                <div className='flex justify-center gap-4 items-center w-[60%] pl-16' disabled={initialValue == "single" && true}>
-                  <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
-                    <InputTarFile name={FORM_INFO.ARM64FILE} disabled={initialValue == "single" && true}/>
-                    <p className='pr-14'>Arm64</p>
-                  </div>
-                  <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
-                    <InputTarFile name={FORM_INFO.AMD64FILE} disabled={initialValue == "single" && true}/>
-                    <p className='pr-14'>Amd64</p>
-                  </div>
-                </div>
-              </div>
+              <InputTarFile name={FORM_INFO.FILE} label="モジュール: " />
 
               <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" />
 
