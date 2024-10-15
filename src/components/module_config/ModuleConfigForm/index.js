@@ -48,7 +48,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
-  
+
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
     setModuleSelectionModalFlag(true)
@@ -134,14 +134,12 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
     (newModuleSet) => {
       if (newModuleSet) {
         const moduleNum = values.config_data.modules.length + 1
-        const moduleSetName = newModuleSet.name
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           const instanceNum = String(moduleNum + i).padStart(3, '0')
           return {
             key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
-            module_set_name: moduleSetName,
             module_name: module.module_name,
             module_instance: `Module-${instanceNum}`,
             tag: module.tag,
@@ -223,17 +221,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   }, [sortedInfo])
 
   const columns = [
-    {
-      title: 'モジュールセット名',
-      dataIndex: 'module_set_name',
-      sorter: true,
-      className: 'min-w-[160px]',
-      render: (text, record, index) => (
-        <div className="flex cursor-pointer items-center gap-x-4 text-base">
-            <RowContent item={text} />
-        </div>
-      ),
-    },
     {
       title: 'モジュール名',
       dataIndex: 'module_name',
