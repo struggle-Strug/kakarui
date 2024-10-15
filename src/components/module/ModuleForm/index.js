@@ -4,7 +4,7 @@ import { Form, Modal, Spin, Radio } from 'antd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useModuleCreate, useModuleUpdate } from '@/hooks/query'
+import { useModuleCreate, useModuleUpdate, useModuleUpdateUrl, useModuleUrlCreate } from '@/hooks/query'
 
 import { Input, InputTarFile, InputTextArea } from '@/components/form'
 import { Button } from '@/components/ui'
@@ -16,7 +16,7 @@ const initValue = {
   name: '',
   description: '',
   tag: '',
-  file: null,
+  architectures: {},
 }
 
 const ModuleForm = ({ open, data, onClose }) => {
@@ -31,7 +31,7 @@ const ModuleForm = ({ open, data, onClose }) => {
     resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
     defaultValues: { ...initValue },
   })
-
+  
   useEffect(() => {
     const defaultValue = data
       ? {
@@ -39,17 +39,30 @@ const ModuleForm = ({ open, data, onClose }) => {
           name: data.name,
           description: data.description,
           tag: data.latest_tag,
-          file: null,
+          architectures: {},
         }
       : { ...initValue }
     methods.reset(defaultValue)
   }, [data])
+
+  const { doCreateModuleUrl, isPending: createUrlLoading } = useModuleUrlCreate({
+    onSuccess: (module) => {
+      onClose(module)
+    },
+  })
 
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: (module) => {
       onClose(module)
     },
   })
+
+  const { doUpdateModuleUrl, isPending: updateUrlLoading } = useModuleUpdateUrl({
+    onSuccess: (module) => {
+      onClose(module)
+    },
+  })
+
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
@@ -58,13 +71,16 @@ const ModuleForm = ({ open, data, onClose }) => {
 
   const onSubmit = useCallback(
     async (values) => {
+      
       if (isEdit) {
-        doUpdateModule(values)
+        const sasUrlDetail = await doUpdateModuleUrl(values)
+        doUpdateModule(values, sasUrlDetail)
         return
       }
-      doCreateModule(values)
+      const sasUrlDetail = await doCreateModuleUrl(values)
+      doCreateModule(values, sasUrlDetail)
     },
-    [doCreateModule, doUpdateModule, isEdit]
+    [doCreateModuleUrl, doCreateModule, doUpdateModule, isEdit]
   )
 
   return (
@@ -78,7 +94,7 @@ const ModuleForm = ({ open, data, onClose }) => {
     >
       <p className="px-12 text-lg font-light text-primary">モジュールの情報を入力してください。</p>
       <div className="p-12 pr-20 font-light">
-        <Spin spinning={createLoading || updateLoading}>
+        <Spin spinning={createUrlLoading || createLoading || updateUrlLoading || updateLoading}>
           <FormProvider {...methods}>
             <Form
               onFinish={methods.handleSubmit(onSubmit)}

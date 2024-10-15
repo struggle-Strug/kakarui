@@ -30,8 +30,10 @@ export const API = {
 
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
-    CREATE: '/organizations/{organization_id}/modules', // POST
-    UPDATE: '/organizations/{organization_id}/modules/{module_id}', // PUT
+    CREATEURL: '/organizations/{organization_id}/modules', // POST
+    CREATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}', // PUT
+    UPDATEURL: '/organizations/{organization_id}/modules/{module_id}', // PUT
+    UPDATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}/{module_id}', // PUT
     DELETE: '/organizations/{organization_id}/modules/{module_id}', // DELETE
   },
 
