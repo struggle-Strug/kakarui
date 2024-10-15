@@ -48,7 +48,7 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   })
 
   const values = methods.getValues()
-  
+
   const moduleCheckSelectionModalOpen = useCallback(() => {
     setModuleSelectionModalType('checkbox')
     setModuleSelectionModalFlag(true)
@@ -65,7 +65,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
 
   const appendModulesToConfig = useCallback(
     (newModules) => {
-      
       const moduleNum = values.config_data.modules.length + 1
       const newSelectionModules = newModules
         .map((module, i) =>
@@ -135,7 +134,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
     (newModuleSet) => {
       if (newModuleSet) {
         const moduleNum = values.config_data.modules.length + 1
-        
         const newModuleSetModules = newModuleSet.moduleset_modules.map((module, i) => {
           const instanceNum = String(moduleNum + i).padStart(3, '0')
           return {
