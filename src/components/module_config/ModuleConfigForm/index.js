@@ -74,7 +74,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
             return {
               key: `${Date.now()}-${i}-${j}`,
               module_id: module.id,
-              module_set_name: "なし",
               module_set_id: null,
               module_instance: `Module-${instanceNum}`,
               module_name: module.name,
@@ -116,7 +115,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
               key: `${Date.now()}`,
               module_id: newModule.id,
               module_set_id: null,
-              module_set_name: "なし",
               module_name: newModule.name,
               module_instance: oldModule.module_instance,
               tag: newModule.tags[0].name,
@@ -144,7 +142,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
             key: `${Date.now()}-${i}`,
             module_id: module.module_id,
             module_set_id: newModuleSet.id,
-            module_set_name: newModuleSet.name,
             module_name: module.module_name,
             module_instance: `Module-${instanceNum}`,
             tag: module.tag,
@@ -226,17 +223,6 @@ const ModuleConfigForm = ({ action, onSubmit, data }) => {
   }, [sortedInfo])
 
   const columns = [
-    {
-      title: 'モジュールセット名',
-      dataIndex: 'module_set_name',
-      sorter: true,
-      className: 'min-w-[160px]',
-      render: (text, record, index) => (
-        <div className="flex cursor-pointer items-center gap-x-4 text-base">
-          <RowContent item={text} />
-        </div>
-      ),
-    },
     {
       title: 'モジュール名',
       dataIndex: 'module_name',
