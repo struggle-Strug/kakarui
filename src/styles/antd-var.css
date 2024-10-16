@@ -367,6 +367,14 @@
   @apply w-20
 }
 
+.module .ant-row{
+  @apply gap-8
+}
+
+.module .ant-col{
+  flex: 1 0 !important;
+}
+
 .module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
   @apply text-[0.8rem]
 }

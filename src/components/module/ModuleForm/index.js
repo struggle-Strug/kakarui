@@ -116,7 +116,7 @@ const ModuleForm = ({ open, data, onClose }) => {
                 <Radio value={"multi"} onChange={() => setInitialValue("multi")}>マルチアーキテクチャ</Radio>
               </Radio.Group> 
 
-              <div className='module flex gap-24 w-full' >
+              <div className='module flex gap-16 w-full' >
                 <div className='flex pt-4 w-[40%]' >
                  <InputTarFile name={FORM_INFO.SINGLEFILE} label="モジュール: " disabled={initialValue == "multi" && true}/>
                 </div>
