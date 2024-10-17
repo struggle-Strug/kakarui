@@ -33,7 +33,7 @@ const SettingMenu = () => {
           サイトデータ管理
         </div>
       ),
-      onClick: () => router.push(Routes.MODULE),
+      onClick: () => router.push(Routes.SITEDATA),
       key: '1',
     },
   ]
@@ -41,7 +41,7 @@ const SettingMenu = () => {
   return (
     <div className="absolute top-[50rem] left-2">
       <Dropdown menu={{ items }} trigger={['click']} placement='right'>
-        <div className="cursor-pointer text-sm w-12 h-12 pt-2"><SettingOutlined className='setting'/></div>
+        <div className="cursor-pointer text-sm w-12 h-12"><SettingOutlined className='setting'/></div>
       </Dropdown>
     </div>
   )

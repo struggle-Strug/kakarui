@@ -1,7 +1,7 @@
 import { Input } from "@/components/form";
 import { FORM_INFO, sitedataRegisterSchema } from "@/validations/siteDataRegisterSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Form, Modal, Select } from "antd";
+import { Form, Modal, Radio, Select, Spin } from "antd";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -56,7 +56,7 @@ const SiteDataKeySettingModal = (open, onClose, data) => {
             >
                 <FormProvider {...methods}>
                     <Form
-                        onFinish={methods.handleSubmit(onSubmit)}
+                        onFinish={methods.handleSubmit()}
                         labelCol={{ flex: '164px' }}
                         wrapperCol={{ flex: 1 }}
                         layout="horizontal"

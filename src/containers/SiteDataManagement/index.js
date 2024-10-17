@@ -3,6 +3,8 @@ import { SearchBar } from "@/components/layout/dashboard";
 import { SiteDataKeySettingModal } from "@/components/site_data_management";
 import { ColumnSorter } from "@/components/table";
 import { Container, Table } from "@/components/ui";
+import { useModuleQuery } from "@/hooks/query";
+import { useDebouncedCallback } from "@/hooks/share";
 import { getSearchOptions } from "@/utils/helper/functions";
 import { EditOutlined } from "@ant-design/icons";
 import { Pagination } from "antd";
@@ -26,15 +28,16 @@ const SiteDataManagementContainer = () => {
         setSiteDataKeySettingFormFlag(true)
     }
 
-    const searchOptions = getSearchOptions(data, ['sitearea', 'sitename', 'sitedatakey']);
-
+    
     const [{ sort, search }] = useQueryStates({
         sort: parseAsArrayOf(parseAsString, ',').withDefault(''),
         search: parseAsString,
     })
     
     const { data, filteredData, isLoading, isFetching } = useModuleQuery({ search, sort })
-
+    
+    const searchOptions = getSearchOptions(data, ['sitearea', 'sitename', 'sitedatakey']);
+    
     const columns = [
         {
             title: <ColumnSorter title="サイトエリア名" field="sitearea" />,
