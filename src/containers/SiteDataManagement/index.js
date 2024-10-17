@@ -1,8 +1,8 @@
-import { TrashIcon } from "@/components/icons";
+import { AddIcon, TrashIcon } from "@/components/icons";
 import { SearchBar } from "@/components/layout/dashboard";
 import { SiteDataKeySettingModal } from "@/components/site_data_management";
 import { ColumnSorter } from "@/components/table";
-import { Container, Table } from "@/components/ui";
+import { Button, Container, Table } from "@/components/ui";
 import { useModuleQuery } from "@/hooks/query";
 import { useDebouncedCallback } from "@/hooks/share";
 import { getSearchOptions } from "@/utils/helper/functions";
@@ -21,7 +21,7 @@ const SiteDataManagementContainer = () => {
           setPage(newPage)
         })
     })
-
+    
     const onChangeSiteDataKey = (siteDataKey) => {
         const initKey = siteDataKey ? siteDataKey : null
         setKey(initKey)
@@ -37,7 +37,7 @@ const SiteDataManagementContainer = () => {
     const { data, filteredData, isLoading, isFetching } = useModuleQuery({ search, sort })
     
     const searchOptions = getSearchOptions(data, ['sitearea', 'sitename', 'sitedatakey']);
-    
+
     const columns = [
         {
             title: <ColumnSorter title="サイトエリア名" field="sitearea" />,
@@ -102,23 +102,29 @@ const SiteDataManagementContainer = () => {
                 <div className="w-full">
                     <SearchBar placeholder="サイトエリア名・サイト名・サイトデータキー"  options={searchOptions}/>
                 </div>
-                <Table 
-                    total={filteredData.length}
-                    loading={isLoading || isFetching}
-                    columns={columns}
-                    data={filteredData}
+                <Button
+                    icon={<AddIcon size={36} />}
+                    type="outline"
+                    label="新規サイトデータ登録"
+                    onClick={() => onChangeSiteDataKey(null)}
                 />
-                <Pagination 
-                    defaultCurrent={page}
-                    pageSize={10}
-                    onChange={onChangePage}
-                    showSizeChanger={false}
-                    className="header-menu"
-                    total={filteredData.length}
-                    showLessItems
-                />
-                <SiteDataKeySettingModal open={siteDataKeySettingFormFlag} onClose={() => setSiteDataKeySettingFormFlag(false)} data={key}/>
             </div>
+            <Table 
+                total={filteredData.length}
+                loading={isLoading || isFetching}
+                columns={columns}
+                data={filteredData}
+            />
+            <Pagination 
+                defaultCurrent={page}
+                pageSize={10}
+                onChange={onChangePage}
+                showSizeChanger={false}
+                className="header-menu"
+                total={filteredData.length}
+                showLessItems
+            />
+            <SiteDataKeySettingModal open={siteDataKeySettingFormFlag} onClose={() => setSiteDataKeySettingFormFlag(false)} data={key}/>
         </Container>
     );
 }

@@ -1,4 +1,5 @@
 import { Input } from "@/components/form";
+import { Button } from "@/components/ui";
 import { FORM_INFO, sitedataRegisterSchema } from "@/validations/siteDataRegisterSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Modal, Radio, Select, Spin } from "antd";
@@ -72,7 +73,7 @@ const SiteDataKeySettingModal = (open, onClose, data) => {
                             name={FORM_INFO.SITEDATANAME}
                             label="サイトデータ名"
                         />
-                        <Radio.Group className='flex justify-center gap-8 w-full pl-36' name={FORM_INFO.VISBILITY} defaultValue={defaultValue.visbility} >
+                        <Radio.Group className='flex justify-center gap-8 w-full pl-36' name={FORM_INFO.VISBILITY} defaultValue={data && defaultValue.visbility || 'public'} >
                             <Radio value={"public"} className='text-sm'>パブリック</Radio>
                             <Radio value={"organization"}>組織</Radio>
                         </Radio.Group>
