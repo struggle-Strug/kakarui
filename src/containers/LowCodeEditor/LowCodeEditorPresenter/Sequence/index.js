@@ -8,7 +8,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 
 import ControlButtons from '../../ControlButton'
 import CustomNode from './Node'
@@ -26,8 +26,14 @@ const Flow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const { getInternalNode, getNodes, getEdges } = useReactFlow()
+  const [isConnected, setIsConnected] = useState(false)
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges])
+  const onConnect = useCallback(
+    (params) => {
+      setEdges((eds) => addEdge(params, eds))
+    },
+    [setEdges]
+  )
 
   const getClosestEdge = useCallback((node) => {
     const { nodeLookup, connectionLookup } = store.getState()
@@ -82,21 +88,34 @@ const Flow = () => {
     }
   }, [])
 
+  // 1度だけノードの情報をログする関数
+  let nodeT = null
+  let nodeFlag = false
+  // 1度だけノードの情報をログする関数
+  const logNodeOnce = useCallback((node) => {
+    if (!nodeT) {
+      const { edges: currentEdges } = store.getState()
+      nodeFlag = currentEdges.some((edge) => edge.source === node.id || edge.target === node.id)
+      console.log('nodeFlag', nodeFlag)
+
+      nodeT = node.id
+    }
+  }, [])
+
   // ドラッグ中に接続候補のエッジを描画する処理
   const onNodeDrag = useCallback(
     (_, node) => {
-      const { edges: currentEdges } = store.getState()
-      const isConnected = currentEdges.some(
-        (edge) => edge.source === node.id || edge.target === node.id
-      )
+      // ここでドロップした時に1回だけノードの情報を引数に関数に渡す
+      logNodeOnce(node)
 
       const closeEdge = getClosestEdge(node)
+      console.log('nodeFlag', nodeFlag)
 
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
 
         if (
-          !isConnected &&
+          !nodeFlag &&
           closeEdge &&
           !nextEdges.find((ne) => ne.source === closeEdge.source && ne.target === closeEdge.target)
         ) {
@@ -113,28 +132,28 @@ const Flow = () => {
   // ドラッグ終了時に接続候補のエッジを確定させる処理
   const onNodeDragStop = useCallback(
     (_, node) => {
-      const { edges: currentEdges } = store.getState()
-      const isConnected = currentEdges.some(
-        (edge) => edge.source === node.id || edge.target === node.id
-      )
       const closeEdge = getClosestEdge(node)
-
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
 
         if (
-          !isConnected &&
+          !nodeFlag &&
           closeEdge &&
           !nextEdges.find((ne) => ne.source === closeEdge.source && ne.target === closeEdge.target)
         ) {
           nextEdges.push(closeEdge)
         }
-
+        nodeT = null
         return nextEdges
       })
     },
     [getClosestEdge]
   )
+
+  //TODO - 確認用なので後で消す
+  useEffect(() => {
+    console.log('nodeFlag-----------------------', nodeFlag)
+  }, [nodeFlag])
 
   // ドロップしたときの処理
   const onDrop = (event) => {
@@ -164,17 +183,14 @@ const Flow = () => {
     event.preventDefault()
     event.dataTransfer.dropEffect = 'move'
   }
-  const isValidConnection = useCallback(
-    (connection) => {
-      //  const { edges: currentEdges } = store.getState()
-      //  const isConnected = currentEdges.some(
-      //    (edge) => edge.source === node.id || edge.target === node.id
-      //  )
-      console.log('connection', connection)
-      return false
+
+  const onEdgesDelete = useCallback(
+    (deletedEdges) => {
+      setEdges((existingEdges) => existingEdges.filter((edge) => !deletedEdges.includes(edge)))
     },
-    [getNodes, getEdges, onNodeDragStop]
+    [setEdges]
   )
+
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
@@ -188,9 +204,9 @@ const Flow = () => {
           onEdgesChange={onEdgesChange}
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
-          isValidConnection={isValidConnection}
-          onConnect={onConnect}
+          // onConnect={onConnect}
           nodeTypes={nodeTypes}
+          onEdgesDelete={onEdgesDelete}
           fitView
         />
 

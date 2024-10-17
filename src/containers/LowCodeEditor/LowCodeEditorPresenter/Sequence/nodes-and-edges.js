@@ -66,9 +66,9 @@ const initialNodes = [
 
 // 初期エッジの定義
 const initialEdges = [
-  { id: 'e1-2', source: '1', target: '2' },
-  { id: 'e2-3', source: '2', target: '3' },
-  { id: 'e2-4', source: '2', target: '4' },
+  { id: 'e1-2', source: initialNodes[1].id, target: initialNodes[0].id },
+  { id: 'e2-3', source: initialNodes[2].id, target: initialNodes[1].id },
+  { id: 'e2-4', source: '4', target: '2' },
 ]
 
 let nodeId = 1
