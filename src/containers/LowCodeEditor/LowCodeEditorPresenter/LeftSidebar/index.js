@@ -13,9 +13,11 @@ const LeftSidebar = () => {
   }
 
   const [sections, setSections] = useState(initialSections)
+  const [filteredSections, setFilteredSections] = useState(initialSections)
+
   // セクションの開閉をトグルする関数
   const toggleSection = (type) => {
-    setSections((prevSections) =>
+    setFilteredSections((prevSections) =>
       prevSections.map((section) =>
         section.type === type
           ? { ...section, isOpen: !section.isOpen } // クリックされたセクションの開閉状態を反転
@@ -24,7 +26,6 @@ const LeftSidebar = () => {
     )
   }
 
-  const [filteredSections, setFilteredSections] = useState(initialSections)
   // フィルタリング関数
   const handleFilter = (keyword) => {
     if (!keyword) {

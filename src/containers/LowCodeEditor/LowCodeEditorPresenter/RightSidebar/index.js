@@ -53,8 +53,8 @@ const title = ''
 const DataList = ({ title, data }) => (
   <div>
     <div className="mb-2 text-[14px] font-bold text-[#796E66]">{title}</div>
-    <div className="mt-4 pl-2">
-      <div className="flex h-[20dvh] flex-col gap-1.5 overflow-y-auto py-2">
+    <div className="mt-4 pl-1">
+      <div className="flex h-[20dvh] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
         {data.map((item, index) => (
           <div
             key={index}
@@ -112,13 +112,13 @@ const RightSidebar = () => {
         {/* Project Data */}
         <DataList title="Project Data" data={projectData} />
 
-        <Divider className="my-6 p-0" />
+        <Divider className="mb-4 mt-8 p-0" />
 
         {/* Site Data */}
         <DataList title="Site Data" data={siteData} />
       </div>
 
-      <Divider className="my-6 p-0" />
+      <Divider className="mb-4 mt-8 p-0" />
 
       {/* Properties View */}
       <div className="w-full">
@@ -126,23 +126,21 @@ const RightSidebar = () => {
         <div className="my-4 text-[14px] font-bold text-[#796E66]">System Properties</div>
 
         {/* keyと値の一覧 */}
-        <div className="flex h-[20dvh] flex-col gap-1.5 overflow-y-auto py-2">
+        <div className="flex h-[23dvh] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
           {properties.map((property, index) => (
             <div
               key={index}
-              className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4]"
+              className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4] p-1 text-[12px]"
             >
-              <div className="w-1/3 pl-2 text-[13px] font-bold text-[#796E66]">
-                {property.label}
-              </div>
+              <div className="w-2/5 pl-2 font-bold text-[#796E66]">{property.label}</div>
               <span className="text-[#D3D3D3]">|</span>
-              <div className="flex w-2/3 items-center pl-2 text-[13px] text-[#796E66]">
+              <div className="flex w-3/5 items-center pl-2 text-[#796E66]">
                 {property.isEditable ? (
                   <Input
                     type="text"
                     value={property.value}
                     onChange={(e) => handleInputChange(e, index)}
-                    className="w-full border-none bg-white text-[13px]"
+                    className="w-full border-none bg-white p-0"
                   />
                 ) : (
                   <span className="w-full overflow-hidden truncate text-ellipsis">
@@ -167,7 +165,7 @@ const RightSidebar = () => {
         </div>
       </div>
 
-      <Divider className="mb-6 mt-6 p-0" />
+      <Divider className="mb-4 mt-8 p-0" />
 
       {/* Custom Properties */}
       <DataList title="Custom Properties" data={customProperties} />
