@@ -116,11 +116,11 @@ const ModuleForm = ({ open, data, onClose }) => {
                 <Radio value={"multi"} onChange={() => setInitialValue("multi")}>マルチアーキテクチャ</Radio>
               </Radio.Group> 
 
-              <div className='module flex gap-16 w-full' >
-                <div className='flex pt-4 w-[40%]' >
+              <div className='module flex w-full' >
+                <div className='flex pt-4 w-[50%]' disabled={initialValue == "multi" && true}>
                  <InputTarFile name={FORM_INFO.SINGLEFILE} label="モジュール: " disabled={initialValue == "multi" && true}/>
                 </div>
-                <div className='flex justify-center gap-4 items-center w-[60%] pl-16' disabled={initialValue == "single" && true}>
+                <div className='flex justify-center gap-4 items-center w-[50%] pl-36' disabled={initialValue == "single" && true}>
                   <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
                     <InputTarFile name={FORM_INFO.ARM64FILE} disabled={initialValue == "single" && true}/>
                     <p className='pr-14'>Arm64</p>

@@ -379,6 +379,16 @@
   @apply text-[0.8rem]
 }
 
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name{
+  overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0 4px !important;
+    line-height: 1.5714285714285714;
+    flex: auto;
+    transition: all 0.3s;
+}
+
 .module .ant-upload-list-item-actions{
   @apply pr-[0.7rem]
 }
