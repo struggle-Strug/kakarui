@@ -4,16 +4,17 @@ import noop from 'lodash/noop'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
-
+import { useFlag } from '@/hooks/share'
 import { UsersLightIcon } from '@/components/icons'
-
+import { useGetMe, useProjectActive, useOrganizationQuery, useUserActive, useUserDetail } from '@/hooks/query'
 import { cn } from '@/utils/helper/functions'
-
+import OrgSubMenu from './OrgSubMenu'
 const OrgMenu = ({ organizationDetail, isMember }) => {
+  const [open, onOpen, onClose] = useFlag()
   const router = useRouter()
 
   const disabledRedirectUser = Boolean(isMember)
-
+  const { organizations, isLoading } = useOrganizationQuery();
   const items = [
     {
       label: (
@@ -56,6 +57,15 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
       label: <div className="mx-3 flex w-[400px] px-3 py-4 text-black">モジュールセット管理</div>,
       onClick: () => router.push(Routes.MODULE_SET),
       key: '3',
+    },
+    {
+      label: <OrgSubMenu data={organizations} loading={isLoading} onClose={onClose} />,
+      onClick: ({ domEvent: event }) => {
+        event.preventDefault()
+      },
+      disabled: true,
+      className: '!pointer-events-auto !cursor-pointer !rounded-l-[24px] !rounded-r-[24px]',
+      key: '4',
     },
   ]
 
