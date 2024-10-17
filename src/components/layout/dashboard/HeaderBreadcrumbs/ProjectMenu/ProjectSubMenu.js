@@ -10,7 +10,8 @@ import { useDebouncedCallback } from '@/hooks/share'
 import { FolderIcon } from '@/components/icons'
 
 import { formatDate } from '@/utils/helper/dayjs'
-
+import { useRouter } from 'next/router'
+import { Routes } from '@/constants'
 const ProjectSubMenuItem = memo(({ item, onClick }) => (
   <div
     onClick={onClick}
@@ -36,6 +37,8 @@ const ProjectSubMenuItem = memo(({ item, onClick }) => (
 ))
 
 const ProjectSubMenu = ({ data, loading, onClose }) => {
+
+  const router = useRouter()
   const [page, setPage] = useState(1)
 
   const [clicking, startClicking] = useLoadingSimulation(false, 500)
@@ -51,6 +54,7 @@ const ProjectSubMenu = ({ data, loading, onClose }) => {
       setProjectActive(item)
       onClose?.()
     })
+    router.push(Routes.HOME, null, { shallow: true })
   })
 
   const onChangePage = useDebouncedCallback((newPage) => {
