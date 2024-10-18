@@ -112,8 +112,9 @@ const generateNode = (type, position) => {
           image: Assets.LOWCODEEDITOR.skillIcon,
           skillName: 'New Skill',
           skillType: 'Action / New Move',
-          customProperties: '新しい動作を実行します。',
-          userName: '新規スキルユーザー',
+          siteData: ['S01', 'S02'], // デフォルトのsiteDataを追加
+          customProperties: 'まで移動する', // ここは単一の文字列で設定
+          userName: '新規ユーザー',
           updatedAt: '2024/10/05',
         },
         position,

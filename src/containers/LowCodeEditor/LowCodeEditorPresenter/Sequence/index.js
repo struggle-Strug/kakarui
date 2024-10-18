@@ -8,7 +8,7 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect } from 'react'
 
 import ControlButtons from '../../ControlButton'
 import CustomNode from './Node'
@@ -25,8 +25,7 @@ const Flow = () => {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const { getInternalNode, getNodes, getEdges } = useReactFlow()
-  const [isConnected, setIsConnected] = useState(false)
+  const { getInternalNode, getNodes, getEdges, screenToFlowPosition } = useReactFlow()
 
   const onConnect = useCallback(
     (params) => {
@@ -96,8 +95,6 @@ const Flow = () => {
     if (!nodeT) {
       const { edges: currentEdges } = store.getState()
       nodeFlag = currentEdges.some((edge) => edge.source === node.id || edge.target === node.id)
-      console.log('nodeFlag', nodeFlag)
-
       nodeT = node.id
     }
   }, [])
@@ -109,7 +106,6 @@ const Flow = () => {
       logNodeOnce(node)
 
       const closeEdge = getClosestEdge(node)
-      console.log('nodeFlag', nodeFlag)
 
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
@@ -156,27 +152,29 @@ const Flow = () => {
   }, [nodeFlag])
 
   // ドロップしたときの処理
-  const onDrop = (event) => {
-    event.preventDefault()
+  const onDrop = useCallback(
+    (event) => {
+      event.preventDefault()
 
-    const reactFlowBounds = event.target.getBoundingClientRect()
-    const type = event.dataTransfer.getData('application/reactflow')
+      const reactFlowBounds = event.target.getBoundingClientRect()
+      const type = event.dataTransfer.getData('application/reactflow')
 
-    // typeが存在しない場合、何も処理をしない
-    if (!type) return
+      // typeが存在しない場合、何も処理をしない
+      if (!type) return
 
-    // マウスの位置を取得してフィールドの座標に変換
-    const position = {
-      x: event.clientX - reactFlowBounds.left || 0,
-      y: event.clientY - reactFlowBounds.top || 0,
-    }
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      })
 
-    // 新しいノードのデータを生成
-    const newNode = generateNode(type, position)
-    if (newNode) {
-      setNodes((prevNodes) => [...prevNodes, newNode])
-    }
-  }
+      // 新しいノードのデータを生成
+      const newNode = generateNode(type, position)
+      if (newNode) {
+        setNodes((prevNodes) => [...prevNodes, newNode])
+      }
+    },
+    [screenToFlowPosition]
+  )
 
   // ドラッグオーバー時の処理（ドロップ可能領域を有効にする）
   const onDragOver = (event) => {
@@ -196,7 +194,7 @@ const Flow = () => {
       {/* 左側のドラック可能な要素 */}
 
       {/* 右側のReactFlowフィールド */}
-      <div className="bg-gray-50 relative h-full w-full" onDragOver={onDragOver} onDrop={onDrop}>
+      <div className="relative w-full h-full bg-gray-50" onDragOver={onDragOver} onDrop={onDrop}>
         <ReactFlow
           nodes={nodes}
           edges={edges}

@@ -52,7 +52,7 @@ const LeftSidebar = () => {
             <div key={section.type} className="mb-6">
               {/* セクションのタイトルとトグルアイコン */}
               <div
-                className="mb-3 flex cursor-pointer items-start gap-1"
+                className="flex items-start gap-1 mb-3 cursor-pointer"
                 onClick={() => toggleSection(section.type)}
               >
                 <Image
@@ -74,6 +74,8 @@ const LeftSidebar = () => {
                   <div
                     key={card.id}
                     className="mb-2 rounded-md border border-solid border-[#E3E3E4] bg-white py-2 pl-2 pr-1"
+                    draggable
+                    onDragStart={(event) => onDragStart(event, 'Skill')}
                   >
                     <div className="flex w-[230px] items-center gap-2">
                       <Image
