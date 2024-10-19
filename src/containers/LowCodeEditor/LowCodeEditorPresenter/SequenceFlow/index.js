@@ -1,7 +1,7 @@
 import { ReactFlow, useEdgesState, useNodesState, useReactFlow, useStoreApi } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
 
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback } from 'react'
 
 import ControlButtons from '../../ControlButton'
 import CustomNode from './Node'
@@ -9,7 +9,7 @@ import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 
 const MIN_DISTANCE = 600
 
-const Flow = () => {
+const SequenceFlow = () => {
   const store = useStoreApi()
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
@@ -130,11 +130,6 @@ const Flow = () => {
     [getClosestEdge]
   )
 
-  //TODO - 確認用なので後で消す
-  useEffect(() => {
-    console.log('isTargetNodeConnected-----------------------', isTargetNodeConnected)
-  }, [isTargetNodeConnected])
-
   // ドロップしたときの処理
   const onDrop = useCallback(
     (event) => {
@@ -196,4 +191,4 @@ const Flow = () => {
   )
 }
 
-export default memo(Flow)
+export default memo(SequenceFlow)

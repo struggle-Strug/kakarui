@@ -2,13 +2,14 @@ import { ReactFlowProvider } from '@xyflow/react'
 
 import Image from 'next/image'
 import { useState } from 'react'
+import 'reactflow/dist/style.css'
 
 import { Assets } from '@/constants'
 
 import Header from './Header'
 import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar'
-import Flow from './Sequence'
+import SequenceFlow from './SequenceFlow'
 
 export const LowCodeEditorPresenter = () => {
   const [open, setOpen] = useState(true)
@@ -36,7 +37,7 @@ export const LowCodeEditorPresenter = () => {
 
           {/* SECTION - シーケンス */}
           <div className="w-full bg-[#E4E4E4]">
-            <Flow />
+            <SequenceFlow />
           </div>
         </ReactFlowProvider>
 
