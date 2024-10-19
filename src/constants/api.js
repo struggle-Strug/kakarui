@@ -78,6 +78,12 @@ export default {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
 
+  //TODO -  ローコードエディターで使用するエンドポイント追加
+  // Skill
+  SKILL: {
+    LIST: '/organizations/{organization_id}/skills',
+  },
+
   // -- END --
 }
 

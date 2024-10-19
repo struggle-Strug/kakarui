@@ -17,7 +17,7 @@ export const LowCodeEditorPresenter = () => {
   const toggleDrawer = () => {
     setOpen(!open)
   }
-
+  const [draggedNodeType, setDraggedNodeType] = useState(null)
   const [name, setName] = useState('Move to 001') // 初期値を設定
 
   // 入力が変更された時の処理
@@ -26,40 +26,43 @@ export const LowCodeEditorPresenter = () => {
   }
 
   return (
-    <div className="flex h-screen flex-col">
-      {/* SECTION - ヘッダー */}
-      <Header />
+    <ReactFlowProvider>
+      <div className="flex h-screen flex-col">
+        {/* SECTION - ヘッダー */}
+        <Header />
 
-      <div className="flex h-[calc(100%-60px)] w-full justify-between">
-        <ReactFlowProvider>
+        <div className="flex h-[calc(100%-60px)] w-full justify-between">
           {/* SECTION - 左サイドバー */}
-          <LeftSidebar />
+          <LeftSidebar setDraggedNodeType={setDraggedNodeType} />
 
           {/* SECTION - シーケンス */}
           <div className="w-full bg-[#E4E4E4]">
-            <SequenceFlow />
-          </div>
-        </ReactFlowProvider>
-
-        {/* SECTION - drawer/ドロワー */}
-        <div className="relative flex h-full items-center justify-center bg-white ">
-          <div
-            className="absolute mb-8 mr-6 flex h-[120px] w-[26px] cursor-pointer items-center justify-center rounded-l-3xl bg-white"
-            onClick={toggleDrawer}
-          >
-            <Image
-              src={open ? Assets.LOWCODEEDITOR.arrowRight : Assets.LOWCODEEDITOR.arrowLeft}
-              className="h-[18px] w-[18px]"
-              alt=""
-              width={18}
-              height={18}
+            <SequenceFlow
+              draggedNodeType={draggedNodeType}
+              setDraggedNodeType={setDraggedNodeType}
             />
           </div>
-        </div>
 
-        {/* SECTION - 右サイドバー */}
-        {open && <RightSidebar />}
+          {/* SECTION - drawer/ドロワー */}
+          <div className="relative flex h-full items-center justify-center bg-white ">
+            <div
+              className="absolute mb-8 mr-6 flex h-[120px] w-[26px] cursor-pointer items-center justify-center rounded-l-3xl bg-white"
+              onClick={toggleDrawer}
+            >
+              <Image
+                src={open ? Assets.LOWCODEEDITOR.arrowRight : Assets.LOWCODEEDITOR.arrowLeft}
+                className="h-[18px] w-[18px]"
+                alt=""
+                width={18}
+                height={18}
+              />
+            </div>
+          </div>
+
+          {/* SECTION - 右サイドバー */}
+          {open && <RightSidebar />}
+        </div>
       </div>
-    </div>
+    </ReactFlowProvider>
   )
 }

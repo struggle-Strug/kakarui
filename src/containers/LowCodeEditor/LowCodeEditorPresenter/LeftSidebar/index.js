@@ -6,12 +6,13 @@ import { Assets } from '@/constants'
 import ModulesSelector from './ModulesSelector/index'
 import { initialSections } from './skillData'
 
-const LeftSidebar = () => {
+const LeftSidebar = ({ setDraggedNodeType }) => {
+  // ドラッグ開始時にノードタイプを状態に保存
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
+    setDraggedNodeType(nodeType) // ドラッグされたノードタイプを保存
   }
-
   const [sections, setSections] = useState(initialSections)
   const [filteredSections, setFilteredSections] = useState(initialSections)
 
@@ -52,7 +53,7 @@ const LeftSidebar = () => {
             <div key={section.type} className="mb-6">
               {/* セクションのタイトルとトグルアイコン */}
               <div
-                className="flex items-start gap-1 mb-3 cursor-pointer"
+                className="mb-3 flex cursor-pointer items-start gap-1"
                 onClick={() => toggleSection(section.type)}
               >
                 <Image

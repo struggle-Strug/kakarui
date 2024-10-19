@@ -484,3 +484,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .react-flow__pane {
   border: 0px !important;
 }
+.react-flow__node.select {
+  border: 3px solid #796e66; /* 太いボーダー */
+}

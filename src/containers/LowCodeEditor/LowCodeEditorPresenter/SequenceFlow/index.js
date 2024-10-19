@@ -1,20 +1,57 @@
 import { ReactFlow, useEdgesState, useNodesState, useReactFlow, useStoreApi } from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
+// Ant DesignのMenuをインポート
+import 'antd/dist/reset.css'
 
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 
 import ControlButtons from '../../ControlButton'
 import CustomNode from './Node'
 import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 
-const MIN_DISTANCE = 600
+// Ant Designのデフォルトスタイル
+const MIN_DISTANCE = 1000
 
-const SequenceFlow = () => {
+const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   const store = useStoreApi()
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const { getInternalNode, getNodes, getEdges, screenToFlowPosition } = useReactFlow()
+  const { getInternalNode, getNodes, getEdges, screenToFlowPosition, deleteElements } =
+    useReactFlow()
+
+  const [selectedNodeIds, setSelectedNodeIds] = useState([]) // 選択されたノードのIDを管理する配列
+
+  // ノードがクリックされた時の処理
+  const onNodeClick = useCallback((event, node) => {
+    event.stopPropagation() // イベントバブリングを防止
+    // Rootタイプのノードは選択処理をスキップ
+    if (node.data.type === 'Root') {
+      return
+    }
+    setSelectedNodeIds((prevSelectedNodeIds) => {
+      // クリックされたノードが既に選択されているかどうかを確認
+      if (prevSelectedNodeIds.includes(node.id)) {
+        // 既に選択されている場合は、そのノードを配列から削除
+        return prevSelectedNodeIds.filter((id) => id !== node.id)
+      }
+      // 選択されていない場合は、そのノードのIDを配列に追加
+      return [...prevSelectedNodeIds, node.id]
+    })
+  }, [])
+
+  // ノードに対して、選択されたノードでかつdata.typeがRoot以外の場合に"select"クラスを付与
+  const nodeWithClasses = nodes.map((node) => {
+    // Rootタイプの場合はそのまま早期リターン
+    if (node.data.type === 'Root') {
+      return node
+    }
+    // Root以外で選択されているノードにクラスを付与
+    return {
+      ...node,
+      className: selectedNodeIds.includes(node.id) ? 'select' : '',
+    }
+  })
 
   const getClosestEdge = useCallback((node) => {
     const { nodeLookup, connectionLookup } = store.getState()
@@ -29,8 +66,6 @@ const SequenceFlow = () => {
             n.measured.height -
             internalNode.internals.positionAbsolute.y
           const distance = Math.sqrt(dx * dx + dy * dy)
-
-          // console.log('connectionLookup:', connectionLookup)
           // ターゲットノードの下部がソースノードの上部より上にあるかを確認
           if (
             // !isConnected &&
@@ -69,7 +104,7 @@ const SequenceFlow = () => {
     }
   }, [])
 
-  // 1度だけノードの情報をログする関数
+  // 1度だけ掴んでいるノードの情報をセットする。過度な再レンダリングを防止。
   let targetNodeId = null
   let isTargetNodeConnected = false
   // 過度な再レンダリングを防ぐために1度だけノードの情報を取得する関数
@@ -113,9 +148,12 @@ const SequenceFlow = () => {
   const onNodeDragStop = useCallback(
     (_, node) => {
       const closeEdge = getClosestEdge(node)
+
+      if (!closeEdge) {
+        deleteElements({ nodes: [{ id: node.id }] })
+      }
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
-
         if (
           !isTargetNodeConnected &&
           closeEdge &&
@@ -130,12 +168,36 @@ const SequenceFlow = () => {
     [getClosestEdge]
   )
 
+  //TODO - ドラッグしてフィールドに入ったときにノードを生成
+  // const onDragEnter = useCallback(
+  //   (event) => {
+  //     event.preventDefault()
+  //     console.log('dddddd')
+  //     const type = event.dataTransfer.getData('application/reactflow')
+  //     console.log('type', type)
+  //     // typeが存在しない場合、何も処理をしない
+  //     if (!type) return
+
+  //     const position = screenToFlowPosition({
+  //       x: event.clientX,
+  //       y: event.clientY,
+  //     })
+
+  //     // 新しいノードのデータを生成
+  //     const newNode = generateNode(type, position)
+
+  //     if (newNode) {
+  //       setNodes((prevNodes) => [...prevNodes, newNode])
+  //     }
+  //   },
+  //   [screenToFlowPosition]
+  // )
+
   // ドロップしたときの処理
   const onDrop = useCallback(
     (event) => {
       event.preventDefault()
 
-      const reactFlowBounds = event.target.getBoundingClientRect()
       const type = event.dataTransfer.getData('application/reactflow')
 
       // typeが存在しない場合、何も処理をしない
@@ -148,6 +210,7 @@ const SequenceFlow = () => {
 
       // 新しいノードのデータを生成
       const newNode = generateNode(type, position)
+
       if (newNode) {
         setNodes((prevNodes) => [...prevNodes, newNode])
       }
@@ -160,33 +223,87 @@ const SequenceFlow = () => {
     event.preventDefault()
     event.dataTransfer.dropEffect = 'move'
   }
+  const [contextMenu, setContextMenu] = useState(null) // コンテキストメニューの位置と表示状態を管理
 
-  // const nodeTypes = {
-  //   custom: (props) => <CustomNode {...props} onDelete={handleDeleteNode} id={props.id} />,
-  // }
+  // 右クリック時の処理
+  const onNodeContextMenu = useCallback((event, node) => {
+    event.preventDefault() // デフォルトのコンテキストメニューを無効化
+    console.log(`Right-clicked on node ${node.id}`) // ノードIDをコンソールに表示
+
+    // コンテキストメニューを表示する位置を設定
+    setContextMenu({
+      mouseX: event.clientX,
+      mouseY: event.clientY,
+      nodeId: node.id,
+    })
+  }, [])
+
+  // メニュー項目がクリックされた時の処理
+  const handleMenuClick = (action) => {
+    console.log(`Action ${action.key} triggered on node ${contextMenu.nodeId}`)
+    setContextMenu(null) // メニューを閉じる
+  }
+
+  // 右クリックの外部クリックでメニューを閉じる処理
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (contextMenu) {
+        setContextMenu(null) // メニューを閉じる
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [contextMenu])
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
-
       {/* 右側のReactFlowフィールド */}
-      <div className="bg-gray-50 relative h-full w-full" onDragOver={onDragOver} onDrop={onDrop}>
+      <div
+        className="bg-gray-50 relative h-full w-full"
+        onDragOver={onDragOver}
+        onDrop={onDrop}
+        // onDragEnter={onDragEnter}
+      >
         <ReactFlow
-          nodes={nodes}
+          nodes={nodeWithClasses}
           edges={edges}
+          onNodeClick={onNodeClick}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeDrag={onNodeDrag}
           onNodeDragStop={onNodeDragStop}
-          nodeTypes={{
-            custom: CustomNode,
-          }}
+          nodeTypes={{ custom: CustomNode }}
           deleteKeyCode={null}
           fitView
+          onNodeContextMenu={selectedNodeIds.length >= 2 && onNodeContextMenu} // 右クリック時のイベントハンドラを指定
         />
 
         {/* 再生・停止ボタン */}
         <ControlButtons />
       </div>
+      {/* カスタムコンテキストメニュー */}
+      {contextMenu && (
+        <div
+          style={{
+            position: 'absolute',
+            top: contextMenu.mouseY,
+            left: contextMenu.mouseX,
+            zIndex: 1000,
+          }}
+          className="bg-white text-start"
+        >
+          <div className="cursor-pointer rounded border border-solid border-gray">
+            <button
+              className="py-2 pl-2 pr-4 text-sm hover:opacity-50"
+              disabled={selectedNodeIds.length < 2}
+            >
+              サブツリーとして登録
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

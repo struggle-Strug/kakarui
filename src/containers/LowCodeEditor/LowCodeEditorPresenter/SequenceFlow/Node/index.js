@@ -1,10 +1,11 @@
 import { Handle, Position, useReactFlow } from '@xyflow/react'
-import { Divider } from 'antd'
 
-import Image from 'next/image'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 
-import { Assets } from '@/constants'
+import { DecoratorNode } from './DecoratorNode'
+import { NodeHeader } from './NodeHeader'
+import { SkillNode } from './SkillNode'
+import { SubTreeNode } from './SubTreeNode'
 
 // 背景色を`type`に応じて設定
 const typeToBgColor = {
@@ -14,29 +15,12 @@ const typeToBgColor = {
   Decorator: '#4D997D',
   'Sub Tree': '#B36E02',
 }
-
 // カスタムノードコンポーネント
-const CustomNode = ({ data, id }) => {
-  // Skillノードの場合のみ、siteDataとcustomPropertiesを管理
-  const [selectedSiteData, setSelectedSiteData] = useState(
-    data.type === 'Skill' && data.siteData ? data.siteData[0] : ''
-  )
-  const [selectedCustomProperty, setSelectedCustomProperty] = useState(
-    data.type === 'Skill' && data.customProperties ? data.customProperties[0] : ''
-  )
-  const handleSiteDataChange = (event) => {
-    setSelectedSiteData(event.target.value)
-  }
-
-  const handleCustomPropertyChange = (event) => {
-    setSelectedCustomProperty(event.target.value)
-  }
-
+const CustomNode = ({ data, id, dragging }) => {
   const { deleteElements, getEdges } = useReactFlow()
 
-  // バツボタンを押したときに擬似的にDeleteキーを押す
+  // バツボタンを押したときにノードを削除
   const handleDeleteNode = () => {
-    // 対象ノードとそれに紐づく親ノードも削除
     const edges = getEdges()
     const connectedEdges = edges.filter((edge) => edge.target === id)
     const childNodeIds = connectedEdges.map((edge) => edge.source)
@@ -47,149 +31,14 @@ const CustomNode = ({ data, id }) => {
   const bgColor = typeToBgColor[data.type] || '#413D39'
 
   return (
-    <div className="rounded-[13px] bg-white px-2 py-2">
-      {/* ノードの内容 */}
+    <div className="cursor-pointer rounded-[13px] bg-white px-2 py-2">
       <div className="w-[250px]">
-        {/* ノードのターゲットとソースのハンドル */}
-        {data.type !== 'Root' && (
-          <Handle
-            type="source"
-            position={Position.Top}
-            className="w-24 !border !border-solid !border-[#796E66] !bg-white p-1"
-          />
-        )}
-        <div
-          className="flex w-full justify-between rounded px-2 py-2"
-          style={{ backgroundColor: bgColor }}
-        >
-          <div className="flex items-center gap-2">
-            {/* モジュールアイコン */}
-            {data.image && (
-              <Image
-                src={data.image}
-                className="w-[20px] shrink-0"
-                alt="gen3p"
-                width={40}
-                height={40}
-              />
-            )}
-            <div className="font-bold text-white">{data.type}</div>
-          </div>
-          {data.type !== 'Root' && (
-            <div className="cursor-pointer text-white" onClick={handleDeleteNode}>
-              ×
-            </div>
-          )}
-        </div>
-        {/* Skillノードの詳細情報 */}
-        {data.type === 'Skill' && (
-          <div className="p-2">
-            <div className="flex flex-col gap-2 p-2">
-              <div className="text-[14px] font-bold">Name: {data.skillName}</div>
-              <div className="text-[14px] font-bold">Type: {data.skillType}</div>
-            </div>
-            <Divider className="my-2 p-0" />
+        <NodeHeader data={data} handleDeleteNode={handleDeleteNode} bgColor={bgColor} />
 
-            <div className="flex items-center justify-start gap-1">
-              <select className="rounded border-2 border-solid border-[#E3E3E4] p-1 text-[14px]">
-                {data.siteData &&
-                  data.siteData.map((site, index) => (
-                    <option key={index} value={site}>
-                      {site}
-                    </option>
-                  ))}
-              </select>
-              <div className="text-[14px] font-bold">{data.customProperties}</div>
-            </div>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <Image
-                  src={Assets.LOWCODEEDITOR.userIcon}
-                  className="w-[20px] shrink-0"
-                  alt="gen3p"
-                  width={20}
-                  height={20}
-                />
-                <div className="truncate text-[14px]">{data.userName}</div>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image
-                  src={Assets.LOWCODEEDITOR.timeIcon}
-                  className="w-[20px] shrink-0"
-                  alt="gen3p"
-                  width={20}
-                  height={20}
-                />
-                <div className="truncate text-[14px]">{data.updatedAt}</div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Decoratorノードの詳細情報 */}
-        {data.type === 'Decorator' && (
-          <div className="flex w-full flex-col gap-2 p-2">
-            {/* <label>Condition Type: </label> */}
-            <select className="w-full rounded-md border-2 border-solid border-[#E3E3E4] p-1">
-              {data.conditionalType.map((condition, index) => (
-                <option key={index} value={condition}>
-                  {condition}
-                </option>
-              ))}
-            </select>
-            <div>
-              <span className="pl-2 text-[14px] font-bold">A</span>
-              <select className="ml-4 rounded border-2 border-solid border-[#E3E3E4] p-1">
-                {/* Aの値を選択肢として表示 */}
-                {data.aValues.map((aValue, index) => (
-                  <option key={index} value={aValue}>
-                    {aValue}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <span className="pl-2 text-[14px] font-bold">B</span>
-              <select className="ml-4 rounded border-2 border-solid border-[#E3E3E4] p-1">
-                {/* Bの値を選択肢として表示 */}
-                {data.bValues.map((bValue, index) => (
-                  <option key={index} value={bValue}>
-                    {bValue}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <Image
-                  src={Assets.LOWCODEEDITOR.userIcon}
-                  className="w-[20px] shrink-0"
-                  alt="gen3p"
-                  width={20}
-                  height={20}
-                />
-                <div className="truncate text-[14px]">{data.userName}</div>
-              </div>
-              <div className="flex items-center gap-1">
-                <Image
-                  src={Assets.LOWCODEEDITOR.timeIcon}
-                  className="w-[20px] shrink-0"
-                  alt="gen3p"
-                  width={20}
-                  height={20}
-                />
-                <div className="truncate text-[14px]">{data.updatedAt}</div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Sub Treeノードの詳細情報 */}
-        {data.type === 'Sub Tree' && (
-          <div className="flex flex-col gap-2 p-2">
-            <div className="text-[14px] font-bold">Name: {data.subTreeName}</div>
-            <div className="text-[14px] font-bold">Type: {data.subTreeType}</div>
-            <div className="mt-2 text-[14px] font-bold">{data.customProperties}</div>
-          </div>
-        )}
+        {data.type === 'Skill' && <SkillNode data={data} />}
+        {data.type === 'Decorator' && <DecoratorNode data={data} />}
+        {data.type === 'Sub Tree' && <SubTreeNode data={data} />}
+
         <Handle
           type="target"
           position={Position.Bottom}
