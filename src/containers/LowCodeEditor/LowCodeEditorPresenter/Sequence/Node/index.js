@@ -1,4 +1,4 @@
-import { Handle, Position } from '@xyflow/react'
+import { Handle, Position, useReactFlow } from '@xyflow/react'
 import { Divider } from 'antd'
 
 import Image from 'next/image'
@@ -16,7 +16,7 @@ const typeToBgColor = {
 }
 
 // カスタムノードコンポーネント
-const CustomNode = ({ data }) => {
+const CustomNode = ({ data, id }) => {
   // Skillノードの場合のみ、siteDataとcustomPropertiesを管理
   const [selectedSiteData, setSelectedSiteData] = useState(
     data.type === 'Skill' && data.siteData ? data.siteData[0] : ''
@@ -24,13 +24,23 @@ const CustomNode = ({ data }) => {
   const [selectedCustomProperty, setSelectedCustomProperty] = useState(
     data.type === 'Skill' && data.customProperties ? data.customProperties[0] : ''
   )
-
   const handleSiteDataChange = (event) => {
     setSelectedSiteData(event.target.value)
   }
 
   const handleCustomPropertyChange = (event) => {
     setSelectedCustomProperty(event.target.value)
+  }
+
+  const { deleteElements, getEdges } = useReactFlow()
+
+  // バツボタンを押したときに擬似的にDeleteキーを押す
+  const handleDeleteNode = () => {
+    // 対象ノードとそれに紐づく親ノードも削除
+    const edges = getEdges()
+    const connectedEdges = edges.filter((edge) => edge.target === id)
+    const childNodeIds = connectedEdges.map((edge) => edge.source)
+    deleteElements({ nodes: [{ id: id }, ...childNodeIds.map((id) => ({ id }))] })
   }
 
   // 背景色を取得
@@ -49,7 +59,7 @@ const CustomNode = ({ data }) => {
           />
         )}
         <div
-          className="flex justify-between w-full px-2 py-2 rounded"
+          className="flex w-full justify-between rounded px-2 py-2"
           style={{ backgroundColor: bgColor }}
         >
           <div className="flex items-center gap-2">
@@ -65,16 +75,20 @@ const CustomNode = ({ data }) => {
             )}
             <div className="font-bold text-white">{data.type}</div>
           </div>
-          {data.type !== 'Root' && <div className="text-white cursor-pointer">×</div>}
+          {data.type !== 'Root' && (
+            <div className="cursor-pointer text-white" onClick={handleDeleteNode}>
+              ×
+            </div>
+          )}
         </div>
         {/* Skillノードの詳細情報 */}
         {data.type === 'Skill' && (
           <div className="p-2">
             <div className="flex flex-col gap-2 p-2">
               <div className="text-[14px] font-bold">Name: {data.skillName}</div>
-              <div className="text-[14px] font-bold">Type: {data.skillType}</div>{' '}
+              <div className="text-[14px] font-bold">Type: {data.skillType}</div>
             </div>
-            <Divider className="p-0 my-2" />
+            <Divider className="my-2 p-0" />
 
             <div className="flex items-center justify-start gap-1">
               <select className="rounded border-2 border-solid border-[#E3E3E4] p-1 text-[14px]">
@@ -87,7 +101,7 @@ const CustomNode = ({ data }) => {
               </select>
               <div className="text-[14px] font-bold">{data.customProperties}</div>
             </div>
-            <div className="flex items-center gap-3 mt-4">
+            <div className="mt-4 flex items-center gap-3">
               <div className="flex items-center gap-1">
                 <Image
                   src={Assets.LOWCODEEDITOR.userIcon}
@@ -113,7 +127,7 @@ const CustomNode = ({ data }) => {
         )}
         {/* Decoratorノードの詳細情報 */}
         {data.type === 'Decorator' && (
-          <div className="flex flex-col w-full gap-2 p-2">
+          <div className="flex w-full flex-col gap-2 p-2">
             {/* <label>Condition Type: </label> */}
             <select className="w-full rounded-md border-2 border-solid border-[#E3E3E4] p-1">
               {data.conditionalType.map((condition, index) => (
@@ -144,7 +158,7 @@ const CustomNode = ({ data }) => {
                 ))}
               </select>
             </div>
-            <div className="flex items-center gap-3 mt-4">
+            <div className="mt-4 flex items-center gap-3">
               <div className="flex items-center gap-1">
                 <Image
                   src={Assets.LOWCODEEDITOR.userIcon}
