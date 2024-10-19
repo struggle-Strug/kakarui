@@ -14,4 +14,5 @@ export * from './texts'
 export * from './time'
 export * from './types'
 export * from './validations'
+export * from './notification_hub'
 export { Assets, Routes, httpStatusCode }

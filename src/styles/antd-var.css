@@ -371,6 +371,59 @@
 .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
   @apply m-0 border-none;
 }
+.module .ant-upload-wrapper .ant-upload div{
+  @apply w-20
+}
+
+.module .ant-row{
+  @apply gap-8
+}
+
+.module .ant-col{
+  flex: 1 0 !important;
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
+  @apply text-[0.8rem]
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name{
+  overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0 4px !important;
+    line-height: 1.5714285714285714;
+    flex: auto;
+    transition: all 0.3s;
+}
+
+.module .ant-upload-list-item-actions{
+  @apply pr-[0.7rem]
+}
+
+.module .ant-upload-list-text{
+  @apply w-[12rem] ml-[3rem]
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-container{
+  @apply w-[6rem]
+}
+
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-actions .ant-upload-list-item-action.ant-btn {
+  @apply h-6
+}
+
+.module .ant-btn.ant-btn-icon-only .anticon {
+  @apply text-[1rem]
+}
+
+.module .ant-btn.ant-btn-icon-only{
+  @apply w-[1rem]
+}
+
+.module .ant-form-item {
+  @apply mb-0
+}
 
 .ant-radio-group {
   @apply text-base;
@@ -572,4 +625,22 @@ div.ant-typography-h3 > textarea,
 
 .directory_log .ant-tree-node-selected .error {
   @apply !font-semibold !text-red-500;
+}
+
+/* ICON */
+.setting svg{
+  @apply w-12 h-8 fill-white
+}
+
+.bell svg{
+  @apply w-12 h-8
+}
+
+/* DROPDOWN */
+.notifi{
+  --arrow-x: 282px; 
+    --arrow-y: -2px;
+    inset: 58px 0px auto auto !important; 
+    box-sizing: border-box;
+    min-width: 48px;
 }
