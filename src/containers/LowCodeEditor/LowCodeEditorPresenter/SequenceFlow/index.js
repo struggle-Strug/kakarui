@@ -249,6 +249,8 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   const handleMenuClick = (action) => {
     console.log(`Action ${action.key} triggered on node ${contextMenu.nodeId}`)
     setContextMenu(null) // メニューを閉じる
+    setSelectedNodeIds([])
+    alert('サブツリーとして登録されました')
   }
 
   // 右クリックの外部クリックでメニューを閉じる処理
@@ -305,6 +307,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
             <button
               className="py-2 pl-2 pr-4 text-sm hover:opacity-50"
               disabled={selectedNodeIds.length < 2}
+              onClick={handleMenuClick}
             >
               サブツリーとして登録
             </button>
