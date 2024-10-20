@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Modal, Spin } from 'antd'
+import { Form, Modal, Spin, Radio } from 'antd'
 
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useModuleCreate, useModuleUpdate, useModuleUpdateUrl, useModuleUrlCreate } from '@/hooks/query'
@@ -24,10 +24,11 @@ const ModuleForm = ({ open, data, onClose }) => {
     if (data) return true
     return false
   }, [data])
+  const [initialValue, setInitialValue] = useState("single");
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver(moduleFormSchema(isEdit)),
+    resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
     defaultValues: { ...initValue },
   })
   

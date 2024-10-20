@@ -8,7 +8,6 @@ import { APP_WIDTH_SIDER } from '@/configs/theme'
 import { getMenuHref, getMenuItems } from '@/utils/helper/menu'
 
 import RoutesTree from '@/RoutesTree'
-import SettingMenu from './SettingMenu'
 
 const Sider = () => {
   const router = useRouter()
@@ -55,19 +54,16 @@ const Sider = () => {
       }}
       width={APP_WIDTH_SIDER}
     >
-      <div className='relative'>
-        <Menu
-          defaultOpenKeys={openKeys}
-          selectedKeys={openKeys}
-          openKeys={openKeys}
-          multiple={false}
-          mode="inline"
-          items={menus}
-          className="h-full bg-primary"
-          onOpenChange={onOpenChange}
-        />
-        <SettingMenu />
-      </div>
+      <Menu
+        defaultOpenKeys={openKeys}
+        selectedKeys={openKeys}
+        openKeys={openKeys}
+        multiple={false}
+        mode="inline"
+        items={menus}
+        className="h-full bg-primary"
+        onOpenChange={onOpenChange}
+      />
     </Layout.Sider>
   )
 }

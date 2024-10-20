@@ -43,11 +43,12 @@ const InputTarFile = (props, ref) => {
       beforeUpload={beforeUpload}
       onChange={handleUploadChange}
       disabled={disabled}
+      className='pl-12'
     >
       <input type="hidden" ref={ref} />
       <div className="flex-center aspect-square w-32 cursor-pointer flex-col rounded-lg border border-dashed bg-light-gray p-3">
         <PlusOutlined />
-        <div className="mt-2">Upload</div>
+        <div className="mt-2 text-center">Upload</div>
       </div>
     </Upload>
   )
