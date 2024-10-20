@@ -3,15 +3,6 @@ import { useEffect } from 'react'
 import { LOCAL_STORAGE_KEYS } from '@/constants'
 import { useSyncLocalStorage } from '@/hooks/share'
 
-export const useOrganizationActive = () => {
-  const [orgActive, setOrgActive] = useSyncLocalStorage(LOCAL_STORAGE_KEYS.ORGANIZATION_ID, {})
-  return {
-    orgActiveId: orgActive?.id,
-    orgActive,
-    setOrgActive,
-  }
-}
-
 export const useOrganizationQuery = () => {
   const [organizations, setOrganizations] = useSyncLocalStorage(
     LOCAL_STORAGE_KEYS.ORGANIZATIONS,
