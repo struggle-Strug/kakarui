@@ -1,18 +1,28 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Assets } from '@/constants'
 
 import ModulesSelector from './ModulesSelector/index'
-import { initialSections } from './skillData'
 
-const LeftSidebar = ({ setDraggedNodeType }) => {
+const LeftSidebar = ({ skills, setDraggedNodeType }) => {
   // ドラッグ開始時にノードタイプを状態に保存
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
     event.dataTransfer.effectAllowed = 'move'
     setDraggedNodeType(nodeType) // ドラッグされたノードタイプを保存
-  }
+  } // グループ化されたスキルをセクション形式に変換
+  const initialSections = Object.keys(skills).map((tag) => ({
+    type: tag,
+    isOpen: true, // 初期状態では全てのセクションを開いておく
+    cards: skills[tag].map((skill) => ({
+      id: skill.id,
+      title: skill.name, // スキルの名前を使用
+      description: skill.description, // スキルの説明を使用
+      icon: Assets.LOWCODEEDITOR.skillsIcon, // アイコンはデフォルトを使用（変更可能）
+    })),
+  }))
+
   const [sections, setSections] = useState(initialSections)
   const [filteredSections, setFilteredSections] = useState(initialSections)
 
@@ -43,14 +53,19 @@ const LeftSidebar = ({ setDraggedNodeType }) => {
       setFilteredSections(filtered)
     }
   }
+
+  useEffect(() => {
+    setSections(initialSections)
+    setFilteredSections(initialSections)
+  }, [skills]) // `skills` が更新されたらセクションも更新
   return (
     <div className="h-full w-full max-w-[300px] bg-[#F4F4F4]">
       {/* Selectorからスキル名検索 */}
       <ModulesSelector onDragStart={onDragStart} onFilter={handleFilter} />
-      <div className="flex h-[calc(100%-250px)] w-full flex-col gap-6 overflow-y-auto px-4 py-6">
+      <div className="flex h-[calc(100%-250px)] w-full flex-col gap-6 overflow-y-auto px-4 py-4">
         <div className="h-full">
           {filteredSections.map((section) => (
-            <div key={section.type} className="mb-6">
+            <div key={section.type} className="mb-4">
               {/* セクションのタイトルとトグルアイコン */}
               <div
                 className="mb-3 flex cursor-pointer items-start gap-1"
@@ -67,18 +82,23 @@ const LeftSidebar = ({ setDraggedNodeType }) => {
                   width={14}
                   height={14}
                 />
-                <div className="font-[#796E66] text-[11px] font-bold">{section.type}</div>
+                <div
+                  className="truncate font-[#796E66] text-[11px] font-bold"
+                  style={{ maxWidth: '180px' }} // テキストの長さ制限
+                >
+                  {section.type} {/* タグ名 */}
+                </div>
               </div>
               {/* セクション内のカードリスト（トグルで表示/非表示を切り替える） */}
               <div className={`pl-2 ${section.isOpen ? '' : 'hidden'}`}>
                 {section.cards.map((card) => (
                   <div
                     key={card.id}
-                    className="mb-2 rounded-md border border-solid border-[#E3E3E4] bg-white py-2 pl-2 pr-1"
+                    className="mb-2 rounded-md border border-solid border-[#E3E3E4] bg-white py-3 pl-2 pr-1"
                     draggable
                     onDragStart={(event) => onDragStart(event, 'Skill')}
                   >
-                    <div className="flex w-[230px] items-center gap-2">
+                    <div className="flex max-h-[120px] w-[230px] items-center gap-2">
                       <Image
                         src={Assets.LOWCODEEDITOR.dragDot}
                         className="h-[14px]"
@@ -95,9 +115,23 @@ const LeftSidebar = ({ setDraggedNodeType }) => {
                             width={18}
                             height={18}
                           />
-                          <div className="text-[12px] font-bold text-[#796E66]">{card.title}</div>
+                          <div
+                            className="mb-1 truncate text-[12px] font-bold text-[#796E66]"
+                            style={{ maxWidth: '160px' }} // テキストの長さ制限
+                          >
+                            {card.title} {/* タイトル */}
+                          </div>
                         </div>
-                        <div className="pl-4 text-[12px] text-[#796E66]">{card.description}</div>
+                        <div
+                          className="line-clamp-3 pl-4 text-[12px] text-[#796E66]"
+                          style={{
+                            maxWidth: '200px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }} // 2行の説明文に制限
+                        >
+                          {card.description} {/* 説明 */}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -110,5 +144,4 @@ const LeftSidebar = ({ setDraggedNodeType }) => {
     </div>
   )
 }
-
 export default LeftSidebar

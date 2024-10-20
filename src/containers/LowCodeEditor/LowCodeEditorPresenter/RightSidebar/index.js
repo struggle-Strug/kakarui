@@ -1,9 +1,17 @@
 import { Divider, Input, Tooltip } from 'antd'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Assets } from '@/constants'
+import { API, Assets } from '@/constants'
+import { useOrganizationQuery } from '@/hooks/query'
+
+import { buildApiURL } from '@/utils/helper/request'
+
+import { Axios } from '@/libs/axios'
+
+import { mockProjectData } from './mockData/mockProjectsData'
+import { mockSiteData } from './mockData/mockSiteData'
 
 const customProperties = [
   { label: 'Move to', value: 'S01(Position)' },
@@ -60,10 +68,12 @@ const DataList = ({ title, data }) => (
             key={index}
             className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4] p-1 text-[12px]"
           >
-            <div className="w-2/5 pl-2 font-bold text-[#796E66]">{item.label}</div>
+            <div className="scrollbar-hide w-2/5  overflow-x-auto whitespace-nowrap pl-2 font-bold text-[#796E66]">
+              {item.label}
+            </div>
             <span className="text-[#D3D3D3]">|</span>
-            <div className="flex w-3/5 text-ellipsis pl-2 text-[#796E66]">
-              <span className="w-full overflow-hidden truncate">{item.value}</span>
+            <div className="flex w-3/5 overflow-hidden text-ellipsis whitespace-nowrap pl-2 text-[#796E66]">
+              <span className="w-full overflow-hidden text-ellipsis">{item.value}</span>
             </div>
           </div>
         ))}
@@ -71,8 +81,93 @@ const DataList = ({ title, data }) => (
     </div>
   </div>
 )
+
 const RightSidebar = () => {
+  const { organizationId } = useOrganizationQuery()
+  const [projectData, setProjectData] = useState([]) // APIから取得したプロジェクトデータを保存
+  const [siteData, setSiteData] = useState([]) // APIから取得したサイトデータを保存
+  const [loading, setLoading] = useState(true) // ローディング状態を管理
+  const [error, setError] = useState(null) // エラーメッセージを保存
   const seqId = '550e8400-e29b-41d4-a716-43333ddddd'
+  //TODO - projectIdを特定してセットする
+  const projectId = '9dcec428-e9bc-4a6c-80d4-f432d1fa677d'
+  const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' // siteIdを追加
+
+  // API呼び出しの関数
+  const fetchProjectData = async () => {
+    try {
+      const response = await Axios.get(
+        buildApiURL(API.PROJECT_DATA.LIST, {
+          organization_id: organizationId,
+          project_id: projectId,
+        })
+      )
+      console.log('response', response.data)
+
+      let data = response.data.datas
+      if (data.length === 0) {
+        data = mockProjectData.datas
+      }
+      setProjectData(
+        data.map((item) => ({
+          label: item.key,
+          value: item.value,
+        }))
+      )
+    } catch (error) {
+      console.error('Error fetching project data:', error)
+      setError('Failed to fetch project data.')
+      setProjectData(
+        mockProjectData.datas.map((item) => ({
+          label: item.key,
+          value: item.value,
+        }))
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Site Dataのフェッチ関数
+  const fetchSiteData = async () => {
+    try {
+      const response = await Axios.get(
+        buildApiURL(API.SITE_DATA.LIST, {
+          site_id: siteId,
+        })
+      )
+      console.log('Site Data response', response.data)
+
+      let data = response.data.site_data
+      if (data.length === 0) {
+        data = mockSiteData.site_data
+      }
+      setSiteData(
+        data.map((item) => ({
+          label: item.key,
+          value: Array.isArray(item.value) ? item.value.join(', ') : item.value, // 配列ならカンマで結合
+        }))
+      )
+    } catch (error) {
+      console.error('Error fetching site data:', error)
+      setError('Failed to fetch site data.')
+      setSiteData(
+        mockSiteData.site_data.map((item) => ({
+          label: item.key,
+          value: Array.isArray(item.value) ? item.value.join(', ') : item.value, // 配列ならカンマで結合
+        }))
+      )
+    }
+  }
+
+  // コンポーネントがマウントされた時にAPIを呼び出す
+  useEffect(() => {
+    if (organizationId) {
+      fetchProjectData()
+      fetchSiteData() // Site Dataのフェッチを追加
+    }
+  }, [organizationId])
+
   // クリップボードにコピーする関数
   const copyToClipboard = () => {
     navigator.clipboard.writeText(seqId).then(() => {
@@ -132,7 +227,9 @@ const RightSidebar = () => {
               key={index}
               className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4] p-1 text-[12px]"
             >
-              <div className="w-2/5 pl-2 font-bold text-[#796E66]">{property.label}</div>
+              <div className="scrollbar-hide w-2/5 overflow-x-auto whitespace-nowrap pl-2 font-bold text-[#796E66]">
+                {property.label}
+              </div>
               <span className="text-[#D3D3D3]">|</span>
               <div className="flex w-3/5 items-center pl-2 text-[#796E66]">
                 {property.isEditable ? (

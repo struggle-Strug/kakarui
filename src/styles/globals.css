@@ -488,3 +488,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   border: 3px solid #3a75e7; /* ドラッグ中のボーダー色 */
   border-radius: 1rem /* 16px */;
 }
+
+/* カスタムクラスを使って特定のスクロールバーを非表示にする */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge, Opera */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IEとEdge */
+  scrollbar-width: none; /* Firefox */
+}

@@ -11,7 +11,7 @@ import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar'
 import SequenceFlow from './SequenceFlow'
 
-export const LowCodeEditorPresenter = () => {
+export const LowCodeEditorPresenter = ({ skills, loading }) => {
   const [open, setOpen] = useState(true)
   // ボタンのクリックでDrawerの開閉をトグル
   const toggleDrawer = () => {
@@ -33,7 +33,7 @@ export const LowCodeEditorPresenter = () => {
 
         <div className="flex h-[calc(100%-60px)] w-full justify-between">
           {/* SECTION - 左サイドバー */}
-          <LeftSidebar setDraggedNodeType={setDraggedNodeType} />
+          <LeftSidebar skills={skills} setDraggedNodeType={setDraggedNodeType} />
 
           {/* SECTION - シーケンス */}
           <div className="w-full bg-[#E4E4E4]">
