@@ -1,6 +1,14 @@
-import { ReactFlow, useEdgesState, useNodesState, useReactFlow, useStoreApi } from '@xyflow/react'
+import {
+  ReactFlow,
+  getConnectedEdges,
+  getIncomers,
+  getOutgoers,
+  useEdgesState,
+  useNodesState,
+  useReactFlow,
+  useStoreApi,
+} from '@xyflow/react'
 import '@xyflow/react/dist/base.css'
-// Ant DesignのMenuをインポート
 import 'antd/dist/reset.css'
 
 import { memo, useCallback, useEffect, useState } from 'react'
@@ -40,7 +48,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
     })
   }, [])
 
-  // ノードに対して、選択されたノードでかつdata.typeがRoot以外の場合に"select"クラスを付与
+  // 選択されたノードかつdata.typeがRoot以外の場合に"select"クラスを付与
   const nodeWithClasses = nodes.map((node) => {
     // Rootタイプの場合はそのまま早期リターン
     if (node.data.type === 'Root') {
@@ -125,7 +133,6 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
       logNodeOnce(node)
 
       const closeEdge = getClosestEdge(node)
-
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
         if (
@@ -136,7 +143,6 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
           closeEdge.className = 'temp'
           nextEdges.push(closeEdge)
         }
-
         return nextEdges
       })
     },
@@ -175,13 +181,35 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
     [getClosestEdge]
   )
 
-  //TODO - ドラッグしてフィールドに入ったときにノードを生成
+  const onNodesDelete = useCallback(
+    (deleted) => {
+      setEdges(
+        deleted.reduce((acc, node) => {
+          const incomers = getIncomers(node, nodes, edges)
+          const outgoers = getOutgoers(node, nodes, edges)
+          const connectedEdges = getConnectedEdges([node], edges)
+          const remainingEdges = acc.filter((edge) => !connectedEdges.includes(edge))
+          const createdEdges = incomers.flatMap(({ id: source }) =>
+            outgoers.map(({ id: target }) => ({
+              id: `${source}->${target}`,
+              source,
+              target,
+            }))
+          )
+          return [...remainingEdges, ...createdEdges]
+        }, edges)
+      )
+      targetNodeId = null
+      isTargetNodeConnected = false
+    },
+    [nodes, edges]
+  )
+
+  //TODO - ドラッグしてフィールドに入ったときにノードを生成。onDragEnterでフィールド内に入ると生成されるような方針を検討。
   // const onDragEnter = useCallback(
   //   (event) => {
   //     event.preventDefault()
-  //     console.log('dddddd')
   //     const type = event.dataTransfer.getData('application/reactflow')
-  //     console.log('type', type)
   //     // typeが存在しない場合、何も処理をしない
   //     if (!type) return
 
@@ -214,10 +242,11 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
         x: event.clientX,
         y: event.clientY,
       })
-
       // 新しいノードのデータを生成
       const newNode = generateNode(type, position)
 
+      targetNodeId = null
+      isTargetNodeConnected = false
       if (newNode) {
         setNodes((prevNodes) => [...prevNodes, newNode])
       }
@@ -236,7 +265,6 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   const onNodeContextMenu = useCallback((event, node) => {
     event.preventDefault() // デフォルトのコンテキストメニューを無効化
     console.log(`Right-clicked on node ${node.id}`) // ノードIDをコンソールに表示
-
     // コンテキストメニューを表示する位置を設定
     setContextMenu({
       mouseX: event.clientX,
@@ -279,6 +307,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
           nodes={nodeWithClasses}
           edges={edges}
           onNodeClick={onNodeClick}
+          onNodesDelete={onNodesDelete}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onNodeDrag={onNodeDrag}

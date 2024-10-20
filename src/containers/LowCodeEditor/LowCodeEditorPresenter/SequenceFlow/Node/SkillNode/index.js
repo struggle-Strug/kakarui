@@ -1,8 +1,13 @@
 import { Divider } from 'antd'
 
+import Image from 'next/image'
+
 import { Assets } from '@/constants'
 
 export const SkillNode = ({ data }) => {
+  const handleSelectClick = (event) => {
+    event.stopPropagation() // 親要素のクリックイベントが発火しないように
+  }
   return (
     <div className="p-2">
       <div className="flex flex-col gap-2 p-2">
@@ -12,7 +17,10 @@ export const SkillNode = ({ data }) => {
       <Divider className="my-2 p-0" />
 
       <div className="flex items-center justify-start gap-1">
-        <select className="rounded border-2 border-solid border-[#E3E3E4] p-1 text-[14px]">
+        <select
+          onClick={handleSelectClick}
+          className="rounded border-2 border-solid border-[#E3E3E4] p-1 text-[14px]"
+        >
           {data.siteData &&
             data.siteData.map((site, index) => (
               <option key={index} value={site}>
@@ -24,7 +32,7 @@ export const SkillNode = ({ data }) => {
       </div>
       <div className="mt-4 flex items-center gap-3">
         <div className="flex items-center gap-1">
-          <img
+          <Image
             src={Assets.LOWCODEEDITOR.userIcon}
             className="w-[20px] shrink-0"
             alt="gen3p"
@@ -34,13 +42,12 @@ export const SkillNode = ({ data }) => {
           <div className="truncate text-[14px]">{data.userName}</div>
         </div>
         <div className="flex items-center gap-1">
-          <img
+          <Image
             src={Assets.LOWCODEEDITOR.timeIcon}
             className="w-[20px] shrink-0"
             alt="gen3p"
             width={20}
             height={20}
-            loading="eager" // ここで動的読み込みを無効化
           />
           <div className="truncate text-[14px]">{data.updatedAt}</div>
         </div>

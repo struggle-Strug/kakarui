@@ -485,5 +485,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   border: 0px !important;
 }
 .react-flow__node.select {
-  border: 3px solid #796e66; /* 太いボーダー */
+  border: 3px solid #3a75e7; /* ドラッグ中のボーダー色 */
+  border-radius: 1rem /* 16px */;
 }
