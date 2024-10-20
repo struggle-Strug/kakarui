@@ -24,7 +24,9 @@ const CustomNode = ({ data, id, dragging }) => {
     const edges = getEdges()
     const connectedEdges = edges.filter((edge) => edge.target === id)
     const childNodeIds = connectedEdges.map((edge) => edge.source)
-    deleteElements({ nodes: [{ id: id }, ...childNodeIds.map((id) => ({ id }))] })
+    deleteElements({ nodes: [{ id: id }] })
+    //TODO - 親ノードが消えた場合に子ノードも消える仕様の場合は以下を使用
+    // deleteElements({ nodes: [{ id: id }, ...childNodeIds.map((id) => ({ id }))] })
   }
 
   // 背景色を取得

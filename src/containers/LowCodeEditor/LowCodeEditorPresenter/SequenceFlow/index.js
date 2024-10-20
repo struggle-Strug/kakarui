@@ -154,7 +154,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
     (_, node) => {
       const closeEdge = getClosestEdge(node)
       // 既に接続しているノードであればエッジ追加の処理をしない
-      if (isTargetNodeConnected) {
+      if (isTargetNodeConnected || node.data.type === 'Root') {
         return
       }
       // 新規ノードで接続先ノードがない場合はキャンセル（追加しない）
@@ -275,6 +275,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
 
   // メニュー項目がクリックされた時の処理
   const handleMenuClick = (action) => {
+    //TODO - サブツリーとして登録する処理を追加する
     console.log(`Action ${action.key} triggered on node ${contextMenu.nodeId}`)
     setContextMenu(null) // メニューを閉じる
     setSelectedNodeIds([])

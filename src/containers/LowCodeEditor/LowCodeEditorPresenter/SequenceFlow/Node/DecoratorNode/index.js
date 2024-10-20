@@ -2,26 +2,26 @@ import Image from 'next/image'
 
 import { Assets } from '@/constants'
 
-// NOTE - childrenNodesはDecoratorの子要素内に入るSkillやSub Treeのことで
+//NOTE - childrenNodesはDecoratorの子要素内に入るSkillやSub Treeのことで
 export const DecoratorNode = ({ data, childrenNodes, onDropNode }) => {
   const handleSelectClick = (event) => {
     event.stopPropagation() // 親要素のクリックイベントが発火しないように
   }
 
-  // ノードがドロップされた際に呼ばれる
-  const handleNodeDrop = (event) => {
-    console.log('event', event)
-    const droppedNodeId = event.dataTransfer.getData('nodeId')
-    if (droppedNodeId) {
-      console.log('droppedNodeId', droppedNodeId)
-      onDropNode(droppedNodeId)
-    }
-  }
+  //TODO - 未実装：ノードがドロップされた際に呼ばれる
+  //   const handleNodeDrop = (event) => {
+  //     console.log('event', event)
+  //     const droppedNodeId = event.dataTransfer.getData('nodeId')
+  //     if (droppedNodeId) {
+  //       console.log('droppedNodeId', droppedNodeId)
+  //       onDropNode(droppedNodeId)
+  //     }
+  //   }
 
   return (
     <div
       className="flex w-full flex-col gap-2 p-2"
-      onDrop={handleNodeDrop}
+      //   onDrop={handleNodeDrop}
       onDragOver={(e) => e.preventDefault()} // ドロップ可能にするためのイベント
     >
       {/* <label>Condition Type: </label> */}

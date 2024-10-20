@@ -1,9 +1,12 @@
 import { Button } from 'antd'
+import noop from 'lodash/noop'
 
 import Image from 'next/image'
 
 // 必要に応じてアンタードのボタンをインポート
 import { Assets } from '@/constants'
+
+import SaveSequenceModal from './SaveSequence/SaveSeaqunceModal'
 
 const Header = () => {
   return (
@@ -24,9 +27,14 @@ const Header = () => {
         <Button className="!rounded !border-2 !border-white !bg-black !px-6 !text-[14px] !font-bold !text-white">
           Import
         </Button>
-        <Button className="!rounded border !bg-white !px-8 !text-[14px] !font-bold !text-black">
-          Save
-        </Button>
+        <SaveSequenceModal>
+          <Button
+            onClick={noop}
+            className="!rounded border !bg-white !px-8 !text-[14px] !font-bold !text-black"
+          >
+            Save
+          </Button>
+        </SaveSequenceModal>
       </div>
     </div>
   )

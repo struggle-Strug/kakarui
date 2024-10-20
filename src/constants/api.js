@@ -84,6 +84,11 @@ export default {
     LIST: '/organizations/{organization_id}/skills',
   },
 
+  SEQUENCE: {
+    CREATE:
+      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences',
+  },
+
   // -- END --
 }
 
