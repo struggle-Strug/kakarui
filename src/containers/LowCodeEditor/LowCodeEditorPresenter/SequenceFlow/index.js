@@ -128,7 +128,6 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
 
       setEdges((es) => {
         const nextEdges = es.filter((e) => e.className !== 'temp')
-
         if (
           !isTargetNodeConnected &&
           closeEdge &&
@@ -148,8 +147,15 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   const onNodeDragStop = useCallback(
     (_, node) => {
       const closeEdge = getClosestEdge(node)
-
-      if (!closeEdge) {
+      // 既に接続しているノードであればエッジ追加の処理をしない
+      if (isTargetNodeConnected) {
+        return
+      }
+      // 新規ノードで接続先ノードがない場合はキャンセル（追加しない）
+      if (
+        !closeEdge &&
+        !edges.find((ne) => ne.source === node.source && ne.target === node.target)
+      ) {
         deleteElements({ nodes: [{ id: node.id }] })
       }
       setEdges((es) => {
@@ -162,6 +168,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
           nextEdges.push(closeEdge)
         }
         targetNodeId = null
+        isTargetNodeConnected = false
         return nextEdges
       })
     },
@@ -294,7 +301,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
           }}
           className="bg-white text-start"
         >
-          <div className="cursor-pointer rounded border border-solid border-gray">
+          <div className="cursor-pointer rounded-xl border border-solid border-gray">
             <button
               className="py-2 pl-2 pr-4 text-sm hover:opacity-50"
               disabled={selectedNodeIds.length < 2}
