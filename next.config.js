@@ -37,6 +37,10 @@ const nextConfig = {
             key: 'Expires',
             value: 'Fri, 1 Jan 2010 00:00:00 GMT',
           },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://etkdevstajpea1img.blob.core.windows.net/img-store", // 環境変数からURLを取得
+          },
         ],
       },
     ]

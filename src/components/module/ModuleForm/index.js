@@ -78,7 +78,9 @@ const ModuleForm = ({ open, data, onClose }) => {
         return
       }
       const sasUrlDetail = await doCreateModuleUrl(values)
-      doCreateModule(values, sasUrlDetail)
+      const detail = sasUrlDetail?.data
+      console.log("detail",detail);
+      sasUrlDetail && doCreateModule({values, detail})
     },
     [doCreateModuleUrl, doCreateModule, doUpdateModule, isEdit]
   )
