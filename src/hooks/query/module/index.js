@@ -162,8 +162,6 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
     mutationFn: async ({values, detail}) => {
-      console.log("sasUrlDetail",detail);
-      
       const [baseUrl, queryParams] = detail?.url.split("?")
       const parsedUrl = new URL(detail?.url)
       const queryparams = new URLSearchParams(parsedUrl?.search);
@@ -200,7 +198,7 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
         if(response.status_code === 201){
           const response_1 = await Axios.put(
             buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: "amd64", queryParams: queryParams }),
-            values.arm64file,
+            values.amd64file,
             {
               headers: {
                 "content-type": "application/x-tar",
