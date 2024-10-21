@@ -54,7 +54,7 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
       key: '2',
     },
     {
-      label: <div className="mx-3 flex w-[400px] px-3 py-4 text-black">モジュールセット管理</div>,
+      label: <div className="mx-3 border-bottom-gray flex w-[400px] px-3 py-4 text-black">モジュールセット管理</div>,
       onClick: () => router.push(Routes.MODULE_SET),
       key: '3',
     },

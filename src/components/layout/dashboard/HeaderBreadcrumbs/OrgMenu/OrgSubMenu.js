@@ -19,10 +19,7 @@ const OrgSubMenuItem = memo(({ item, onClick }) => (
     className="flex shrink-0 items-center gap-x-6 overflow-hidden px-4 py-[4px] text-dark-gray-3 transition-colors hover:bg-light-gray"
     role="presentation"
   >
-    <div className="shrink-0">
-      <FolderIcon className="text-[40px]" size={40} />
-    </div>
-    <div className="w-[calc(100%-40px-24px)] flex-1">
+    <div className="w-[calc(100%-40px-24px)] flex-1 py-3">
       <div
         className="w-full truncate text-[13px] font-semibold leading-[15px] text-dark-gray-3"
         title={item?.organization_name}
@@ -64,7 +61,7 @@ const OrgSubMenu = ({ data, loading, onClose }) => {
 
   return (
     <div className="mx-3 w-[420px] px-3 py-4 font-light text-primary">
-      <div className="text-sm">組織が表示される</div>
+      <div className="text-sm">組織を切り替える</div>
 
       <Spin spinning={loading || clicking}>
         <div className="mt-3.5 pl-5 text-xl">

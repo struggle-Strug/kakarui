@@ -10,10 +10,11 @@ import ProjectMenu from './ProjectMenu'
 import RobotMenu from './RobotMenu'
 
 const HeaderBreadcrumbs = () => {
-  const { organizationDetail, organizationName } = useOrganizationQuery()
+  const { organizationDetail, organizationName, organizationId, organizations } = useOrganizationQuery()
   const { projectActive } = useProjectActive()
   const { isMember } = useGetMe()
-
+  const filteredOrganizations = organizations.filter(org => org.organization_id == organizationId);
+  console.log(filteredOrganizations, 'filteredOrganizations')
   const breadcrumbs = useMemo(
     () => [
       // { key: 'robocon', title: 'ロボコン2024' },
@@ -33,7 +34,7 @@ const HeaderBreadcrumbs = () => {
   const renderOrganizationName = (
     <>
       <OrgMenu organizationDetail={organizationDetail} isMember={isMember} />
-      <div>{organizationName}</div>
+      <div>{filteredOrganizations[0].organization_name}</div>
     </>
   )
 
