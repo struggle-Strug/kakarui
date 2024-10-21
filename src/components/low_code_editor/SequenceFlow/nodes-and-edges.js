@@ -73,9 +73,8 @@ const initialEdges = []
 let nodeId = 1
 const getId = () => `node-${nodeId++}`
 // ノードのデータを生成する関数
-const generateNode = (type, position) => {
+const generateNode = (type, position, skillData = {}) => {
   const id = getId() // ユニークなIDを生成
-
   switch (type) {
     case 'Decorator':
       return {
@@ -109,12 +108,13 @@ const generateNode = (type, position) => {
         data: {
           type: 'Skill',
           image: Assets.LOWCODEEDITOR.skillIcon,
-          skillName: 'New Skill',
-          skillType: 'Action / New Move',
-          siteData: ['S01', 'S02'], // デフォルトのsiteDataを追加
-          customProperties: 'まで移動する', // ここは単一の文字列で設定
-          userName: '新規ユーザー',
-          updatedAt: '2024/10/05',
+          skillName: skillData.name || 'New Skill', // デフォルト値
+          skillType: skillData.schema.Node.enum || 'Action / New Move', // デフォルト値
+          siteData: skillData.siteData || ['S01', 'S02'], // デフォルト値
+          customProperties: skillData.description || 'まで移動する', // デフォルト値
+          userName: skillData.create_user_name || '新規ユーザー', // デフォルト値
+          updatedAt: skillData.update_date || '2024/10/05', // デフォルト値
+          ...skillData, // skillDataの他のすべてのプロパティを展開
         },
         position,
       }

@@ -10,10 +10,8 @@ export const DecoratorNode = ({ data, childrenNodes, onDropNode }) => {
 
   //TODO - 未実装：ノードがドロップされた際に呼ばれる
   //   const handleNodeDrop = (event) => {
-  //     console.log('event', event)
   //     const droppedNodeId = event.dataTransfer.getData('nodeId')
   //     if (droppedNodeId) {
-  //       console.log('droppedNodeId', droppedNodeId)
   //       onDropNode(droppedNodeId)
   //     }
   //   }

@@ -4,29 +4,17 @@ import { API } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useOrganizationQuery } from '@/hooks/query'
 
+import { LowCodeEditorPresenter } from '@/components/low_code_editor'
+import { mockSkills } from '@/components/low_code_editor/MockSkillData'
+
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
 
-import { LowCodeEditorPresenter } from './LowCodeEditorPresenter'
-import { mockSkills } from './MockData'
-
-// スキルをタグごとにグルーピングする関数
-const groupSkillsByTag = (skills) => {
-  return skills.reduce((acc, skill) => {
-    const tag = skill.tag || 'unknown'
-    if (!acc[tag]) {
-      acc[tag] = []
-    }
-    acc[tag].push(skill)
-    return acc
-  }, {})
-}
-
 const LowCodeEditorContainer = () => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
-  const [groupedSkillList, setGroupedSkillList] = useState({}) // グルーピングされたスキルデータを保存
+  const [skillList, setSkillList] = useState([]) // グルーピングされたスキルデータを保存
   const [loading, setLoading] = useState(true) // ローディング状態を管理
   const [error, setError] = useState(null) // エラーメッセージを保存
 
@@ -43,15 +31,11 @@ const LowCodeEditorContainer = () => {
       if (skills.length === 0) {
         skills = mockSkills.skills
       }
-      // タグごとにスキルをグルーピング
-      const groupedSkills = groupSkillsByTag(skills)
-      setGroupedSkillList(groupedSkills)
+      setSkillList(skills)
     } catch (error) {
       console.error('Error fetching skills data:', error)
       setError('Failed to fetch skills data.')
-      // エラーハンドリングとしてモックデータを使用
-      const groupedSkills = groupSkillsByTag(mockSkills.skills)
-      setGroupedSkillList(groupedSkills)
+      setSkillList(skills)
     } finally {
       setLoading(false) // ローディング完了
     }
@@ -69,11 +53,7 @@ const LowCodeEditorContainer = () => {
     console.error(error)
   }
 
-  // groupedSkillListとloadingの状態をログ出力
-  console.log('Current groupedSkillList:', groupedSkillList)
-  console.log('organizationId:', organizationId)
-
-  return <LowCodeEditorPresenter skills={groupedSkillList} loading={loading} />
+  return <LowCodeEditorPresenter skills={skillList} loading={loading} />
 }
 
 export default LowCodeEditorContainer

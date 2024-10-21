@@ -5,17 +5,35 @@ import { Assets } from '@/constants'
 
 import ModulesSelector from './ModulesSelector/index'
 
+// スキルをタグごとにグルーピングする関数
+const groupSkillsByTag = (skills) => {
+  return skills.reduce((acc, skill) => {
+    const tag = skill.tag || 'unknown'
+    if (!acc[tag]) {
+      acc[tag] = []
+    }
+    acc[tag].push(skill)
+    return acc
+  }, {})
+}
 const LeftSidebar = ({ skills, setDraggedNodeType }) => {
+  const groupedSkills = groupSkillsByTag(skills)
+
   // ドラッグ開始時にノードタイプを状態に保存
-  const onDragStart = (event, nodeType) => {
+  const onDragStart = (event, nodeType, skillId) => {
     event.dataTransfer.setData('application/reactflow', nodeType)
+    event.dataTransfer.setData(
+      'skillData',
+      JSON.stringify(skills.find((skill) => skill.id === skillId))
+    ) // スキルデータも渡す
     event.dataTransfer.effectAllowed = 'move'
     setDraggedNodeType(nodeType) // ドラッグされたノードタイプを保存
-  } // グループ化されたスキルをセクション形式に変換
-  const initialSections = Object.keys(skills).map((tag) => ({
+  }
+  // グループ化されたスキルをセクション形式に変換
+  const initialSections = Object.keys(groupedSkills).map((tag) => ({
     type: tag,
     isOpen: true, // 初期状態では全てのセクションを開いておく
-    cards: skills[tag].map((skill) => ({
+    cards: groupedSkills[tag].map((skill) => ({
       id: skill.id,
       title: skill.name, // スキルの名前を使用
       description: skill.description, // スキルの説明を使用
@@ -96,7 +114,7 @@ const LeftSidebar = ({ skills, setDraggedNodeType }) => {
                     key={card.id}
                     className="mb-2 rounded-md border border-solid border-[#E3E3E4] bg-white py-3 pl-2 pr-1"
                     draggable
-                    onDragStart={(event) => onDragStart(event, 'Skill')}
+                    onDragStart={(event) => onDragStart(event, 'Skill', card.id)} // Skill IDを渡す
                   >
                     <div className="flex max-h-[120px] w-[230px] items-center gap-2">
                       <Image

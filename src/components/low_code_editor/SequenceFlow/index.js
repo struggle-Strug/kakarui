@@ -13,12 +13,12 @@ import 'antd/dist/reset.css'
 
 import { memo, useCallback, useEffect, useState } from 'react'
 
-import ControlButtons from '../../ControlButton'
+import ControlButtons from '../ControlButton'
 import CustomNode from './Node'
 import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 
 // Ant Designのデフォルトスタイル
-const MIN_DISTANCE = 1000
+const MIN_DISTANCE = 800
 
 const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   const store = useStoreApi()
@@ -234,7 +234,20 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
       event.preventDefault()
 
       const type = event.dataTransfer.getData('application/reactflow')
-
+      let skillData = null
+      // typeがSkillの場合のみskillDataを取得
+      if (type === 'Skill') {
+        const skillDataRaw = event.dataTransfer.getData('skillData')
+        // skillDataが存在するかチェックして、JSON.parseを安全に実行
+        if (skillDataRaw) {
+          try {
+            skillData = JSON.parse(skillDataRaw)
+          } catch (error) {
+            console.error('Invalid JSON in skillData:', error)
+            skillData = null // JSONが無効ならnullを設定
+          }
+        }
+      }
       // typeが存在しない場合、何も処理をしない
       if (!type) return
 
@@ -243,8 +256,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
         y: event.clientY,
       })
       // 新しいノードのデータを生成
-      const newNode = generateNode(type, position)
-
+      const newNode = generateNode(type, position, skillData)
       targetNodeId = null
       isTargetNodeConnected = false
       if (newNode) {
@@ -264,7 +276,6 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   // 右クリック時の処理
   const onNodeContextMenu = useCallback((event, node) => {
     event.preventDefault() // デフォルトのコンテキストメニューを無効化
-    console.log(`Right-clicked on node ${node.id}`) // ノードIDをコンソールに表示
     // コンテキストメニューを表示する位置を設定
     setContextMenu({
       mouseX: event.clientX,

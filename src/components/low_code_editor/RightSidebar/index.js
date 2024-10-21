@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { API, Assets } from '@/constants'
 import { useOrganizationQuery } from '@/hooks/query'
 
+import { uuidv4 } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
@@ -82,16 +83,16 @@ const DataList = ({ title, data }) => (
   </div>
 )
 
-const RightSidebar = () => {
+const RightSidebar = ({ skillId, skills }) => {
   const { organizationId } = useOrganizationQuery()
   const [projectData, setProjectData] = useState([]) // APIから取得したプロジェクトデータを保存
   const [siteData, setSiteData] = useState([]) // APIから取得したサイトデータを保存
   const [loading, setLoading] = useState(true) // ローディング状態を管理
   const [error, setError] = useState(null) // エラーメッセージを保存
-  const seqId = '550e8400-e29b-41d4-a716-43333ddddd'
+
   //TODO - projectIdを特定してセットする
   const projectId = '9dcec428-e9bc-4a6c-80d4-f432d1fa677d'
-  const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' // siteIdを追加
+  const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
   // API呼び出しの関数
   const fetchProjectData = async () => {
@@ -180,18 +181,27 @@ const RightSidebar = () => {
   const [name, setName] = useState('Move to 001') // 初期値を設定
 
   const [visible, setVisible] = useState(false)
+
+  const [seqId, setSeqId] = useState('')
+
   const [properties, setProperties] = useState([
-    { label: 'Seq ID', value: seqId, isEditable: false, isCopyable: true },
+    { label: 'Seq ID', value: '', isEditable: false, isCopyable: true }, // 初期値は空に
     { label: 'Name', value: name, isEditable: true, isCopyable: false },
     { label: 'Type', value: 'Skill / Action / Move', isEditable: false, isCopyable: false },
     { label: 'Author', value: '田中義雄', isEditable: false, isCopyable: false },
     { label: 'Publish Date', value: '2024/7/13 13:45', isEditable: false, isCopyable: false },
     { label: 'Update User', value: '羽田美希', isEditable: false, isCopyable: false },
     { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
-    { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
-    { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
-    { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
   ])
+
+  // クライアントサイドでのみUUIDを生成し、状態を更新
+  useEffect(() => {
+    const newSeqId = uuidv4()
+    setSeqId(newSeqId)
+    setProperties((prevProperties) =>
+      prevProperties.map((prop) => (prop.label === 'Seq ID' ? { ...prop, value: newSeqId } : prop))
+    )
+  }, [])
 
   // 入力が変更された時の処理
   const handleInputChange = (event) => {
@@ -237,7 +247,7 @@ const RightSidebar = () => {
                     type="text"
                     value={property.value}
                     onChange={(e) => handleInputChange(e, index)}
-                    className="w-full border-none bg-white p-0"
+                    className="w-full border-none bg-white px-1 py-0"
                   />
                 ) : (
                   <span className="w-full overflow-hidden truncate text-ellipsis">
