@@ -39,7 +39,7 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://etkdevstajpea1img.blob.core.windows.net/img-store", // 環境変数からURLを取得
+            value: process.env.IMG_STORE_URL, // 環境変数からURLを取得
           },
         ],
       },

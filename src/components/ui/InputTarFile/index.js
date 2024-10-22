@@ -2,14 +2,17 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { Upload, message } from 'antd'
 
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 
 import { MAX_FILE_SIZE } from '@/constants'
 
 const InputTarFile = (props, ref) => {
-  const [fileList, setFileList] = useState([])
 
-  const { accept = 'application/x-tar', maxSize = MAX_FILE_SIZE, disabled, onChange } = props
+  const { accept = 'application/x-tar', maxSize = MAX_FILE_SIZE, disabled, onChange, fileList, setFileList } = props
+  
+  useEffect(() => {
+      setFileList([])
+  },[disabled])
 
   const beforeUpload = () => {
     return false

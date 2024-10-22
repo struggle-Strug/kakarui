@@ -106,17 +106,16 @@ export const useModuleUrlCreate = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
   const { mutateAsync, isPending, isSuccess } = useMutation({
-    mutationFn: async (params) => {
-      
+    mutationFn: async ({values, initialValue}) => {
       const payload = {
-        name: params.name,
-        description: params.description,
-        tag: params.tag,
-        architectures: params.singlefile && params.singlefile.status !== "removed" ? {} : {
+        name: values.name,
+        description: values.description,
+        tag: values.tag,
+        architectures: initialValue == "single" && values.singlefile && values.singlefile.status !== "removed" ? {} : {
           arm64: true, amd64: true
         }
       }
-      if(params.singlefile && params.singlefile.status !== "removed"){
+      if(initialValue == "single" && values.singlefile && values.singlefile.status !== "removed"){
         const response = await Axios.post(
           buildApiURL(API.MODULE.CREATEURL, { organization_id: organizationId }),
           payload,
