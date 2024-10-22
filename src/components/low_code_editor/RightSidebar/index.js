@@ -75,6 +75,7 @@ const DataList = ({ title, data }) => (
             <span className="text-[#D3D3D3]">|</span>
             <div className="flex w-3/5 overflow-hidden text-ellipsis whitespace-nowrap pl-2 text-[#796E66]">
               <span className="w-full overflow-hidden text-ellipsis">{item.value}</span>
+
             </div>
           </div>
         ))}
@@ -87,12 +88,14 @@ const RightSidebar = ({ skillId, skills }) => {
   const { organizationId } = useOrganizationQuery()
   const [projectData, setProjectData] = useState([]) // APIから取得したプロジェクトデータを保存
   const [siteData, setSiteData] = useState([]) // APIから取得したサイトデータを保存
+  const [systemProperty, setsystemProperty] = useState([]) // APIから取得したサイトデータを保存
   const [loading, setLoading] = useState(true) // ローディング状態を管理
   const [error, setError] = useState(null) // エラーメッセージを保存
 
   //TODO - projectIdを特定してセットする
   const projectId = '9dcec428-e9bc-4a6c-80d4-f432d1fa677d'
   const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+  const moduleConfigId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
   // API呼び出しの関数
   const fetchProjectData = async () => {
@@ -161,11 +164,56 @@ const RightSidebar = ({ skillId, skills }) => {
     }
   }
 
+  // System Propertiesのフェッチ関数
+  const fetchSystemProperty = async () => {
+    try {
+      const response = await Axios.get(
+        buildApiURL(API.SEQUENCE.LIST, {
+          organization_id: organizationId,
+          project_id: projectId,
+          module_config_id: moduleConfigId,
+        })
+      )
+      console.log('response', response.data)
+
+      let data = response.data.datas
+      if (data.length === 0) {
+        throw new Error('No data available');
+      }
+      setsystemProperty(
+        data.map((item) => ({
+          label: item.key,
+          value: item.value,
+        }))
+      )
+    } catch (error) {
+      console.error('Error fetching system properties:', error)
+      setError('Failed to fetch system properties.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const propertyLabelsMap = {
+    id: 'Seq ID',
+    name: 'Name',
+    schema: 'Type',
+    create_user_name: 'Author',
+    create_date: 'Publish Date',
+    update_user_name: 'Update User',
+    update_date: 'Update Date',
+  };
+
+  const filteredSystemProperties = systemProperty.filter((property) =>
+    Object.keys(propertyLabelsMap).includes(property.label)
+  );
+
   // コンポーネントがマウントされた時にAPIを呼び出す
   useEffect(() => {
     if (organizationId) {
       fetchProjectData()
       fetchSiteData() // Site Dataのフェッチを追加
+      fetchSystemProperty() // System Propertiesのフェッチを追加
     }
   }, [organizationId])
 
@@ -232,13 +280,13 @@ const RightSidebar = ({ skillId, skills }) => {
 
         {/* keyと値の一覧 */}
         <div className="flex h-[23dvh] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
-          {properties.map((property, index) => (
+          {filteredSystemProperties.map((property, index) => (
             <div
               key={index}
               className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4] p-1 text-[12px]"
             >
               <div className="scrollbar-hide w-2/5 overflow-x-auto whitespace-nowrap pl-2 font-bold text-[#796E66]">
-                {property.label}
+                {propertyLabelsMap[property.label]}
               </div>
               <span className="text-[#D3D3D3]">|</span>
               <div className="flex w-3/5 items-center pl-2 text-[#796E66]">

@@ -86,6 +86,8 @@ export default {
   SEQUENCE: {
     CREATE:
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences',
+    LIST:
+      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences',
   },
 
   PROJECT_DATA: {
