@@ -87,23 +87,116 @@ export const useModuleQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getModuleDetail }
 }
 
-export const useModuleCreate = ({ onSuccess } = {}) => {
+export const useModuleUrlCreate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
 
-  const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async (params) => {
+  const { mutateAsync, isPending, isSuccess } = useMutation({
+    mutationFn: async ({values, initialValue}) => {
+      const payload = {
+        name: values.name,
+        description: values.description,
+        tag: values.tag,
+        architectures: initialValue == "single" && values.singlefile && values.singlefile.status !== "removed" ? {} : {
+          arm64: true, amd64: true
+        }
+      }
+      if(initialValue == "single" && values.singlefile && values.singlefile.status !== "removed"){
+        const response = await Axios.post(
+          buildApiURL(API.MODULE.CREATEURL, { organization_id: organizationId }),
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 1800000, // 1800s
+          }
+        )
+        return response
+      }
       const response = await Axios.post(
-        buildApiURL(API.MODULE.CREATE, { organization_id: organizationId }),
-        { ...params },
+        buildApiURL(API.MODULE.CREATEURL, { organization_id: organizationId }),
+        payload,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
           },
           timeout: 1800000, // 1800s
         }
       )
       return response
+    },
+    onSuccess: async ({ data }) => {
+      if (data.status_code === 201) {
+        onSuccess?.(data)
+      }
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
+    },
+  })
+
+  const doCreateModuleUrl = useDebouncedCallback(mutateAsync)
+
+  return { doCreateModuleUrl, isPending, isSuccess }
+}
+
+export const useModuleCreate = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutateAsync, isPending, isSuccess } = useMutation({
+    mutationFn: async ({values, detail}) => {
+      const [baseUrl, queryParams] = detail?.url.split("?")
+      const parsedUrl = new URL(detail?.url)
+      const queryparams = new URLSearchParams(parsedUrl?.search);
+      const sv = queryparams?.get('sv');
+      
+      if(values.singlefile && values.singlefile.status !== "removed"){
+        const response = await Axios.put(
+          buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "single", queryParams: queryParams }),
+          values.singlefile,
+          {
+            headers: {
+              "content-type": "application/x-tar",
+              "x-ms-version": sv,
+              "x-ms-blob-type": "BlockBlob",
+              "x-ms-date": new Date().toUTCString(),
+            },
+            timeout: 1800000, // 1800s
+          },
+        )
+      } else {
+        const response = await Axios.put(
+          buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "arm64", queryParams: queryParams }),
+          values.arm64file,
+          {
+            headers: {
+              "content-type": "application/x-tar",
+              "x-ms-version": sv,
+              "x-ms-blob-type": "BlockBlob",
+              "x-ms-date": new Date().toUTCString(),
+            },
+            timeout: 1800000, // 1800s
+          },
+        )
+        if(response.status_code === 201){
+          const response_1 = await Axios.put(
+            buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: "amd64", queryParams: queryParams }),
+            values.amd64file,
+            {
+              headers: {
+                "content-type": "application/x-tar",
+                "x-ms-version": sv,
+                "x-ms-blob-type": "BlockBlob",
+                "x-ms-date": new Date().toUTCString(),
+              },
+              timeout: 1800000, // 1800s
+            },
+          )
+          return response_1
+        }
+      }
     },
     onSuccess: async ({ data }) => {
       if (data.status_code === 201) {
@@ -120,9 +213,81 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
     },
   })
 
-  const doCreateModule = useDebouncedCallback(mutate)
+  const doCreateModule = useDebouncedCallback(mutateAsync)
 
   return { doCreateModule, isPending, isSuccess }
+}
+
+export const useModuleUpdateUrl = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: moduleId, ...params }) => {
+
+      if((!params.singlefile || params.singlefile.status == "removed") && (!params.arm64file | params.arm64file.status == "removed") && (!params.amd64file && params.amd64file.status == "removed")){
+        const payload = {
+          name: params.name,
+          description: params.description,
+        }
+        const response = await Axios.put(
+          buildApiURL(API.MODULE.UPDATEURL, { organization_id: organizationId, module_id: moduleId }),
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 1800000, // 1800s
+          }
+        )
+        return response
+      }
+      const payload = {
+        name: params.name,
+        description: params.description,
+        tag: params.tag,
+        architectures: params.singlefile && params.singlefile.status !== "removed" ? {} : {
+          arm64: true, amd64: true
+        }
+      }
+      if(params.singlefile && params.singlefile.status !== "removed"){
+        const response = await Axios.put(
+          buildApiURL(API.MODULE.UPDATEURL, { organization_id: organizationId, module_id: moduleId }),
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 1800000, // 1800s
+          }
+        )
+        return response
+      }
+      const response = await Axios.put(
+        buildApiURL(API.MODULE.UPDATEURL, { organization_id: organizationId, module_id: moduleId }),
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 1800000, // 1800s
+        }
+      )
+      return response
+    },
+    onSuccess: async ({ data }) => {
+      if (data.status_code === 201) {
+        onSuccess?.(data)
+      }
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
+    },
+  })
+
+  const doUpdateModuleUrl = useDebouncedCallback(mutate)
+
+  return { doUpdateModuleUrl, isPending, isSuccess }
 }
 
 export const useModuleUpdate = ({ onSuccess } = {}) => {
@@ -130,24 +295,67 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async ({ id: moduleId, ...params }) => {
-      const response = await Axios.put(
-        buildApiURL(API.MODULE.UPDATE, { organization_id: organizationId, module_id: moduleId }),
-        { ...params },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+    mutationFn: async ({ id: moduleId, ...params }, sasUrlDetail) => {
+      const [baseUrl, queryParams] = sasUrlDetail.url.split("?")
+      const parsedUrl = new URL(sasUrlDetail.url)
+      const queryparams = new URLSearchParams(parsedUrl.search);
+      const sv = queryparams.get('sv');
+      if(params.singlefile && params.singlefile.status !== "removed"){
+        const response = await Axios.put(
+          buildApiURL(API.MODULE.UPDATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: single, queryParams: queryParams, module_id: moduleId }),
+          params.singlefile,
+          {
+            headers: {
+              "content-type": "application/x-tar",
+              "content-length": 0,
+              "x-ms-version": sv,
+              "x-ms-blob-type": "BlockBlob",
+              "x-ms-date": date.now()
+            },
+            timeout: 1800000, // 1800s
           },
-          timeout: 1800000,
+        )
+      } else {
+        const response = await Axios.put(
+          buildApiURL(API.MODULE.UPDATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: arm64, queryParams: queryParams, module_id: moduleId  }),
+          params.arm64file,
+          {
+            headers: {
+              "content-type": "application/x-tar",
+              "content-length": 0,
+              "x-ms-version": sv,
+              "x-ms-blob-type": "BlockBlob",
+              "x-ms-date": date.now()
+            },
+            timeout: 1800000, // 1800s
+          },
+        )
+        if(response.status_code === 201){
+          const response_1 = await Axios.put(
+            buildApiURL(API.MODULE.UPDATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: amd64, queryParams: queryParams, module_id: moduleId  }),
+            params.arm64file,
+            {
+              headers: {
+                "content-type": "application/x-tar",
+                "content-length": 0,
+                "x-ms-version": sv,
+                "x-ms-blob-type": "BlockBlob",
+                "x-ms-date": date.now()
+              },
+              timeout: 1800000, // 1800s
+            },
+          )
+          return response_1
         }
-      )
-      return response
+      }
     },
     onSuccess: async (response) => {
-      await queryClient.refetchQueries({
-        queryKey: [MODULE_LIST_KEY, organizationId, false],
-      })
-      onSuccess?.(response)
+      if(response.status_code == 201){
+        await queryClient.refetchQueries({
+          queryKey: [MODULE_LIST_KEY, organizationId, false],
+        })
+        onSuccess?.(response)
+      }
     },
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)

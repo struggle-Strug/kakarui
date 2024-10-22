@@ -16,7 +16,7 @@ const RowContent = ({ item, className, showTooltip }) => {
   }
   return (
     <div className={cn('line-clamp-5 whitespace-pre-wrap text-base', className)} title={item}>
-      {item || '-'}
+      {item || 'なし'}
     </div>
   )
 }

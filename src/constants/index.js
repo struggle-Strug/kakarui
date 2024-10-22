@@ -19,3 +19,4 @@ export * from './time'
 export * from './types'
 export * from './validations'
 export { API, Assets, Routes, httpStatusCode }
+export * from './notification_hub'

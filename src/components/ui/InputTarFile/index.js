@@ -2,14 +2,17 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { Upload, message } from 'antd'
 
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 
 import { MAX_FILE_SIZE } from '@/constants'
 
 const InputTarFile = (props, ref) => {
-  const [fileList, setFileList] = useState([])
 
-  const { accept = 'application/x-tar', maxSize = MAX_FILE_SIZE, disabled, onChange } = props
+  const { accept = 'application/x-tar', maxSize = MAX_FILE_SIZE, disabled, onChange, fileList, setFileList } = props
+  
+  useEffect(() => {
+      setFileList([])
+  },[disabled])
 
   const beforeUpload = () => {
     return false
@@ -43,11 +46,12 @@ const InputTarFile = (props, ref) => {
       beforeUpload={beforeUpload}
       onChange={handleUploadChange}
       disabled={disabled}
+      className='pl-12'
     >
       <input type="hidden" ref={ref} />
       <div className="flex-center aspect-square w-32 cursor-pointer flex-col rounded-lg border border-dashed bg-light-gray p-3">
         <PlusOutlined />
-        <div className="mt-2">Upload</div>
+        <div className="mt-2 text-center">Upload</div>
       </div>
     </Upload>
   )

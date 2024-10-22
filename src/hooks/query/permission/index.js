@@ -75,7 +75,7 @@ export const usePermissionDelete = ({ onSuccess } = {}) => {
   let date1 = new Date();
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
-  const { mutate, isPending, isSuccess } = useMutation({
+  const { mutateAsync: doDeletePermissionMutate, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
       const response = await Axios.delete(
         buildApiURL(API.PERMISSION.DELETE, {
@@ -99,7 +99,9 @@ export const usePermissionDelete = ({ onSuccess } = {}) => {
     },
   })
 
-  const doDeletePermission = useDebouncedCallback(mutate)
+  const doDeletePermission = async (params) => {
+    await doDeletePermissionMutate(params);
+  };
 
   return { doDeletePermission, isPending, isSuccess }
 }

@@ -6,6 +6,7 @@ import { UserIcon } from '@/components/icons'
 
 import Logo from '../../common/Logo'
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs'
+import Notification from './Notification'
 
 const Header = () => {
   // const items = [
@@ -28,21 +29,6 @@ const Header = () => {
       <HeaderBreadcrumbs />
     </div>
   )
-
-  // const renderStore = (
-  //   <Space className="flex-center mr-[72px] flex-shrink-0 cursor-pointer gap-2.5">
-  //     <Image src={Assets.COMMON.STORE} width={38} height={34} alt="store" />
-  //     <div className="flex-center text-base font-semibold text-dark-gray-3">
-  //       {t('common.module_store')}
-  //     </div>
-  //   </Space>
-  // )
-
-  // const renderNotification = (
-  //   <Space className="mr-9 cursor-pointer">
-  //     <Image src={Assets.COMMON.NOTIFICATION} width={36} height={43} alt="notification" />
-  //   </Space>
-  // )
 
   const renderAuthenticated = (
     <div className="flex items-center">
@@ -74,9 +60,8 @@ const Header = () => {
       <div className="flex-between item-center flex size-full gap-x-0 px-4">
         {renderLogo}
         {renderBreadcrumbs}
-        <div className="flex items-center justify-end">
-          {/* {renderStore}
-          {renderNotification} */}
+        <div className="flex items-center justify-end gap-4">
+          <Notification />
           {renderAuthenticated}
         </div>
       </div>
