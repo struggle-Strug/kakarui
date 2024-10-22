@@ -29,7 +29,7 @@ export default {
   DEPLOY_LOG_SHOW: '/log-show',
   DEPLOY_LOG_SHOW_DETAIL: '/log-show/[deploy_id]',
 
-  LOW_CODE_EDITOR: '/low-code-editor',
+  LOW_CODE_EDITOR: '/editor',
 
   CHECK: '/Check',
 
