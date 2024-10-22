@@ -287,7 +287,6 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   // メニュー項目がクリックされた時の処理
   const handleMenuClick = (action) => {
     //TODO - サブツリーとして登録する処理を追加する
-    console.log(`Action ${action.key} triggered on node ${contextMenu.nodeId}`)
     setContextMenu(null) // メニューを閉じる
     setSelectedNodeIds([])
     alert('サブツリーとして登録されました')

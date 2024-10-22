@@ -11,8 +11,8 @@ import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
 
-import { mockProjectData } from './mockData/mockProjectsData'
-import { mockSiteData } from './mockData/mockSiteData'
+import { mockProjectData } from '../mockData/mockProjectsData'
+import { mockSiteData } from '../mockData/mockSiteData'
 
 const customProperties = [
   { label: 'Move to', value: 'S01(Position)' },
@@ -103,7 +103,6 @@ const RightSidebar = ({ skillId, skills }) => {
           project_id: projectId,
         })
       )
-      console.log('response', response.data)
 
       let data = response.data.datas
       if (data.length === 0) {
@@ -137,7 +136,6 @@ const RightSidebar = ({ skillId, skills }) => {
           site_id: siteId,
         })
       )
-      console.log('Site Data response', response.data)
 
       let data = response.data.site_data
       if (data.length === 0) {

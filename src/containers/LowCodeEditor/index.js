@@ -5,7 +5,7 @@ import { useStubEnabled } from '@/hooks/custom'
 import { useOrganizationQuery } from '@/hooks/query'
 
 import { LowCodeEditorPresenter } from '@/components/low_code_editor'
-import { mockSkills } from '@/components/low_code_editor/MockSkillData'
+import { mockSkills } from '@/components/low_code_editor/mockData/MockSkillData'
 
 import { buildApiURL } from '@/utils/helper/request'
 
