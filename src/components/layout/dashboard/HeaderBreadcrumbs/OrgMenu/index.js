@@ -22,7 +22,7 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
           <UsersLightIcon size={40} />
           <div className="pl-1.5">
             <div>組織サブメニュー</div>
-            <div className="text-lg">{organizationDetail?.organization_name || ''}</div>
+            <div className="text-lg">{organizationDetail[0]?.organization_name == undefined ? organizationDetail[0]?.name : organizationDetail[0]?.organization_name}</div>
           </div>
         </div>
       ),

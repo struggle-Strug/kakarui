@@ -42,7 +42,7 @@ const OrgSubMenu = ({ data, loading, onClose }) => {
   const doSetOrgActive = useDebouncedCallback((item) => {
     if (item?.id === orgActiveId) return
     startClicking(() => {
-      setOrgActive(item.organization_id)
+      setOrgActive(item.id)
       onClose?.()
       router.push(Routes.HOME, null, { shallow: true })
     })

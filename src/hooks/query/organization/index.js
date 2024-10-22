@@ -29,7 +29,7 @@ export const useOrganizationQuery = () => {
   useEffect(() => {
     if (organizations.length > 0) {
       setOrganizationDetail(organizations?.[0] || {})
-      setOrganizationId(organizations?.[0]?.organization_id || organizations?.[0]?.id)
+      setOrganizationId(organizations?.[0]?.id || organizations?.[0]?.id)
     }
   }, [organizations])
 
