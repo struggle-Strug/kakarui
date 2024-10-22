@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { API, APP_NAME, Routes } from '@/constants'
+import { API, APP_NAME, LOCAL_STORAGE_KEYS, Routes } from '@/constants'
 
 import { Progressbar } from '@/components/layout/common'
 import notification_hub from "@/constants/notification_hub";
@@ -14,27 +14,27 @@ import DashboardLayout from '@/layouts/DashboardLayout'
 import '@/styles/index.css'
 import { Axios } from '@/libs/axios'
 import { buildApiURL } from '@/utils/helper/request'
-import { useAuth } from '@/hooks/query'
+import { SessionProvider } from 'next-auth/react'
 
 export default function MyApp({ Component, pageProps }) {
   const { session, ...restPageProps } = pageProps
-
+  
   const router = useRouter()
-
+  
   const isAuthPage = router.pathname === Routes.AUTH.LOGIN
-
+  
   const isPublicPage = router.pathname === Routes.CHECK
-
+  
   const layout = useCallback(
     (children) => {
       if (isPublicPage) {
         return children
       }
-
+      
       if (isAuthPage) {
         return <AuthLayout>{children}</AuthLayout>
       }
-
+      
       return <DashboardLayout>{children}</DashboardLayout>
     },
     [isAuthPage, isPublicPage, router.pathname]
@@ -51,20 +51,24 @@ export default function MyApp({ Component, pageProps }) {
     return outputArray;
   }
 
+  //user entra ID
+  
+  
   useEffect(() => {
-    const vapidPublicKey = notification_hub.VAPID_Public_Key;
-    
+    const vapidPublicKey = notification_hub.VAPID_Public_Key
+    const user = localStorage.user
+    const entraId = user.entraId
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       const registerServiceWorker = async () => {
         try {
-          const registration = await navigator.serviceWorker.register('/sw.js');
-
+          const registration = await navigator.serviceWorker.register('/sw.js')
+          
           // Subscribe to push notifications
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
           });
-
+          
           
           const subscriptionData = {
             endpoint: subscription.endpoint,
@@ -72,7 +76,6 @@ export default function MyApp({ Component, pageProps }) {
             auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')))),
           };
 
-          const entraId = useAuth().entraId
           // Send subscription to the server
           const response = await Axios.put(
             buildApiURL(API.NOTIFICATION, { entra_id: entraId }),
@@ -105,10 +108,12 @@ export default function MyApp({ Component, pageProps }) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
       </Head>
-      <AppProviders locale={router.locale || 'ja'} pageProps={restPageProps}>
-        <Progressbar />
-        {layout(<Component {...restPageProps} />)}
-      </AppProviders>
+      <SessionProvider session={session}>
+        <AppProviders locale={router.locale || 'ja'} pageProps={restPageProps}>
+          <Progressbar />
+          {layout(<Component {...restPageProps} />)}
+        </AppProviders>
+      </SessionProvider>
     </>
   )
 }
