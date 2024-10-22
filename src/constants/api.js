@@ -79,6 +79,9 @@ export const API = {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
 
+  NOTIFICATION: "/users/{entra_id}/notification", //PUT
+
+
   // -- END --
 }
 
