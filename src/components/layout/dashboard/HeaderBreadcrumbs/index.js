@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useMemo } from 'react'
 
-import { useGetMe, useOrganizationQuery, useProjectActive } from '@/hooks/query'
+import { useOrganizationQuery, useProjectActive } from '@/hooks/query'
 
 import { Breadcrumbs } from '@/components/common'
 
@@ -10,9 +10,8 @@ import ProjectMenu from './ProjectMenu'
 import RobotMenu from './RobotMenu'
 
 const HeaderBreadcrumbs = () => {
-  const { organizationDetail, organizationName } = useOrganizationQuery()
+  const { organizationName } = useOrganizationQuery()
   const { projectActive } = useProjectActive()
-  const { isMember } = useGetMe()
 
   const breadcrumbs = useMemo(
     () => [
@@ -32,7 +31,7 @@ const HeaderBreadcrumbs = () => {
 
   const renderOrganizationName = (
     <>
-      <OrgMenu organizationDetail={organizationDetail} isMember={isMember} />
+      <OrgMenu />
       <div>{organizationName}</div>
     </>
   )

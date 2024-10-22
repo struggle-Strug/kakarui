@@ -21,9 +21,11 @@ export default function MyApp({ Component, pageProps }) {
 
   const isPublicPage = router.pathname === Routes.CHECK
 
+  const idLowCodeEditorPage = router.pathname === Routes.LOW_CODE_EDITOR
+
   const layout = useCallback(
     (children) => {
-      if (isPublicPage) {
+      if (isPublicPage || idLowCodeEditorPage) {
         return children
       }
 
@@ -40,7 +42,6 @@ export default function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>{APP_NAME}</title>
-        <meta charSet="utf-8" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"

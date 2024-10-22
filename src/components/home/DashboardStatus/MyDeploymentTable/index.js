@@ -1,15 +1,18 @@
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { Space } from 'antd'
+import noop from 'lodash/noop'
 
-import { DEPLOYMENT_TYPE_TEXT, FORMAT_STRING, Routes } from '@/constants'
+import { useRouter } from 'next/router'
+
+import { DEPLOYMENT_TYPE_TEXT, DEPLOY_STATUS, FORMAT_STRING, Routes } from '@/constants'
 import { useModuleConfigQuery, useProjectActive, useProjectQuery } from '@/hooks/query'
 
-import { DeployThumbnailLink } from '@/components/deployment'
-import { ModuleConfigAlert } from '@/components/module_config'
-import { DeployStatus, RowContent, RowDate } from '@/components/table'
-import { Button, Link, Table } from '@/components/ui'
+import { ThumbnailLink } from '@/components/common'
+import { LogIcon } from '@/components/icons'
+import { DeployStatus, RowContent, RowDate, RowTextLink } from '@/components/table'
+import { Button, ButtonIcon, Link, Table } from '@/components/ui'
 
 import { cn } from '@/utils/helper/functions'
+import { base64ToImageUrl } from '@/utils/helper/image'
 
 const HeaderRow = (props) => {
   return <tr {...props} />
@@ -56,20 +59,13 @@ const DeployShowMore = () => (
 
 const MyDeploymentTable = ({ data, total, loading }) => {
   const router = useRouter()
-  const [showModuleConfigAlertModal, setShowModuleConfigAlertModal] = useState(false)
-
   const { filteredData: projectFilteredData } = useProjectQuery({
     sort: JSON.stringify([{ field: 'execute_start_date', value: 'desc' }]),
   })
-
-  const { data: moduleConfigData, refetch: moduleConfigRefetch } = useModuleConfigQuery({
+  const { refetch: moduleConfigRefetch } = useModuleConfigQuery({
     sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
   })
-
   const { setProjectActive } = useProjectActive()
-
-  // eslint-disable-next-line no-console
-  console.info('[my-deploy-list]', data)
 
   const onClick = (module) => {
     if (!module?.module_config_id) return
@@ -77,20 +73,22 @@ const MyDeploymentTable = ({ data, total, loading }) => {
     if (moduleProject) {
       setProjectActive(moduleProject)
       moduleConfigRefetch().then(() => {
-        const moduleConfig = moduleConfigData.find((item) => item.id === module.module_config_id)
-        if (moduleConfig) {
-          router.push(`/moduleconfig-manage/${module.module_config_id}`)
-        } else {
-          setShowModuleConfigAlertModal(true)
-        }
+        router.push(`/moduleconfig-manage/${module.module_config_id}`)
       })
     }
   }
 
   const columns = [
     {
-      title: <div className="min-w-[232px]">日付</div>,
-      dataIndex: 'create_date',
+      title: <div className="min-w-[232px]">実施日時</div>,
+      dataIndex: 'execute_start_date',
+      render: (item) => (
+        <RowDate className="min-w-[232px]" item={item} unit={FORMAT_STRING.datetime_full_str} />
+      ),
+    },
+    {
+      title: <div className="min-w-[232px]">完了日時</div>,
+      dataIndex: 'execute_end_date',
       render: (item) => (
         <RowDate className="min-w-[232px]" item={item} unit={FORMAT_STRING.datetime_full_str} />
       ),
@@ -104,13 +102,13 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       title: <div className="min-w-[240px]">モジュール配置</div>,
       dataIndex: 'module_config_name',
       width: '60%',
-      render: (text, row) => (
+      render: (item, row) => (
         <Button
-          type="text"
           onClick={() => onClick(row)}
+          type="text"
           className="flex-start min-w-[240px] max-w-[400px] !p-0"
         >
-          {text}
+          {item}
         </Button>
       ),
     },
@@ -126,22 +124,66 @@ const MyDeploymentTable = ({ data, total, loading }) => {
       dataIndex: 'status',
       render: (item) => <DeployStatus className="min-w-[132px]" status={item} />,
     },
+    {
+      title: <div className="min-w-[132px]">メッセージ</div>,
+      dataIndex: 'last_desired_status',
+      render: (item) => {
+        const { code, description } = item || {}
+        if (code !== 500) return ''
+        return <RowContent item={description} showTooltip />
+      },
+    },
+    {
+      title: <div className="min-w-[132px] text-center">ログ表示</div>,
+      render: (item) => {
+        const { id: deployId, project_id: projectId, deploy_log_file_name: logName } = item || {}
+
+        const disabled = Boolean(!deployId || !projectId || !logName)
+
+        if (!logName) return null
+
+        return (
+          <RowTextLink
+            pathname={Routes.DEPLOY_LOG_SHOW_DETAIL}
+            query={{ deploy_id: deployId, project_id: projectId, name: logName }}
+            disabled={disabled}
+          >
+            <Space className="flex-center">
+              <ButtonIcon icon={<LogIcon size={32} />} onClick={noop} disabled={disabled} />
+            </Space>
+          </RowTextLink>
+        )
+      },
+    },
     // {
-    //   title: <div className="min-w-[132px]">メッセージ</div>,
-    //   dataIndex: 'last_desired_status',
-    //   render: (item, { id }) => {
-    //     return <DeployLastDesiredStatus id={id} item={item} />
+    //   title: <div className="min-w-[100px]">ムービー</div>,
+    //   className: 'min-w-[100px]',
+    //   render: (item, _, index) => {
+    //     const isCompletedStatus = item?.status === DEPLOY_STATUS.COMPLETE
+
+    //     if (!isCompletedStatus || !item?.execute_result_url) return <div className="h-[84px]" />
+
+    //     return <ThumbnailLink deployId={item?.id} projectId={item?.project_id} index={index} />
     //   },
     // },
-    // {
-    //   title: <div className="min-w-[132px] text-center">詳細表示</div>,
-    //   render: (item) => <RowLogFileLink item={item} />,
-    // },
     {
-      title: <div className="min-w-[154px]">ムービー</div>,
-      className: 'min-w-[154px]',
+      title: <div className="min-w-[100px]">ムービー</div>,
+      className: 'min-w-[100px]',
       dataIndex: 'sim_video_thumbnail',
-      render: (thumbnail, item) => <DeployThumbnailLink item={item} />,
+      render: (thumbnail, item, index) => {
+        const isCompletedStatus = item?.status === DEPLOY_STATUS.COMPLETE
+
+        if (!isCompletedStatus || !thumbnail) return <div className="h-[84px]" />
+
+        return (
+          <ThumbnailLink
+            deployId={item?.id}
+            thumbnailUrl={base64ToImageUrl(thumbnail)}
+            projectId={item?.project_id}
+            index={index}
+          />
+        )
+      },
     },
   ]
 
@@ -168,10 +210,6 @@ const MyDeploymentTable = ({ data, total, loading }) => {
         bordered={false}
       />
       {!loading && data.length > 0 ? <DeployShowMore /> : null}
-      <ModuleConfigAlert
-        open={showModuleConfigAlertModal}
-        onClose={() => setShowModuleConfigAlertModal(false)}
-      />
     </section>
   )
 }

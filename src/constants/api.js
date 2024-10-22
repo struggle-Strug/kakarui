@@ -1,10 +1,11 @@
 export const API_ROOT = process.env.NEXT_PUBLIC_HOST
+export const SOCKET_IO = process.env.NEXT_PUBLIC_SERVER_URL
 export const ROOT_URL = process.env.NEXT_PUBLIC_WEB_URL
 export const API_ADMIN_PREFIX = 'admin'
 
 export const TIMEOUT = 30000
 
-export const API = {
+export default {
   API_ROOT,
   TIMEOUT,
 
@@ -77,6 +78,23 @@ export const API = {
 
   FILE: {
     URL_CREATE: '/storages/{storage_name}/url', // POST
+  },
+
+  //TODO -  ローコードエディターで使用するエンドポイント追加
+  SKILL: {
+    LIST: '/organizations/{organization_id}/skills',
+  },
+
+  SEQUENCE: {
+    CREATE:
+      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences',
+  },
+
+  PROJECT_DATA: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/project-data',
+  },
+  SITE_DATA: {
+    LIST: '/sites/{site_id}/site-data',
   },
 
   // -- END --

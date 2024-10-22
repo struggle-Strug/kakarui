@@ -4,9 +4,10 @@ import MovieShowDetailContainer from '@/containers/Movie/MovieDetail'
 
 const MovieShowDetailPage = () => {
   const router = useRouter()
-  const { project_id: projectId, deploy_id: deployId, file_name: fileName } = router.query || {}
+  const projectId = router.query?.project_id
+  const deployId = router.query?.deploy_id
 
-  return <MovieShowDetailContainer projectId={projectId} deployId={deployId} fileName={fileName} />
+  return <MovieShowDetailContainer projectId={projectId} deployId={deployId} />
 }
 
 export default MovieShowDetailPage

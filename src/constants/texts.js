@@ -1,6 +1,6 @@
 import { USER_ROLE } from './constants'
-import { ACTIVE_STATUS, DEPLOY_STATUS } from './status'
-import { DEPLOYMENT_TYPE } from './types'
+import { ACTIVE_STATUS, DEPLOY_STATUS, USER_STATUS } from './status'
+import { DEPLOYMENT_TYPE, GENDER_TYPE, SORT_TYPE } from './types'
 
 export const APP_NAME = 'KARAKURI'
 
@@ -11,10 +11,25 @@ export const NOT_SET_AGE = '年齢未設定'
 export const PLACEHOLDER_INPUT = '入力してください。'
 export const PLACEHOLDER_SELECT = '選択してください。'
 
+export const SORT_TYPE_TEXT = {
+  [SORT_TYPE.ASC]: '上昇',
+  [SORT_TYPE.DESC]: '降順',
+}
+
+export const GENDER_TEXT = {
+  [GENDER_TYPE.MALE]: '男性',
+  [GENDER_TYPE.FEMALE]: '女性',
+}
+
+export const USER_STATUS_TEXT = {
+  [USER_STATUS.ACTIVE]: '有効',
+  [USER_STATUS.BANNED]: '禁止中',
+}
+
 export const DEPLOY_STATUS_TEXT = {
   [DEPLOY_STATUS.COMPLETE]: '正常終了',
   [DEPLOY_STATUS.IN_PROGRESS]: '実行中',
-  [DEPLOY_STATUS.FAILED]: '異常終了',
+  [DEPLOY_STATUS.PENDING]: '異常終了',
 }
 
 export const USER_ROLE_TEXT = {
@@ -34,7 +49,3 @@ export const DEPLOYMENT_TYPE_TEXT = {
   [DEPLOYMENT_TYPE.ROBOT]: '実機',
   [DEPLOYMENT_TYPE.SIM]: 'Sim環境',
 }
-
-export const EMPTY_LOG = 'データがありません'
-export const MAX_LENGTH_LOG_TAIL_TEXT =
-  'さらに詳細を確認する場合は、ログをダウンロードしてください。'

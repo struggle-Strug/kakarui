@@ -1,10 +1,11 @@
 import { Form, Modal, message } from 'antd'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useState } from 'react';
 
-import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE_OPTIONS } from '@/constants'
-import { useAuth, usePermissionDelete, useUserDelete, useUserDetail } from '@/hooks/query'
+import { ACTIVE_STATUS, ACTIVE_STATUS_OPTIONS, USER_ROLE, USER_ROLE_OPTIONS } from '@/constants'
+import { useUserDelete, usePermissionDelete, useUserDetailCount, useAuth} from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Checkbox, Input, Select } from '@/components/form'
@@ -27,13 +28,19 @@ const formText = {
   cancel_button: 'キャンセル',
 }
 
-const UserDeleteModalForm = ({ open, onClose, data, onSuccess }) => {
-  const { data: user } = useUserDetail({ userId: data?.entra_id })
-  const { organizations = [] } = user || {}
+const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
+  const { id } = useAuth()
+  const [userCount, setUserCount] = useState(null);
+  const [isLoading, setIsLoading] = useState(false)
+  const [open, onOpen, onClose] = useFlag()
 
-  const [userCount, setUserCount] = useState(null)
+  const defaultValues = useMemo(
+    () => (data)
+  )
 
-  const { doDeleteUser, isPending } = useUserDelete({
+  const role = data.main_role;
+
+  const { doDeleteUser } = useUserDelete({
     onSuccess: () => {
       message.success('ユーザを削除しました。')
       onClose()
@@ -41,49 +48,137 @@ const UserDeleteModalForm = ({ open, onClose, data, onSuccess }) => {
     },
   })
 
-  const { doDeletePermission } = usePermissionDelete({
+  const { doDetailUserCount, isPending, isSuccess } = useUserDetailCount(
+    {
+    onSuccess: (count) => {
+      setUserCount(count);
+    },
+  }
+)
+
+  const { doDeletePermission } = usePermissionDelete(
+    {
     onSuccess: () => {
-      if (userCount !== 1) {
-        message.success('ユーザを削除しました。')
+      if (userCount != 1) {
+        message.success('所属ユーザを削除しました。')
         onClose()
+      } else {
+        
       }
       onSuccess?.()
     },
-  })
-
-  const onSubmit = async (values) => {
-    try {
-      const totalOrgs = organizations?.length || 0
-      setUserCount(totalOrgs)
-
-      // Ensure PermissionDelete is called first
-      await doDeletePermission(values)
-
-      // Check if the user belongs to only one organization
-      if (totalOrgs === 1) {
-        // Call UserDelete if the user is in only one organization
-        await doDeleteUser(values)
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Error delete user:', error)
-    }
   }
-  const defaultValues = useMemo(
-    () => ({
-      ...(data || {}),
-    }),
-    [data]
-  )
-
-  const role = data?.main_role
+)
 
   const methods = useForm(defaultValues)
 
   useEffect(() => {
     methods.reset(defaultValues)
-  }, [defaultValues])
+  }, [defaultValues]
+)
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// userCountが更新されたら削除処理を実行
+useEffect(() => {
+  const performDeleteOperations = async () => {
+  if (userCount !== null) {
+    try {
+      // await doDeletePermission(defaultValues);
+      if (userCount === 1) {
+        console.log("Attempting to delete user...");
+        // await delay(3000);
+        await doDeleteUser(defaultValues);
+      }
+    } catch (error) {
+      console.error('Error during delete operations:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+};
+
+  performDeleteOperations()
+}, [userCount, doDeletePermission, doDeleteUser, defaultValues])
+
+  const onSubmit = async (values) => {
+    try{
+      setIsLoading(true);
+
+      // await doDetailUserCount(values)
+      // ユーザカウントを取得
+    const count = await doDetailUserCount(values);
+    console.log("count: ",count)
+    // setUserCount(count);
+
+    // if (userCount !== null) {
+    //   setUserCount(userCount);
+
+    //   // ここで 1 秒（1000ms）待機する
+    //   await delay(1000);
+
+    //   // doDeletePermissionを実行
+    //   await doDeletePermission(values);
+
+    //   console.log("count: ",userCount)
+    //   // userCountが1の場合にのみユーザー削除処理を実行
+    //   if (userCount === 1) {
+    //     await doDeleteUser(values);
+    //   }
+    // }
+
+      // // userCount の更新を監視し、null ではなくなったら次の処理に進む
+      // if (userCount !== null) {
+      // // doDeletePermission の実行
+
+      //   await doDeletePermission(values);
+
+      //   await delay(5000);
+        
+      //   // userCount が1の場合はユーザー削除処理を実行
+      //   if (userCount === 1) {
+      //     await doDeleteUser(values);
+      //   }
+      // }
+
+      // await new Promise((resolve) => {
+      //   const interval = setInterval(() => {
+      //     if (userCount !== null) {
+      //       clearInterval(interval)
+      //       resolve()
+      //     }
+      //   }, 500)
+      // })
+
+      // const ms = 3000;
+      // new Promise((resolve) => {
+      //   setTimeout(() => {
+      //     resolve();
+      //   }, ms)
+      // }).then(() => {
+      //   doDeletePermission(values);
+      // });      
+
+      // new Promise((resolve) => {
+      //   setTimeout(() => {
+      //     resolve();
+      //   }, 4000)
+      // }).then(() => {
+      //   if (userCount === 1) {
+      //     doDeleteUser(values)
+      //   }
+      // });
+
+      
+      
+    } catch (error) {
+      console.error('Error delete user:', error)
+    } finally {
+      // ローディングを終了
+      setIsLoading(false);
+    }
+      
+  }
   const renderForm = (
     <FormProvider {...methods}>
       <Form
@@ -94,7 +189,7 @@ const UserDeleteModalForm = ({ open, onClose, data, onSuccess }) => {
         labelAlign="left"
         colon={false}
         labelWrap
-        disabled
+        disabled={isLoading}
       >
         <Input
           name={FORM_INFO.COMPANY}
@@ -146,7 +241,7 @@ const UserDeleteModalForm = ({ open, onClose, data, onSuccess }) => {
           <Button type="default" className="min-w-[200px]" onClick={onClose}>
             <span className="font-semibold">{formText.cancel_button}</span>
           </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]" loading={isPending}>
+          <Button type="primary" htmlType="submit" className="min-w-[200px]" loading={isLoading}>
             <span className="font-semibold">{formText.delete_button}</span>
           </Button>
         </div>
@@ -155,31 +250,21 @@ const UserDeleteModalForm = ({ open, onClose, data, onSuccess }) => {
   )
 
   return (
-    <Modal
-      open={open}
-      onCancel={onClose}
-      title={<h1 className="text-lg font-semibold text-dark-gray-3">{formText.title}</h1>}
-      className="rounded-3xl"
-      footer={null}
-      width={698}
-      data={data}
-    >
-      <p className="px-12 text-lg font-light text-primary">{formText.description}</p>
-      <p className="px-12 text-lg font-light text-primary">{formText.description2}</p>
-      <div className="p-12 font-light">{renderForm}</div>
-    </Modal>
-  )
-}
-
-const UserDeleteCheckModalButton = ({ data, onSuccess }) => {
-  const [open, onOpen, onClose] = useFlag()
-
-  const { id: meId } = useAuth()
-
-  return (
     <>
-      <ButtonIcon icon={<TrashIcon />} onClick={onOpen} disabled={meId === data?.entra_id} />
-      {open && <UserDeleteModalForm {...{ open, onClose, data, onSuccess }} />}
+      <ButtonIcon icon={<TrashIcon />} onClick={onOpen} disabled={id == data.entra_id} />
+      <Modal
+        open={open}
+        onCancel={onClose}
+        title={<h1 className="text-lg font-semibold text-dark-gray-3">{formText.title}</h1>}
+        className="rounded-3xl"
+        footer={null}
+        width={698}
+        data={data}
+      >
+        <p className="px-12 text-lg font-light text-primary">{formText.description}</p>
+        <p className="px-12 text-lg font-light text-primary">{formText.description2}</p>
+        <div className="p-12 font-light">{renderForm}</div>
+      </Modal>
     </>
   )
 }

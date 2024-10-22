@@ -30,7 +30,7 @@ const ModuleConfigDetailContainer = () => {
     <Container title="モジュール配置設定">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
-        <ModuleConfigForm action="edit" onSubmit={doUpdateModuleConfig} data={detail || {}} />
+        <ModuleConfigForm isEdit onSubmit={doUpdateModuleConfig} data={detail || {}} />
       </Spin>
     </Container>
   )

@@ -21,7 +21,7 @@ const ModuleConfigCreateContainer = () => {
     <Container title="モジュール配置設定">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
-        <ModuleConfigForm action="create" onSubmit={doCreateModuleConfig} data={null} />
+        <ModuleConfigForm onSubmit={doCreateModuleConfig} data={null} />
       </Spin>
     </Container>
   )
