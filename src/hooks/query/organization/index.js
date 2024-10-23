@@ -26,13 +26,6 @@ export const useOrganizationQuery = () => {
     LOCAL_STORAGE_KEYS.ORGANIZATION_ID
   )
 
-  useEffect(() => {
-    if (organizations.length > 0) {
-      setOrganizationDetail(organizations?.[0] || {})
-      setOrganizationId(organizations?.[0]?.id || organizations?.[0]?.id)
-    }
-  }, [organizations])
-
   return {
     organizations,
     setOrganizations,

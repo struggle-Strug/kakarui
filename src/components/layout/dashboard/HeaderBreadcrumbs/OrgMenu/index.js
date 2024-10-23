@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Dropdown } from 'antd'
 import noop from 'lodash/noop'
 
@@ -6,15 +7,30 @@ import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import { useFlag } from '@/hooks/share'
 import { UsersLightIcon } from '@/components/icons'
-import { useGetMe, useProjectActive, useOrganizationQuery, useUserActive, useUserDetail } from '@/hooks/query'
+import { useGetMe, useOrganizationQuery, useUserActive, useOrganizationActive } from '@/hooks/query'
 import { cn } from '@/utils/helper/functions'
 import OrgSubMenu from './OrgSubMenu'
 const OrgMenu = ({ organizationDetail, isMember }) => {
-  const [open, onOpen, onClose] = useFlag()
   const router = useRouter()
 
+  const [open, onOpen, onClose] = useFlag()
+
   const disabledRedirectUser = Boolean(isMember)
-  const { organizations, isLoading } = useOrganizationQuery();
+  const { organizations, isLoading, setOrganizationDetail, setOrganizationId } = useOrganizationQuery();
+  const { data: me = {} } = useGetMe()
+  const { userActiveId } = useUserActive()
+  const { setOrgActive } = useOrganizationActive();
+  
+
+  useEffect(() => {
+    if (organizations.length > 0) {
+      setOrgActive(organizations[0].id || organizations[0].organization_id)
+      setOrganizationDetail(organizations?.[0] || {})
+      setOrganizationId(organizations?.[0]?.id || organizations?.[0]?.id)
+    }
+  }, [organizations])
+
+  
   const items = [
     {
       label: (
@@ -69,9 +85,16 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
     },
   ]
 
+  const onOpenChange = (enable) => (enable ? onOpen() : onClose())
+
   return (
     <div className="flex flex-col">
-      <Dropdown menu={{ items }} trigger={['click']} overlayClassName="pt-7 header-dropdown">
+      <Dropdown 
+        menu={{ items }} 
+        trigger={['click']} 
+        overlayClassName="pt-7 header-dropdown" 
+        onOpenChange={onOpenChange}
+        open={open}>
         <div className="cursor-pointer text-sm">組織</div>
       </Dropdown>
     </div>

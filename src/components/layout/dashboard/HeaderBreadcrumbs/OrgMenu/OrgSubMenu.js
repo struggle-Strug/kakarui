@@ -1,15 +1,11 @@
 import { Pagination, Spin } from 'antd'
 
-import { memo, useState } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { DEFAULT_PAGE_SIZE_MENU, FORMAT_STRING } from '@/constants'
 import { useLoadingSimulation } from '@/hooks/custom'
-import { useOrganizationActive } from '@/hooks/query'
+import { useOrganizationActive, useProjectActive, useProjectQuery, useOrganizationQuery, useRobotActive, useRobotQuery} from '@/hooks/query'
 import { useDebouncedCallback } from '@/hooks/share'
-
-import { FolderIcon } from '@/components/icons'
-
-import { formatDate } from '@/utils/helper/dayjs'
 import { Routes } from '@/constants'
 
 const OrgSubMenuItem = memo(({ item, onClick }) => (
@@ -22,9 +18,9 @@ const OrgSubMenuItem = memo(({ item, onClick }) => (
     <div className="w-[calc(100%-40px-24px)] flex-1 py-3">
       <div
         className="w-full truncate text-[13px] font-semibold leading-[15px] text-dark-gray-3"
-        title={item?.organization_name}
+        title={item?.organization_name || item?.name || ''}
       >
-        {item?.organization_name}
+        {item?.organization_name || item?.name || ''}
       </div>
     </div>
   </div>
@@ -36,13 +32,41 @@ const OrgSubMenu = ({ data, loading, onClose }) => {
 
   const [clicking, startClicking] = useLoadingSimulation(false, 500)
   const { orgActiveId, setOrgActive } = useOrganizationActive()
+  const { setProjectActive } = useProjectActive()
+  const { setRobotActive } = useRobotActive()
+  const { setOrganizationId, setOrganizationDetail } = useOrganizationQuery()
+  
+  const { filteredData:projectList} = useProjectQuery({
+    sort: JSON.stringify([{ field: 'create_date', value: 'desc' }]),
+  })
+
+  const { filteredData:robotList } = useRobotQuery({
+    sort: JSON.stringify([{ field: 'name', value: 'asc' }]),
+  })
+
+  useEffect(() => {
+    setProjectActive(projectList.length > 0 ? projectList[0] : []);
+  }, [projectList])
+
+  useEffect(() => {
+    setRobotActive(robotList.length > 0 ? robotList[0] : [])
+  }, [robotList])
+
+  // 重複するorganization_idを排除
+  const uniqueData = data.filter((item, index, self) => {
+    const id = item.organization_id || item.id;
+    return index === self.findIndex((t) => (t.organization_id || t.id) === id);
+  });
 
   const pageSize = (page - 1) * DEFAULT_PAGE_SIZE_MENU
-  const slicedData = data.slice(pageSize, pageSize + DEFAULT_PAGE_SIZE_MENU);
+  const slicedData = uniqueData.slice(pageSize, pageSize + DEFAULT_PAGE_SIZE_MENU);
   const doSetOrgActive = useDebouncedCallback((item) => {
-    if (item?.id === orgActiveId) return
+
+    if ((item?.id || item?.organization_id) === orgActiveId) return
     startClicking(() => {
-      setOrgActive(item.id)
+      setOrgActive(item?.id || item?.organization_id);
+      setOrganizationDetail(item || {})
+      setOrganizationId(item?.id || item?.organization_id)
       onClose?.()
       router.push(Routes.HOME, null, { shallow: true })
     })
