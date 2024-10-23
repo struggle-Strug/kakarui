@@ -130,12 +130,12 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
         const type = valueNumber > 1 ? 
                         {items: {type: "number"}, type: "array"}
                         : { type: "number"}
-
+        const value = valueNumber > 1 ? params.value : params.value * 1
         const payload = {
             key: params.key,
             type: type,
             description: params.description,
-            value: params.value,
+            value: value,
             visibility: params.visibility
         }
 
@@ -153,10 +153,12 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
     },
     onSuccess: async ({ data }) => {
       if (data.status_code === 201) {
+        console.log("list",data);
         await queryClient.refetchQueries({
           queryKey: [SITE_LIST_KEY, data.site_id, false],
         })
         const list = queryClient.getQueryData([SITE_LIST_KEY, data.site_id, false])
+        
         const newSiteData = list?.sitedatas.find((sitedata) => sitedata.data_id === data.data_id) || null
         onSuccess?.(newSiteData)
       }

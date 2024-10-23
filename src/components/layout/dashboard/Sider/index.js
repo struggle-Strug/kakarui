@@ -9,6 +9,7 @@ import { getMenuHref, getMenuItems } from '@/utils/helper/menu'
 
 import RoutesTree from '@/RoutesTree'
 import SettingMenu from './SettingMenu'
+import { useGetMe } from '@/hooks/query'
 
 const Sider = () => {
   const router = useRouter()
@@ -17,6 +18,8 @@ const Sider = () => {
   const menus = getMenuItems(RoutesTree(), unReads)
 
   const [openKeys, setOpenKeys] = useState([router.pathname])
+
+  const { isSystemAdmin, isSiteAdmin } = useGetMe()
 
   const onOpenChange = useCallback(
     (items) => {
@@ -66,6 +69,7 @@ const Sider = () => {
           className="h-full bg-primary"
           onOpenChange={onOpenChange}
         />
+        {/* {(isSystemAdmin || isSiteAdmin) && <SettingMenu />} */}
         <SettingMenu />
       </div>
     </Layout.Sider>

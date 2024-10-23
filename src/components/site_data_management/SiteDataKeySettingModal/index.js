@@ -17,6 +17,7 @@ const initValue = {
 }
 
 const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
+    
     const isEdit = useMemo(() => {
         if(data) return true
         return false
@@ -48,8 +49,8 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
     },[data])
 
     const { doCreateSiteData, isPending: createLoading } = useSiteDataCreate({
-        onSuccess: (module) => {
-          onClose(module)
+        onSuccess: (data) => {
+          onClose(data)
         },
     })
 
@@ -95,16 +96,23 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
                         colon={false}
                         labelWrap
                     >
-                        <Select 
+                        <Controller
                             name={FORM_INFO.AREA}
-                            label="サイト名"
-                            placeholder={"サイト名を選択してください。"}
-                            defaultValue={`${data?.area}${" "}${data?.name}`}
-                            options={sitenames?.map(site => ({
-                                label: `${site.area}${" "}${site.name}`,
-                                value: site.id
-                            }))}
+                            control={methods.control}
+                            render={({ field }) => (
+                                <Form.Item label={"サイト名"}>
+                                    <Select 
+                                        {...field}
+                                        placeholder={"サイト名を選択してください。"}
+                                        options={sitenames?.map(site => ({
+                                            label: `${site.area}${" "}${site.name}`,
+                                            value: site.id
+                                        }))}
+                                    />
+                                </Form.Item>
+                            )}
                         />
+                        
                         <Input 
                             name={FORM_INFO.KEY}
                             label="サイトデータ名"
@@ -113,6 +121,7 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
                         <Controller
                             name={FORM_INFO.VISIBILITY}
                             control={methods.control}
+                            defaultValue={data ? data.visbility : "public"}
                             render={({ field }) => (
                                 <Form.Item label={"参照範囲"}>
                                     <Radio.Group 
