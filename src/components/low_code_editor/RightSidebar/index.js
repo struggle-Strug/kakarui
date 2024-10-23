@@ -33,7 +33,7 @@ const DataList = ({ title, data }) => (
   <div>
     <div className="mb-2 text-[14px] font-bold text-[#796E66]">{title}</div>
     <div className="pl-1 mt-4">
-      <div className="flex h-[20dvh] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
+      <div className="flex h-[20dvh] max-h-[200px] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
         {data.map((item, index) => (
           <div
             key={index}
@@ -206,7 +206,7 @@ const RightSidebar = ({ skillId, skills }) => {
         <div className="my-4 text-[14px] font-bold text-[#796E66]">System Properties</div>
 
         {/* keyと値の一覧 */}
-        <div className="flex h-[23dvh] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
+        <div className="flex h-[23dvh] max-h-[220px] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
           {properties.map((property, index) => (
             <div
               key={index}
