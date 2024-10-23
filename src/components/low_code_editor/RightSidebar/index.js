@@ -168,10 +168,8 @@ const RightSidebar = ({ skillId, skills }) => {
   const fetchSystemProperty = async () => {
     try {
       const response = await Axios.get(
-        buildApiURL(API.SEQUENCE.LIST, {
+        buildApiURL(API.SKILL.LIST, {
           organization_id: organizationId,
-          project_id: projectId,
-          module_config_id: moduleConfigId,
         })
       )
       console.log('response', response.data)
