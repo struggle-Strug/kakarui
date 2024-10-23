@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import { LOCAL_STORAGE_KEYS } from '@/constants'
 import { useSyncLocalStorage } from '@/hooks/share'
 
