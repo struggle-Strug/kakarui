@@ -1,7 +1,7 @@
 import { ReactFlowProvider } from '@xyflow/react'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'reactflow/dist/style.css'
 
 import { Assets } from '@/constants'
@@ -13,6 +13,7 @@ import SequenceFlow from './SequenceFlow'
 
 export const LowCodeEditorPresenter = ({ skills, loading }) => {
   const [open, setOpen] = useState(true)
+  const [selectedSkillId, setSelectedSkillId] = useState("");
   // ボタンのクリックでDrawerの開閉をトグル
   const toggleDrawer = () => {
     setOpen(!open)
@@ -40,6 +41,8 @@ export const LowCodeEditorPresenter = ({ skills, loading }) => {
             <SequenceFlow
               draggedNodeType={draggedNodeType}
               setDraggedNodeType={setDraggedNodeType}
+              selectedSkillId={selectedSkillId}
+              setSelectedSkillId={setSelectedSkillId}
             />
           </div>
 
@@ -60,7 +63,7 @@ export const LowCodeEditorPresenter = ({ skills, loading }) => {
           </div>
 
           {/* SECTION - 右サイドバー */}
-          {open && <RightSidebar />}
+          {open && <RightSidebar skillId={selectedSkillId} skills={skills} />}
         </div>
       </div>
     </ReactFlowProvider>

@@ -20,18 +20,19 @@ import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 // Ant Designのデフォルトスタイル
 const MIN_DISTANCE = 800
 
-const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
+const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, setSelectedSkillId }) => {
   const store = useStoreApi()
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const { getInternalNode, getNodes, getEdges, screenToFlowPosition, deleteElements } =
     useReactFlow()
-
   const [selectedNodeIds, setSelectedNodeIds] = useState([]) // 選択されたノードのIDを管理する配列
-
+  // const [selectedSkillId, setSelectedSkillId] = useState("")
   // ノードがクリックされた時の処理
   const onNodeClick = useCallback((event, node) => {
+    setSelectedSkillId(node.data.id)
+
     event.stopPropagation() // イベントバブリングを防止
     // Rootタイプのノードは選択処理をスキップ
     if (node.data.type === 'Root') {
@@ -313,7 +314,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
         className="bg-gray-50 relative h-full w-full"
         onDragOver={onDragOver}
         onDrop={onDrop}
-        // onDragEnter={onDragEnter}
+      // onDragEnter={onDragEnter}
       >
         <ReactFlow
           nodes={nodeWithClasses}
