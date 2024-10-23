@@ -18,18 +18,20 @@ import { useCallback, useMemo, useState } from 'react'
 import {
   API,
   API_ERRORS,
+  API_MOCK,
   DEPLOY_LIST_KEY,
   INTERVAL_5M,
   INTERVAL_15S,
   MODULE_CONFIG_LIST_KEY,
   STALE_TIME,
 } from '@/constants'
-import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
+import { useMockApiEnabled, useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
+import { useMockApiError } from '@/hooks/custom/useMockApiError'
 import { useDebouncedCallback } from '@/hooks/share'
 
 import { tryParseJson } from '@/utils/helper/functions'
 import { showAPIErrorMessage } from '@/utils/helper/message'
-import { buildApiURL } from '@/utils/helper/request'
+import { buildApiURL, buildURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
@@ -40,9 +42,13 @@ import { useProjectActive, useProjectQuery } from '../project'
 export const useDeployQuery = ({ search, sort, options = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { projectActiveId } = useProjectActive()
+  const { mockApiEnabled } = useMockApiEnabled()
   const { stubEnabled } = useStubEnabled()
 
+  const paramsErrorTest = useMockApiError()
+
   const query = useQuery({
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: [DEPLOY_LIST_KEY, organizationId, projectActiveId, stubEnabled],
     queryFn: async () => {
       if (stubEnabled) {
@@ -50,12 +56,12 @@ export const useDeployQuery = ({ search, sort, options = {} } = {}) => {
         return mockData.deploy_list
       }
 
-      // TODO: remove when using api
-      Axios.defaults.baseURL = 'https://karakuri.agecode.dev'
-      const API_URL = '/deploys' || API.DEPLOY.LIST
+      const API_URI = mockApiEnabled
+        ? buildURL(API_MOCK.DEPLOY_LIST, { ...paramsErrorTest })
+        : API.DEPLOY.LIST
 
       const response = await Axios.get(
-        buildApiURL(API_URL, {
+        buildApiURL(API_URI, {
           organization_id: organizationId,
           project_id: projectActiveId,
         })
@@ -114,21 +120,20 @@ export const useDeployQuery = ({ search, sort, options = {} } = {}) => {
 export const useDeployByProjectQuery = ({ projectId, options = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
+  const { mockApiEnabled } = useMockApiEnabled()
 
   const query = useQuery({
-    queryKey: [DEPLOY_LIST_KEY, organizationId, projectId, stubEnabled],
+    queryKey: [DEPLOY_LIST_KEY, organizationId, projectId, stubEnabled, mockApiEnabled],
     queryFn: async () => {
       if (stubEnabled) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
         return mockData.deploy_list
       }
 
-      // TODO: remove when using api
-      Axios.defaults.baseURL = 'https://karakuri.agecode.dev'
-      const API_URL = '/deploys' || API.DEPLOY.LIST
+      const API_URI = mockApiEnabled ? API_MOCK.DEPLOY_LIST : API.DEPLOY.LIST
 
       const response = await Axios.get(
-        buildApiURL(API_URL, {
+        buildApiURL(API_URI, {
           organization_id: organizationId,
           project_id: projectId,
         })
@@ -301,27 +306,4 @@ export const useDeployStart = ({ onSuccess } = {}) => {
   const doDeployStart = useDebouncedCallback(mutate)
 
   return { doDeployStart, isPending, isSuccess }
-}
-
-export const useMockMyDeployQuery = ({ limit = 10 } = {}) => {
-  const { stubEnabled } = useStubEnabled() || {}
-  const { organizationId } = useOrganizationQuery() || {}
-
-  const query = useQuery({
-    queryKey: [DEPLOY_LIST_KEY, organizationId],
-    queryFn: async () => {
-      const response = await Axios.get('https://karakuri.agecode.dev/deploys')
-      return response.data?.deploys || []
-    },
-    placeholderData: [],
-    refetchInterval: INTERVAL_5M,
-    enabled: !stubEnabled,
-    staleTime: Infinity,
-  })
-
-  return {
-    loading: query.isLoading || query.isFetching,
-    data: query.isLoading ? [] : (query.data || []).slice(0, limit),
-    refetch: query.refetch,
-  }
 }

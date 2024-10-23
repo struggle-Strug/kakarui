@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
-  <g id="open_close" transform="translate(-408 1125) rotate(-90)">
-    <path id="area" d="M1.037,0H12.963A1.037,1.037,0,0,1,14,1.037V12.963A1.037,1.037,0,0,1,12.963,14H1.037A1.037,1.037,0,0,1,0,12.963V1.037A1.037,1.037,0,0,1,1.037,0Z" transform="translate(1111 408)" fill="none"/>
-    <path id="open_close-2" data-name="open_close" d="M1,1V13L9,7Z" transform="translate(1125 411.5) rotate(90)" fill="#796e66"/>
-  </g>
-</svg>

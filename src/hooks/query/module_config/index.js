@@ -1,4 +1,5 @@
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -167,4 +168,41 @@ export const useModuleConfigUpdate = ({ onSuccess } = {}) => {
   const doUpdateModuleConfig = useDebouncedCallback(mutate)
 
   return { doUpdateModuleConfig, isPending, isSuccess }
+}
+
+export const useModuleConfigDelete = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: moduleConfigId, ...params }) => {
+      const response = await Axios.delete(
+        buildApiURL(API.MODULE_CONFIG.DELETE, {
+          organization_id: organizationId,
+          project_id: projectActiveId,
+          module_config_id: moduleConfigId,
+        }),
+        { ...params },
+        {
+          timeout: 60000,
+        }
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.refetchQueries({
+        queryKey: [MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, false],
+      })
+      message.success('モジュール配置を削除しました。')
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.MODULE_CONFIG_DELETE)
+    },
+  })
+
+  const doDeleteModuleConfig = useDebouncedCallback(mutate)
+
+  return { doDeleteModuleConfig, isPending, isSuccess }
 }

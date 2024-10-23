@@ -13,10 +13,12 @@ export default {
   MODULE_SET: '/moduleset-manage',
   MODULE_SET_CREATE: '/moduleset-add',
   MODULE_SET_DETAIL: '/moduleset-manage/[module_set_id]',
+  MODULE_SET_DELETE: '/moduleset-manage/[module_set_id]/delete',
 
   MODULE_CONFIG: '/moduleconfig-manage',
   MODULE_CONFIG_CREATE: '/module-config-add',
   MODULE_CONFIG_DETAIL: '/moduleconfig-manage/[module_config_id]',
+  MODULE_CONFIG_DELETE: '/moduleconfig-manage/[module_config_id]/delete',
 
   PROJECT: '/project-manage',
   PROJECT_DETAIL: '/project-manage/[project_id]',
@@ -28,8 +30,6 @@ export default {
 
   DEPLOY_LOG_SHOW: '/log-show',
   DEPLOY_LOG_SHOW_DETAIL: '/log-show/[deploy_id]',
-
-  LOW_CODE_EDITOR: '/editor',
 
   CHECK: '/Check',
 

@@ -99,13 +99,15 @@ const SearchBar = ({ placeholder = '', options = [] }) => {
         onChange={(val) => handleChange(val)}
         onClear={handleClearSearch}
         onSelect={onSelect}
-      >
-        <Input
-          onKeyDown={handleKeyDown}
-          className="h-[40px] w-full max-w-[368px] !pr-[75px]"
-          placeholder=""
-        />
-      </AutoComplete>
+        getInputElement={
+          <Input
+            onKeyDown={handleKeyDown}
+            className="h-[40px] w-full max-w-[368px] !pr-[75px]"
+            placeholder=""
+          />
+        }
+      />
+
       <div className="flex-center absolute right-0 top-0 h-[40px] hover:!bg-transparent">
         <div className="h-[40px] w-[0.5px] bg-primary" />
         <SearchIcon

@@ -9,10 +9,9 @@ import { useGetMe, useProjectDelete } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
 
 import { Input, InputTextArea } from '@/components/form'
-import { TrashIcon } from '@/components/icons'
-import { Button, ButtonIcon } from '@/components/ui'
+import { Button } from '@/components/ui'
 
-import { FORM_INFO, projectFormSchema, projectValues } from '@/validations/projectSchema'
+import { FORM_INFO, projectFormSchema } from '@/validations/projectSchema'
 
 const formText = {
   title: 'プロジェクト削除確認',
@@ -24,9 +23,9 @@ const formText = {
   delete_button: ' 削除 ',
 }
 
-const ProjectForm = ({ data, onSuccess, onClose}) => {
-  const defaultValues = useMemo(() => (data))
-  
+const ProjectDeleteForm = ({ data, onSuccess, onClose }) => {
+  const defaultValues = useMemo(() => data)
+
   const { doDeleteProject, isPending: deleteLoading } = useProjectDelete({
     onSuccess: () => {
       message.success('プロジェクトを削除しました。')
@@ -60,11 +59,7 @@ const ProjectForm = ({ data, onSuccess, onClose}) => {
         colon={false}
         labelWrap
       >
-        <Input
-          name={FORM_INFO.PROJECT_NAME}
-          label={formText.project_name}
-          disabled
-        />
+        <Input name={FORM_INFO.PROJECT_NAME} label={formText.project_name} disabled />
 
         <InputTextArea
           name={FORM_INFO.DESCRIPTION}
@@ -114,7 +109,7 @@ const ProjectDeleteModal = ({ children, data, onSuccess }) => {
           <p className="px-12 text-lg font-light text-primary">{formText.description}</p>
           <p className="px-12 text-lg font-light text-primary">{formText.description2}</p>
           <div className="p-12 font-light">
-            <ProjectForm data={data} onClose={onClose} onSuccess={onSuccess} />
+            <ProjectDeleteForm data={data} onClose={onClose} onSuccess={onSuccess} />
           </div>
         </Modal>
       )}

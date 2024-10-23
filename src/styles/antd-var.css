@@ -118,6 +118,10 @@
   @apply flex h-10 w-10 items-center justify-center;
 }
 
+.ant-btn.ant-btn-icon-only .anticon {
+  @apply text-[32px];
+}
+
 .ant-btn {
   @apply h-10 rounded-lg px-4 text-base font-normal shadow-none;
 }
@@ -359,63 +363,58 @@
 .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
   @apply m-0 border-none;
 }
-.module .ant-upload-wrapper .ant-upload div {
-  @apply w-20;
+.module .ant-upload-wrapper .ant-upload div{
+  @apply w-20
 }
 
-.module .ant-row {
-  @apply gap-8;
+.module .ant-row{
+  @apply gap-8
 }
 
-.module .ant-col {
+.module .ant-col{
   flex: 1 0 !important;
 }
 
 .module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item {
-  @apply text-[0.8rem];
+  @apply text-[0.8rem]
 }
 
-.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name {
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-name{
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  padding: 0 4px !important;
-  line-height: 1.5714285714285714;
-  flex: auto;
-  transition: all 0.3s;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 0 4px !important;
+    line-height: 1.5714285714285714;
+    flex: auto;
+    transition: all 0.3s;
 }
 
-.module .ant-upload-list-item-actions {
-  @apply pr-[0.7rem];
+.module .ant-upload-list-item-actions{
+  @apply pr-[0.7rem]
 }
 
-.module .ant-upload-list-text {
-  @apply ml-[3rem] w-[12rem];
+.module .ant-upload-list-text{
+  @apply w-[12rem] ml-[3rem]
 }
 
-.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-container {
-  @apply w-[6rem];
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item-container{
+  @apply w-[6rem]
 }
 
-.module
-  .ant-upload-wrapper
-  .ant-upload-list
-  .ant-upload-list-item
-  .ant-upload-list-item-actions
-  .ant-upload-list-item-action.ant-btn {
-  @apply h-6;
+.module .ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-actions .ant-upload-list-item-action.ant-btn {
+  @apply h-6
 }
 
 .module .ant-btn.ant-btn-icon-only .anticon {
-  @apply text-[1rem];
+  @apply text-[1rem]
 }
 
-.module .ant-btn.ant-btn-icon-only {
-  @apply w-[1rem];
+.module .ant-btn.ant-btn-icon-only{
+  @apply w-[1rem]
 }
 
 .module .ant-form-item {
-  @apply mb-0;
+  @apply mb-0
 }
 
 .ant-radio-group {
@@ -423,8 +422,8 @@
 }
 
 /* ERRORMESSAGE */
-.module .ant-form-item .ant-form-item-explain-error {
-  @apply w-[13rem];
+.module .ant-form-item .ant-form-item-explain-error{
+  @apply w-[13rem]
 }
 /* SELECT */
 .ant-select-single.ant-select-lg {
@@ -551,6 +550,23 @@ table :where(th, td) {
   @apply text-lg;
 }
 
+.row_content_modal.ant-modal .ant-modal-content {
+  @apply rounded-[8px];
+}
+
+.row_content_modal.ant-modal .ant-modal-header {
+  @apply rounded-t-[8px] px-4 py-3;
+}
+
+.row_content_modal.ant-modal .ant-modal-header .ant-modal-title {
+  @apply text-primary;
+}
+
+.row_content_modal.ant-modal .ant-modal-close {
+  inset-inline-end: 8px;
+  top: 8px;
+}
+
 /* BREADCRUMBS */
 .ant-breadcrumb-separator {
   color: var(--dark-gray-3) !important;
@@ -608,19 +624,19 @@ div.ant-typography-h3 > textarea,
 }
 
 /* ICON */
-.setting svg {
-  @apply h-8 w-12 fill-white;
+.setting svg{
+  @apply w-12 h-8 fill-white
 }
 
-.bell svg {
-  @apply h-8 w-12;
+.bell svg{
+  @apply w-12 h-8
 }
 
 /* DROPDOWN */
-.notifi {
-  --arrow-x: 282px;
-  --arrow-y: -2px;
-  inset: 58px 0px auto auto !important;
-  box-sizing: border-box;
-  min-width: 48px;
+.notifi{
+  --arrow-x: 282px; 
+    --arrow-y: -2px;
+    inset: 58px 0px auto auto !important; 
+    box-sizing: border-box;
+    min-width: 48px;
 }

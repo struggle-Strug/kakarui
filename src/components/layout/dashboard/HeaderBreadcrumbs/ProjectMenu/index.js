@@ -38,7 +38,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
   const items = [
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[420px] items-center px-3 py-4">
+        <div className="border-bottom-gray mx-3 flex w-[420px] cursor-default items-center px-3 py-4">
           <div>
             <Image src={Assets.MENU.project} alt="gen3p" width={48} height={44} />
           </div>
