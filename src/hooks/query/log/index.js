@@ -7,34 +7,29 @@
 /* eslint-disable no-console */
 import { isServer, useQuery } from '@tanstack/react-query'
 
-import { API_ERRORS, LOG_LIST_KEY, STALE_TIME, VIDEO_LIST_KEY } from '@/constants'
-import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
+import { API, API_ERRORS, API_MOCK, LOG_LIST_KEY, STALE_TIME, VIDEO_LIST_KEY } from '@/constants'
+import { useMockApiEnabled, useShowErrorOnce } from '@/hooks/custom'
 
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
-import { mockData } from '@/services/mock-data'
 
 import { useOrganizationQuery } from '../organization'
 
 export const useVideoQuery = ({ projectId, options = {}, body = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
+  const { mockApiEnabled } = useMockApiEnabled()
+
+  const { file_name: fileName, end_date: endDate } = body || {}
 
   const query = useQuery({
-    queryKey: [VIDEO_LIST_KEY, organizationId, projectId, body, stubEnabled],
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryKey: [VIDEO_LIST_KEY, organizationId, projectId],
     queryFn: async () => {
-      if (stubEnabled) {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return mockData.deploy_list
-      }
-
-      // TODO: remove when using api
-      Axios.defaults.baseURL = 'https://karakuri.agecode.dev'
-      const API_URL = '/storages/video/url'
+      const API_URI = mockApiEnabled ? API_MOCK.URL_CREATE : API.FILE.URL_CREATE
 
       const response = await Axios.post(
-        buildApiURL(API_URL, {
+        buildApiURL(API_URI.replace('{storage_name}', 'video'), {
           organization_id: organizationId,
           project_id: projectId,
         }),
@@ -43,62 +38,50 @@ export const useVideoQuery = ({ projectId, options = {}, body = {} } = {}) => {
 
       return response.data
     },
-    enabled: Boolean(!isServer && organizationId && projectId && body?.file_name && body?.end_date),
+    enabled: Boolean(
+      !isServer && organizationId && projectId && (mockApiEnabled || (fileName && endDate))
+    ),
     staleTime: STALE_TIME,
+    retry: false,
     ...options,
   })
 
   useShowErrorOnce(query, API_ERRORS.COMMON)
 
-  const data = query?.data
-
-  // -- get detail --
-  const getDeployDetail = (deployId) => {
-    return data.find((deploy) => deploy?.id === deployId) || null
-  }
-
-  return { ...query, data, getDeployDetail }
+  return { ...query }
 }
 
 export const useLogQuery = ({ projectId, options = {}, body = {} } = {}) => {
   const { organizationId } = useOrganizationQuery()
-  const { stubEnabled } = useStubEnabled()
+  const { mockApiEnabled } = useMockApiEnabled()
+
+  const { file_name: fileName, end_date: endDate } = body || {}
 
   const query = useQuery({
-    queryKey: [LOG_LIST_KEY, organizationId, projectId, body, stubEnabled],
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryKey: [LOG_LIST_KEY, organizationId, projectId],
     queryFn: async () => {
-      if (stubEnabled) {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        return mockData.deploy_list
-      }
-
-      // TODO: remove when using api
-      Axios.defaults.baseURL = 'https://karakuri.agecode.dev'
-      const API_URL = '/storages/log/url'
+      const API_URI = mockApiEnabled ? API_MOCK.URL_CREATE : API.FILE.URL_CREATE
 
       const response = await Axios.post(
-        buildApiURL(API_URL, {
+        buildApiURL(API_URI.replace('{storage_name}', 'log'), {
           organization_id: organizationId,
           project_id: projectId,
         }),
         body
       )
 
-      return response.data
+      return response?.data
     },
-    enabled: Boolean(!isServer && organizationId && projectId && body?.file_name && body?.end_date),
+    enabled: Boolean(
+      !isServer && organizationId && projectId && (mockApiEnabled || (fileName && endDate))
+    ),
     staleTime: STALE_TIME,
+    networkMode: 'online',
     ...options,
   })
 
   useShowErrorOnce(query, API_ERRORS.COMMON)
 
-  const data = query?.data
-
-  // -- get detail --
-  const getDeployDetail = (deployId) => {
-    return data.find((deploy) => deploy?.id === deployId) || null
-  }
-
-  return { ...query, data, getDeployDetail }
+  return { ...query }
 }

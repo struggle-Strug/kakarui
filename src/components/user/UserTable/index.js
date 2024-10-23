@@ -2,9 +2,8 @@ import { Space } from 'antd'
 
 import { USER_ROLE_TEXT } from '@/constants'
 
-import { TrashIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate } from '@/components/table'
-import { ButtonIcon, Table } from '@/components/ui'
+import { Table } from '@/components/ui'
 
 import UserDeleteCheckModalButton from '../UserDeleteCheckModalButton'
 import UserUpdateModalButton from '../UserUpdateModalButton'
@@ -42,23 +41,6 @@ const UserTable = ({ data, total, loading, reload }) => {
       className: 'min-w-[112px]',
       render: (enable) => <RowContent item={enable ? '有効' : '無効'} />,
     },
-    // {
-    //   title: '削除',
-    //   dataIndex: 'id',
-    //   align: 'center',
-    //   className: 'min-w-[124px]',
-    //   render: (id,record, index) => (
-    //     <Space>
-    //       <UserDeleteCheckModalButton data={record} onSuccess={() => reload?.()}>
-    //         <ButtonIcon
-    //           onClick={() => remove(index)}
-    //           icon={<TrashIcon size={32}
-    //           />} 
-    //         />
-    //       </UserDeleteCheckModalButton>
-    //     </Space>
-    //   ),
-    // },
     {
       title: <ColumnSorter title="登録日" field="create_date" />,
       dataIndex: 'create_date',
@@ -70,13 +52,7 @@ const UserTable = ({ data, total, loading, reload }) => {
       render: (record) => (
         <Space>
           <UserUpdateModalButton data={record} onSuccess={reload} />
-          <UserDeleteCheckModalButton data={record} onSuccess={() => reload?.()}>
-            <ButtonIcon
-              onClick={() => remove(index)}
-              icon={<TrashIcon size={32}
-              />} 
-            />
-          </UserDeleteCheckModalButton>
+          <UserDeleteCheckModalButton data={record} onSuccess={() => reload?.()} />
         </Space>
       ),
     },

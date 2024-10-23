@@ -6,7 +6,7 @@ import toLower from 'lodash/toLower'
 
 import { useMemo } from 'react'
 
-import { API, API_ERRORS, STALE_TIME, USER_LIST_KEY } from '@/constants'
+import { API, API_ERRORS, STALE_TIME, USER_DETAIL_KEY, USER_LIST_KEY } from '@/constants'
 import { useShowErrorOnce, useStubEnabled } from '@/hooks/custom'
 import { useDebouncedCallback } from '@/hooks/share'
 
@@ -89,6 +89,17 @@ export const useUserQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getUserDetail }
 }
 
+export const useUserDetail = ({ userId } = {}) => {
+  return useQuery({
+    queryKey: [USER_DETAIL_KEY, userId],
+    queryFn: async () => {
+      const response = await Axios.get(buildApiURL(API.USER.DETAIL, { user_id: userId }))
+      return response.data?.user || {}
+    },
+    enabled: Boolean(userId),
+  })
+}
+
 export const useUserCreate = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
@@ -138,18 +149,16 @@ export const useUserUpdate = ({ userId, onSuccess } = {}) => {
   return { doUpdateUser, isPending, isSuccess }
 }
 
-export const useUserDelete = ({ userId,onSuccess } = {}) => {
+export const useUserDelete = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
   const queryClient = useQueryClient()
 
-  let date1 = new Date();
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async ({ id: user_id, ...params }) => {
-      console.log("useUserDelete API ",date1.getSeconds(),date1.getMilliseconds())
+    mutationFn: async (params) => {
       const response = await Axios.delete(
-        buildApiURL(API.USER.DELETE, { user_id: params.entra_id}))
-        // "http://127.0.0.1:5000/users/"+params.entra_id)
+        buildApiURL(API.USER.DELETE, { user_id: params.entra_id })
+      )
       return response
     },
     onSuccess: (response) => {
@@ -166,12 +175,10 @@ export const useUserDelete = ({ userId,onSuccess } = {}) => {
   return { doDeleteUser, isPending, isSuccess }
 }
 
-export const useUserDetailCount = ({ onSuccess }) => {
-  let date1 = new Date();
+export const useUserDetailCount = ({ onSuccess } = {}) => {
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
       const response = await Axios.get(buildApiURL(API.USER.DETAIL, { user_id: params.entra_id }))
-      console.log("useUserDetailCount API ",date1.getSeconds(),date1.getMilliseconds())
       return response.data?.user.organizations.length
     },
     onSuccess: (response) => {
@@ -184,5 +191,5 @@ export const useUserDetailCount = ({ onSuccess }) => {
 
   const doDetailUserCount = useDebouncedCallback(mutate)
 
-  return { doDetailUserCount, isPending, isSuccess }  
+  return { doDetailUserCount, isPending, isSuccess }
 }
