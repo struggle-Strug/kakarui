@@ -57,7 +57,7 @@ export default function MyApp({ Component, pageProps }) {
     const vapidPublicKey = notification_hub.VAPID_Public_Key
     //user entra ID
     const user = localStorage.user
-    const entraId = user.entraId
+    const entraId = user?.entraId
     if ('serviceWorker' in navigator && 'PushManager' in window) {
       const registerServiceWorker = async () => {
         try {
