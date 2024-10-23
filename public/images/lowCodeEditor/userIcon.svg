@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.4" height="20.4" viewBox="0 0 20.4 20.4">
+  <g id="user" transform="translate(-1.967 -1.967)">
+    <rect id="area" width="20" height="20" transform="translate(2 2)" fill="none"/>
+    <circle id="楕円形_37" data-name="楕円形 37" cx="9.2" cy="9.2" r="9.2" transform="translate(2.967 2.967)" fill="#796e66" stroke="#796e66" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <g id="グループ_247" data-name="グループ 247" transform="translate(7.119 6.312)">
+      <circle id="楕円形_38" data-name="楕円形 38" cx="2.975" cy="2.975" r="2.975" transform="translate(2.225)" fill="#fff"/>
+      <path id="交差_1" data-name="交差 1" d="M0,5.574C.139,1.727,2.411,0,5.2,0s5.061,1.727,5.2,5.574Z" transform="translate(0 5.951)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
