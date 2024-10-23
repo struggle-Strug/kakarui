@@ -62,11 +62,11 @@ const OrgSubMenu = ({ data, loading, onClose }) => {
   const slicedData = uniqueData.slice(pageSize, pageSize + DEFAULT_PAGE_SIZE_MENU);
   const doSetOrgActive = useDebouncedCallback((item) => {
 
-    if ((item?.id || item?.organization_id) === orgActiveId) return
+    if ((item?.organization_id || item?.id) === orgActiveId) return
     startClicking(() => {
-      setOrgActive(item?.id || item?.organization_id);
+      setOrgActive(item?.organization_id || item?.id);
       setOrganizationDetail(item || {})
-      setOrganizationId(item?.id || item?.organization_id)
+      setOrganizationId(item?.organization_id || item?.id)
       onClose?.()
       router.push(Routes.HOME, null, { shallow: true })
     })

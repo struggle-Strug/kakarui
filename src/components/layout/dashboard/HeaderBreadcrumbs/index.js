@@ -13,7 +13,7 @@ const HeaderBreadcrumbs = () => {
   const { organizationDetail, organizationName, organizationId, organizations } = useOrganizationQuery()
   const { projectActive } = useProjectActive()
   const { isMember } = useGetMe();
-  const filteredOrganizations = organizations.filter(org => org.id == organizationId);
+  const filteredOrganizations = organizations.filter(org => org.organization_id == organizationId || org.id == organizationId);
   const breadcrumbs = useMemo(
     () => [
       // { key: 'robocon', title: 'ロボコン2024' },

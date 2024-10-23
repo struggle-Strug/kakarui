@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import { useFlag } from '@/hooks/share'
 import { UsersLightIcon } from '@/components/icons'
-import { useGetMe, useOrganizationQuery, useUserActive, useOrganizationActive } from '@/hooks/query'
+import { useOrganizationQuery, useOrganizationActive } from '@/hooks/query'
 import { cn } from '@/utils/helper/functions'
 import OrgSubMenu from './OrgSubMenu'
 const OrgMenu = ({ organizationDetail, isMember }) => {
@@ -17,16 +17,14 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
 
   const disabledRedirectUser = Boolean(isMember)
   const { organizations, isLoading, setOrganizationDetail, setOrganizationId } = useOrganizationQuery();
-  const { data: me = {} } = useGetMe()
-  const { userActiveId } = useUserActive()
   const { setOrgActive } = useOrganizationActive();
   
 
   useEffect(() => {
     if (organizations.length > 0) {
-      setOrgActive(organizations[0].id || organizations[0].organization_id)
+      setOrgActive(organizations[0].organization_id || organizations[0].id)
       setOrganizationDetail(organizations?.[0] || {})
-      setOrganizationId(organizations?.[0]?.id || organizations?.[0]?.id)
+      setOrganizationId(organizations?.[0]?.organization_id || organizations?.[0]?.id)
     }
   }, [organizations])
 
