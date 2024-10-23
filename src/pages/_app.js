@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 
-import { API, APP_NAME, LOCAL_STORAGE_KEYS, Routes } from '@/constants'
+import { API, APP_NAME, Routes } from '@/constants'
 
 import { Progressbar } from '@/components/layout/common'
 import notification_hub from "@/constants/notification_hub";
@@ -51,11 +51,11 @@ export default function MyApp({ Component, pageProps }) {
     return outputArray;
   }
 
-  //user entra ID
   
   
   useEffect(() => {
     const vapidPublicKey = notification_hub.VAPID_Public_Key
+    //user entra ID
     const user = localStorage.user
     const entraId = user.entraId
     if ('serviceWorker' in navigator && 'PushManager' in window) {
