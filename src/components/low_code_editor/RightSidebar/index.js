@@ -45,7 +45,6 @@ const DataList = ({ title, data }) => (
             <span className="text-[#D3D3D3]">|</span>
             <div className="flex w-3/5 overflow-hidden text-ellipsis whitespace-nowrap pl-2 text-[#796E66]">
               <span className="w-full overflow-hidden text-ellipsis">{item.value}</span>
-
             </div>
           </div>
         ))}

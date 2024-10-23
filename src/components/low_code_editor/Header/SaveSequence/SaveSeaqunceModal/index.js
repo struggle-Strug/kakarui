@@ -29,14 +29,14 @@ const SaveSequenceModal = ({ children, isEdit, data }) => {
         <Modal
           open={open}
           onCancel={onClose}
-          title={<h1 className="text-lg font-semibold text-dark-gray-3">{title}</h1>}
+          title={<h1 className="text-xl font-semibold text-dark-gray-3">シーケンス保存</h1>}
           className="rounded-3xl"
           footer={null}
-          width={768}
+          width={576}
         >
           <HeadNext title={title} />
-          <p className="px-12 text-lg font-light text-primary">シーケンスを登録します。</p>
-          <div className="p-12 font-light">
+          <p className="px-10 text-lg font-light text-primary">シーケンスを登録します。<br />シーケンス名が既に存在する場合、上書き保存されます。</p>
+          <div className="p-12 pt-5 font-light">
             <SaveSequence isEdit={isEdit} data={data} onClose={onClose} />
           </div>
         </Modal>

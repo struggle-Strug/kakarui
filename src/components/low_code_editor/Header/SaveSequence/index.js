@@ -81,12 +81,18 @@ const SaveSequence = ({ isEdit, data, onClose, organizationId, projectId, module
       >
         <Input
           name={FORM_SAVE_SEQUENCE.NAME}
+          label="モジュール配置名:"
+          placeholder="カフェ配膳"
+          disabled={isEdit}
+        />
+        <Input
+          name={FORM_SAVE_SEQUENCE.NAME}
           label="シーケンス名:"
-          placeholder="シーケンス名を入力してください。"
+          placeholder="配膳ルートA(フロア用)"
           disabled={isEdit}
         />
 
-        <InputTextArea
+        {/* <InputTextArea
           label="シーケンス説明:"
           name={FORM_SAVE_SEQUENCE.DESCRIPTION}
           placeholder="シーケンス説明を入力してください。"
@@ -100,14 +106,14 @@ const SaveSequence = ({ isEdit, data, onClose, organizationId, projectId, module
           placeholder="スキーマをJSON形式で入力してください。"
           rows={6} // JSONフィールド用に行数を多くする
           disabled={isEdit}
-        />
+        /> */}
 
         <div className="flex-end mt-12 gap-x-4">
-          <Button type="default" className="min-w-[200px] text-primary" onClick={onClose}>
+          <Button type="default" className="min-w-[180px] text-primary" onClick={onClose}>
             <span className="font-semibold">キャンセル</span>
           </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
-            <span className="font-semibold">{isEdit ? '更新' : '登録'}</span>
+          <Button type="primary" htmlType="submit" className="min-w-[180px]">
+            <span className="font-semibold">{isEdit ? '更新' : '保存'}</span>
           </Button>
         </div>
       </Form>
