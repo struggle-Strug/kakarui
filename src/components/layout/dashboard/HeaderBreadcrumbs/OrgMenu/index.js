@@ -5,11 +5,13 @@ import noop from 'lodash/noop'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
-import { useFlag } from '@/hooks/share'
+
 import { UsersLightIcon } from '@/components/icons'
 import { useOrganizationQuery, useOrganizationActive } from '@/hooks/query'
 import { cn } from '@/utils/helper/functions'
 import OrgSubMenu from './OrgSubMenu'
+import { useFlag } from '@/hooks/share'
+
 const OrgMenu = ({ organizationDetail, isMember }) => {
   const router = useRouter()
 

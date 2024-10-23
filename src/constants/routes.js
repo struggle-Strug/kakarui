@@ -33,5 +33,7 @@ export default {
 
   CHECK: '/Check',
 
+  LOW_CODE_EDITOR: '/editor',
+
   NOT_FOUND: '/404',
 }
