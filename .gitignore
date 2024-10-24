@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+/flask_project
 # production
 /build
 
