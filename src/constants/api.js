@@ -89,7 +89,7 @@ export default {
   },
 
   PROJECT_DATA: {
-    LIST: '/organizations/{organization_id}/projects',
+    LIST: '/organizations/{organization_id}/projects/{project_id}/project-data',
   },
   SITE_DATA: {
     LIST: '/sites/{site_id}/site-data',

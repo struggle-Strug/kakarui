@@ -8,7 +8,7 @@ import { Assets } from '@/constants'
 
 import SaveSequenceModal from './SaveSequence/SaveSeaqunceModal'
 
-const Header = () => {
+const Header = ({ nodes }) => {
   return (
     <div className="text-wh1te flex h-[60px] w-full items-center justify-between !bg-[#413D39] bg-black px-6 py-2">
       <div className="flex items-center gap-4 text-white">
@@ -27,7 +27,7 @@ const Header = () => {
         <Button className="!rounded !border-2 !border-white !bg-black !px-6 !text-[14px] !font-bold !text-white">
           Import
         </Button>
-        <SaveSequenceModal>
+        <SaveSequenceModal nodes={nodes}>
           <Button
             onClick={noop}
             className="!rounded border !bg-white !px-8 !text-[14px] !font-bold !text-black"

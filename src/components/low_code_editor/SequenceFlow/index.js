@@ -20,10 +20,10 @@ import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 // Ant Designのデフォルトスタイル
 const MIN_DISTANCE = 800
 
-const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, setSelectedSkillId }) => {
+const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, setSelectedSkillId, nodes, setNodes, onNodesChange }) => {
   const store = useStoreApi()
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+  // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
   const { getInternalNode, getNodes, getEdges, screenToFlowPosition, deleteElements } =
     useReactFlow()
@@ -306,6 +306,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, se
       document.removeEventListener('click', handleClickOutside)
     }
   }, [contextMenu])
+
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}

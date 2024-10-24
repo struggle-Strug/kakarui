@@ -5,11 +5,15 @@ import { useEffect, useState } from 'react'
 import 'reactflow/dist/style.css'
 
 import { Assets } from '@/constants'
-
+import {
+  useNodesState,
+} from '@xyflow/react'
 import Header from './Header'
 import LeftSidebar from './LeftSidebar'
 import RightSidebar from './RightSidebar'
 import SequenceFlow from './SequenceFlow'
+
+import { generateNode, initialEdges, initialNodes } from './SequenceFlow/nodes-and-edges'
 
 export const LowCodeEditorPresenter = ({ skills, loading }) => {
   const [open, setOpen] = useState(true)
@@ -25,12 +29,13 @@ export const LowCodeEditorPresenter = ({ skills, loading }) => {
   const handleInputChange = (event) => {
     setName(event.target.value) // 入力内容を更新
   }
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
 
   return (
     <ReactFlowProvider>
       <div className="flex h-screen flex-col">
         {/* SECTION - ヘッダー */}
-        <Header />
+        <Header nodes={nodes} />
 
         <div className="flex h-[calc(100%-60px)] w-full justify-between">
           {/* SECTION - 左サイドバー */}
@@ -39,6 +44,9 @@ export const LowCodeEditorPresenter = ({ skills, loading }) => {
           {/* SECTION - シーケンス */}
           <div className="w-full bg-[#E4E4E4]">
             <SequenceFlow
+              nodes={nodes}
+              setNodes={setNodes}
+              onNodesChange={onNodesChange}
               draggedNodeType={draggedNodeType}
               setDraggedNodeType={setDraggedNodeType}
               selectedSkillId={selectedSkillId}

@@ -62,7 +62,7 @@ const RightSidebar = ({ skillId, skills }) => {
   const [filteredSystemProperties, setFilteredSystemProperties] = useState([])
 
   //TODO - projectIdを特定してセットする
-  const projectId = '9dcec428-e9bc-4a6c-80d4-f432d1fa677d'
+  const projectId = '48367204-bc4f-4c56-b00c-1ed331e7c8c1'
   const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
   const moduleConfigId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
@@ -86,7 +86,7 @@ const RightSidebar = ({ skillId, skills }) => {
           project_id: projectId,
         })
       )
-      console.log('response--------------', response.data)
+      console.log('response', response.data)
 
       let data = response.data.datas
       if (data.length === 0) {
@@ -247,7 +247,7 @@ const RightSidebar = ({ skillId, skills }) => {
                     {filteredSystemProperties[0]?.[property.key]}
                   </span>
                 )}
-                {filteredSystemProperties.isCopyable && (
+                {property.label === 'Seq ID' && filteredSystemProperties[0]?.id && (
                   <Tooltip color="black" title="コピーしました" open={visible}>
                     <Image
                       src={Assets.LOWCODEEDITOR.copy}
@@ -255,7 +255,7 @@ const RightSidebar = ({ skillId, skills }) => {
                       alt=""
                       width={18}
                       height={18}
-                      onClick={() => copyToClipboard(filteredSystemProperties[0]?.[property.key])}
+                      onClick={() => copyToClipboard(filteredSystemProperties[0]?.id)}
                     />
                   </Tooltip>
                 )}

@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 
-import { cloneElement } from 'react'
+import { cloneElement, useEffect } from 'react'
 
 import { useGetMe } from '@/hooks/query'
 import { useFlag } from '@/hooks/share'
@@ -9,13 +9,16 @@ import { HeadNext } from '@/components/common'
 
 import SaveSequence from '..'
 
-const SaveSequenceModal = ({ children, isEdit, data }) => {
+const SaveSequenceModal = ({ children, isEdit, data, nodes }) => {
   const [open, onOpen, onClose] = useFlag()
 
   const { isAcceptedDeployment } = useGetMe()
 
   const title = isEdit ? 'シーケンス' : 'シーケンス'
+  useEffect(() => {
+    console.log(nodes);
 
+  }, [nodes])
   return (
     <>
       <div role="presentation" onClick={onOpen}>
@@ -37,7 +40,7 @@ const SaveSequenceModal = ({ children, isEdit, data }) => {
           <HeadNext title={title} />
           <p className="px-10 text-lg font-light text-primary">シーケンスを登録します。<br />シーケンス名が既に存在する場合、上書き保存されます。</p>
           <div className="p-12 pt-5 font-light">
-            <SaveSequence isEdit={isEdit} data={data} onClose={onClose} />
+            <SaveSequence isEdit={isEdit} data={data} nodes={nodes} onClose={onClose} />
           </div>
         </Modal>
       ) : null}
