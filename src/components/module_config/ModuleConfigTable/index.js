@@ -42,6 +42,12 @@ const ModuleConfigTable = ({ data, total, loading }) => {
       render: (item) => <RowDate item={item} />,
     },
     {
+      title: <ColumnSorter title="更新者" field="update_user_name" />,
+      dataIndex: 'update_user_name',
+      className: 'min-w-[164px]',
+      render: (item) => <RowContent item={item} />,
+    },
+    {
       title: <ColumnSorter title="更新日" field="update_date" />,
       dataIndex: 'update_date',
       className: 'min-w-[164px]',

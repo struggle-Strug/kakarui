@@ -239,10 +239,11 @@ export const useModuleUpdateUrl = ({ onSuccess } = {}) => {
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async ({ id: moduleId, ...params }) => {
 
-      if((!params.singlefile || params.singlefile.status == "removed") && (!params.arm64file | params.arm64file.status == "removed") && (!params.amd64file && params.amd64file.status == "removed")){
+      if((!params.singlefile || params.singlefile.status == "removed") && (!params.arm64file || params.arm64file.status == "removed") && (!params.amd64file || params.amd64file.status == "removed")){
         const payload = {
           name: params.name,
           description: params.description,
+          tag: params.tag,
         }
         const response = await Axios.put(
           buildApiURL(API.MODULE.UPDATEURL, { organization_id: organizationId, module_id: moduleId }),
