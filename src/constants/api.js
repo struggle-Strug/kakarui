@@ -28,6 +28,13 @@ export const API = {
     DELETE: '/users/{user_id}',
   },
 
+  SITELISTS: {
+    LIST: '/sites',
+    SITEDATA: '/sites/{site_id}/site-data', //GET
+    CREATE: '/sites/{site_id}/site-data', //POST
+    UPDATA: '/sites/{site_id}/site-data/{data_id}' //PUT
+  },
+
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
     CREATEURL: '/organizations/{organization_id}/modules', // POST
