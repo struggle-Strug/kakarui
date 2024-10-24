@@ -85,8 +85,7 @@ export const API = {
   FILE: {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
-
-  //TODO -  ローコードエディターで使用するエンドポイント追加
+  NOTIFICATION: "/users/{entra_id}/notification", //PUT
   SKILL: {
     LIST: '/organizations/{organization_id}/skills',
   },
@@ -102,7 +101,6 @@ export const API = {
   SITE_DATA: {
     LIST: '/sites/{site_id}/site-data',
   },
-
   // -- END --
 }
 
