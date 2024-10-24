@@ -28,6 +28,13 @@ export const API = {
     DELETE: '/users/{user_id}',
   },
 
+  SITELISTS: {
+    LIST: '/sites',
+    SITEDATA: '/sites/{site_id}/site-data', //GET
+    CREATE: '/sites/{site_id}/site-data', //POST
+    UPDATA: '/sites/{site_id}/site-data/{data_id}' //PUT
+  },
+
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
     CREATEURL: '/organizations/{organization_id}/modules', // POST
@@ -78,10 +85,22 @@ export const API = {
   FILE: {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
-
   NOTIFICATION: "/users/{entra_id}/notification", //PUT
+  SKILL: {
+    LIST: '/organizations/{organization_id}/skills',
+  },
 
+  SEQUENCE: {
+    CREATE:
+      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences',
+  },
 
+  PROJECT_DATA: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/project-data',
+  },
+  SITE_DATA: {
+    LIST: '/sites/{site_id}/site-data',
+  },
   // -- END --
 }
 
