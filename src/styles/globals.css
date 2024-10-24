@@ -455,3 +455,46 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-radius: 10px;
   border: 3px solid var(--white);
 }
+
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__edge-path {
+  stroke: white;
+  stroke-width: 5;
+}
+
+.temp .react-flow__edge-path {
+  stroke: #3a75e7;
+  /* stroke-dasharray: 5 5; */
+  stroke-width: 3;
+}
+
+.react-flow__node {
+  border: 2px solid #796e66; /* border-stone-400相当の色 */
+  border-radius: 1rem /* 16px */;
+}
+
+.dragging {
+  border: 3px solid #3a75e7; /* ドラッグ中のボーダー色 */
+  border-radius: 1rem /* 16px */;
+}
+
+.react-flow__pane {
+  border: 0px !important;
+}
+.react-flow__node.select {
+  border: 3px solid #3a75e7; /* ドラッグ中のボーダー色 */
+  border-radius: 1rem /* 16px */;
+}
+
+/* カスタムクラスを使って特定のスクロールバーを非表示にする */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge, Opera */
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IEとEdge */
+  scrollbar-width: none; /* Firefox */
+}

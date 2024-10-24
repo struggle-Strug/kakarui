@@ -7,8 +7,6 @@ export default {
 
   USER: '/user-manage',
 
-  SITEDATA: '/sitedata-management',
-
   MODULE: '/module-manage',
   MODULE_DETAIL: '/module-manage/[module_id]',
 
@@ -34,6 +32,8 @@ export default {
   DEPLOY_LOG_SHOW_DETAIL: '/log-show/[deploy_id]',
 
   CHECK: '/Check',
+
+  LOW_CODE_EDITOR: '/editor',
 
   NOT_FOUND: '/404',
 }

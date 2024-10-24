@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Modal, Spin } from 'antd'
+import { Form, Modal, Spin, Radio } from 'antd'
 
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { useModuleCreate, useModuleUpdate } from '@/hooks/query'
+import { useModuleCreate, useModuleUpdate, useModuleUpdateUrl, useModuleUrlCreate } from '@/hooks/query'
 
 import { Input, InputTarFile, InputTextArea } from '@/components/form'
 import { Button } from '@/components/ui'
@@ -16,20 +16,35 @@ const initValue = {
   name: '',
   description: '',
   tag: '',
-  file: null,
+  architectures: {},
 }
 
 const ModuleForm = ({ open, data, onClose }) => {
+  const [singleFileList, setSingleFileList] = useState([])
+  const [arm64FileList, setArm64FileList] = useState([])
+  const [amd64FileList, setAmd64FileList] = useState([])
+  
   const isEdit = useMemo(() => {
     if (data) return true
     return false
   }, [data])
+  const [initialValue, setInitialValue] = useState("single");
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver(moduleFormSchema(isEdit)),
+    resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
     defaultValues: { ...initValue },
   })
+
+  useEffect(() => {
+    if (!open) {
+        methods.reset(initValue);
+    }
+    setSingleFileList([])
+    setArm64FileList([])
+    setAmd64FileList([])
+    setInitialValue("single")
+  }, [open]);
 
   useEffect(() => {
     const defaultValue = data
@@ -38,17 +53,30 @@ const ModuleForm = ({ open, data, onClose }) => {
           name: data.name,
           description: data.description,
           tag: data.latest_tag,
-          file: null,
+          architectures: {},
         }
       : { ...initValue }
     methods.reset(defaultValue)
   }, [data])
+
+  const { doCreateModuleUrl, isPending: createUrlLoading } = useModuleUrlCreate({
+    onSuccess: (module) => {
+      onClose(module)
+    },
+  })
 
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: (module) => {
       onClose(module)
     },
   })
+
+  const { doUpdateModuleUrl, isPending: updateUrlLoading } = useModuleUpdateUrl({
+    onSuccess: (module) => {
+      onClose(module)
+    },
+  })
+
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
@@ -57,13 +85,19 @@ const ModuleForm = ({ open, data, onClose }) => {
 
   const onSubmit = useCallback(
     async (values) => {
+      
       if (isEdit) {
-        doUpdateModule(values)
+        const sasUrlDetail = await doUpdateModuleUrl(values)
+        const detail = sasUrlDetail?.data
+        sasUrlDetail && doUpdateModule({values, detail})
         return
       }
-      doCreateModule(values)
+      
+      const sasUrlDetail = await doCreateModuleUrl({values, initialValue})
+      const detail = sasUrlDetail?.data
+      sasUrlDetail && doCreateModule({values, detail})
     },
-    [doCreateModule, doUpdateModule, isEdit]
+    [doCreateModuleUrl, doCreateModule, doUpdateModule, isEdit, initialValue]
   )
 
   return (
@@ -77,7 +111,7 @@ const ModuleForm = ({ open, data, onClose }) => {
     >
       <p className="px-12 text-lg font-light text-primary">モジュールの情報を入力してください。</p>
       <div className="p-12 pr-20 font-light">
-        <Spin spinning={createLoading || updateLoading}>
+        <Spin spinning={createUrlLoading || createLoading || updateUrlLoading || updateLoading}>
           <FormProvider {...methods}>
             <Form
               onFinish={methods.handleSubmit(onSubmit)}
@@ -94,7 +128,26 @@ const ModuleForm = ({ open, data, onClose }) => {
                 placeholder="モジュール名を入力してください。"
               />
 
-              <InputTarFile name={FORM_INFO.FILE} label="モジュール: " />
+              <Radio.Group className='flex justify-center gap-8 w-full pl-36' defaultValue={initialValue} >
+                <Radio value="single" autoFocus={true} className='text-sm' onChange={() => setInitialValue("single")}>シングルアーキテクチャ</Radio>
+                <Radio value="multi" onChange={() => setInitialValue("multi")}>マルチアーキテクチャ</Radio>
+              </Radio.Group> 
+
+              <div className='module flex w-full' >
+                <div className='flex pt-4 w-[50%]' disabled={initialValue == "multi" && true}>
+                 <InputTarFile name={FORM_INFO.SINGLEFILE} label="モジュール: " disabled={initialValue == "multi" && true} fileList={singleFileList} setFileList={setSingleFileList}/>
+                </div>
+                <div className='flex justify-center gap-4 items-center w-[50%] pl-36' disabled={initialValue == "single" && true}>
+                  <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
+                    <InputTarFile name={FORM_INFO.ARM64FILE} disabled={initialValue == "single" && true} fileList={arm64FileList} setFileList={setArm64FileList}/>
+                    <p className='pr-14'>Arm64</p>
+                  </div>
+                  <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
+                    <InputTarFile name={FORM_INFO.AMD64FILE} disabled={initialValue == "single" && true} fileList={amd64FileList} setFileList={setAmd64FileList}/>
+                    <p className='pr-14'>Amd64</p>
+                  </div>
+                </div>
+              </div>
 
               <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" />
 
