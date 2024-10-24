@@ -30,7 +30,7 @@ const SiteDataManagementContainer = () => {
         search: parseAsString,
     })
     
-    const { data, siteNames, filteredData, isLoading, isFetching } = useSiteDataQuery({ search, sort })
+    const { data, siteNames, filteredData, isLoading, isFetching, refetch } = useSiteDataQuery({ search, sort })
 
     const searchOptions = getSearchOptions(data, ['area', 'name', 'key']);
 
@@ -63,7 +63,7 @@ const SiteDataManagementContainer = () => {
             title: <ColumnSorter title="設定値" field="value" />,
             dataIndex: "value",
             className: "min-w-[70px]",
-            render: (item) => <RowContent item={item} className="max-w-[400px]" />,
+            render: (item) => <RowContent item={item.toString()} className="max-w-[400px]" />,
         },
         {
             title: <ColumnSorter title="更新者" field="update_user_name" />,
@@ -75,7 +75,7 @@ const SiteDataManagementContainer = () => {
             title: <ColumnSorter title="更新日" field="update_date" />,
             dataIndex: "update_date",
             className: "min-w-[70px]",
-            render: (item) => <RowContent item={item} className="max-w-[400px]" />,
+            render: (item) => <RowContent item={item.slice(0,10)} className="max-w-[400px]" />,
         },
         {
             title: '操作',
@@ -83,9 +83,6 @@ const SiteDataManagementContainer = () => {
             render: (record) => (
               <Space>
                 <ButtonIcon icon={<EditOutlined size={32} />} onClick={() => onChangeSiteDataKey(record)} />
-                <ButtonIcon
-                  icon={<TrashIcon size={32} />}
-                />
               </Space>
             ),
             className: 'min-w-[50px]',
@@ -111,7 +108,7 @@ const SiteDataManagementContainer = () => {
                 columns={columns}
                 data={filteredData}
             />
-            <SiteDataKeySettingModal open={siteDataKeySettingFormFlag} onClose={() => onClose()} data={key} sitenames={siteNames?.sites}/>
+            <SiteDataKeySettingModal open={siteDataKeySettingFormFlag} onClose={() => onClose()} onRefresh={refetch} data={key} sitenames={siteNames?.sites}/>
         </Container>
     );
 }

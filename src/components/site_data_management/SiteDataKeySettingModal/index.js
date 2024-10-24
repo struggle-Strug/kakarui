@@ -9,14 +9,14 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 
 const initValue = {
     area: '',
-    visbility: 'public',
+    visibility: 'public',
     value: '',
     key: '',
     description: ''
 
 }
 
-const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
+const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) => {
     
     const isEdit = useMemo(() => {
         if(data) return true
@@ -34,12 +34,12 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
             methods.reset(initValue);  // Reset to initial values when the modal is closed
         }
     }, [open]);
-    
+
     useEffect(() => {
         const defaultValue = data
             ? {
                 area: `${data.area}${" "}${data.name}`,
-                visbility: data.visbility,
+                visibility: data.visibility,
                 value: data.value,
                 key: data.key,
                 description: data.description
@@ -51,24 +51,26 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
     const { doCreateSiteData, isPending: createLoading } = useSiteDataCreate({
         onSuccess: (data) => {
           onClose(data)
+          onRefresh()
         },
     })
 
-    const { doUpdateModule, isPending: updateLoading } = useSiteDataUpdata({
-        onSuccess: (module) => {
-          onClose(module)
+    const { doUpdateSiteData, isPending: updateLoading } = useSiteDataUpdata({
+        onSuccess: (data) => {
+          onClose(data)
+          onRefresh()
         },
     })
 
     const onSubmit = useCallback(
         async (values) => {
           if (isEdit) {
-            doUpdateModule(values)
+            doUpdateSiteData({...values, siteId: data.site_id, dataId: data.data_id})
             return
           }
           doCreateSiteData(values)
         },
-        [doCreateSiteData, isEdit]
+        [doCreateSiteData, doUpdateSiteData, isEdit]
     )
     
 
@@ -121,15 +123,14 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames}) => {
                         <Controller
                             name={FORM_INFO.VISIBILITY}
                             control={methods.control}
-                            defaultValue={data ? data.visbility : "public"}
                             render={({ field }) => (
                                 <Form.Item label={"参照範囲"}>
-                                    <Radio.Group 
-                                        {...field}
+                                    <Radio.Group
+                                        {...field}  // Spread the field props to bind value and onChange automatically
                                         className='flex justify-center items-center gap-8 w-full flex-start'
                                     >
-                                        <Radio value={"public"} className='text-sm'>パブリック</Radio>
-                                        <Radio value={"organization"}>組織</Radio>
+                                        <Radio value="public" className='text-sm'>パブリック</Radio>
+                                        <Radio value="organization">組織</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                             )}

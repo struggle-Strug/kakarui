@@ -19,8 +19,9 @@ const Sider = () => {
 
   const [openKeys, setOpenKeys] = useState([router.pathname])
 
-  const { isSystemAdmin, isSiteAdmin } = useGetMe()
-
+  const { isSystemAdmin, data } = useGetMe();
+  const isSiteAdmin = data?.role == "site_admin"
+  
   const onOpenChange = useCallback(
     (items) => {
       const latestOpenKey = items.find((key) => openKeys.indexOf(key) === -1)
@@ -69,8 +70,7 @@ const Sider = () => {
           className="h-full bg-primary"
           onOpenChange={onOpenChange}
         />
-        {/* {(isSystemAdmin || isSiteAdmin) && <SettingMenu />} */}
-        <SettingMenu />
+        {(isSystemAdmin || isSiteAdmin) && <SettingMenu />}
       </div>
     </Layout.Sider>
   )

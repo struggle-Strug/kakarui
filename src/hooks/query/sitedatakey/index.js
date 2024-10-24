@@ -20,6 +20,7 @@ import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
+import { useQueryStates } from 'nuqs'
 
 export const useSiteDataQuery = ({ search, sort, options = {} } = {}) => {
   const { stubEnabled } = useStubEnabled()
@@ -130,7 +131,7 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
         const type = valueNumber > 1 ? 
                         {items: {type: "number"}, type: "array"}
                         : { type: "number"}
-        const value = valueNumber > 1 ? params.value : params.value * 1
+        const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
         const payload = {
             key: params.key,
             type: type,
@@ -153,7 +154,6 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
     },
     onSuccess: async ({ data }) => {
       if (data.status_code === 201) {
-        console.log("list",data);
         await queryClient.refetchQueries({
           queryKey: [SITE_LIST_KEY, data.site_id, false],
         })
@@ -177,22 +177,23 @@ export const useSiteDataUpdata = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async ({ data_id: dataId, ...params }) => {
+    mutationFn: async (params) => {
         const valueNumber = params.value.split(",").length;
         const type = valueNumber > 1 ? 
                         {items: {type: "number"}, type: "array"}
                         : { type: "number"}
+        const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
 
         const payload = {
             key: params.key,
             type: type,
             description: params.description,
-            value: params.value,
+            value: value,
             visibility: params.visibility
         }
 
       const response = await Axios.put(
-        buildApiURL(API.SITELISTS.UPDATA, { site_id: params.area, data_id: dataId }),
+        buildApiURL(API.SITELISTS.UPDATA, { site_id: params.siteId, data_id: params.dataId }),
         payload,
         {
           headers: {
@@ -204,10 +205,12 @@ export const useSiteDataUpdata = ({ onSuccess } = {}) => {
       return response
     },
     onSuccess: async (response) => {
-      await queryClient.refetchQueries({
-        queryKey: [SITE_LIST_KEY, data.site_id, false],
-      })
-      onSuccess?.(response)
+      if(response.status === 200){
+        // await queryClient.refetchQueries({
+        //   queryKey: [SITE_LIST_KEY, response.data.site_id, false],
+        // })
+        onSuccess?.(response)
+      }
     },
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.SITEDATA_UPDATE)
