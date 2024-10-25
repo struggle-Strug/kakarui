@@ -4,7 +4,7 @@ export default {
     LOGO_LOGIN: '/images/logo-login.png',
     AVATAR: '/images/icons/user.png',
     STORE: '/images/icons/store.png',
-    BACKGROUND_LOGIN: '/images/background-login.png',
+    BACKGROUND_LOGIN: '/images/background-login.jpg',
     NOTIFICATION: '/images/icons/notification.png',
     REFRESH: '/images/icons/refresh.png',
     VIDEO: '/images/icons/video.png',
