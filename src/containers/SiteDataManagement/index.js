@@ -93,7 +93,7 @@ const SiteDataManagementContainer = () => {
         <Container title="サイトデータ管理">
             <div className="flex-between mb-5">
                 <div className="w-full">
-                    <SearchBar placeholder="サイトエリア名・サイト名・サイトデータキー"  options={searchOptions}/>
+                    <SearchBar placeholder="サイトエリア名・サイト名・サイトデータ名"  options={searchOptions}/>
                 </div>
                 <Button
                     icon={<AddIcon size={36} />}

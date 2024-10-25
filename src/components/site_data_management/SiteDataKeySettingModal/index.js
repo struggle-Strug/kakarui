@@ -35,16 +35,16 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
         }
     }, [open]);
 
+    const defaultValue = data
+        ? {
+            area: `${data.area}${" "}${data.name}`,
+            visibility: data.visibility,
+            value: data.value,
+            key: data.key,
+            description: data.description
+        }
+        : { ...initValue }
     useEffect(() => {
-        const defaultValue = data
-            ? {
-                area: `${data.area}${" "}${data.name}`,
-                visibility: data.visibility,
-                value: data.value,
-                key: data.key,
-                description: data.description
-            }
-            : { ...initValue }
         methods.reset(defaultValue)
     },[data])
 
@@ -149,7 +149,7 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
                             <Button
                             type="default"
                             className="min-w-[200px]"
-                            onClick={() => methods.reset(initValue)}
+                            onClick={() => methods.reset(defaultValue)}
                             disabled={createLoading || updateLoading}
                             >
                             <span className="font-semibold">リセット</span>
