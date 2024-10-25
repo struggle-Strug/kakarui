@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Spin, Button, Checkbox, Input } from 'antd'
+import { useParams } from 'react-router-dom';
 
 import { useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -72,21 +73,35 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
   //   }
   // }
   const onFinish = async (values) => {
-    console.log(values, organizationId, projectId, moduleConfigId);
 
     try {
       // URLパラメータの確認
-      if (!organizationId || !projectId || !moduleConfigId) {
-        throw new Error('URLパラメータが不足しています')
-      }
+      // if (!organizationId || !projectId || !moduleConfigId) {
+      //   throw new Error('URLパラメータが不足しています')
+      // }
 
-      const schemaValue = JSON.parse(values[FORM_SAVE_SEQUENCE.SCHEMA]) // JSONに変換して送信
+
+      console.log(values[FORM_SAVE_SEQUENCE.NAME], values[FORM_SAVE_SEQUENCE.DESCRIPTION], values, nodes, organizationId, projectId, moduleConfigId,);
+      // const schemaValue = JSON.parse(values[FORM_SAVE_SEQUENCE.SCHEMA]) // JSONに変換して送信
       const params = {
         name: values[FORM_SAVE_SEQUENCE.NAME],
         description: values[FORM_SAVE_SEQUENCE.DESCRIPTION],
-        schema: schemaValue, // JSONを含むオブジェクトとして送信
-        nodes
+        schema: {
+          root: {
+            BehaviorTree: {
+              ID: "MainTree",
+              Tree: [
+                {
+                  Sequence: [
+                    nodes
+                  ]
+                }
+              ]
+            }
+          }
+        }
       }
+
       // APIエンドポイントのURLを構築
       const response = await Axios.post(
         buildApiURL(API.SEQUENCE.CREATE, {
@@ -141,8 +156,8 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
       </Form.Item>
 
       <Form.Item
-        label={FORM_SAVE_SEQUENCE.NAME}
-        name={FORM_SAVE_SEQUENCE.NAME}
+        label={FORM_SAVE_SEQUENCE.DESCRIPTION}
+        name={FORM_SAVE_SEQUENCE.DESCRIPTION}
         rules={[
           {
             required: true,

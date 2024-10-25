@@ -40,7 +40,7 @@ const SaveSequenceModal = ({ children, isEdit, data, nodes }) => {
           <HeadNext title={title} />
           <p className="px-10 text-lg font-light text-primary">シーケンスを登録します。<br />シーケンス名が既に存在する場合、上書き保存されます。</p>
           <div className="p-12 pt-5 font-light">
-            <SaveSequence isEdit={isEdit} data={data} nodes={nodes} onClose={onClose} />
+            <SaveSequence isEdit={isEdit} data={data} nodes={nodes} onClose={onClose} projectId={'48367204-bc4f-4c56-b00c-1ed331e7c8c1'} moduleConfigId={'4fd29a4b-08a6-436a-b748-a7d95ce16dba'} />
           </div>
         </Modal>
       ) : null}
