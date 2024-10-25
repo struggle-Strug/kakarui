@@ -60,9 +60,6 @@ export const useSiteDataQuery = ({ search, sort, options = {} } = {}) => {
                 ...sitedata,
                 area: site.area,
                 name: site.name,
-                visibility: site.visibility,
-                update_user_name: site.update_user_name,
-                update_date: site.update_date
             }
         })
 
