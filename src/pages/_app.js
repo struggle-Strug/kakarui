@@ -22,10 +22,11 @@ export default function MyApp({ Component, pageProps }) {
   const isPublicPage = router.pathname === Routes.CHECK
 
   const idLowCodeEditorPage = router.pathname === Routes.LOW_CODE_EDITOR
+  const idLowCodeEditorEditPage = router.pathname === Routes.LOW_CODE_EDITOR_EDIT
 
   const layout = useCallback(
     (children) => {
-      if (isPublicPage || idLowCodeEditorPage) {
+      if (isPublicPage || idLowCodeEditorPage || idLowCodeEditorEditPage) {
         return children
       }
 

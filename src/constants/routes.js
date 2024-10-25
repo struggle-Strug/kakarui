@@ -33,7 +33,8 @@ export default {
 
   CHECK: '/Check',
 
-  LOW_CODE_EDITOR: '/editor',
+  LOW_CODE_EDITOR: '/editor/[project_id]/[module_config_id]',
+  LOW_CODE_EDITOR_EDIT: '/editor/[project_id]/[module_config_id]/[sequence_id]',
 
   NOT_FOUND: '/404',
 }
