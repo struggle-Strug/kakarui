@@ -1,13 +1,14 @@
 import { Spin } from 'antd'
 
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 
 import { MEMBER_ROLE_BLOCKED_PAGES, Routes } from '@/constants'
 import { useStubEnabled } from '@/hooks/custom'
 import { useAuth, useGetMe, useOrganizationQuery } from '@/hooks/query'
 
 import Result from '../Result'
+import ServiceWorker from '@/containers/ServiceWorker'
 
 /**
  * Check if is current logged admin is authorized
@@ -69,7 +70,10 @@ const AuthorizationCheck = ({ children }) => {
     )
   }
 
-  return <Suspense fallback={<Spin />}>{children}</Suspense>
+  return <Suspense fallback={<Spin />}>
+          <ServiceWorker />
+            {children}
+          </Suspense>
 }
 
 export default AuthorizationCheck
