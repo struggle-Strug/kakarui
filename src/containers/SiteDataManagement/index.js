@@ -1,4 +1,4 @@
-import { AddIcon, TrashIcon } from "@/components/icons";
+import { AddIcon } from "@/components/icons";
 import { SearchBar } from "@/components/layout/dashboard";
 import { SiteDataKeySettingModal } from "@/components/site_data_management";
 import { ColumnSorter, RowContent } from "@/components/table";
