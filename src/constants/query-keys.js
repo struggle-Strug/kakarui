@@ -34,3 +34,5 @@ export const MODULE_CONFIG_SELECTION_KEY = 'MODULE_CONFIG_SELECTION_KEY'
 
 // robot
 export const ROBOT_LIST_KEY = 'ROBOT_LIST_KEY'
+// site
+export const SITE_LIST_KEY = 'SITE_LIST_KEY'

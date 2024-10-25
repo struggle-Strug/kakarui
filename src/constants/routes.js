@@ -7,6 +7,8 @@ export default {
 
   USER: '/user-manage',
 
+  SITEDATA: '/sitedata-management',
+
   MODULE: '/module-manage',
   MODULE_DETAIL: '/module-manage/[module_id]',
 

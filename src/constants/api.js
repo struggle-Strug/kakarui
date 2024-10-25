@@ -28,6 +28,13 @@ export const API = {
     DELETE: '/users/{user_id}',
   },
 
+  SITELISTS: {
+    LIST: '/sites',
+    SITEDATA: '/sites/{site_id}/site-data', //GET
+    CREATE: '/sites/{site_id}/site-data', //POST
+    UPDATA: '/sites/{site_id}/site-data/{data_id}' //PUT
+  },
+
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
     CREATEURL: '/organizations/{organization_id}/modules', // POST
@@ -78,8 +85,7 @@ export const API = {
   FILE: {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
-
-  //TODO -  ローコードエディターで使用するエンドポイント追加
+  NOTIFICATION: "/users/{entra_id}/notification", //PUT
   SKILL: {
     LIST: '/organizations/{organization_id}/skills',
   },
@@ -95,7 +101,6 @@ export const API = {
   SITE_DATA: {
     LIST: '/sites/{site_id}/site-data',
   },
-
   // -- END --
 }
 
