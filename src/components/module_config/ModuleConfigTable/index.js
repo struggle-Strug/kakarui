@@ -1,31 +1,36 @@
 /* eslint-disable camelcase */
 import { Space } from 'antd'
+import { ApartmentOutlined } from '@ant-design/icons';
 import noop from 'lodash/noop'
 
 import { Routes } from '@/constants'
-import { useGetMe, useUserActive } from '@/hooks/query'
+import { useGetMe, useUserActive, useProjectActive } from '@/hooks/query'
 
 import { DeployAddEditModal } from '@/components/deployment'
-import { DeleteIcon, DeployIcon, EditIcon } from '@/components/icons'
+import { SequenceAddEditModal } from '@/components/deployment'
+import { DeleteIcon, DeployIcon, EditIcon, } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate, RowTextLink } from '@/components/table'
 import { ButtonIcon, Table } from '@/components/ui'
 
 const ModuleConfigTable = ({ data, total, loading }) => {
   const { isSystemAdmin, isOrgAdmin } = useGetMe()
   const { userActiveId } = useUserActive()
-
+  const { projectActive, setProjectActive } = useProjectActive();
   const columns = [
     {
       title: <ColumnSorter title="モジュール配置名" field="name" />,
       dataIndex: 'name',
       className: 'min-w-[164px]',
-      render: (item, { id }) => (
+      render: (item, { id, schema }) => (
+
         <RowTextLink
           pathname={Routes.MODULE_CONFIG_DETAIL}
           query={{ module_config_id: id }}
           disabled={!id}
         >
-          <RowContent item={item} />
+          {
+            !schema ? <RowContent item={item} /> : <RowContent item={item} className='ml-8' />
+          }
         </RowTextLink>
       ),
     },
@@ -53,6 +58,17 @@ const ModuleConfigTable = ({ data, total, loading }) => {
       align: 'center',
       render: (id, row) => (
         <Space>
+          {
+            row.schema ? <SequenceAddEditModal isEdit data={row}>
+              <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
+            </SequenceAddEditModal> : <RowTextLink
+              pathname={Routes.SEQUENCE_CONFIG_CREATE}
+              query={{ module_config_id: id, project_id: projectActive }}
+              disabled={!id}
+            >
+              <ApartmentOutlined className='text-[30px]' onClick={noop} />
+            </RowTextLink>
+          }
           <RowTextLink
             pathname={Routes.MODULE_CONFIG_DETAIL}
             query={{ module_config_id: id }}
@@ -60,10 +76,11 @@ const ModuleConfigTable = ({ data, total, loading }) => {
           >
             <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
           </RowTextLink>
-
-          <DeployAddEditModal isEdit data={row}>
-            <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
-          </DeployAddEditModal>
+          {
+            row.schema ? "" : <DeployAddEditModal isEdit data={row}>
+              <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
+            </DeployAddEditModal>
+          }
 
           <RowTextLink
             pathname={Routes.MODULE_CONFIG_DELETE}
