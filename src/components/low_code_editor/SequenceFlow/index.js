@@ -25,6 +25,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, se
 
   // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+
   const { getInternalNode, getNodes, getEdges, screenToFlowPosition, deleteElements } =
     useReactFlow()
   const [selectedNodeIds, setSelectedNodeIds] = useState([]) // 選択されたノードのIDを管理する配列
@@ -50,9 +51,9 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, se
   }, [])
 
   // 選択されたノードかつdata.typeがRoot以外の場合に"select"クラスを付与
-  const nodeWithClasses = nodes.map((node) => {
+  const nodeWithClasses = nodes.map((node, index) => {
     // Rootタイプの場合はそのまま早期リターン
-    if (node.data.type === 'Root') {
+    if (index == 0) {
       return node
     }
     // Root以外で選択されているノードにクラスを付与
@@ -258,6 +259,8 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, se
       })
       // 新しいノードのデータを生成
       const newNode = generateNode(type, position, skillData)
+      console.log(newNode);
+
       targetNodeId = null
       isTargetNodeConnected = false
       if (newNode) {
@@ -317,6 +320,8 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, se
         onDrop={onDrop}
       // onDragEnter={onDragEnter}
       >
+        {console.log(edges)
+        }
         <ReactFlow
           nodes={nodeWithClasses}
           edges={edges}

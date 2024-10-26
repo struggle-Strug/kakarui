@@ -16,9 +16,12 @@ const Header = ({ onLoadData, nodes }) => {
       reader.onload = (e) => {
         try {
           const content = JSON.parse(e.target.result); // ファイルの内容をパース
-          if (content.nodes && content.edges) {
+          const sequence = content?.root?.BehaviorTree?.Tree[0].Sequence;
+          console.log(sequence);
+
+          if (sequence.length > 0) {
             // ノードとエッジのデータをonLoadData関数に渡してエディタに適用
-            onLoadData(content.nodes, content.edges); // handleLoadDataを呼び出す
+            onLoadData(sequence, sequence); // handleLoadDataを呼び出す
             message.success('データのインポートが成功しました。');
           } else {
             message.error('ファイルにノードとエッジが見つかりませんでした。');
@@ -31,6 +34,7 @@ const Header = ({ onLoadData, nodes }) => {
     } else {
       message.error('JSONファイルを選択してください。');
     }
+
   };
 
   // インポートボタンがクリックされたときの処理

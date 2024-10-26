@@ -32,57 +32,14 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
     [data]
   )
 
-  // const methods = useForm({
-  //   mode: 'onChange',
-  //   resolver: yupResolver(saveSequenceFormSchema()), // バリデーションスキーマを適用
-  //   defaultValues,
-  // })
-  // const { reset } = methods
-  // const onSubmit = async () => {
-  //   console.log('ddddddddddddd');
-
-  //   try {
-  //     // URLパラメータの確認
-  //     if (!organizationId || !projectId || !moduleConfigId) {
-  //       throw new Error('URLパラメータが不足しています')
-  //     }
-
-  //     const schemaValue = JSON.parse(values[FORM_SAVE_SEQUENCE.SCHEMA]) // JSONに変換して送信
-  //     const params = {
-  //       name: values[FORM_SAVE_SEQUENCE.NAME],
-  //       description: values[FORM_SAVE_SEQUENCE.DESCRIPTION],
-  //       schema: schemaValue, // JSONを含むオブジェクトとして送信
-  //       nodes
-  //     }
-  //     // APIエンドポイントのURLを構築
-  //     const response = await Axios.post(
-  //       buildApiURL(API.SEQUENCE.CREATE, {
-  //         organization_id: organizationId,
-  //         project_id: projectId,
-  //         module_config_id: moduleConfigId,
-  //       }),
-  //       params
-  //     )
-  //     console.log('成功:', response.data)
-  //     //TODO - フォーム登録後に値をクリアする場合は以下を使用
-  //     //   reset()
-  //     onClose() // フォームを閉じる
-  //   } catch (error) {
-  //     console.error('エラーが発生しました:', error)
-  //     // エラーハンドリングを追加する
-  //   }
-  // }
   const onFinish = async (values) => {
 
     try {
       // URLパラメータの確認
-      // if (!organizationId || !projectId || !moduleConfigId) {
-      //   throw new Error('URLパラメータが不足しています')
-      // }
-
-
-      console.log(values[FORM_SAVE_SEQUENCE.NAME], values[FORM_SAVE_SEQUENCE.DESCRIPTION], values, nodes, organizationId, projectId, moduleConfigId,);
-      // const schemaValue = JSON.parse(values[FORM_SAVE_SEQUENCE.SCHEMA]) // JSONに変換して送信
+      if (!organizationId || !projectId || !moduleConfigId || nodes?.length === 0) {
+        throw new Error('URLパラメータが不足しています')
+        return;
+      }
       const params = {
         name: values[FORM_SAVE_SEQUENCE.NAME],
         description: values[FORM_SAVE_SEQUENCE.DESCRIPTION],
@@ -90,13 +47,10 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
           root: {
             BehaviorTree: {
               ID: "MainTree",
-              Tree: [
-                {
-                  Sequence: [
-                    nodes
-                  ]
-                }
-              ]
+              Tree:
+              {
+                Sequence: nodes
+              }
             }
           }
         }
@@ -143,11 +97,10 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
       autoComplete="off"
     >
       <Form.Item
-        label={FORM_SAVE_SEQUENCE.NAME}
+        label="モジュール配置名"
         name={FORM_SAVE_SEQUENCE.NAME}
         rules={[
           {
-            required: true,
             message: 'Please input your username!',
           },
         ]}
@@ -156,11 +109,10 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
       </Form.Item>
 
       <Form.Item
-        label={FORM_SAVE_SEQUENCE.DESCRIPTION}
+        label="シーケンス名"
         name={FORM_SAVE_SEQUENCE.DESCRIPTION}
         rules={[
           {
-            required: true,
             message: 'Please input your password!',
           },
         ]}
@@ -168,16 +120,14 @@ const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes 
         <Input />
       </Form.Item>
 
-      <Form.Item
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Button type="primary" htmlType="submit">
-          Submit
+      <div className='flex justify-end items-center gap-6'>
+        <Button type="default" onClick={onClose} className='min-w-40'>
+          キャンセル
         </Button>
-      </Form.Item>
+        <Button type="primary" htmlType="submit" className='min-w-40'>
+          保存
+        </Button>
+      </div>
     </Form>
   )
   return <Spin spinning={false}>{renderForm}</Spin>
