@@ -4,9 +4,7 @@ import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
 
-import { cn } from '@/utils/helper/functions'
 import { SettingOutlined } from '@ant-design/icons'
-import { useGetMe } from '@/hooks/query'
 
 const SettingMenu = () => {
   const router = useRouter()
@@ -24,7 +22,7 @@ const SettingMenu = () => {
   ]
 
   return (
-    <div className="absolute top-[50rem] left-2">
+    <div className="absolute top-[49rem] left-3">
       <Dropdown menu={{ items }} trigger={['click']} placement='right'>
         <div className="cursor-pointer text-sm w-12 h-12">
           <SettingOutlined className='setting'/>

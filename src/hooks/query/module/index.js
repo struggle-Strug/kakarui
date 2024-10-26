@@ -176,6 +176,7 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
               "x-ms-version": sv,
               "x-ms-blob-type": "BlockBlob",
               "x-ms-date": new Date().toUTCString(),
+              "Access-Control-Allow-Origin": "*"
             },
             timeout: 1800000, // 1800s
           },

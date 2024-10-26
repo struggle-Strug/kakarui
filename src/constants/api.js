@@ -53,6 +53,10 @@ export const API = {
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // DELETE
   },
 
+  MODULE_SEQUENCES_CONFIG: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences', // POST
+  },
+  
   MODULE_SET: {
     LIST: '/organizations/{organization_id}/module-sets',
     DETAIL: '/organizations/{organization_id}/module-sets/{module_set_id}', // GET

@@ -19,15 +19,11 @@ import '@/styles/index.css'
 
 export default function MyApp({ Component, pageProps }) {
   const { session, ...restPageProps } = pageProps
-
   const router = useRouter()
 
   const isAuthPage = router.pathname === Routes.AUTH.LOGIN
-
   const isPublicPage = router.pathname === Routes.CHECK
-
   const idLowCodeEditorPage = router.pathname === Routes.LOW_CODE_EDITOR
-
   const idLowCodeEditorEditPage = router.pathname === Routes.LOW_CODE_EDITOR_EDIT
 
   const layout = useCallback(
@@ -82,7 +78,6 @@ export default function MyApp({ Component, pageProps }) {
             ),
           }
 
-          // Send subscription to the server
           const response = await Axios.put(
             buildApiURL(API.NOTIFICATION, { entra_id: entraId }),
             JSON.stringify(subscriptionData),
