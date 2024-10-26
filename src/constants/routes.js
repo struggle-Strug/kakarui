@@ -17,6 +17,8 @@ export default {
   MODULE_SET_DETAIL: '/moduleset-manage/[module_set_id]',
   MODULE_SET_DELETE: '/moduleset-manage/[module_set_id]/delete',
 
+  SKILL_SET: '/skillconfig-manage',
+
   MODULE_CONFIG: '/moduleconfig-manage',
   MODULE_CONFIG_CREATE: '/module-config-add',
   MODULE_CONFIG_DETAIL: '/moduleconfig-manage/[module_config_id]',

@@ -54,9 +54,14 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
       key: '2',
     },
     {
+      label: <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 text-black">スキル管理</div>,
+      onClick: () => router.push(Routes.SKILL_SET),
+      key: '3',
+    },
+    {
       label: <div className="mx-3 flex w-[400px] px-3 py-4 text-black">モジュールセット管理</div>,
       onClick: () => router.push(Routes.MODULE_SET),
-      key: '3',
+      key: '4',
     },
     {
       label: <OrgSubMenu data={organizations} loading={isLoading} onClose={onClose} />,
@@ -65,7 +70,7 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
       },
       disabled: true,
       className: '!pointer-events-auto !cursor-pointer !rounded-l-[24px] !rounded-r-[24px]',
-      key: '4',
+      key: '5',
     },
   ]
 
