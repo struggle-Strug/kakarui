@@ -58,6 +58,13 @@ const ModuleConfigTable = ({ data, total, loading }) => {
       align: 'center',
       render: (id, row) => (
         <Space>
+          <RowTextLink
+            pathname={Routes.MODULE_CONFIG_DETAIL}
+            query={{ module_config_id: id }}
+            disabled={!id}
+          >
+            <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
+          </RowTextLink>
           {
             row.schema ? <SequenceAddEditModal isEdit data={row}>
               <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
@@ -69,13 +76,6 @@ const ModuleConfigTable = ({ data, total, loading }) => {
               <ApartmentOutlined className='text-[30px]' onClick={noop} />
             </RowTextLink>
           }
-          <RowTextLink
-            pathname={Routes.MODULE_CONFIG_DETAIL}
-            query={{ module_config_id: id }}
-            disabled={!id}
-          >
-            <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
-          </RowTextLink>
           {
             row.schema ? "" : <DeployAddEditModal isEdit data={row}>
               <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
