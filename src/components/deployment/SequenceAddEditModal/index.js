@@ -9,7 +9,7 @@ import { HeadNext } from '@/components/common'
 
 import DeploymentForm from './DeploymentForm'
 
-const DeployAddEditModal = ({ children, isEdit, data }) => {
+const SequenceAddEditModal = ({ children, isEdit, data }) => {
   const [open, onOpen, onClose] = useFlag()
 
   const { isAcceptedDeployment } = useGetMe()
@@ -45,4 +45,4 @@ const DeployAddEditModal = ({ children, isEdit, data }) => {
   )
 }
 
-export default DeployAddEditModal
+export default SequenceAddEditModal

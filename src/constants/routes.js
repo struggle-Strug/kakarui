@@ -21,6 +21,7 @@ export default {
   MODULE_CONFIG_CREATE: '/module-config-add',
   MODULE_CONFIG_DETAIL: '/moduleconfig-manage/[module_config_id]',
   MODULE_CONFIG_DELETE: '/moduleconfig-manage/[module_config_id]/delete',
+  SEQUENCE_CONFIG_CREATE: '/editor/[project_id]/[module_config_id]',
 
   PROJECT: '/project-manage',
   PROJECT_DETAIL: '/project-manage/[project_id]',
@@ -35,7 +36,8 @@ export default {
 
   CHECK: '/Check',
 
-  LOW_CODE_EDITOR: '/editor',
+  LOW_CODE_EDITOR: '/editor/[project_id]/[module_config_id]',
+  LOW_CODE_EDITOR_EDIT: '/editor/[project_id]/[module_config_id]/[sequence_id]',
 
   NOT_FOUND: '/404',
 }

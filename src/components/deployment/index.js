@@ -1,4 +1,5 @@
 export { default as DeployAddEditModal } from './DeployAddEditModal'
+export { default as SequenceAddEditModal } from './SequenceAddEditModal'
 export { default as DeployLastDesiredStatus } from './DeployLastDesiredStatus'
 export { default as DeploySearchBox } from './DeploySearchBox'
 export { default as DeployThumbnailLink } from './DeployThumbnailLink'
