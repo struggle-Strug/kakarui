@@ -53,6 +53,10 @@ export const API = {
     UPDATE: '/organizations/{organization_id}/module-sets/{module_set_id}', // PUT
   },
 
+  SKILL_CONFIG: {
+    LIST: "/organizations/{organization_id}/skills"
+  },
+
   DEPLOY: {
     LIST: '/organizations/{organization_id}/projects/{project_id}/deploys',
     START: '/organizations/{organization_id}/projects/{project_id}/deploy', // POST

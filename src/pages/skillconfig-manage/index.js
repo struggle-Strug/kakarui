@@ -1,7 +1,7 @@
-import ModuleConfigContainer from '@/containers/ModuleConfig'
+import SkillConfigContainer from '@/containers/SkillConfig'
 
-const ModuleConfigPage = () => {
-  return <ModuleConfigContainer />
+const SkillConfigPage = () => {
+  return <SkillConfigContainer />
 }
 
-export default ModuleConfigPage
+export default SkillConfigPage
