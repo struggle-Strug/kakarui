@@ -21,6 +21,7 @@ import { buildApiURL } from '@/utils/helper/request'
 import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
 import { useQueryStates } from 'nuqs'
+import { message } from 'antd'
 
 export const useSiteDataQuery = ({ search, sort, options = {} } = {}) => {
   const { stubEnabled } = useStubEnabled()
@@ -86,8 +87,9 @@ export const useSiteDataQuery = ({ search, sort, options = {} } = {}) => {
       const lowerSearchTerm = toLower(search)
       result = result.filter(
         (item) =>
+          includes(toLower(item.area), lowerSearchTerm) ||
           includes(toLower(item.name), lowerSearchTerm) ||
-          includes(toLower(item.description), lowerSearchTerm)
+          includes(toLower(item.key), lowerSearchTerm)
       )
     }
 
@@ -157,6 +159,7 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
         const list = queryClient.getQueryData([SITE_LIST_KEY, data.site_id, false])
         
         const newSiteData = list?.sitedatas.find((sitedata) => sitedata.data_id === data.data_id) || null
+        message.success("サイトデータの登録を完了しました。")
         onSuccess?.(newSiteData)
       }
     },
