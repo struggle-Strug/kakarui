@@ -25,6 +25,7 @@ export default {
 
   PROJECT: '/project-manage',
   PROJECT_DETAIL: '/project-manage/[project_id]',
+  PROJECTDATA: '/projectData-manage',
 
   DEPLOY: '/deploy-manage',
 
