@@ -5,7 +5,7 @@ import { useStubEnabled } from '@/hooks/custom'
 import { useOrganizationQuery } from '@/hooks/query'
 
 import { LowCodeEditorPresenter } from '@/components/low_code_editor'
-import { mockSkills } from '@/components/low_code_editor/MockSkillData'
+import { mockSkills } from '@/components/low_code_editor/mockData/MockSkillData'
 
 import { buildApiURL } from '@/utils/helper/request'
 
@@ -27,15 +27,17 @@ const LowCodeEditorContainer = () => {
       console.log('response', response.data)
 
       //NOTE - レスポンスデータが空の場合、モックデータを使用
-      let skills = response.data.skills
+      let skills = response?.data?.skills
       if (skills.length === 0) {
         skills = mockSkills.skills
       }
-      setSkillList(skills)
+      if (skills) {
+              setSkillList(skills)
+
+      }
     } catch (error) {
       console.error('Error fetching skills data:', error)
       setError('Failed to fetch skills data.')
-      setSkillList(skills)
     } finally {
       setLoading(false) // ローディング完了
     }

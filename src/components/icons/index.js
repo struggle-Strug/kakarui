@@ -1,14 +1,19 @@
 import {
   CopyOutlined as CopyIcon,
-  DeleteOutlined as DeleteIcon,
+  DownloadOutlined as DownloadIcon,
   FolderOpenFilled as FolderIcon,
   LoadingOutlined as LoadingIcon,
+  FileTextOutlined as LogFileIcon,
   RightSquareOutlined as LogIcon,
   PlusOutlined as PlusIcon,
   UserOutlined as UserIcon,
 } from '@ant-design/icons'
 
-import { AiOutlineEdit as EditIcon, AiOutlinePlayCircle as PlayIcon } from 'react-icons/ai'
+import {
+  AiOutlineDelete as DeleteIcon,
+  AiOutlineEdit as EditIcon,
+  AiOutlinePlayCircle as PlayIcon,
+} from 'react-icons/ai'
 import { BiMenu as MenuIcon, BiSolidBell as NotificationIcon } from 'react-icons/bi'
 import { BsBoxArrowInUpLeft as ExternalLinkIcon } from 'react-icons/bs'
 import { GrSettingsOption as SettingIcon } from 'react-icons/gr'
@@ -36,7 +41,11 @@ import {
   LuCode2 as SourceCodeIcon,
   LuTrash2 as TrashIcon,
 } from 'react-icons/lu'
-import { MdSubdirectoryArrowRight as ArrowRightIcon, MdCheck as CheckIcon } from 'react-icons/md'
+import {
+  MdSubdirectoryArrowRight as ArrowRightIcon,
+  MdCheck as CheckIcon,
+  MdWarningAmber as WarningIcon,
+} from 'react-icons/md'
 import { PiGridNine as GridNineIcon, PiUsersLight as UsersLightIcon } from 'react-icons/pi'
 import {
   TiArrowSortedDown as SortedDownIcon,
@@ -58,6 +67,7 @@ export {
   CloseCircleIcon,
   CloseIcon,
   DashboardIcon,
+  DeleteIcon,
   DeployIcon,
   EditIcon,
   ExternalLinkIcon,
@@ -83,12 +93,9 @@ export {
   SourceCodeIcon,
   TrashIcon,
   TriangleIcon,
-  UserIcon,
   UsersLightIcon,
-  FolderIcon,
-  CopyIcon,
-  LogIcon,
+  WarningIcon,
 }
 
 //
-export { DeleteIcon, LoadingIcon, PlusIcon }
+export { CopyIcon, DownloadIcon, FolderIcon, LoadingIcon, LogFileIcon, LogIcon, PlusIcon, UserIcon }

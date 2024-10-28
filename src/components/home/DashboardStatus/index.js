@@ -1,4 +1,4 @@
-import { useMockMyDeployQuery } from '@/hooks/query'
+import { useMyDeployQuery } from '@/hooks/query'
 
 import { ReloadIcon } from '@/components/icons'
 import { HeaderTitle } from '@/components/layout/dashboard'
@@ -7,8 +7,7 @@ import { Button } from '@/components/ui'
 import MyDeploymentTable from './MyDeploymentTable'
 
 const DashboardStatus = () => {
-  // const { data, loading, refetch } = useMyDeployQuery({ limit: 10 })
-  const { data, loading, refetch } = useMockMyDeployQuery()
+  const { data, loading, refetch } = useMyDeployQuery({ limit: 10 })
 
   return (
     <div

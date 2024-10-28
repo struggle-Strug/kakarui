@@ -1,11 +1,10 @@
 export const API_ROOT = process.env.NEXT_PUBLIC_HOST
-export const SOCKET_IO = process.env.NEXT_PUBLIC_SERVER_URL
 export const ROOT_URL = process.env.NEXT_PUBLIC_WEB_URL
 export const API_ADMIN_PREFIX = 'admin'
 
 export const TIMEOUT = 30000
 
-export default {
+export const API = {
   API_ROOT,
   TIMEOUT,
 
@@ -29,10 +28,19 @@ export default {
     DELETE: '/users/{user_id}',
   },
 
+  SITELISTS: {
+    LIST: '/sites',
+    SITEDATA: '/sites/{site_id}/site-data', //GET
+    CREATE: '/sites/{site_id}/site-data', //POST
+    UPDATA: '/sites/{site_id}/site-data/{data_id}' //PUT
+  },
+
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
-    CREATE: '/organizations/{organization_id}/modules', // POST
-    UPDATE: '/organizations/{organization_id}/modules/{module_id}', // PUT
+    CREATEURL: '/organizations/{organization_id}/modules', // POST
+    CREATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}', // PUT
+    UPDATEURL: '/organizations/{organization_id}/modules/{module_id}', // PUT
+    UPDATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}/{module_id}', // PUT
     DELETE: '/organizations/{organization_id}/modules/{module_id}', // DELETE
   },
 
@@ -45,6 +53,10 @@ export default {
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // DELETE
   },
 
+  MODULE_SEQUENCES_CONFIG: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences', // POST
+  },
+  
   MODULE_SET: {
     LIST: '/organizations/{organization_id}/module-sets',
     DETAIL: '/organizations/{organization_id}/module-sets/{module_set_id}', // GET
@@ -77,8 +89,7 @@ export default {
   FILE: {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
-
-  //TODO -  ローコードエディターで使用するエンドポイント追加
+  NOTIFICATION: "/users/{entra_id}/notification", //PUT
   SKILL: {
     LIST: '/organizations/{organization_id}/skills',
   },
@@ -94,7 +105,6 @@ export default {
   SITE_DATA: {
     LIST: '/sites/{site_id}/site-data',
   },
-
   // -- END --
 }
 

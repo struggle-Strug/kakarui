@@ -160,7 +160,7 @@ export const useProjectUpdate = ({ onSuccess } = {}) => {
 export const useProjectDelete = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const queryClient = useQueryClient()
-  
+
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async ({ id: projectId, ...params }) => {
       const response = await Axios.delete(

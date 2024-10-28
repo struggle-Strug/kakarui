@@ -22,6 +22,7 @@ export const USER_ROLE = {
 
 export const LOCAL_STORAGE_KEYS = {
   STUB: 'stub', // on/off
+  MOCK_API: 'mock-api', // on/off
   USER: 'user',
   ORGANIZATIONS: 'organizations',
   ORGANIZATIONS_DETAIL: 'organization-detail',
@@ -30,20 +31,11 @@ export const LOCAL_STORAGE_KEYS = {
   ROBOT: 'robot',
 }
 
-export const DEFAULT_ORGANIZATION_ID = 'b53e56d4-125c-42c2-90e0-2b4b17e085fd'
-
-export const DEFAULT_PROJECT = {
-  create_date: '2024-07-19T07:12:08.972663',
-  create_user: 'ad3a7c48-8592-4002-a189-e874e40235e4',
-  description: '結合試験用プロジェクトです。',
-  id: 'fe694977-83a5-4ab7-99b4-2e0aded1b4fe',
-  name: '結合試験用プロジェクト',
-  organization_id: 'b53e56d4-125c-42c2-90e0-2b4b17e085fd',
-  update_date: '2024-07-19T07:12:08.972663',
-  update_user: 'ad3a7c48-8592-4002-a189-e874e40235e4',
-}
-
 export const EXPIRED_URL = {
-  TIME: Number(process.env.NEXT_PUBLIC_EXPIRE_TIME),
-  UNIT: process.env.NEXT_PUBLIC_EXPIRE_TIME_UNIT,
+  TIME: Number(process.env.NEXT_PUBLIC_EXPIRE_TIME || 1),
+  UNIT: process.env.NEXT_PUBLIC_EXPIRE_TIME_UNIT || 'hours',
 }
+
+export const MAX_LENGTH_LOG_TAIL = Number(process.env.NEXT_PUBLIC_MAX_LENGTH_LOG_TAIL || 10000)
+
+export const JapaneseRegex = /[ぁ-んァ-ン々〆〤一-龯]/

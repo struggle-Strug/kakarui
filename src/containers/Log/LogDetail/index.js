@@ -1,183 +1,192 @@
-import { Spin, message } from 'antd'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import JSZip from 'jszip'
+import { parseAsString, useQueryStates } from 'nuqs'
 
 import { useEffect, useRef, useState } from 'react'
 
-import { EXPIRED_URL, FORMAT_STRING } from '@/constants'
+import { EMPTY_LOG, EXPIRED_URL, MAX_LENGTH_LOG_TAIL, MAX_LENGTH_LOG_TAIL_TEXT } from '@/constants'
 import { useDeployByProjectQuery, useLogQuery } from '@/hooks/query'
 
-import { CopyIcon, ReloadIcon } from '@/components/icons'
-import { Button, Container, Select } from '@/components/ui'
+import { Container } from '@/components/ui'
 
-import { formatDate } from '@/utils/helper/dayjs'
+import { formatUTCDateToISOString } from '@/utils/helper/dayjs'
 
-const LogShowDetailContainer = ({ projectId, deployId }) => {
-  const lastElementRef = useRef()
+import LogContent from '../LogContent'
+import LogDetailHeader from '../LogDetailHeader'
+import LogDirectory from '../LogDirectory'
+
+const extractLogFiles = async (zipData) => {
+  const zipFolder = zipData.folder('logs')
+  return Object.values(zipFolder.files)
+    .filter((f) => /^logs\//.test(f?.name) && f?.name?.includes('_log.txt') && !f.dir)
+    .map((item) => {
+      const label = item?.name.replace(/^logs\//, '').replace(/_log.txt$/, '')
+      return {
+        label,
+        name: label,
+        value: item?.name,
+      }
+    })
+}
+
+const processLogContent = (textLog, wrapperContentRef) => {
+  const logLines = textLog.split('\n') || []
+  const allLength = logLines.length === 1 && logLines[0] === '' ? 0 : logLines.length || 0
+
+  wrapperContentRef.current.innerHTML = ''
+
+  if (!allLength) {
+    wrapperContentRef.current.innerHTML = `<div class="flex grow items-center justify-center text-base">${EMPTY_LOG}</div>`
+  } else {
+    const fragment = document.createDocumentFragment()
+    const lastLine = Number(allLength || 1) - 1
+    const firstLine = lastLine - MAX_LENGTH_LOG_TAIL >= 0 ? lastLine - MAX_LENGTH_LOG_TAIL : 0
+
+    for (let i = lastLine; i >= firstLine; i -= 1) {
+      const lineContent = logLines[i]
+      const lineElement = document.createElement('p')
+      lineElement.textContent = lineContent
+
+      fragment.appendChild(lineElement)
+    }
+    if (firstLine > 0) {
+      const lineElement = document.createElement('div')
+      lineElement.className = 'flex grow items-center justify-center text-base'
+      lineElement.textContent = MAX_LENGTH_LOG_TAIL_TEXT
+      fragment.appendChild(lineElement)
+    }
+
+    wrapperContentRef.current.appendChild(fragment)
+  }
+}
+
+const useLogDetail = (projectId, deployId, fileName, selectedItem, wrapperContentRef) => {
   const [detail, setDetail] = useState()
-  const [isDownloading, setIsDownloading] = useState(true)
-  const [logFileContent, setLogFileContent] = useState()
-  const [isLoadingLogFile, setLoadingLogFile] = useState(true)
   const [logFiles, setLogFiles] = useState([])
-  const [selectedLogFile, setSelectedLogFile] = useState(null)
+  const [isReading, setReading] = useState(true)
+  const [logContent, setLogContent] = useState('')
+  const [endDateUrl, setEndDateUrl] = useState(dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT))
 
-  const { data, isLoading, isFetching, getDeployDetail, refetch } = useDeployByProjectQuery({
+  const {
+    data,
+    isLoading: isLoadingDeploys,
+    getDeployDetail,
+    refetch,
+  } = useDeployByProjectQuery({
     projectId,
   })
 
-  // TODO: remove when using api
-  const id = deployId
+  const dataRequest = {
+    file_name: fileName,
+    end_date: formatUTCDateToISOString(endDateUrl),
+  }
 
-  const { data: logData } = useLogQuery({
+  const { data: logData, isLoading: isLoadingFileLog } = useLogQuery({
     projectId,
-    deployId: id,
-    body: {
-      file_name: detail?.deploy_log_file_name,
-      end_date: dayjs().add(EXPIRED_URL.TIME, EXPIRED_URL.UNIT).format(FORMAT_STRING.datetime_full),
-    },
+    deployId,
+    body: dataRequest,
   })
 
-  const zipURL = logData?.url
+  useEffect(() => {
+    const newDetail = getDeployDetail(deployId)
+    setDetail((prev) => ({ ...prev, ...newDetail }))
+  }, [deployId, projectId, data, isLoadingDeploys])
 
   useEffect(() => {
-    setDetail(getDeployDetail(id))
-  }, [deployId, projectId, data])
+    if (!isLoadingFileLog && !logData?.url) return
 
-  useEffect(() => {
-    if (zipURL) {
-      axios
-        .create()
-        .get(zipURL, {
-          onDownloadProgress: (progressEvent) => {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.bytes)
-            if (percentCompleted === 100) {
-              setIsDownloading(false)
-            }
-          },
-          responseType: 'arraybuffer',
-          headers: {
-            'Content-Type': 'application/zip',
-          },
-        })
-        .then(async (res) => {
-          const zipData = await JSZip.loadAsync(res.data, {
-            base64: true,
+    const downloadZip = async () => {
+      try {
+        setReading(true)
+        if (logData?.url && !isLoadingFileLog) {
+          wrapperContentRef.current.innerHTML = ''
+          const response = await axios.create().get(logData?.url, {
+            responseType: 'arraybuffer',
+            headers: {
+              'Content-Type': 'application/zip',
+            },
+          })
+          const zipData = await JSZip.loadAsync(response?.data, {
             optimizedBinaryString: true,
           })
-          const zipFolder = zipData.folder('logs')
-          const logFilesOptions = Object.values(zipFolder.files)
-            .filter((f) => /^logs\//.test(f.name) && !f.dir)
-            .map((item) => {
-              const uncompressedSize = item?._data?.uncompressedSize
-              const compressedSize = item?._data?.compressedSize
-              return {
-                uncompressedSize,
-                compressedSize,
-                label: `${item?.name.replace(/^logs\//, '')} (${Math.round((uncompressedSize || 0) / 1024 / 1024)} MB)`,
-                value: item?.name,
-              }
-            })
+
+          const logFilesOptions = await extractLogFiles(zipData)
           setLogFiles(logFilesOptions)
-          if (selectedLogFile) {
-            const zipFile = zipData.file(selectedLogFile)
-            const currentText = await zipFile.async('text')
-            setLogFileContent(currentText)
-          } else {
-            setSelectedLogFile(logFilesOptions[0].value)
+
+          if (selectedItem?.log) {
+            const zipFile = zipData.file(selectedItem?.log)
+            const textLog = await zipFile.async('text')
+            setReading(false)
+            processLogContent(textLog, wrapperContentRef)
+            setLogContent(textLog)
           }
-        })
-        .finally(() => {
-          setLoadingLogFile(false)
-        })
+        }
+      } catch (_error) {
+        // eslint-disable-next-line no-console
+        console.error(_error)
+      } finally {
+        setReading(false)
+      }
     }
-  }, [zipURL, detail, isFetching, selectedLogFile])
+
+    downloadZip()
+  }, [logData, selectedItem, wrapperContentRef])
+
+  return {
+    detail,
+    logFiles,
+    isReading,
+    logContent,
+    isLoadingDeploys,
+    refetch,
+    logData,
+    setEndDateUrl,
+  }
+}
+
+const LogShowDetailContainer = ({ projectId, deployId, fileName }) => {
+  const lastElementRef = useRef()
+  const wrapperContentRef = useRef()
+
+  const [selectedItem, setSelectedItem] = useQueryStates({
+    log: parseAsString.withDefault(''),
+  })
+
+  const {
+    detail,
+    logFiles,
+    isReading,
+    logContent,
+    isLoadingDeploys,
+    refetch,
+    logData,
+    setEndDateUrl,
+  } = useLogDetail(projectId, deployId, fileName, selectedItem, wrapperContentRef)
 
   useEffect(() => {
     lastElementRef?.current?.scrollIntoView({ behavior: 'instant', block: 'end' })
-  }, [logFileContent, isFetching, isLoading, isLoadingLogFile])
+  }, [logContent, selectedItem?.log, isReading])
+
   return (
     <Container title="ログ表示(ログ)">
-      <Spin className="w-full" spinning={isLoading || isDownloading || isLoadingLogFile}>
-        <div className="flex w-full flex-col">
-          <div className="text-[28px] font-light text-dark-gray-3">
-            <span>ファイル:</span>
-            &nbsp;
-            <Select
-              name="fileName"
-              label=""
-              options={logFiles}
-              placeholder=""
-              className="text-[28px] font-light text-dark-gray-3"
-              onChange={(value) => {
-                setSelectedLogFile(value)
-              }}
-              value={selectedLogFile}
-            />
-          </div>
-          <div className="mt-2 text-xl font-light">
-            <span>コンテナエラーコード:</span>
-            &nbsp;
-            <span>
-              {
-                detail?.module_status?.[
-                  logFiles?.find((f) => f.value === selectedLogFile)?.label?.replace('_log.txt', '')
-                ]?.exitCode
-              }
-            </span>
-          </div>
-          <div className="mb-5 mt-7 flex w-full flex-row justify-between gap-2">
-            <div className="flex flex-col text-xl font-light">
-              <div className="flex flex-row">
-                <span>開始日時:</span>
-                &nbsp;
-                <span>
-                  {detail?.execute_start_date &&
-                    formatDate(dayjs(detail?.execute_start_date), FORMAT_STRING.datetime_full)}
-                </span>
-              </div>
-              <div className="flex flex-row">
-                <span>終了日時:</span>
-                &nbsp;
-                <span>
-                  {detail?.execute_end_date &&
-                    formatDate(dayjs(detail?.execute_end_date), FORMAT_STRING.datetime_full)}
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-row items-end gap-2">
-              <Button
-                icon={<ReloadIcon size={36} />}
-                type="outline"
-                label="リロード"
-                onClick={() => {
-                  setLoadingLogFile(true)
-                  refetch()
-                }}
-              />
-              <Button
-                icon={<CopyIcon className="text-4xl" />}
-                type="outline"
-                label="コピー"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(logFileContent)
-                    message.success('コピーしました。')
-                  } catch (err) {
-                    message.error('コピーに失敗しました。')
-                  }
-                }}
-              />
-            </div>
-          </div>
-          <div className="flex h-[70vh] w-full flex-col overflow-scroll overscroll-auto scroll-smooth rounded-lg border border-solid border-[#d5d3d2] bg-light-gray p-5">
-            <p className="whitespace-pre-line break-words">{logFileContent}</p>
-            <div ref={lastElementRef} className="h-0 w-full">
-              &nbsp;
-            </div>
-          </div>
+      <div className="flex flex-col">
+        <LogDetailHeader {...{ detail, logData, logContent }} />
+        <div className="grid w-full grid-cols-3 gap-8">
+          <LogDirectory
+            {...{
+              detail,
+              logFiles,
+              isLoadingDeploys,
+              refetch,
+              setEndDateUrl,
+              setSelectedItem,
+              selectedItem,
+            }}
+          />
+          <LogContent {...{ isReading, wrapperContentRef, lastElementRef }} />
         </div>
-      </Spin>
+      </div>
     </Container>
   )
 }

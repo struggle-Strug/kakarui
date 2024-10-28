@@ -2,12 +2,16 @@ import { Space } from 'antd'
 import noop from 'lodash/noop'
 
 import { Routes } from '@/constants'
+import { useGetMe, useUserActive } from '@/hooks/query'
 
-import { EditIcon } from '@/components/icons'
+import { DeleteIcon, EditIcon } from '@/components/icons'
 import { ColumnSorter, RowContent, RowDate, RowTextLink } from '@/components/table'
 import { ButtonIcon, Table } from '@/components/ui'
 
 const ModuleSetTable = ({ data, total, loading }) => {
+  const { isSystemAdmin, isOrgAdmin } = useGetMe()
+  const { userActiveId } = useUserActive()
+
   const columns = [
     {
       title: <ColumnSorter title="モジュールセット名" field="name" />,
@@ -36,7 +40,7 @@ const ModuleSetTable = ({ data, total, loading }) => {
     {
       title: <span className="text-base">操作</span>,
       dataIndex: 'id',
-      render: (id) => (
+      render: (id, row) => (
         <Space>
           <RowTextLink
             pathname={Routes.MODULE_SET_DETAIL}
@@ -44,6 +48,18 @@ const ModuleSetTable = ({ data, total, loading }) => {
             disabled={!id}
           >
             <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
+          </RowTextLink>
+
+          <RowTextLink
+            pathname={Routes.MODULE_SET_DELETE}
+            query={{ module_set_id: id }}
+            disabled={!id || (!isSystemAdmin && !isOrgAdmin && row.create_user !== userActiveId)}
+          >
+            <ButtonIcon
+              icon={<DeleteIcon size={32} />}
+              onClick={noop}
+              disabled={!id || (!isSystemAdmin && !isOrgAdmin && row.create_user !== userActiveId)}
+            />
           </RowTextLink>
         </Space>
       ),
