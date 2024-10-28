@@ -1,4 +1,4 @@
-import { AddIcon, TrashIcon } from "@/components/icons";
+import { AddIcon } from "@/components/icons";
 import { SearchBar } from "@/components/layout/dashboard";
 import { ProjectDataSettingModal } from "@/components/project_data_management";
 import { ColumnSorter, RowContent } from "@/components/table";
@@ -72,10 +72,6 @@ const ProjectDataManagementContainer = () => {
             render: (record) => (
               <Space>
                 <ButtonIcon icon={<EditOutlined size={32} />} onClick={() => onChangeProjectDataKey(record)} />
-                <ButtonIcon
-                    icon={<TrashIcon size={32} />}
-                    onClick={() => projectDataDeleteModalOpen(record)}
-                />
               </Space>
             ),
             className: 'min-w-[50px]',
