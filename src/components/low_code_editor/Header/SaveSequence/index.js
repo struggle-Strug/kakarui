@@ -1,13 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Spin } from 'antd'
+import { Form, Spin, Button, Checkbox, Input } from 'antd'
+import { useParams } from 'react-router-dom';
 
 import { useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useOrganizationQuery } from '@/hooks/query'
 
 import { API } from '@/constants'
 
-import { Input, InputTextArea } from '@/components/form'
-import { Button } from '@/components/ui'
+// import { Input, InputTextArea } from '@/components/form'
+// import { Button } from '@/components/ui'
 
 import { buildApiURL } from '@/utils/helper/request'
 
@@ -15,9 +17,10 @@ import { Axios } from '@/libs/axios'
 // エンドポイントを構築する関数
 import { FORM_SAVE_SEQUENCE, saveSequenceFormSchema } from '@/validations/saveSequenceSchema'
 
-const SaveSequence = ({ isEdit, data, onClose, organizationId, projectId, moduleConfigId }) => {
+const SaveSequence = ({ isEdit, data, onClose, projectId, moduleConfigId, nodes }) => {
+
   //TODO - projectIdとmoduleConfigIdをhookか何かで取得する
-  //   const { organizationId } = useOrganizationQuery() || {}
+  const { organizationId } = useOrganizationQuery() || {}
   //TODO - シーケンスデータを取得しjsonを出力する処理を実装
 
   const defaultValues = useMemo(
@@ -29,25 +32,30 @@ const SaveSequence = ({ isEdit, data, onClose, organizationId, projectId, module
     [data]
   )
 
-  const methods = useForm({
-    mode: 'onChange',
-    resolver: yupResolver(saveSequenceFormSchema()), // バリデーションスキーマを適用
-    defaultValues,
-  })
-  const { reset } = methods
-  const onSubmit = async (values) => {
+  const onFinish = async (values) => {
+
     try {
       // URLパラメータの確認
-      if (!organizationId || !projectId || !moduleConfigId) {
+      if (!organizationId || !projectId || !moduleConfigId || nodes?.length === 0) {
         throw new Error('URLパラメータが不足しています')
+        return;
       }
-
-      const schemaValue = JSON.parse(values[FORM_SAVE_SEQUENCE.SCHEMA]) // JSONに変換して送信
       const params = {
         name: values[FORM_SAVE_SEQUENCE.NAME],
         description: values[FORM_SAVE_SEQUENCE.DESCRIPTION],
-        schema: schemaValue, // JSONを含むオブジェクトとして送信
+        schema: {
+          root: {
+            BehaviorTree: {
+              ID: "MainTree",
+              Tree:
+              {
+                Sequence: nodes
+              }
+            }
+          }
+        }
       }
+
       // APIエンドポイントのURLを構築
       const response = await Axios.post(
         buildApiURL(API.SEQUENCE.CREATE, {
@@ -65,55 +73,63 @@ const SaveSequence = ({ isEdit, data, onClose, organizationId, projectId, module
       console.error('エラーが発生しました:', error)
       // エラーハンドリングを追加する
     }
-  }
-
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
   const renderForm = (
-    <FormProvider {...methods}>
-      <Form
-        onFinish={methods.handleSubmit(onSubmit)}
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        className="item-start"
-        layout="horizontal"
-        labelAlign="left"
-        colon={false}
-        labelWrap
+    <Form
+      name="basic"
+      labelCol={{
+        span: 8,
+      }}
+      wrapperCol={{
+        span: 16,
+      }}
+      style={{
+        maxWidth: 600,
+      }}
+      initialValues={{
+        remember: true,
+      }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item
+        label="モジュール配置名"
+        name={FORM_SAVE_SEQUENCE.NAME}
+        rules={[
+          {
+            message: 'Please input your username!',
+          },
+        ]}
       >
-        <Input
-          name={FORM_SAVE_SEQUENCE.NAME}
-          label="シーケンス名:"
-          placeholder="シーケンス名を入力してください。"
-          disabled={isEdit}
-        />
+        <Input />
+      </Form.Item>
 
-        <InputTextArea
-          label="シーケンス説明:"
-          name={FORM_SAVE_SEQUENCE.DESCRIPTION}
-          placeholder="シーケンス説明を入力してください。"
-          rows={3}
-          disabled={isEdit}
-        />
+      <Form.Item
+        label="シーケンス名"
+        name={FORM_SAVE_SEQUENCE.DESCRIPTION}
+        rules={[
+          {
+            message: 'Please input your password!',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
 
-        <InputTextArea
-          label="スキーマ (JSON形式):"
-          name={FORM_SAVE_SEQUENCE.SCHEMA}
-          placeholder="スキーマをJSON形式で入力してください。"
-          rows={6} // JSONフィールド用に行数を多くする
-          disabled={isEdit}
-        />
-
-        <div className="flex-end mt-12 gap-x-4">
-          <Button type="default" className="min-w-[200px] text-primary" onClick={onClose}>
-            <span className="font-semibold">キャンセル</span>
-          </Button>
-          <Button type="primary" htmlType="submit" className="min-w-[200px]">
-            <span className="font-semibold">{isEdit ? '更新' : '登録'}</span>
-          </Button>
-        </div>
-      </Form>
-    </FormProvider>
+      <div className='flex justify-end items-center gap-6'>
+        <Button type="default" onClick={onClose} className='min-w-40'>
+          キャンセル
+        </Button>
+        <Button type="primary" htmlType="submit" className='min-w-40'>
+          保存
+        </Button>
+      </div>
+    </Form>
   )
-
   return <Spin spinning={false}>{renderForm}</Spin>
 }
 

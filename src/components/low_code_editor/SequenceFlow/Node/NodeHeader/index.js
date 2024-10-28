@@ -13,7 +13,7 @@ export const NodeHeader = ({ data, handleDeleteNode, bgColor }) => (
       />
     )}
     <div
-      className="flex justify-between w-full px-2 py-2 rounded"
+      className="flex w-full justify-between rounded px-2 py-2"
       style={{ backgroundColor: bgColor }}
     >
       <div className="flex items-center gap-2">
@@ -30,7 +30,7 @@ export const NodeHeader = ({ data, handleDeleteNode, bgColor }) => (
         <div className="font-bold text-white">{data.type}</div>
       </div>
       {data.type !== 'Root' && (
-        <div className="text-white cursor-pointer" onClick={handleDeleteNode}>
+        <div className="cursor-pointer text-white" onClick={handleDeleteNode}>
           ×
         </div>
       )}
