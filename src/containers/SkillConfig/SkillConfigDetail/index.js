@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import { useModuleConfigQuery, useModuleConfigUpdate } from '@/hooks/query'
 
-import { ModuleConfigForm } from '@/components/module_config'
+import { SkillConfigForm } from '@/components/skill_config'
 import { Container } from '@/components/ui'
 
 const SkillConfigDetailContainer = () => {
@@ -30,10 +30,10 @@ const SkillConfigDetailContainer = () => {
     <Container title="モジュール配置設定">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">モジュール配置を設定します。</p>
-        <ModuleConfigForm action="edit" onSubmit={doUpdateModuleConfig} data={detail || {}} />
+        <SkillConfigForm action="edit" onSubmit={doUpdateModuleConfig} data={detail || {}} />
       </Spin>
     </Container>
   )
 }
 
-export default ModuleConfigDetailContainer
+export default SkillConfigDetailContainer

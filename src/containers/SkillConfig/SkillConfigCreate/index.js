@@ -8,7 +8,7 @@ import { useModuleConfigCreate } from '@/hooks/query'
 import { ModuleConfigForm } from '@/components/module_config'
 import { Container } from '@/components/ui'
 
-const ModuleConfigCreateContainer = () => {
+const SkillConfigCreateContainer = () => {
   const router = useRouter()
 
   const { doCreateModuleConfig, isPending: loading } = useModuleConfigCreate({
@@ -27,4 +27,4 @@ const ModuleConfigCreateContainer = () => {
   )
 }
 
-export default ModuleConfigCreateContainer
+export default SkillConfigCreateContainer

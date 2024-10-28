@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Routes } from '@/constants'
 import { useModuleConfigDelete, useModuleConfigQuery } from '@/hooks/query'
 
-import { ModuleConfigForm } from '@/components/module_config'
+import { SkillConfigForm } from '@/components/skill_config'
 import { Container } from '@/components/ui'
 
 const SkillConfigDeleteContainer = () => {
@@ -30,7 +30,7 @@ const SkillConfigDeleteContainer = () => {
     <Container title="モジュール配置削除確認">
       <Spin spinning={loading}>
         <p className="-mt-6 mb-10 text-lg">以下のモジュール配置を削除します。</p>
-        <ModuleConfigForm action="delete" onSubmit={doDeleteModuleConfig} data={detail || {}} />
+        <SkillConfigForm action="delete" onSubmit={doDeleteModuleConfig} data={detail || {}} />
       </Spin>
     </Container>
   )

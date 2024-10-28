@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 import { Routes } from '@/constants'
 import { useSkillConfigQuery } from '@/hooks/query'
-
+import { SkillAddModal } from '@/components/skill_config'
 import { AddIcon } from '@/components/icons'
 import { SearchBar } from '@/components/layout/dashboard'
 import { SkillConfigTable } from '@/components/skill_config'
@@ -33,18 +33,21 @@ const SkillConfigContainer = () => {
         <div className="w-full">
           <SearchBar placeholder="スキル名・スキル説明" options={searchOptions} />
         </div>
+
         <Button
-          type="outline"
-          icon={<AddIcon size={36} />}
-          label="新規スキル登録"
-          onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
-        />
-        <Button
+          disabled={false}
           type="outline"
           icon={<AddIcon size={36} />}
           label="スキル紐付け登録"
-          onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
         />
+        <SkillAddModal>
+          <Button
+            type="outline"
+            icon={<AddIcon size={36} />}
+            label="新規スキル登録"
+            onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
+          />
+        </SkillAddModal>
       </div>
 
       <SkillConfigTable
