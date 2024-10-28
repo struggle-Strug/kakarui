@@ -52,7 +52,7 @@ const ProjectDataManagementContainer = () => {
             title: <ColumnSorter title="設定値" field="value" />,
             dataIndex: "value",
             className: "min-w-[70px]",
-            render: (item) => <RowContent item={item.toString()} className="max-w-[400px]" />,
+            render: (item) => <RowContent item={JSON.stringify(item)} className="max-w-[400px]" />,
         },
         {
             title: <ColumnSorter title="更新者" field="update_user_name" />,
@@ -79,7 +79,7 @@ const ProjectDataManagementContainer = () => {
     ]
 
     return (
-        <Container title="プロジェクトデータ名管理">
+        <Container title="プロジェクトデータ管理">
             <div className="flex-between mb-5">
                 <div className="w-full">
                     <SearchBar placeholder="プロジェクト名・プロジェクトデータ名"  
