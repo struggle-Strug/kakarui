@@ -137,7 +137,8 @@ export const useProjectDataCreate = ({ onSuccess } = {}) => {
         const payload = {
             key: params.key,
             type: type,
-            value: value
+            value: value,
+            description: params.description
         }
 
         const response = await Axios.post(
@@ -186,10 +187,11 @@ export const useProjectDataUpdate = ({ onSuccess } = {}) => {
           const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
   
           const payload = {
-              key: params.key,
-              type: type,
-              value: value
-          }
+            key: params.key,
+            type: type,
+            value: value,
+            description: params.description
+        }
   
           const response = await Axios.put(
           buildApiURL(API.PROJECTDATA.UPDATE, { organization_id: organizationId, project_id: params.project_id, data_id: params.data_id}),
