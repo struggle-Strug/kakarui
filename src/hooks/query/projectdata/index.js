@@ -29,7 +29,7 @@ export const useProjectDataQuery = ({ search, sort, options = {} } = {}) => {
   const { stubEnabled } = useStubEnabled()
 
   const query = useQuery({
-    queryKey: [PROJECT_LIST_KEY, stubEnabled],
+    queryKey: [PROJECT_LIST_KEY, stubEnabled, organizationId],
     queryFn: async () => {
       if (stubEnabled) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
