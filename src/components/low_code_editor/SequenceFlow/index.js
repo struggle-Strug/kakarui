@@ -20,18 +20,20 @@ import { generateNode, initialEdges, initialNodes } from './nodes-and-edges'
 // Ant Designのデフォルトスタイル
 const MIN_DISTANCE = 800
 
-const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
+const SequenceFlow = ({ draggedNodeType, setDraggedNodeType, selectedSkillId, setSelectedSkillId, nodes, setNodes, onNodesChange }) => {
   const store = useStoreApi()
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+  // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+
   const { getInternalNode, getNodes, getEdges, screenToFlowPosition, deleteElements } =
     useReactFlow()
-
   const [selectedNodeIds, setSelectedNodeIds] = useState([]) // 選択されたノードのIDを管理する配列
-
+  // const [selectedSkillId, setSelectedSkillId] = useState("")
   // ノードがクリックされた時の処理
   const onNodeClick = useCallback((event, node) => {
+    setSelectedSkillId(node.data.id)
+
     event.stopPropagation() // イベントバブリングを防止
     // Rootタイプのノードは選択処理をスキップ
     if (node.data.type === 'Root') {
@@ -49,9 +51,9 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   }, [])
 
   // 選択されたノードかつdata.typeがRoot以外の場合に"select"クラスを付与
-  const nodeWithClasses = nodes.map((node) => {
+  const nodeWithClasses = nodes.map((node, index) => {
     // Rootタイプの場合はそのまま早期リターン
-    if (node.data.type === 'Root') {
+    if (index == 0) {
       return node
     }
     // Root以外で選択されているノードにクラスを付与
@@ -257,6 +259,8 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
       })
       // 新しいノードのデータを生成
       const newNode = generateNode(type, position, skillData)
+      console.log(newNode);
+
       targetNodeId = null
       isTargetNodeConnected = false
       if (newNode) {
@@ -287,6 +291,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
   // メニュー項目がクリックされた時の処理
   const handleMenuClick = (action) => {
     //TODO - サブツリーとして登録する処理を追加する
+    console.log(`Action ${action.key} triggered on node ${contextMenu.nodeId}`)
     setContextMenu(null) // メニューを閉じる
     setSelectedNodeIds([])
     alert('サブツリーとして登録されました')
@@ -304,16 +309,19 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
       document.removeEventListener('click', handleClickOutside)
     }
   }, [contextMenu])
+
   return (
     <div className="flex h-full">
       {/* 左側のドラック可能な要素 */}
       {/* 右側のReactFlowフィールド */}
       <div
-        className="relative w-full h-full bg-gray-50"
+        className="bg-gray-50 relative h-full w-full"
         onDragOver={onDragOver}
         onDrop={onDrop}
-        // onDragEnter={onDragEnter}
+      // onDragEnter={onDragEnter}
       >
+        {console.log(edges)
+        }
         <ReactFlow
           nodes={nodeWithClasses}
           edges={edges}
@@ -343,7 +351,7 @@ const SequenceFlow = ({ draggedNodeType, setDraggedNodeType }) => {
           }}
           className="bg-white text-start"
         >
-          <div className="border border-solid cursor-pointer rounded-xl border-gray">
+          <div className="cursor-pointer rounded-xl border border-solid border-gray">
             <button
               className="py-2 pl-2 pr-4 text-sm hover:opacity-50"
               disabled={selectedNodeIds.length < 2}

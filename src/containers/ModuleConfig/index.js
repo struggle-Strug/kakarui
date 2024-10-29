@@ -61,6 +61,12 @@ const ModuleConfigContainer = () => {
         <Button
           type="outline"
           icon={<AddIcon size={36} />}
+          label="ローコードエディタ起動"
+          onClick={() => window.open(Routes.LOW_CODE_EDITOR)}
+        />
+        <Button
+          type="outline"
+          icon={<AddIcon size={36} />}
           label="新規モジュール配置作成"
           onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
         />
