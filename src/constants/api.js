@@ -54,7 +54,8 @@ export const API = {
   },
 
   SKILL_CONFIG: {
-    LIST: "/organizations/{organization_id}/skills"
+    LIST: "/organizations/{organization_id}/skills",
+    CREATE: '/organizations/{organization_id}/skills', // POST
   },
 
   DEPLOY: {

@@ -7,14 +7,14 @@ import { useFlag } from '@/hooks/share'
 
 import { HeadNext } from '@/components/common'
 
-import DeploymentForm from './SkillForm'
+import SkillForm from './SkillForm'
 
 const SkillAddModal = ({ children, isEdit }) => {
     const [open, onOpen, onClose] = useFlag()
 
     const { isAcceptedDeployment } = useGetMe()
 
-    const title = isEdit ? 'デプロイ' : 'デプロイ'
+    const title = isEdit ? 'スキル設定' : 'スキル設定'
 
     return (
         <>
@@ -35,9 +35,9 @@ const SkillAddModal = ({ children, isEdit }) => {
                     width={768}
                 >
                     <HeadNext title={title} />
-                    <p className="px-12 text-lg font-light text-primary">デプロイを実行します。</p>
+                    <p className="px-12 text-lg font-light text-primary">スキルを設定します。</p>
                     <div className="p-12 font-light">
-                        <DeploymentForm isEdit={isEdit} data={data} onClose={onClose} />
+                        <SkillForm isEdit={isEdit}  onClose={onClose} />
                     </div>
                 </Modal>
             ) : null}

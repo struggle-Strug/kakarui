@@ -45,7 +45,7 @@ const SkillConfigContainer = () => {
             type="outline"
             icon={<AddIcon size={36} />}
             label="新規スキル登録"
-            onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
+            // onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
           />
         </SkillAddModal>
       </div>

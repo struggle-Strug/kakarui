@@ -1,136 +1,139 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Spin } from 'antd'
-
-import { useEffect, useMemo } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-
-import { DEPLOYMENT_TYPE_OPTIONS } from '@/constants'
-import {
-    useDeployStart,
-    useModuleConfigQuery,
-    useProjectActive,
-    useRobotActive,
-    useRobotQuery,
-} from '@/hooks/query'
-
-import { Input, InputTextArea, Select } from '@/components/form'
-import { Button } from '@/components/ui'
-
-import { FORM_DEPLOY, deployFormSchema } from '@/validations/deploySchema'
-
-const SkillForm = ({ isEdit, data, onClose }) => {
-    const { data: moduleConfigs, getModuleConfigOptions } = useModuleConfigQuery()
-    const { getRobotOptions } = useRobotQuery()
-
-    const moduleConfigOptions = getModuleConfigOptions()
-    const robotOptions = getRobotOptions()
-
-    const { projectActive } = useProjectActive()
-    const { robotActive } = useRobotActive()
-
-    const defaultValues = useMemo(
-        () => ({
-            [FORM_DEPLOY.NAME]: projectActive?.name || '',
-            [FORM_DEPLOY.MODULE_CONFIG]: data?.id,
-            [FORM_DEPLOY.DESCRIPTION]: data?.description || '',
-            [FORM_DEPLOY.TYPE]: robotActive?.type || '',
-            [FORM_DEPLOY.ROBOT]: robotActive?.id,
-        }),
-        [data, projectActive?.name, robotActive?.id]
-    )
-
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Form, Radio } from 'antd';
+import { FormProvider, useForm, Controller } from 'react-hook-form';
+import { Input, InputTextArea } from '@/components/form';
+import { Button } from '@/components/ui';
+import { FORM_SKILL, skillSchema } from '@/validations/skillShema'; // Ensure correct import
+import { useSkillCreate } from '@/hooks/query'
+const SkillForm = ({ isEdit, onClose }) => {
     const methods = useForm({
-        mode: 'onChange',
-        resolver: yupResolver(deployFormSchema()),
-        defaultValues,
-    })
+        resolver: yupResolver(skillSchema()), // Ensure schema is instantiated
+    });
 
-    useEffect(() => {
-        methods.reset(defaultValues)
-    }, [defaultValues])
+    const { handleSubmit, control } = methods;
 
-    const { doDeployStart, isPending } = useDeployStart({
-        onSuccess: () => {
-            methods.reset({})
-            onClose()
+    const { doCreateSkill, isPending: createUrlLoading } = useSkillCreate({
+        onSuccess: (module) => {
+            onClose(module)
         },
     })
-
-    const onSubmit = (values) => {
-        doDeployStart(values)
+    const onSubmit = (data) => {
+        const { name, description, schema, visibility, tag } = data;
+        let values = {
+            name,
+            description,
+            schema,
+            visibility,
+            tag
+        }
+        console.log(data);
+        createSkill(values);
+    };
+    const createSkill = async (values) => {
+        if (isEdit) {
+            const sasUrlDetail = await doUpdateModuleUrl(values)
+            doUpdateModule(values, sasUrlDetail)
+            return
+        }
+        const data = await doCreateSkill(values)
+        console.log(data, 'data')
     }
 
-    const moduleConfigIdWatch = methods.watch(FORM_DEPLOY.MODULE_CONFIG)
-
-    useEffect(() => {
-        if (moduleConfigIdWatch === data?.id) return
-
-        const moduleConfigActive = moduleConfigs.find((m) => m?.id === moduleConfigIdWatch)
-        methods.setValue(FORM_DEPLOY.DESCRIPTION, moduleConfigActive?.description)
-    }, [moduleConfigIdWatch, data?.id, moduleConfigs])
-
-    const renderForm = (
+    return (
         <FormProvider {...methods}>
             <Form
-                onFinish={methods.handleSubmit(onSubmit)}
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
-                className="item-start"
                 layout="horizontal"
                 labelAlign="left"
                 colon={false}
                 labelWrap
+                onFinish={handleSubmit(onSubmit)} // Handle form submission
             >
-                <Input
-                    name={FORM_DEPLOY.NAME}
-                    label="プロジェクト名:"
-                    placeholder="プロジェクト名を入力してください。"
-                    disabled
+                <Controller
+                    name={FORM_SKILL.NAME} // Ensure this matches your schema
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            label="スキル名"
+                            placeholder=""
+                        />
+                    )}
                 />
 
-                <Select
-                    name={FORM_DEPLOY.MODULE_CONFIG}
-                    label="モジュール配置名:"
-                    placeholder="モジュール配置名を選択してください。"
-                    options={moduleConfigOptions}
+                <Controller
+                    name={FORM_SKILL.DESCRIPTION} // Ensure this matches your schema
+                    control={control}
+                    render={({ field }) => (
+                        <InputTextArea
+                            {...field}
+                            label="スキル説明"
+                            placeholder=""
+                            rows={3}
+                        />
+                    )}
                 />
 
-                <InputTextArea
-                    label="説明:"
-                    name={FORM_DEPLOY.DESCRIPTION}
-                    placeholder="説明を入力してください。"
-                    rows={3}
-                    disabled
+                <Controller
+                    name={FORM_SKILL.SCHEMA} // Ensure this matches your schema
+                    control={control}
+                    render={({ field }) => (
+                        <InputTextArea
+                            {...field}
+                            label="スキーマ"
+                            placeholder=""
+                            rows={8}
+                        />
+                    )}
                 />
 
-                <Select
-                    name={FORM_DEPLOY.TYPE}
-                    label="デプロイ先タイプ:"
-                    options={DEPLOYMENT_TYPE_OPTIONS}
-                    placeholder="デプロイ先タイプを選択してください。"
+                <Controller
+                    name={FORM_SKILL.VISIBILITY} // Ensure this matches your schema
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            label="可視性"
+                            placeholder=""
+                        />
+                    )}
                 />
 
-                <Select
-                    name={FORM_DEPLOY.ROBOT}
-                    label="デプロイ先モデル:"
-                    placeholder="デプロイ先モデルを入力してください。"
-                    options={robotOptions}
-                    disabled
+                <Controller
+                    name={FORM_SKILL.TAG} // Use a name that matches your schema
+                    control={control}
+                    defaultValue="single" // Set default value if needed
+                    render={({ field }) => (
+                        <div className='flex items-center'>
+                            <label className="block mb-2 text-sm font-medium min-w-[100px]">参照範囲</label>
+                            <Radio.Group
+                                {...field}
+                                className='flex justify-center gap-8 w-full pl-36'
+                                onChange={e => field.onChange(e.target.value)} // To update the form state
+                            >
+                                <Radio value="Public" autoFocus={true} className='text-sm'>
+                                    パブリック
+                                </Radio>
+                                <Radio value="Organization" className='text-sm'>
+                                    組織
+                                </Radio>
+                            </Radio.Group>
+                        </div>
+                    )}
                 />
 
                 <div className="flex-end mt-12 gap-x-4">
-                    <Button type="default" className="min-w-[200px] text-primary" onClick={onClose}>
-                        <span className="font-semibold">キャンセル</span>
+                    <Button type="default" className="min-w-[200px]" onClick={onClose}>
+                        <span className="font-semibold">リセット</span>
                     </Button>
                     <Button type="primary" htmlType="submit" className="min-w-[200px]">
-                        <span className="font-semibold">{isEdit ? 'デプロイ' : 'デプロイ'}</span>
+                        <span className="font-semibold">{isEdit ? ' 設定 ' : ' 作成 '}</span>
                     </Button>
                 </div>
             </Form>
         </FormProvider>
-    )
+    );
+};
 
-    return <Spin spinning={isPending}>{renderForm}</Spin>
-}
-
-export default SkillForm
+export default SkillForm;
