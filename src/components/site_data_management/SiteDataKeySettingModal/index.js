@@ -10,6 +10,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 const initValue = {
     area: '',
     visibility: 'public',
+    type: 'string',
     value: '',
     key: '',
     description: ''
@@ -39,7 +40,8 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
         ? {
             area: `${data.area}${" "}${data.name}`,
             visibility: data.visibility,
-            value: data.value,
+            type: data.type.type,
+            value: data.type.type == 'object' ? JSON.stringify(data.value) : data.value,
             key: data.key,
             description: data.description
         }
@@ -131,6 +133,23 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
                                     >
                                         <Radio value="public" className='text-sm'>パブリック</Radio>
                                         <Radio value="organization">組織</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                            )}
+                        />
+                        <Controller 
+                            name={FORM_INFO.TYPE}
+                            control={methods.control}
+                            render={({field}) => (
+                                <Form.Item label={"タイプ"}>
+                                    <Radio.Group
+                                        {...field}
+                                        className='flex flex-column justify-center items-center gap-0 w-full flex-start flex-wrap'
+                                    >
+                                            <Radio value={"string"} className="text-sm p-1">String</Radio>
+                                            <Radio value={"number"} className="text-sm p-1">Number</Radio>
+                                            <Radio value={"array"} className="text-sm p-1">Array</Radio>
+                                            <Radio value={"object"} className="text-sm p-1">Object</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                             )}

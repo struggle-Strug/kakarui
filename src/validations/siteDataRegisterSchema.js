@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 const FORM_INFO = {
     AREA: 'area',
     VISIBILITY: 'visibility',
+    TYPE: 'type',
     VALUE: 'value',
     KEY: 'key',
     DESCRIPTION: 'description'
