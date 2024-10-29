@@ -31,7 +31,7 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
     resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
     defaultValues: { ...initValue },
   })
-
+  
   useEffect(() => {
     if (!open) {
         methods.reset(initValue);
@@ -71,6 +71,7 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
   const { doUpdateModuleUrl, isPending: updateUrlLoading } = useModuleUpdateUrl({
     onSuccess: (module) => {
       onClose(module)
+      onRefetch()
     },
   })
 
@@ -147,7 +148,12 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
                 </div>
               </div>
 
-              <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" disabled={data ? true : false}/>
+              <Input 
+                name={FORM_INFO.TAG} 
+                label="タグ:" 
+                placeholder="タグを入力してください。" 
+                disabled={(singleFileList.length > 0 || arm64FileList.length > 0 || amd64FileList.length > 0) ? false : true}
+              />
 
               <InputTextArea
                 rows={4}

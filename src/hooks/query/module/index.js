@@ -291,6 +291,13 @@ export const useModuleUpdateUrl = ({ onSuccess } = {}) => {
       if (data.status_code === 201) {
         onSuccess?.(data)
       }
+      if (data.status_code === 200) {
+        await queryClient.refetchQueries({
+          queryKey: [MODULE_LIST_KEY, organizationId, false],
+        })
+        message.success("モジュール更新を完了しました。")
+        onSuccess?.(data)
+      }
     },
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
