@@ -17,6 +17,10 @@ const ModuleContainer = () => {
   const [module, setModule] = useState(null)
   const [moduleFormFlag, setModuleFormFlag] = useState(false)
   const [moduleDeleteFormFlag, setModuleDeleteFormFlag] = useState(false)
+  const [initialValue, setInitialValue] = useState("single");
+  const [singleFileList, setSingleFileList] = useState([])
+  const [arm64FileList, setArm64FileList] = useState([])
+  const [amd64FileList, setAmd64FileList] = useState([])
   const { isOrgAdmin, isSystemAdmin } = useGetMe()
   const { userActiveId } = useUserActive()
 
@@ -110,11 +114,33 @@ const ModuleContainer = () => {
         columns={columns}
         data={filteredData}
       />
-      <ModuleForm open={moduleFormFlag} data={module} onClose={() => setModuleFormFlag(false)} onRefetch={refetch}/>
+      <ModuleForm 
+        open={moduleFormFlag} 
+        data={module} 
+        singleFileList={singleFileList}
+        setSingleFileList={setSingleFileList}
+        arm64FileList={arm64FileList}
+        setArm64FileList={setArm64FileList}
+        amd64FileList={amd64FileList}
+        setAmd64FileList={setAmd64FileList}
+        onClose={() => setModuleFormFlag(false)} 
+        onRefetch={refetch} 
+        initialValue={initialValue} 
+        setInitialValue={setInitialValue}
+      />
       {moduleDeleteFormFlag && (
         <ModuleDeleteForm
           open={moduleDeleteFormFlag}
           data={module}
+          initialValue={initialValue} 
+          setInitialValue={setInitialValue}
+          singleFileList={singleFileList}
+          setSingleFileList={setSingleFileList}
+          arm64FileList={arm64FileList}
+          setArm64FileList={setArm64FileList}
+          amd64FileList={amd64FileList}
+          setAmd64FileList={setAmd64FileList}
+          onRefetch={refetch}
           onClose={() => setModuleDeleteFormFlag(false)}
         />
       )}

@@ -19,16 +19,12 @@ const initValue = {
   architectures: {},
 }
 
-const ModuleForm = ({ open, data, onClose, onRefetch }) => {
-  const [singleFileList, setSingleFileList] = useState([])
-  const [arm64FileList, setArm64FileList] = useState([])
-  const [amd64FileList, setAmd64FileList] = useState([])
+const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialValue, singleFileList, setSingleFileList, arm64FileList, setArm64FileList, amd64FileList, setAmd64FileList }) => {
   
   const isEdit = useMemo(() => {
     if (data) return true
     return false
   }, [data])
-  const [initialValue, setInitialValue] = useState("single");
 
   const methods = useForm({
     mode: 'onChange',
@@ -91,7 +87,7 @@ const ModuleForm = ({ open, data, onClose, onRefetch }) => {
       if (isEdit) {
         const sasUrlDetail = await doUpdateModuleUrl(values)
         const detail = sasUrlDetail?.data
-        sasUrlDetail && doUpdateModule({values, detail})
+        sasUrlDetail && doUpdateModule({...values, detail: detail})
         return
       }
       
@@ -151,7 +147,7 @@ const ModuleForm = ({ open, data, onClose, onRefetch }) => {
                 </div>
               </div>
 
-              <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" />
+              <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" disabled={data ? true : false}/>
 
               <InputTextArea
                 rows={4}
