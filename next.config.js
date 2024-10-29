@@ -39,7 +39,7 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: process.env.IMG_STORE_URL, // 環境変数からURLを取得
+            value: process.env.NEXT_PUBLIC_IMG_STORE_URL, // 環境変数からURLを取得
           },
         ],
       },

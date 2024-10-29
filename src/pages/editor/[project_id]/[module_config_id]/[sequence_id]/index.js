@@ -1,5 +1,7 @@
+import LowCodeEditorContainer from '@/containers/LowCodeEditor'
+
 const LowCodeEditorDetailPage = () => {
-  return <div>LowCodeEditorPage</div>
+  return <LowCodeEditorContainer />
 }
 
 export default LowCodeEditorDetailPage

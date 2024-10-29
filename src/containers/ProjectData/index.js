@@ -1,27 +1,27 @@
 import { AddIcon } from "@/components/icons";
 import { SearchBar } from "@/components/layout/dashboard";
-import { SiteDataKeySettingModal } from "@/components/site_data_management";
+import { ProjectDataSettingModal } from "@/components/project_data_management";
 import { ColumnSorter, RowContent } from "@/components/table";
 import { Button, ButtonIcon, Container, Table } from "@/components/ui";
-import { useSiteDataQuery } from "@/hooks/query/sitedatakey";
+import { useProjectDataQuery } from "@/hooks/query/projectdata";
 import { getSearchOptions } from "@/utils/helper/functions";
 import { EditOutlined } from "@ant-design/icons";
 import { Space } from "antd";
 import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { useState } from "react";
 
-const SiteDataManagementContainer = () => {
-    const [siteDataKeySettingFormFlag, setSiteDataKeySettingFormFlag] = useState(false)
+const ProjectDataManagementContainer = () => {
+    const [projectDataKeySettingFormFlag, setProjectDataKeySettingFormFlag] = useState(false)
     const [key, setKey] = useState(null)
     
-    const onChangeSiteDataKey = (siteDataKey) => {
-        const initKey = siteDataKey ? siteDataKey : null
+    const onChangeProjectDataKey = (projectDataKey) => {
+        const initKey = projectDataKey ? projectDataKey : null
         setKey(initKey)
-        setSiteDataKeySettingFormFlag(true)
+        setProjectDataKeySettingFormFlag(true)
     }
 
     const onClose = () => {
-        setSiteDataKeySettingFormFlag(false)
+        setProjectDataKeySettingFormFlag(false)
         setKey(null)
     }
     
@@ -30,32 +30,21 @@ const SiteDataManagementContainer = () => {
         search: parseAsString,
     })
     
-    const { data, siteNames, filteredData, isLoading, isFetching, refetch } = useSiteDataQuery({ search, sort })
+    const { data, projectNames, filteredData, isLoading, isFetching, refetch } = useProjectDataQuery({ search, sort })
+    
 
-    const searchOptions = getSearchOptions(data, ['area', 'name', 'key']);
+    const searchOptions = getSearchOptions(data, ['name', 'key']);
 
     const columns = [
         {
-            title: <ColumnSorter title="サイトエリア名" field="area" />,
-            dataIndex: "area",
+            title: <ColumnSorter title="プロジェクト名" field="name" />,
+            dataIndex: "name",
             className: "min-w-[100px]",
             render: (item) => <RowContent item={item} className="max-w-[400px]" />,
         },
         {
-            title: <ColumnSorter title="サイト名" field="name" />,
-            dataIndex: "name",
-            className: "min-w-[70px]",
-            render: (item) => <RowContent item={item} className="max-w-[400px]" />,
-        },
-        {
-            title: <ColumnSorter title="サイトデータ名" field="key" />,
+            title: <ColumnSorter title="プロジェクトデータ名" field="key" />,
             dataIndex: "key",
-            className: "min-w-[120px]",
-            render: (item) => <RowContent item={item} className="max-w-[400px]" />,
-        },
-        {
-            title: <ColumnSorter title="参照範囲" field="visibility" />,
-            dataIndex: "visibility",
             className: "min-w-[70px]",
             render: (item) => <RowContent item={item} className="max-w-[400px]" />,
         },
@@ -82,7 +71,7 @@ const SiteDataManagementContainer = () => {
             align: 'center',
             render: (record) => (
               <Space>
-                <ButtonIcon icon={<EditOutlined size={32} />} onClick={() => onChangeSiteDataKey(record)} />
+                <ButtonIcon icon={<EditOutlined size={32} />} onClick={() => onChangeProjectDataKey(record)} />
               </Space>
             ),
             className: 'min-w-[50px]',
@@ -90,16 +79,18 @@ const SiteDataManagementContainer = () => {
     ]
 
     return (
-        <Container title="サイトデータ管理">
+        <Container title="プロジェクトデータ管理">
             <div className="flex-between mb-5">
                 <div className="w-full">
-                    <SearchBar placeholder="サイトエリア名・サイト名・サイトデータ名"  options={searchOptions}/>
+                    <SearchBar placeholder="プロジェクト名・プロジェクトデータ名"  
+                        options={searchOptions}
+                    />
                 </div>
                 <Button
                     icon={<AddIcon size={36} />}
                     type="outline"
-                    label="新規サイトデータ登録"
-                    onClick={() => onChangeSiteDataKey(null)}
+                    label="新規プロジェクトデータ登録"
+                    onClick={() => onChangeProjectDataKey(null)}
                 />
             </div>
             <Table 
@@ -108,9 +99,9 @@ const SiteDataManagementContainer = () => {
                 columns={columns}
                 data={filteredData}
             />
-            <SiteDataKeySettingModal open={siteDataKeySettingFormFlag} onClose={() => onClose()} onRefresh={refetch} data={key} sitenames={siteNames?.sites}/>
+            <ProjectDataSettingModal open={projectDataKeySettingFormFlag} onClose={() => onClose()} onRefresh={refetch} data={key} projectNames={projectNames}/>
         </Container>
     );
 }
  
-export default SiteDataManagementContainer;
+export default ProjectDataManagementContainer;

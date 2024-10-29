@@ -187,10 +187,11 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
           values.arm64file,
           {
             headers: {
-              "content-type": "application/x-tar",
+             "content-type": "application/x-tar",
               "x-ms-version": sv,
               "x-ms-blob-type": "BlockBlob",
               "x-ms-date": new Date().toUTCString(),
+              "Access-Control-Allow-Origin": "*"
             },
             timeout: 1800000, // 1800s
           },
@@ -201,10 +202,11 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
             values.amd64file,
             {
               headers: {
-                "content-type": "application/x-tar",
+               "content-type": "application/x-tar",
                 "x-ms-version": sv,
                 "x-ms-blob-type": "BlockBlob",
                 "x-ms-date": new Date().toUTCString(),
+                "Access-Control-Allow-Origin": "*"
               },
               timeout: 1800000, // 1800s
             },

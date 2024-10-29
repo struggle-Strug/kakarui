@@ -76,6 +76,13 @@ export const API = {
     DELETE: '/organizations/{organization_id}/projects/{project_id}',
   },
 
+  PROJECTDATA: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/project-data',
+    CREATE: '/organizations/{organization_id}/projects/{project_id}/project-data', // POST
+    UPDATE: '/organizations/{organization_id}/projects/{project_id}/project-data/{data_id}', // PUT
+    DELETE: '/organizations/{organization_id}/projects/{project_id}',
+  },
+
   PERMISSION: {
     CREATE: '/organizations/{organization_id}/users/{user_id}/permission', // POST
     UPDATE: '/organizations/{organization_id}/users/{user_id}/permission/{organization_user_id}', // PUT

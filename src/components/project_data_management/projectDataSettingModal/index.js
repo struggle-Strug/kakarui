@@ -1,23 +1,21 @@
 import { Input, Select } from "@/components/form";
-import { Button } from "@/components/ui";
-import { useSiteDataCreate, useSiteDataUpdata } from "@/hooks/query";
-import { FORM_INFO, sitedataRegisterSchema } from "@/validations/siteDataRegisterSchema";
+import { Button, InputTextArea } from "@/components/ui";
+import { useProjectDataCreate, useProjectDataUpdate } from "@/hooks/query/projectdata";
+import { FORM_INFO, projectDataSettingSchema } from "@/validations/projectDataSettingSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Modal, Radio, Spin } from "antd";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 const initValue = {
-    area: '',
-    visibility: 'public',
-    type: 'string',
+    name: '',
     value: '',
+    type: 'string',
     key: '',
     description: ''
-
 }
 
-const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) => {
+const ProjectDataSettingModal = ({open, onClose, data, projectNames, onRefresh}) => {
     
     const isEdit = useMemo(() => {
         if(data) return true
@@ -26,7 +24,7 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
 
     const methods = useForm({
         mode: 'onChange',
-        resolver: yupResolver(sitedataRegisterSchema()),
+        resolver: yupResolver(projectDataSettingSchema()),
         defaultValues: { ...initValue },
     })
 
@@ -38,10 +36,9 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
 
     const defaultValue = data
         ? {
-            area: `${data.area}${" "}${data.name}`,
-            visibility: data.visibility,
-            type: data.type.type,
+            name: data.name,
             value: data.type.type == 'object' ? JSON.stringify(data.value) : data.value,
+            type: data.type.type,
             key: data.key,
             description: data.description
         }
@@ -50,14 +47,14 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
         methods.reset(defaultValue)
     },[data])
 
-    const { doCreateSiteData, isPending: createLoading } = useSiteDataCreate({
+    const { doCreateProjectData, isPending: createLoading } = useProjectDataCreate({
         onSuccess: (data) => {
           onClose(data)
           onRefresh()
         },
     })
 
-    const { doUpdateSiteData, isPending: updateLoading } = useSiteDataUpdata({
+    const { doUpdataProjectData, isPending: updateLoading } = useProjectDataUpdate({
         onSuccess: (data) => {
           onClose(data)
           onRefresh()
@@ -67,12 +64,12 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
     const onSubmit = useCallback(
         async (values) => {
           if (isEdit) {
-            doUpdateSiteData({...values, siteId: data.site_id, dataId: data.data_id})
+            doUpdataProjectData({...values, data_id: data.data_id, project_id: data.project_id})
             return
           }
-          doCreateSiteData(values)
+          doCreateProjectData(values)
         },
-        [doCreateSiteData, doUpdateSiteData, isEdit]
+        [doCreateProjectData, doUpdataProjectData, isEdit]
     )
     
 
@@ -80,12 +77,12 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
         <Modal 
             open={open}
             onCancel={() => onClose()}
-            title={<h1 className="text-lg font-semibold text-dark-gray-3">サイトデータキー設定</h1>}
+            title={<h1 className="text-lg font-semibold text-dark-gray-3">プロジェクトデータ設定</h1>}
             className="rounded-3xl"
             footer={null}
             width={698}
         >
-        <p className="px-12 text-lg font-light text-primary">サイトデータキーを設定します。</p>
+        <p className="px-12 text-lg font-light text-primary">プロジェクトデータを設定します。</p>
         <div className="p-12 pr-20 font-light">
             <Spin
                 spinning={createLoading || updateLoading}
@@ -101,16 +98,16 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
                         labelWrap
                     >
                         <Controller
-                            name={FORM_INFO.AREA}
+                            name={FORM_INFO.NAME}
                             control={methods.control}
                             render={({ field }) => (
-                                <Form.Item label={"サイト名"}>
+                                <Form.Item label={"プロジェクト名"}>
                                     <Select 
                                         {...field}
-                                        placeholder={"サイト名を選択してください。"}
-                                        options={sitenames?.map(site => ({
-                                            label: `${site.area}${" "}${site.name}`,
-                                            value: site.id
+                                        placeholder={"プロジェクト名を選択してください。"}
+                                        options={projectNames?.projects?.map(project => ({
+                                            label: project.name,
+                                            value: project.id
                                         }))}
                                     />
                                 </Form.Item>
@@ -119,23 +116,8 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
                         
                         <Input 
                             name={FORM_INFO.KEY}
-                            label="サイトデータ名"
-                            placeholder={"サイトデータ名を入力してください。"}
-                        />
-                        <Controller
-                            name={FORM_INFO.VISIBILITY}
-                            control={methods.control}
-                            render={({ field }) => (
-                                <Form.Item label={"参照範囲"}>
-                                    <Radio.Group
-                                        {...field}  // Spread the field props to bind value and onChange automatically
-                                        className='flex justify-center items-center gap-8 w-full flex-start'
-                                    >
-                                        <Radio value="public" className='text-sm'>パブリック</Radio>
-                                        <Radio value="organization">組織</Radio>
-                                    </Radio.Group>
-                                </Form.Item>
-                            )}
+                            label="プロジェクトデータ名"
+                            placeholder={"プロジェクトデータ名を入力してください。"}
                         />
                         <Controller 
                             name={FORM_INFO.TYPE}
@@ -159,10 +141,18 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
                             label="設定値"
                             placeholder={"設定値を入力してください。"}
                         />
-                        <Input 
+                        <Controller 
                             name={FORM_INFO.DESCRIPTION}
-                            label="説明"
-                            placeholder={"説明を入力してください。"}
+                            control={methods.control}
+                            render={({field}) => (
+                                <Form.Item label={"説明:"}>
+                                    <InputTextArea
+                                        {...field}
+                                        rows={4}
+                                        placeholder="説明を入力してください。"
+                                    />
+                                </Form.Item>
+                            )}
                         />
                         <div className="flex-end mt-12 gap-x-4">
                             <Button
@@ -190,4 +180,4 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
      );
 }
  
-export default SiteDataKeySettingModal;
+export default ProjectDataSettingModal;

@@ -21,6 +21,7 @@ import { buildApiURL } from '@/utils/helper/request'
 import { Axios } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
 import { useQueryStates } from 'nuqs'
+import { message } from 'antd'
 
 export const useSiteDataQuery = ({ search, sort, options = {} } = {}) => {
   const { stubEnabled } = useStubEnabled()
@@ -86,8 +87,9 @@ export const useSiteDataQuery = ({ search, sort, options = {} } = {}) => {
       const lowerSearchTerm = toLower(search)
       result = result.filter(
         (item) =>
+          includes(toLower(item.area), lowerSearchTerm) ||
           includes(toLower(item.name), lowerSearchTerm) ||
-          includes(toLower(item.description), lowerSearchTerm)
+          includes(toLower(item.key), lowerSearchTerm)
       )
     }
 
@@ -125,13 +127,51 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
         const valueNumber = params.value.split(",").length;
-        const type = valueNumber > 1 ? 
-                        {items: {type: "number"}, type: "array"}
-                        : { type: "number"}
-        const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
+        function checkType(input) {
+          try {
+              const parsed = JSON.parse(input);
+              if (typeof parsed === "object" && !Array.isArray(parsed)) {
+                  return "object"; // It's an object
+              } else if (Array.isArray(parsed)) {
+                  return "array"; // It's an array
+              } else if (typeof parsed === "number") {
+                  return "number"; // It's a number
+              } else {
+                  return typeof parsed; // return whatever type it may be
+              }
+          } catch (e) {
+              return "string"; // If JSON.parse fails, it's a plain string
+            }
+          }
+          
+        const type = (valueNumber > 1 && !params.value.includes("{")) ? "array" : checkType(params.value)
+  
+        let value
+  
+        if(valueNumber == 1){
+          if(type == 'object'){
+            value = JSON.parse(params.value)
+          } else if(type == 'number') {
+            value = params.value * 1
+          } else if(type == 'string') {
+            value = params.value
+          }
+        } else if(valueNumber > 1 && type !== 'object'){
+          value = []
+          params.value.split(",").map(item => {
+            if(checkType(item) == 'number'){
+              value.push(item * 1)
+            } else if(checkType(item) == 'string'){
+              value.push(item)
+            }
+          })
+        } else if(valueNumber > 1 && type == 'object'){
+          value = JSON.parse(params.value)
+        }
+
         const payload = {
             key: params.key,
-            type: type,
+            type: { "type": params.type },
             description: params.description,
             value: value,
             visibility: params.visibility
@@ -157,6 +197,7 @@ export const useSiteDataCreate = ({ onSuccess } = {}) => {
         const list = queryClient.getQueryData([SITE_LIST_KEY, data.site_id, false])
         
         const newSiteData = list?.sitedatas.find((sitedata) => sitedata.data_id === data.data_id) || null
+        message.success("サイトデータの登録を完了しました。")
         onSuccess?.(newSiteData)
       }
     },
@@ -176,14 +217,51 @@ export const useSiteDataUpdata = ({ onSuccess } = {}) => {
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
         const valueNumber = params.value.split(",").length;
-        const type = valueNumber > 1 ? 
-                        {items: {type: "number"}, type: "array"}
-                        : { type: "number"}
-        const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
+        function checkType(input) {
+          try {
+              const parsed = JSON.parse(input);
+              if (typeof parsed === "object" && !Array.isArray(parsed)) {
+                  return "object"; // It's an object
+              } else if (Array.isArray(parsed)) {
+                  return "array"; // It's an array
+              } else if (typeof parsed === "number") {
+                  return "number"; // It's a number
+              } else {
+                  return typeof parsed; // return whatever type it may be
+              }
+          } catch (e) {
+              return "string"; // If JSON.parse fails, it's a plain string
+            }
+          }
+          
+        const type = (valueNumber > 1 && !params.value.includes("{")) ? "array" : checkType(params.value)
+  
+        let value
+  
+        if(valueNumber == 1){
+          if(type == 'object'){
+            value = JSON.parse(params.value)
+          } else if(type == 'number') {
+            value = params.value * 1
+          } else if(type == 'string') {
+            value = params.value
+          }
+        } else if(valueNumber > 1 && type !== 'object'){
+          value = []
+          params.value.split(",").map(item => {
+            if(checkType(item) == 'number'){
+              value.push(item * 1)
+            } else if(checkType(item) == 'string'){
+              value.push(item)
+            }
+          })
+        } else if(valueNumber > 1 && type == 'object'){
+          value = JSON.parse(params.value)
+        }
 
         const payload = {
             key: params.key,
-            type: type,
+            type: { "type": params.type },
             description: params.description,
             value: value,
             visibility: params.visibility

@@ -24,7 +24,8 @@ export default {
   SEQUENCE_CONFIG_CREATE: '/editor/[project_id]/[module_config_id]',
 
   PROJECT: '/project-manage',
-  PROJECT_DETAIL: '/project-manage/[project_id]/project-data',
+  PROJECT_DETAIL: '/project-manage/[project_id]',
+  PROJECTDATA: '/projectData-manage',
 
   DEPLOY: '/deploy-manage',
 
