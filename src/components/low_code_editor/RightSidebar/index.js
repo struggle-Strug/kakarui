@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 
 import { API, Assets } from '@/constants'
 import { useOrganizationQuery } from '@/hooks/query'
+import { useProjectActive } from '@/hooks/query/project/index'
+import { useSiteDataQuery } from "@/hooks/query/sitedatakey";
 
 import { uuidv4 } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
@@ -55,16 +57,13 @@ const DataList = ({ title, data }) => (
 
 const RightSidebar = ({ skillId, skills }) => {
   const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
+  const { siteNames } = useSiteDataQuery()
   const [projectData, setProjectData] = useState([]) // APIから取得したプロジェクトデータを保存
   const [siteData, setSiteData] = useState([]) // APIから取得したサイトデータを保存
   const [loading, setLoading] = useState(true) // ローディング状態を管理
   const [error, setError] = useState(null) // エラーメッセージを保存
   const [filteredSystemProperties, setFilteredSystemProperties] = useState([])
-
-  //TODO - projectIdを特定してセットする
-  const projectId = '48367204-bc4f-4c56-b00c-1ed331e7c8c1'
-  const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-  const moduleConfigId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
   useEffect(() => {
     if (skills && skillId !== "") {
@@ -83,7 +82,7 @@ const RightSidebar = ({ skillId, skills }) => {
       const response = await Axios.get(
         buildApiURL(API.PROJECT_DATA.LIST, {
           organization_id: organizationId,
-          project_id: projectId,
+          project_id: projectActiveId,
         })
       )
       console.log('response', response.data)
@@ -117,7 +116,7 @@ const RightSidebar = ({ skillId, skills }) => {
     try {
       const response = await Axios.get(
         buildApiURL(API.SITE_DATA.LIST, {
-          site_id: siteId,
+          site_id: siteNames.id,
         })
       )
       console.log('Site Data response', response.data)
