@@ -21,7 +21,7 @@ import { tryParseJson } from '@/utils/helper/functions'
 import { showAPIErrorMessage } from '@/utils/helper/message'
 import { buildApiURL } from '@/utils/helper/request'
 
-import { Axios } from '@/libs/axios'
+import { Axios, azureInstance } from '@/libs/axios'
 import { mockData } from '@/services/mock-data'
 
 import { useOrganizationQuery } from '../organization'
@@ -167,62 +167,56 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
       const sv = queryparams?.get('sv');
       
       if(values.singlefile && values.singlefile.status !== "removed"){
-        const response = await Axios.put(
-          buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "single", queryParams: queryParams }),
-          values.singlefile,
-          {
+        const response = await fetch(buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "single", queryParams: queryParams }), {
+          method: 'PUT', // Use PUT method for uploading the file
+          headers: {
+            "content-type": "application/x-tar",
+            "content-length": 0,
+            "x-ms-version": sv,
+            "x-ms-blob-type": "BlockBlob",
+            "x-ms-date": new Date().toUTCString(),
+            "Access-Control-Allow-Origin": "*"
+          },
+          body: values.singlefile, // Send the file object as the body
+        });
+        return response
+      } else {
+        const response = await fetch(buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "arm64", queryParams: queryParams }), {
+          method: 'PUT', // Use PUT method for uploading the file
+          headers: {
+            "content-type": "application/x-tar",
+            "content-length": 0,
+            "x-ms-version": sv,
+            "x-ms-blob-type": "BlockBlob",
+            "x-ms-date": new Date().toUTCString(),
+            "Access-Control-Allow-Origin": "*"
+          },
+          body: values.arm64file, // Send the file object as the body
+        });
+        if(response.ok){
+          const response_1 = await fetch(buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "amd64", queryParams: queryParams }), {
+            method: 'PUT', // Use PUT method for uploading the file
             headers: {
               "content-type": "application/x-tar",
+              "content-length": 0,
               "x-ms-version": sv,
               "x-ms-blob-type": "BlockBlob",
               "x-ms-date": new Date().toUTCString(),
               "Access-Control-Allow-Origin": "*"
             },
-            timeout: 1800000, // 1800s
-          },
-        )
-      } else {
-        const response = await Axios.put(
-          buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "arm64", queryParams: queryParams }),
-          values.arm64file,
-          {
-            headers: {
-             "content-type": "application/x-tar",
-              "x-ms-version": sv,
-              "x-ms-blob-type": "BlockBlob",
-              "x-ms-date": new Date().toUTCString(),
-              "Access-Control-Allow-Origin": "*"
-            },
-            timeout: 1800000, // 1800s
-          },
-        )
-        if(response.status_code === 201){
-          const response_1 = await Axios.put(
-            buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: "amd64", queryParams: queryParams }),
-            values.amd64file,
-            {
-              headers: {
-               "content-type": "application/x-tar",
-                "x-ms-version": sv,
-                "x-ms-blob-type": "BlockBlob",
-                "x-ms-date": new Date().toUTCString(),
-                "Access-Control-Allow-Origin": "*"
-              },
-              timeout: 1800000, // 1800s
-            },
-          )
+            body: values.amd64file, // Send the file object as the body
+          });
           return response_1
         }
       }
     },
-    onSuccess: async ({ data }) => {
-      if (data.status_code === 201) {
+    onSuccess: async (response) => {
+      if (response.ok) {
         await queryClient.refetchQueries({
           queryKey: [MODULE_LIST_KEY, organizationId, false],
         })
-        const list = queryClient.getQueryData([MODULE_LIST_KEY, organizationId, false])
-        const newModule = list?.modules.find((module) => module.id === data.id) || null
-        onSuccess?.(newModule)
+        message.success("モジュール登録が成功しました")
+        onSuccess?.(response)
       }
     },
     onError: (error) => {
@@ -246,8 +240,8 @@ export const useModuleUpdateUrl = ({ onSuccess } = {}) => {
         const payload = {
           name: params.name,
           description: params.description,
-          tag: params.tag,
         }
+        
         const response = await Axios.put(
           buildApiURL(API.MODULE.UPDATEURL, { organization_id: organizationId, module_id: moduleId }),
           payload,
@@ -297,6 +291,13 @@ export const useModuleUpdateUrl = ({ onSuccess } = {}) => {
       if (data.status_code === 201) {
         onSuccess?.(data)
       }
+      if (data.status_code === 200) {
+        await queryClient.refetchQueries({
+          queryKey: [MODULE_LIST_KEY, organizationId, false],
+        })
+        message.success("モジュール更新を完了しました。")
+        onSuccess?.(data)
+      }
     },
     onError: (error) => {
       showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
@@ -313,70 +314,66 @@ export const useModuleUpdate = ({ onSuccess } = {}) => {
   const queryClient = useQueryClient()
 
   const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: async ({ id: moduleId, ...params }, sasUrlDetail) => {
-      const [baseUrl, queryParams] = sasUrlDetail.url.split("?")
-      const parsedUrl = new URL(sasUrlDetail.url)
+    mutationFn: async (params) => {
+      const [baseUrl, queryParams] = params.detail.url.split("?")
+      const parsedUrl = new URL(params.detail.url)
       const queryparams = new URLSearchParams(parsedUrl.search);
       const sv = queryparams.get('sv');
-      if(params.singlefile && params.singlefile.status !== "removed"){
-        const response = await Axios.put(
-          buildApiURL(API.MODULE.UPDATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: single, queryParams: queryParams, module_id: moduleId }),
-          params.singlefile,
-          {
-            headers: {
-              "content-type": "application/x-tar",
-              "content-length": 0,
-              "x-ms-version": sv,
-              "x-ms-blob-type": "BlockBlob",
-              "x-ms-date": date.now()
-            },
-            timeout: 1800000, // 1800s
+      if(values.singlefile && values.singlefile.status !== "removed"){
+        const response = await fetch(buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "single", queryParams: queryParams }), {
+          method: 'PUT', // Use PUT method for uploading the file
+          headers: {
+            "content-type": "application/x-tar",
+            "content-length": 0,
+            "x-ms-version": sv,
+            "x-ms-blob-type": "BlockBlob",
+            "x-ms-date": new Date().toUTCString(),
+            "Access-Control-Allow-Origin": "*"
           },
-        )
+          body: values.singlefile, // Send the file object as the body
+        });
+        return response
       } else {
-        const response = await Axios.put(
-          buildApiURL(API.MODULE.UPDATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: arm64, queryParams: queryParams, module_id: moduleId  }),
-          params.arm64file,
-          {
+        const response = await fetch(buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "arm64", queryParams: queryParams }), {
+          method: 'PUT', // Use PUT method for uploading the file
+          headers: {
+            "content-type": "application/x-tar",
+            "content-length": 0,
+            "x-ms-version": sv,
+            "x-ms-blob-type": "BlockBlob",
+            "x-ms-date": new Date().toUTCString(),
+            "Access-Control-Allow-Origin": "*"
+          },
+          body: values.arm64file, // Send the file object as the body
+        });
+        if(response.ok){
+          const response_1 = await fetch(buildApiURL(API.MODULE.CREATEUPLOAD, { baseUrl: baseUrl,module_upload_id: detail.module_upload_id, architecture: "amd64", queryParams: queryParams }), {
+            method: 'PUT', // Use PUT method for uploading the file
             headers: {
               "content-type": "application/x-tar",
               "content-length": 0,
               "x-ms-version": sv,
               "x-ms-blob-type": "BlockBlob",
-              "x-ms-date": date.now()
+              "x-ms-date": new Date().toUTCString(),
+              "Access-Control-Allow-Origin": "*"
             },
-            timeout: 1800000, // 1800s
-          },
-        )
-        if(response.status_code === 201){
-          const response_1 = await Axios.put(
-            buildApiURL(API.MODULE.UPDATEUPLOAD, { baseUrl: baseUrl,module_upload_id: sasUrlDetail.module_upload_id, architecture: amd64, queryParams: queryParams, module_id: moduleId  }),
-            params.arm64file,
-            {
-              headers: {
-                "content-type": "application/x-tar",
-                "content-length": 0,
-                "x-ms-version": sv,
-                "x-ms-blob-type": "BlockBlob",
-                "x-ms-date": date.now()
-              },
-              timeout: 1800000, // 1800s
-            },
-          )
+            body: values.amd64file, // Send the file object as the body
+          });
           return response_1
         }
       }
     },
     onSuccess: async (response) => {
-      if(response.status_code == 201){
+      if(response.ok){
         await queryClient.refetchQueries({
           queryKey: [MODULE_LIST_KEY, organizationId, false],
         })
+        message.success("モジュール更新を完了しました。")
         onSuccess?.(response)
       }
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.MODULE_DELETE)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
     },
   })
 

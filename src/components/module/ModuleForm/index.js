@@ -19,23 +19,19 @@ const initValue = {
   architectures: {},
 }
 
-const ModuleForm = ({ open, data, onClose }) => {
-  const [singleFileList, setSingleFileList] = useState([])
-  const [arm64FileList, setArm64FileList] = useState([])
-  const [amd64FileList, setAmd64FileList] = useState([])
+const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialValue, singleFileList, setSingleFileList, arm64FileList, setArm64FileList, amd64FileList, setAmd64FileList }) => {
   
   const isEdit = useMemo(() => {
     if (data) return true
     return false
   }, [data])
-  const [initialValue, setInitialValue] = useState("single");
 
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
     defaultValues: { ...initValue },
   })
-
+  
   useEffect(() => {
     if (!open) {
         methods.reset(initValue);
@@ -68,18 +64,21 @@ const ModuleForm = ({ open, data, onClose }) => {
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: (module) => {
       onClose(module)
+      onRefetch()
     },
   })
 
   const { doUpdateModuleUrl, isPending: updateUrlLoading } = useModuleUpdateUrl({
     onSuccess: (module) => {
       onClose(module)
+      onRefetch()
     },
   })
 
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
+      onRefetch()
     },
   })
 
@@ -89,7 +88,7 @@ const ModuleForm = ({ open, data, onClose }) => {
       if (isEdit) {
         const sasUrlDetail = await doUpdateModuleUrl(values)
         const detail = sasUrlDetail?.data
-        sasUrlDetail && doUpdateModule({values, detail})
+        sasUrlDetail && doUpdateModule({...values, detail: detail})
         return
       }
       
@@ -149,7 +148,12 @@ const ModuleForm = ({ open, data, onClose }) => {
                 </div>
               </div>
 
-              <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" />
+              <Input 
+                name={FORM_INFO.TAG} 
+                label="タグ:" 
+                placeholder="タグを入力してください。" 
+                disabled={(singleFileList.length > 0 || arm64FileList.length > 0 || amd64FileList.length > 0) ? false : true}
+              />
 
               <InputTextArea
                 rows={4}
