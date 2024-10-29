@@ -29,7 +29,7 @@ export const useProjectDataQuery = ({ search, sort, options = {} } = {}) => {
   const { stubEnabled } = useStubEnabled()
 
   const query = useQuery({
-    queryKey: [PROJECT_LIST_KEY, stubEnabled],
+    queryKey: [PROJECT_LIST_KEY, stubEnabled, organizationId],
     queryFn: async () => {
       if (stubEnabled) {
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -127,18 +127,57 @@ export const useProjectDataCreate = ({ onSuccess } = {}) => {
 
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: async (params) => {
-        
-        const valueNumber = params.value.split(",").length;
-        const type = valueNumber > 1 ? 
-                        {items: {type: "number"}, type: "array"}
-                        : { type: "number"}
-        const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
 
-        const payload = {
-            key: params.key,
-            type: type,
-            value: value
+      const valueNumber = params.value.split(",").length;
+
+      function checkType(input) {
+        try {
+            const parsed = JSON.parse(input);
+            if (typeof parsed === "object" && !Array.isArray(parsed)) {
+                return "object"; // It's an object
+            } else if (Array.isArray(parsed)) {
+                return "array"; // It's an array
+            } else if (typeof parsed === "number") {
+                return "number"; // It's a number
+            } else {
+                return typeof parsed; // return whatever type it may be
+            }
+        } catch (e) {
+            return "string"; // If JSON.parse fails, it's a plain string
+          }
         }
+        
+      const type = (valueNumber > 1 && !params.value.includes("{")) ? "array" : checkType(params.value)
+
+      let value
+
+      if(valueNumber == 1){
+        if(type == 'object'){
+          value = JSON.parse(params.value)
+        } else if(type == 'number') {
+          value = params.value * 1
+        } else if(type == 'string') {
+          value = params.value
+        }
+      } else if(valueNumber > 1 && type !== 'object'){
+        value = []
+        params.value.split(",").map(item => {
+          if(checkType(item) == 'number'){
+            value.push(item * 1)
+          } else if(checkType(item) == 'string'){
+            value.push(item)
+          }
+        })
+      } else if(valueNumber > 1 && type == 'object'){
+        value = JSON.parse(params.value)
+      }
+
+      const payload = {
+          key: params.key,
+          type: { "type": params.type },
+          value: value,
+          description: params.description
+      }
 
         const response = await Axios.post(
         buildApiURL(API.PROJECTDATA.CREATE, { organization_id: organizationId, project_id: params.name}),
@@ -165,7 +204,7 @@ export const useProjectDataCreate = ({ onSuccess } = {}) => {
       }
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.PROJECTDATE_CREATE)
+      showAPIErrorMessage(error, API_ERRORS.PROJECTDATA_CREATE)
     },
   })
 
@@ -180,15 +219,54 @@ export const useProjectDataUpdate = ({ onSuccess } = {}) => {
     const { mutate, isPending, isSuccess } = useMutation({
       mutationFn: async (params) => {
           const valueNumber = params.value.split(",").length;
-          const type = valueNumber > 1 ? 
-                          {items: {type: "number"}, type: "array"}
-                          : { type: "number"}
-          const value = valueNumber > 1 ? params.value.split(",").map(value => value *1) : params.value * 1
-  
+
+          function checkType(input) {
+            try {
+                const parsed = JSON.parse(input);
+                if (typeof parsed === "object" && !Array.isArray(parsed)) {
+                    return "object"; // It's an object
+                } else if (Array.isArray(parsed)) {
+                    return "array"; // It's an array
+                } else if (typeof parsed === "number") {
+                    return "number"; // It's a number
+                } else {
+                    return typeof parsed; // return whatever type it may be
+                }
+            } catch (e) {
+                return "string"; // If JSON.parse fails, it's a plain string
+              }
+            }
+            
+          const type = (valueNumber > 1 && !params.value.includes("{")) ? "array" : checkType(params.value)
+
+          let value
+
+          if(valueNumber == 1){
+            if(type == 'object'){
+              value = JSON.parse(params.value)
+            } else if(type == 'number') {
+              value = params.value * 1
+            } else if(type == 'string') {
+              value = params.value
+            }
+          } else if(valueNumber > 1 && type !== 'object'){
+            value = []
+            params.value.split(",").map(item => {
+              if(checkType(item) == 'number'){
+                value.push(item * 1)
+              } else if(checkType(item) == 'string'){
+                value.push(item)
+              }
+            })
+          } else if(valueNumber > 1 && type == 'object'){
+            value = JSON.parse(params.value)
+          }
+          
           const payload = {
               key: params.key,
-              type: type,
-              value: value
+              type: { "type": params.type },
+              value: value,
+              description: params.description
           }
   
           const response = await Axios.put(
@@ -210,7 +288,9 @@ export const useProjectDataUpdate = ({ onSuccess } = {}) => {
           }
       },
       onError: (error) => {
-        showAPIErrorMessage(error, API_ERRORS.PROJECTDATE_UPDATE)
+        console.log("error",error);
+        
+        showAPIErrorMessage(error, API_ERRORS.PROJECTDATA_UPDATE)
       },
     })
 

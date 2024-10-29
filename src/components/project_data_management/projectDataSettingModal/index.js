@@ -1,16 +1,18 @@
 import { Input, Select } from "@/components/form";
-import { Button } from "@/components/ui";
+import { Button, InputTextArea } from "@/components/ui";
 import { useProjectDataCreate, useProjectDataUpdate } from "@/hooks/query/projectdata";
 import { FORM_INFO, projectDataSettingSchema } from "@/validations/projectDataSettingSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Form, Modal, Spin } from "antd";
+import { Form, Modal, Radio, Spin } from "antd";
 import { useCallback, useEffect, useMemo } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 const initValue = {
     name: '',
     value: '',
+    type: 'string',
     key: '',
+    description: ''
 }
 
 const ProjectDataSettingModal = ({open, onClose, data, projectNames, onRefresh}) => {
@@ -35,8 +37,10 @@ const ProjectDataSettingModal = ({open, onClose, data, projectNames, onRefresh})
     const defaultValue = data
         ? {
             name: data.name,
-            value: data.value,
+            value: data.type.type == 'object' ? JSON.stringify(data.value) : data.value,
+            type: data.type.type,
             key: data.key,
+            description: data.description
         }
         : { ...initValue }
     useEffect(() => {
@@ -115,10 +119,40 @@ const ProjectDataSettingModal = ({open, onClose, data, projectNames, onRefresh})
                             label="プロジェクトデータ名"
                             placeholder={"プロジェクトデータ名を入力してください。"}
                         />
+                        <Controller 
+                            name={FORM_INFO.TYPE}
+                            control={methods.control}
+                            render={({field}) => (
+                                <Form.Item label={"タイプ"}>
+                                    <Radio.Group
+                                        {...field}
+                                        className='flex flex-column justify-center items-center gap-0 w-full flex-start flex-wrap'
+                                    >
+                                            <Radio value={"string"} className="text-sm p-1">String</Radio>
+                                            <Radio value={"number"} className="text-sm p-1">Number</Radio>
+                                            <Radio value={"array"} className="text-sm p-1">Array</Radio>
+                                            <Radio value={"object"} className="text-sm p-1">Object</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                            )}
+                        />
                         <Input 
                             name={FORM_INFO.VALUE}
                             label="設定値"
                             placeholder={"設定値を入力してください。"}
+                        />
+                        <Controller 
+                            name={FORM_INFO.DESCRIPTION}
+                            control={methods.control}
+                            render={({field}) => (
+                                <Form.Item label={"説明:"}>
+                                    <InputTextArea
+                                        {...field}
+                                        rows={4}
+                                        placeholder="説明を入力してください。"
+                                    />
+                                </Form.Item>
+                            )}
                         />
                         <div className="flex-end mt-12 gap-x-4">
                             <Button
