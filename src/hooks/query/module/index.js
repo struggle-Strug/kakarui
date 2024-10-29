@@ -215,9 +215,7 @@ export const useModuleCreate = ({ onSuccess } = {}) => {
         await queryClient.refetchQueries({
           queryKey: [MODULE_LIST_KEY, organizationId, false],
         })
-        const list = queryClient.getQueryData([MODULE_LIST_KEY, organizationId, false])
-        const newModule = list?.modules.find((module) => module.id === data.id) || null
-        onSuccess?.(newModule)
+        onSuccess?.(response)
       }
     },
     onError: (error) => {

@@ -25,7 +25,7 @@ const ModuleContainer = () => {
     search: parseAsString,
   })
 
-  const { data, filteredData, isLoading, isFetching } = useModuleQuery({ search, sort })
+  const { data, filteredData, isLoading, isFetching, refetch } = useModuleQuery({ search, sort })
 
   const searchOptions = getSearchOptions(data, ['name'])
 
@@ -110,7 +110,7 @@ const ModuleContainer = () => {
         columns={columns}
         data={filteredData}
       />
-      <ModuleForm open={moduleFormFlag} data={module} onClose={() => setModuleFormFlag(false)} />
+      <ModuleForm open={moduleFormFlag} data={module} onClose={() => setModuleFormFlag(false)} onRefetch={refetch}/>
       {moduleDeleteFormFlag && (
         <ModuleDeleteForm
           open={moduleDeleteFormFlag}

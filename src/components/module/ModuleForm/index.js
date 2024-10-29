@@ -19,7 +19,7 @@ const initValue = {
   architectures: {},
 }
 
-const ModuleForm = ({ open, data, onClose }) => {
+const ModuleForm = ({ open, data, onClose, onRefetch }) => {
   const [singleFileList, setSingleFileList] = useState([])
   const [arm64FileList, setArm64FileList] = useState([])
   const [amd64FileList, setAmd64FileList] = useState([])
@@ -68,6 +68,7 @@ const ModuleForm = ({ open, data, onClose }) => {
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: (module) => {
       onClose(module)
+      onRefetch()
     },
   })
 
@@ -80,6 +81,7 @@ const ModuleForm = ({ open, data, onClose }) => {
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
+      onRefetch()
     },
   })
 
