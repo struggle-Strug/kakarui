@@ -300,7 +300,7 @@ export const useModuleUpdateUrl = ({ onSuccess } = {}) => {
       }
     },
     onError: (error) => {
-      showAPIErrorMessage(error, API_ERRORS.MODULE_CREATE)
+      showAPIErrorMessage(error, API_ERRORS.MODULE_UPDATE)
     },
   })
 
