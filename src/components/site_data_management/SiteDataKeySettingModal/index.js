@@ -112,6 +112,7 @@ const SiteDataKeySettingModal = ({open, onClose, data, sitenames, onRefresh}) =>
                                             label: `${site.area}${" "}${site.name}`,
                                             value: site.id
                                         }))}
+                                        disabled={data ? true : false}
                                     />
                                 </Form.Item>
                             )}
