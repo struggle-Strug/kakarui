@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Form, Modal } from 'antd'
-import { includes, toLower } from 'lodash'
+import includes from 'lodash/includes'
+import toLower from 'lodash/toLower'
 import { parseAsString, useQueryStates } from 'nuqs'
 
 import { useCallback, useEffect, useMemo } from 'react'

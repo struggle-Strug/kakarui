@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 import { API } from '@/constants'
@@ -12,6 +13,10 @@ import { buildApiURL } from '@/utils/helper/request'
 import { Axios } from '@/libs/axios'
 
 const LowCodeEditorContainer = () => {
+  const router = useRouter()
+  // クエリーパラメータから値を取得
+  const { project_id, module_config_id, sequence_id } = router.query
+
   const { organizationId } = useOrganizationQuery()
   const { stubEnabled } = useStubEnabled()
   const [skillList, setSkillList] = useState([]) // グルーピングされたスキルデータを保存
@@ -24,18 +29,18 @@ const LowCodeEditorContainer = () => {
       const response = await Axios.get(
         buildApiURL(API.SKILL.LIST, { organization_id: organizationId })
       )
-      console.log('response', response.data)
 
       //NOTE - レスポンスデータが空の場合、モックデータを使用
-      let skills = response.data.skills
+      let skills = response?.data?.skills
       if (skills.length === 0) {
         skills = mockSkills.skills
       }
-      setSkillList(skills)
+      if (skills) {
+        setSkillList(skills)
+      }
     } catch (error) {
       console.error('Error fetching skills data:', error)
       setError('Failed to fetch skills data.')
-      setSkillList(skills)
     } finally {
       setLoading(false) // ローディング完了
     }

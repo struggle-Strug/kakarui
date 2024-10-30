@@ -4,11 +4,9 @@ import { Upload, message } from 'antd'
 
 import { forwardRef, useEffect, useState } from 'react'
 
-import { MAX_FILE_SIZE } from '@/constants'
-
 const InputTarFile = (props, ref) => {
 
-  const { accept = 'application/x-tar', maxSize = MAX_FILE_SIZE, disabled, onChange, fileList, setFileList } = props
+  const { accept = 'application/x-tar', disabled, onChange, fileList, setFileList } = props
   
   useEffect(() => {
       setFileList([])
@@ -20,13 +18,8 @@ const InputTarFile = (props, ref) => {
 
   const handleUploadChange = ({ file, fileList: updatedFileList }) => {
     const isAcceptFile = accept.includes(file.type)
-    const isLtMaxFileSize = file.size <= maxSize * 1024 * 1024
     if (!isAcceptFile) {
       message.error('tarファイルをアップロードしてください。')
-      return false
-    }
-    if (!isLtMaxFileSize) {
-      message.error(`${maxSize}MB以下のファイルをアップロードしてください。`)
       return false
     }
     if (updatedFileList.length > 1) {

@@ -1,4 +1,5 @@
 import { isServer, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { message } from 'antd'
 import get from 'lodash/get'
 import includes from 'lodash/includes'
 import orderBy from 'lodash/orderBy'
@@ -144,4 +145,36 @@ export const useModuleSetUpdate = ({ onSuccess } = {}) => {
   const doUpdateModuleSet = useDebouncedCallback(mutate)
 
   return { doUpdateModuleSet, isPending, isSuccess }
+}
+
+export const useModuleSetDelete = ({ onSuccess } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending, isSuccess } = useMutation({
+    mutationFn: async ({ id: moduleSetId, ...params }) => {
+      const response = await Axios.delete(
+        buildApiURL(API.MODULE_SET.UPDATE, {
+          organization_id: organizationId,
+          module_set_id: moduleSetId,
+        }),
+        { ...params }
+      )
+      return response
+    },
+    onSuccess: (response) => {
+      queryClient.refetchQueries({
+        queryKey: [MODULE_SET_LIST_KEY, organizationId, false],
+      })
+      message.success('モジュールセットを削除しました。')
+      onSuccess?.(response)
+    },
+    onError: (error) => {
+      showAPIErrorMessage(error, API_ERRORS.MODULE_SET_DELETE)
+    },
+  })
+
+  const doDeleteModuleSet = useDebouncedCallback(mutate)
+
+  return { doDeleteModuleSet, isPending, isSuccess }
 }

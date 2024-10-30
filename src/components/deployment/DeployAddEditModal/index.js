@@ -21,7 +21,7 @@ const DeployAddEditModal = ({ children, isEdit, data }) => {
       <div role="presentation" onClick={onOpen}>
         {cloneElement(children, {
           ...children.props,
-          disabled: !isAcceptedDeployment,
+          // disabled: !isAcceptedDeployment,
         })}
       </div>
 

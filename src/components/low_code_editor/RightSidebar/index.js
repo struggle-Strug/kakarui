@@ -5,14 +5,16 @@ import { useEffect, useState } from 'react'
 
 import { API, Assets } from '@/constants'
 import { useOrganizationQuery } from '@/hooks/query'
+import { useProjectActive } from '@/hooks/query/project/index'
+import { useSiteDataQuery } from "@/hooks/query/sitedatakey";
 
 import { uuidv4 } from '@/utils/helper/functions'
 import { buildApiURL } from '@/utils/helper/request'
 
 import { Axios } from '@/libs/axios'
 
-import { mockProjectData } from '../mockData/mockProjectsData'
-import { mockSiteData } from '../mockData/mockSiteData'
+import { mockProjectData } from './mockData/mockProjectsData'
+import { mockSiteData } from './mockData/mockSiteData'
 
 const customProperties = [
   { label: 'Move to', value: 'S01(Position)' },
@@ -25,36 +27,6 @@ const customProperties = [
   { label: 'Move to', value: 'S04(Position)' },
   { label: 'Move to', value: 'S04(Position)' },
   { label: 'Move to', value: 'S04(Position)' },
-]
-const projectData = [
-  { label: '現在位置', value: '120.243.115' },
-  { label: 'XXX', value: '10.833.131' },
-  { label: 'XXX', value: '843.343.131' },
-  { label: 'XXX', value: '1' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-  { label: 'XXX', value: '16' },
-]
-const siteData = [
-  { label: 'Nyokkey初期位置', value: '120.243.115' },
-  { label: 'タオル位置', value: '10.833.131' },
-  { label: '患者位置', value: '843.343.131' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: 'Nyokkey台数', value: '1' },
-  { label: '最高速度', value: '16' },
 ]
 
 // TODO - 後でリファクタ
@@ -85,14 +57,24 @@ const DataList = ({ title, data }) => (
 
 const RightSidebar = ({ skillId, skills }) => {
   const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
+  const { siteNames } = useSiteDataQuery()
   const [projectData, setProjectData] = useState([]) // APIから取得したプロジェクトデータを保存
   const [siteData, setSiteData] = useState([]) // APIから取得したサイトデータを保存
   const [loading, setLoading] = useState(true) // ローディング状態を管理
   const [error, setError] = useState(null) // エラーメッセージを保存
+  const [filteredSystemProperties, setFilteredSystemProperties] = useState([])
 
-  //TODO - projectIdを特定してセットする
-  const projectId = '9dcec428-e9bc-4a6c-80d4-f432d1fa677d'
-  const siteId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+  useEffect(() => {
+    if (skills && skillId !== "") {
+      const filteredValue = skills.filter((item) => item.id === skillId);
+      setFilteredSystemProperties(filteredValue);
+    }
+  }, [skillId, skills])
+
+  useEffect(() => {
+    console.log("filteredSystemProperties", filteredSystemProperties);
+  }, [filteredSystemProperties])
 
   // API呼び出しの関数
   const fetchProjectData = async () => {
@@ -100,9 +82,10 @@ const RightSidebar = ({ skillId, skills }) => {
       const response = await Axios.get(
         buildApiURL(API.PROJECT_DATA.LIST, {
           organization_id: organizationId,
-          project_id: projectId,
+          project_id: projectActiveId,
         })
       )
+      console.log('response', response.data)
 
       let data = response.data.datas
       if (data.length === 0) {
@@ -133,9 +116,10 @@ const RightSidebar = ({ skillId, skills }) => {
     try {
       const response = await Axios.get(
         buildApiURL(API.SITE_DATA.LIST, {
-          site_id: siteId,
+          site_id: siteNames.id,
         })
       )
+      console.log('Site Data response', response.data)
 
       let data = response.data.site_data
       if (data.length === 0) {
@@ -158,6 +142,16 @@ const RightSidebar = ({ skillId, skills }) => {
       )
     }
   }
+
+  // System Properties
+  const systemProperties = [
+    { label: 'Seq ID', key: 'id' },
+    { label: 'Name', key: 'name' },
+    { label: 'Author', key: 'create_user_name' },
+    { label: 'Publish Date', key: 'create_date' },
+    { label: 'Update User', key: 'update_user_name' },
+    { label: 'Update Date', key: 'update_date' },
+  ];
 
   // コンポーネントがマウントされた時にAPIを呼び出す
   useEffect(() => {
@@ -182,24 +176,24 @@ const RightSidebar = ({ skillId, skills }) => {
 
   const [seqId, setSeqId] = useState('')
 
-  const [properties, setProperties] = useState([
-    { label: 'Seq ID', value: '', isEditable: false, isCopyable: true }, // 初期値は空に
-    { label: 'Name', value: name, isEditable: true, isCopyable: false },
-    { label: 'Type', value: 'Skill / Action / Move', isEditable: false, isCopyable: false },
-    { label: 'Author', value: '田中義雄', isEditable: false, isCopyable: false },
-    { label: 'Publish Date', value: '2024/7/13 13:45', isEditable: false, isCopyable: false },
-    { label: 'Update User', value: '羽田美希', isEditable: false, isCopyable: false },
-    { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
-  ])
+  // const [properties, setProperties] = useState([
+  //   { label: 'Seq ID', value: '', isEditable: false, isCopyable: true }, // 初期値は空に
+  //   { label: 'Name', value: name, isEditable: true, isCopyable: false },
+  //   { label: 'Type', value: 'Skill / Action / Move', isEditable: false, isCopyable: false },
+  //   { label: 'Author', value: '田中義雄', isEditable: false, isCopyable: false },
+  //   { label: 'Publish Date', value: '2024/7/13 13:45', isEditable: false, isCopyable: false },
+  //   { label: 'Update User', value: '羽田美希', isEditable: false, isCopyable: false },
+  //   { label: 'Update Date', value: '2024/9/4 18:22', isEditable: false, isCopyable: false },
+  // ])
 
-  // クライアントサイドでのみUUIDを生成し、状態を更新
-  useEffect(() => {
-    const newSeqId = uuidv4()
-    setSeqId(newSeqId)
-    setProperties((prevProperties) =>
-      prevProperties.map((prop) => (prop.label === 'Seq ID' ? { ...prop, value: newSeqId } : prop))
-    )
-  }, [])
+  // // クライアントサイドでのみUUIDを生成し、状態を更新
+  // useEffect(() => {
+  //   const newSeqId = uuidv4()
+  //   setSeqId(newSeqId)
+  //   setProperties((prevProperties) =>
+  //     prevProperties.map((prop) => (prop.label === 'Seq ID' ? { ...prop, value: newSeqId } : prop))
+  //   )
+  // }, [])
 
   // 入力が変更された時の処理
   const handleInputChange = (event) => {
@@ -230,7 +224,7 @@ const RightSidebar = ({ skillId, skills }) => {
 
         {/* keyと値の一覧 */}
         <div className="flex h-[23dvh] flex-col gap-1.5 overflow-y-auto py-2 pr-3">
-          {properties.map((property, index) => (
+          {systemProperties.map((property, index) => (
             <div
               key={index}
               className="flex items-center rounded border border-solid border-[#D3D3D3] bg-[#F4F4F4] p-1 text-[12px]"
@@ -240,19 +234,19 @@ const RightSidebar = ({ skillId, skills }) => {
               </div>
               <span className="text-[#D3D3D3]">|</span>
               <div className="flex w-3/5 items-center pl-2 text-[#796E66]">
-                {property.isEditable ? (
+                {filteredSystemProperties.isEditable ? (
                   <Input
                     type="text"
-                    value={property.value}
+                    value={filteredSystemProperties[0]?.[property.key]}
                     onChange={(e) => handleInputChange(e, index)}
                     className="w-full border-none bg-white px-1 py-0"
                   />
                 ) : (
                   <span className="w-full overflow-hidden truncate text-ellipsis">
-                    {property.value}
+                    {filteredSystemProperties[0]?.[property.key]}
                   </span>
                 )}
-                {property.isCopyable && (
+                {property.label === 'Seq ID' && filteredSystemProperties[0]?.id && (
                   <Tooltip color="black" title="コピーしました" open={visible}>
                     <Image
                       src={Assets.LOWCODEEDITOR.copy}
@@ -260,7 +254,7 @@ const RightSidebar = ({ skillId, skills }) => {
                       alt=""
                       width={18}
                       height={18}
-                      onClick={() => copyToClipboard(property.value)}
+                      onClick={() => copyToClipboard(filteredSystemProperties[0]?.id)}
                     />
                   </Tooltip>
                 )}

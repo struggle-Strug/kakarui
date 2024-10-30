@@ -1,53 +1,68 @@
-import { ReactFlowProvider } from '@xyflow/react'
+import { ReactFlowProvider } from '@xyflow/react';
+import Image from 'next/image';
+import { useState } from 'react';
+import 'reactflow/dist/style.css';
 
-import Image from 'next/image'
-import { useState } from 'react'
-import 'reactflow/dist/style.css'
+import { Assets } from '@/constants';
+import { useNodesState, useEdgesState } from '@xyflow/react';
+import Header from './Header';
+import LeftSidebar from './LeftSidebar';
+import RightSidebar from './RightSidebar';
+import SequenceFlow from './SequenceFlow';
 
-import { Assets } from '@/constants'
-
-import Header from './Header'
-import LeftSidebar from './LeftSidebar'
-import RightSidebar from './RightSidebar'
-import SequenceFlow from './SequenceFlow'
+import { initialNodes, initialEdges } from './SequenceFlow/nodes-and-edges';
 
 export const LowCodeEditorPresenter = ({ skills, loading }) => {
-  const [open, setOpen] = useState(true)
-  // ボタンのクリックでDrawerの開閉をトグル
-  const toggleDrawer = () => {
-    setOpen(!open)
-  }
-  const [draggedNodeType, setDraggedNodeType] = useState(null)
-  const [name, setName] = useState('Move to 001') // 初期値を設定
+  // Drawerの状態管理
+  const [open, setOpen] = useState(true);
 
-  // 入力が変更された時の処理
-  const handleInputChange = (event) => {
-    setName(event.target.value) // 入力内容を更新
-  }
+  // 選択されたスキルIDの管理
+  const [selectedSkillId, setSelectedSkillId] = useState('');
+
+  // ドラッグされているノードタイプの管理
+  const [draggedNodeType, setDraggedNodeType] = useState(null);
+
+  // ノードとエッジの状態管理
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  // JSONデータをインポートしてノードとエッジを更新する関数
+  const handleLoadData = (importedNodes, importedEdges) => {
+    setNodes(importedNodes); // ノードをインポートされたデータで更新
+    setEdges(importedEdges); // エッジをインポートされたデータで更新
+  };
 
   return (
     <ReactFlowProvider>
       <div className="flex h-screen flex-col">
-        {/* SECTION - ヘッダー */}
-        <Header />
+        {/* ヘッダーコンポーネント、handleLoadDataを渡す */}
+        <Header nodes={nodes} onLoadData={handleLoadData} /> {/* handleLoadDataを渡す */}
 
         <div className="flex h-[calc(100%-60px)] w-full justify-between">
-          {/* SECTION - 左サイドバー */}
+          {/* 左サイドバー */}
           <LeftSidebar skills={skills} setDraggedNodeType={setDraggedNodeType} />
 
-          {/* SECTION - シーケンス */}
+          {/* メインのシーケンスフロービュー */}
           <div className="w-full bg-[#E4E4E4]">
             <SequenceFlow
+              nodes={nodes}
+              setNodes={setNodes}
+              onNodesChange={onNodesChange}
+              edges={edges}              // エッジの状態を渡す
+              setEdges={setEdges}        // エッジを設定する関数を渡す
+              onEdgesChange={onEdgesChange}
               draggedNodeType={draggedNodeType}
               setDraggedNodeType={setDraggedNodeType}
+              selectedSkillId={selectedSkillId}
+              setSelectedSkillId={setSelectedSkillId}
             />
           </div>
 
-          {/* SECTION - drawer/ドロワー */}
+          {/* 右サイドバー */}
           <div className="relative flex h-full items-center justify-center bg-white ">
             <div
               className="absolute mb-8 mr-6 flex h-[120px] w-[26px] cursor-pointer items-center justify-center rounded-l-3xl bg-white"
-              onClick={toggleDrawer}
+              onClick={() => setOpen(!open)} // Drawerの開閉を切り替える
             >
               <Image
                 src={open ? Assets.LOWCODEEDITOR.arrowRight : Assets.LOWCODEEDITOR.arrowLeft}
@@ -59,10 +74,10 @@ export const LowCodeEditorPresenter = ({ skills, loading }) => {
             </div>
           </div>
 
-          {/* SECTION - 右サイドバー */}
-          {open && <RightSidebar />}
+          {/* 右サイドバー（Drawerが開いている場合のみ表示） */}
+          {open && <RightSidebar skillId={selectedSkillId} skills={skills} />}
         </div>
       </div>
     </ReactFlowProvider>
-  )
-}
+  );
+};

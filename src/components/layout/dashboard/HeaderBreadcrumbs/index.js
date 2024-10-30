@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useMemo } from 'react'
 
-import { useOrganizationQuery, useProjectActive } from '@/hooks/query'
+import { useGetMe, useOrganizationQuery, useProjectActive } from '@/hooks/query'
 
 import { Breadcrumbs } from '@/components/common'
 
@@ -10,9 +10,10 @@ import ProjectMenu from './ProjectMenu'
 import RobotMenu from './RobotMenu'
 
 const HeaderBreadcrumbs = () => {
-  const { organizationName } = useOrganizationQuery()
+  const { organizationDetail, organizationName, organizationId, organizations } = useOrganizationQuery()
   const { projectActive } = useProjectActive()
-
+  const { isMember } = useGetMe();
+  const filteredOrganizations = organizations.filter(org => org.organization_id == organizationId || org.id == organizationId);
   const breadcrumbs = useMemo(
     () => [
       // { key: 'robocon', title: 'ロボコン2024' },
@@ -31,8 +32,8 @@ const HeaderBreadcrumbs = () => {
 
   const renderOrganizationName = (
     <>
-      <OrgMenu />
-      <div>{organizationName}</div>
+      <OrgMenu organizationDetail={filteredOrganizations} isMember={isMember} />
+      <div>{filteredOrganizations[0]?.organization_name == undefined ? filteredOrganizations[0]?.name : filteredOrganizations[0]?.organization_name}</div>
     </>
   )
 

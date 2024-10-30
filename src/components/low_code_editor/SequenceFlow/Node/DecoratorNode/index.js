@@ -4,17 +4,20 @@ import { Assets } from '@/constants'
 
 //NOTE - childrenNodesはDecoratorの子要素内に入るSkillやSub Treeのことで
 export const DecoratorNode = ({ data, childrenNodes, onDropNode }) => {
+  // セレクトボックスのクリック時に親ノードのクリックイベントが発火しないようにする
   const handleSelectClick = (event) => {
-    event.stopPropagation() // 親要素のクリックイベントが発火しないように
-  }
+    event.stopPropagation();
+  };
 
-  //TODO - 未実装：ノードがドロップされた際に呼ばれる
-  //   const handleNodeDrop = (event) => {
-  //     const droppedNodeId = event.dataTransfer.getData('nodeId')
-  //     if (droppedNodeId) {
-  //       onDropNode(droppedNodeId)
-  //     }
-  //   }
+  // ノードがドロップされた時の処理
+  const handleNodeDrop = (event) => {
+    // ドロップされたノードのIDを取得
+    const droppedNodeId = event.dataTransfer.getData('nodeId');
+    if (droppedNodeId) {
+      // ドロップされたノードをこのDecoratorノードの子ノードとして追加
+      onDropNode(droppedNodeId);
+    }
+  };
 
   return (
     <div

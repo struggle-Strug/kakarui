@@ -1,5 +1,7 @@
 import * as Yup from 'yup'
 
+import { JapaneseRegex } from '@/constants'
+
 const FORM_INFO = {
   ID: 'id',
   NAME: 'name',
@@ -31,12 +33,6 @@ const moduleFormSchema = (isEdit, initialValue) =>
             new RegExp(`^(?!.*${JapaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
             '日本語は含めないでください。'
           ),
-        [FORM_INFO.SINGLEFILE]:
-          initialValue == 'single' && Yup.mixed().required('ファイルを入力してください。'),
-        [FORM_INFO.ARM64FILE]:
-          initialValue == 'multi' && Yup.mixed().required('ファイルを入力してください。'),
-        [FORM_INFO.AMD64FILE]:
-          initialValue == 'multi' && Yup.mixed().required('ファイルを入力してください。'),
       })
     : Yup.object().shape({
         [FORM_INFO.NAME]: Yup.string()
@@ -55,12 +51,9 @@ const moduleFormSchema = (isEdit, initialValue) =>
             new RegExp(`^(?!.*${JapaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
             '日本語は含めないでください。'
           ),
-        [FORM_INFO.SINGLEFILE]:
-          initialValue == 'single' && Yup.mixed().required('ファイルを入力してください。'),
-        [FORM_INFO.ARM64FILE]:
-          initialValue == 'multi' && Yup.mixed().required('ファイルを入力してください。'),
-        [FORM_INFO.AMD64FILE]:
-          initialValue == 'multi' && Yup.mixed().required('ファイルを入力してください。'),
+          [FORM_INFO.SINGLEFILE]: initialValue == "single" && Yup.mixed().required('ファイルを入力してください。'),
+          [FORM_INFO.ARM64FILE] : initialValue == "multi" && Yup.mixed().required('ファイルを入力してください。'),
+          [FORM_INFO.AMD64FILE] : initialValue == "multi" && Yup.mixed().required('ファイルを入力してください。'),
       })
 
 const moduleSettingSchema = Yup.object().shape({
@@ -72,4 +65,4 @@ const moduleSettingSchema = Yup.object().shape({
   ),
 })
 
-export { FORM_INFO, moduleFormSchema, moduleSettingSchema }
+export { moduleFormSchema, moduleSettingSchema, FORM_INFO }

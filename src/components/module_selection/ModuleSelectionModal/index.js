@@ -42,7 +42,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
         const idTags = selectedRows.reduce((result, row) => {
           const id = row.parent ? row.parent : row.id
           const tag = row.tags
-            ? row.tags.find((item) => row.latest_tag.includes(item.name))?.name
+            ? (row.tags || []).find((item) => row.latest_tag.includes(item.name))?.name
             : row.latest_tag
           if (tag) {
             if (result[id]) {
@@ -69,7 +69,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
 
   const tableData = useMemo(() => {
     return filteredData.map((item, i) => {
-      const children = item.tags
+      const children = (item.tags || [])
         .filter((tag) => !item.latest_tag.includes(tag.name))
         .map((tag, j) => {
           return {
@@ -83,6 +83,7 @@ const ModuleSelectionModal = ({ open, onClose, type }) => {
             update_date: tag.update_date,
           }
         })
+
       if (children.length) {
         return {
           ...item,

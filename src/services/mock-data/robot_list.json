@@ -1,45 +1,45 @@
 {
-    "message": "Robots information get success.",
-    "robots": [
-        {
-            "create_date": "2024-07-16T08:45:24.931194",
-            "create_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19",
-            "description": "kobe lab robot description.",
-            "id": "7c415fe8-9405-4503-ac55-1ee42d2c3616",
-            "model": "nyokky",
-            "name": "kobe lab robot",
-            "organization_id": "b53e56d4-125c-42c2-90e0-2b4b17e085fd",
-            "robot_url": null,
-            "type": "robot",
-            "update_date": "2024-07-16T08:45:24.931194",
-            "update_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19"
-        },
-        {
-            "create_date": "2024-07-16T08:45:24.931194",
-            "create_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19",
-            "description": "結合試験用説明文です。",
-            "id": "92615b56-7386-4d01-b0f9-ad9a13304c7b",
-            "model": "nyokky",
-            "name": "結合試験用",
-            "organization_id": "b53e56d4-125c-42c2-90e0-2b4b17e085fd",
-            "robot_url": null,
-            "type": "robot",
-            "update_date": "2024-07-16T08:45:24.931194",
-            "update_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19"
-        },
-        {
-            "create_date": "2024-07-16T08:45:24.931194",
-            "create_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19",
-            "description": "ロボット説明文A-02",
-            "id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
-            "model": "nyokky",
-            "name": "ロボットA-02",
-            "organization_id": "b53e56d4-125c-42c2-90e0-2b4b17e085fd",
-            "robot_url": "https://xxxxxxx",
-            "type": "sim",
-            "update_date": "2024-07-16T08:45:24.931194",
-            "update_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19"
-        }
-    ],
-    "status_code": 200
+  "message": "Robots information get success.",
+  "robots": [
+    {
+      "create_date": "2024-07-16T08:45:24.931194",
+      "create_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19",
+      "description": "kobe lab robot description.",
+      "id": "7c415fe8-9405-4503-ac55-1ee42d2c3616",
+      "model": "nyokky",
+      "name": "kobe lab robot",
+      "organization_id": "b53e56d4-125c-42c2-90e0-2b4b17e085fd",
+      "robot_url": null,
+      "type": "robot",
+      "update_date": "2024-07-16T08:45:24.931194",
+      "update_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19"
+    },
+    {
+      "create_date": "2024-07-16T08:45:24.931194",
+      "create_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19",
+      "description": "結合試験用説明文です。",
+      "id": "92615b56-7386-4d01-b0f9-ad9a13304c7b",
+      "model": "nyokky",
+      "name": "結合試験用",
+      "organization_id": "b53e56d4-125c-42c2-90e0-2b4b17e085fd",
+      "robot_url": null,
+      "type": "robot",
+      "update_date": "2024-07-16T08:45:24.931194",
+      "update_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19"
+    },
+    {
+      "create_date": "2024-07-16T08:45:24.931194",
+      "create_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19",
+      "description": "ロボット説明文A-02",
+      "id": "57b0cee0-c5b5-44d8-a9f0-c9ca2a195a1f",
+      "model": "nyokky",
+      "name": "ロボットA-02",
+      "organization_id": "b53e56d4-125c-42c2-90e0-2b4b17e085fd",
+      "robot_url": "https://xxxxxxx",
+      "type": "sim",
+      "update_date": "2024-07-16T08:45:24.931194",
+      "update_user": "d79d1ce9-7d61-4563-b71d-b5669a911d19"
+    }
+  ],
+  "status_code": 200
 }

@@ -38,7 +38,7 @@ const ProjectMenu = ({ breadcrumbs }) => {
   const items = [
     {
       label: (
-        <div className="border-bottom-gray mx-3 flex w-[420px] items-center px-3 py-4">
+        <div className="border-bottom-gray mx-3 flex w-[420px] cursor-default items-center px-3 py-4">
           <div>
             <Image src={Assets.MENU.project} alt="gen3p" width={48} height={44} />
           </div>
@@ -77,13 +77,22 @@ const ProjectMenu = ({ breadcrumbs }) => {
       key: '2',
     },
     {
+      label: (
+        <div className="border-bottom-gray mx-3 w-[420px] px-3 py-4 font-light text-primary">
+          プロジェクトデータ管理
+        </div>
+      ),
+      onClick: () => router.push(Routes.PROJECTDATA),
+      key: '3',
+    },
+    {
       label: <ProjectSubMenu data={filteredData} loading={isLoading} onClose={onClose} />,
       onClick: ({ domEvent: event }) => {
         event.preventDefault()
       },
       disabled: true,
       className: '!pointer-events-auto !cursor-pointer !rounded-l-[24px] !rounded-r-[24px]',
-      key: '3',
+      key: '4',
     },
   ]
 
