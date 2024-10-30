@@ -152,7 +152,7 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
                 name={FORM_INFO.TAG} 
                 label="タグ:" 
                 placeholder="タグを入力してください。" 
-                disabled={(singleFileList.length > 0 || arm64FileList.length > 0 || amd64FileList.length > 0) ? false : true}
+                disabled={(!data || (singleFileList.length > 0 || arm64FileList.length > 0 || amd64FileList.length > 0)) ? false : true}
               />
 
               <InputTextArea
