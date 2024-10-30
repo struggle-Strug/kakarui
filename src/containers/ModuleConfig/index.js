@@ -61,18 +61,6 @@ const ModuleConfigContainer = () => {
         <Button
           type="outline"
           icon={<AddIcon size={36} />}
-          label="ローコードエディタ起動"
-          onClick={() => {
-            const project_id = projectActiveId;
-            const module_config_id = '4fd29a4b-08a6-436a-b748-a7d95ce16dba';
-            const editorUrl = Routes.LOW_CODE_EDITOR.replace('[project_id]', project_id)
-              .replace('[module_config_id]', module_config_id);
-            window.open(editorUrl, '_blank');
-          }}
-        />
-        <Button
-          type="outline"
-          icon={<AddIcon size={36} />}
           label="新規モジュール配置作成"
           onClick={() => router.push(Routes.MODULE_CONFIG_CREATE)}
         />

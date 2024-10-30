@@ -15,10 +15,20 @@ import { ButtonIcon, Table } from '@/components/ui'
 const ModuleConfigTable = ({ data, total, loading }) => {
   const { isSystemAdmin, isOrgAdmin } = useGetMe()
   const { userActiveId } = useUserActive()
-  const { projectActive, setProjectActive } = useProjectActive();
+  const { projectActiveId } = useProjectActive();
+  console.log("data", data);
+  
   const columns = [
     {
-      title: <ColumnSorter title="モジュール配置名" field="name" />,
+      title: (
+        <div className='pl-4'> {/* Apply padding to the entire div */}
+          モジュール配置名
+          <br />
+          <span className='pl-4'>
+            /シーケンス名
+          </span>
+        </div>
+      ),
       dataIndex: 'name',
       className: 'min-w-[164px]',
       render: (item, { id, schema }) => (
@@ -64,23 +74,38 @@ const ModuleConfigTable = ({ data, total, loading }) => {
       align: 'center',
       render: (id, row) => (
         <Space>
-          <RowTextLink
-            pathname={Routes.MODULE_CONFIG_DETAIL}
-            query={{ module_config_id: id }}
-            disabled={!id}
-          >
-            <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
-          </RowTextLink>
           {
-            row.schema ? <SequenceAddEditModal isEdit data={row}>
-              <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
-            </SequenceAddEditModal> : <RowTextLink
-              pathname={Routes.SEQUENCE_CONFIG_CREATE}
-              query={{ module_config_id: id, project_id: projectActive }}
+            row?.config_data
+            ?
+            <RowTextLink
+              pathname={Routes.MODULE_CONFIG_DETAIL}
+              query={{ module_config_id: id }}
               disabled={!id}
             >
-              <ApartmentOutlined className='text-[30px]' onClick={noop} />
+              <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
             </RowTextLink>
+            :
+            <RowTextLink
+            pathname={Routes.SEQUENCE_EDITOR}
+            query={{ module_config_id: id, project_id: projectActiveId, sequence_id: row?.id }}
+            disabled={!id}
+            >
+              <ButtonIcon icon={<EditIcon size={32} />} onClick={noop} />
+            </RowTextLink>
+          }
+          {
+            row.schema ? 
+              <SequenceAddEditModal isEdit data={row}>
+                <ButtonIcon icon={<DeployIcon size={32} />} onClick={noop} />
+              </SequenceAddEditModal>
+               : 
+              <RowTextLink
+                pathname={Routes.SEQUENCE_CONFIG_CREATE}
+                query={{ module_config_id: id, project_id: projectActiveId }}
+                disabled={!id}
+              >
+                <ApartmentOutlined className='text-[30px]' onClick={noop} />
+              </RowTextLink>
           }
           {
             row.schema ? "" : <DeployAddEditModal isEdit data={row}>
