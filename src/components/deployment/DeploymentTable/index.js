@@ -35,6 +35,11 @@ const DeploymentTable = ({ data, total, loading }) => {
       render: (item) => <DeployStatus className="min-w-[154px]" status={item} />,
     },
     {
+      title: <ColumnSorter title="担当者" field="update_user_name" />,
+      dataIndex: 'update_user_name',
+      render: (item) => <RowContent item={item} className="min-w-[154px]" />,
+    },
+    {
       title: <ColumnSorter title="メッセージ" field="last_desired_status.status" />,
       dataIndex: 'last_desired_status',
       render: (item, { id }) => {

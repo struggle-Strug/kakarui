@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import { LOCAL_STORAGE_KEYS } from '@/constants'
 import { useSyncLocalStorage } from '@/hooks/share'
 
@@ -25,13 +23,6 @@ export const useOrganizationQuery = () => {
   const [organizationId, setOrganizationId] = useSyncLocalStorage(
     LOCAL_STORAGE_KEYS.ORGANIZATION_ID
   )
-
-  useEffect(() => {
-    if (organizations.length > 0) {
-      setOrganizationDetail(organizations?.[0] || {})
-      setOrganizationId(organizations?.[0]?.organization_id || organizations?.[0]?.id)
-    }
-  }, [organizations])
 
   return {
     organizations,

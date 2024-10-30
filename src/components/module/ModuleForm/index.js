@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Form, Modal, Spin } from 'antd'
+import { Form, Modal, Spin, Radio } from 'antd'
 
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useModuleCreate, useModuleUpdate, useModuleUpdateUrl, useModuleUrlCreate } from '@/hooks/query'
@@ -19,7 +19,8 @@ const initValue = {
   architectures: {},
 }
 
-const ModuleForm = ({ open, data, onClose }) => {
+const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialValue, singleFileList, setSingleFileList, arm64FileList, setArm64FileList, amd64FileList, setAmd64FileList }) => {
+  
   const isEdit = useMemo(() => {
     if (data) return true
     return false
@@ -27,9 +28,19 @@ const ModuleForm = ({ open, data, onClose }) => {
 
   const methods = useForm({
     mode: 'onChange',
-    resolver: yupResolver(moduleFormSchema(isEdit)),
+    resolver: yupResolver(moduleFormSchema(isEdit, initialValue)),
     defaultValues: { ...initValue },
   })
+  
+  useEffect(() => {
+    if (!open) {
+        methods.reset(initValue);
+    }
+    setSingleFileList([])
+    setArm64FileList([])
+    setAmd64FileList([])
+    setInitialValue("single")
+  }, [open]);
 
   useEffect(() => {
     const defaultValue = data
@@ -53,18 +64,21 @@ const ModuleForm = ({ open, data, onClose }) => {
   const { doCreateModule, isPending: createLoading } = useModuleCreate({
     onSuccess: (module) => {
       onClose(module)
+      onRefetch()
     },
   })
 
   const { doUpdateModuleUrl, isPending: updateUrlLoading } = useModuleUpdateUrl({
     onSuccess: (module) => {
       onClose(module)
+      onRefetch()
     },
   })
 
   const { doUpdateModule, isPending: updateLoading } = useModuleUpdate({
     onSuccess: () => {
       onClose()
+      onRefetch()
     },
   })
 
@@ -73,13 +87,16 @@ const ModuleForm = ({ open, data, onClose }) => {
 
       if (isEdit) {
         const sasUrlDetail = await doUpdateModuleUrl(values)
-        doUpdateModule(values, sasUrlDetail)
+        const detail = sasUrlDetail?.data
+        sasUrlDetail && doUpdateModule({...values, detail: detail})
         return
       }
-      const sasUrlDetail = await doCreateModuleUrl(values)
-      doCreateModule(values, sasUrlDetail)
+      
+      const sasUrlDetail = await doCreateModuleUrl({values, initialValue})
+      const detail = sasUrlDetail?.data
+      sasUrlDetail && doCreateModule({values, detail})
     },
-    [doCreateModuleUrl, doCreateModule, doUpdateModule, isEdit]
+    [doCreateModuleUrl, doCreateModule, doUpdateModule, isEdit, initialValue]
   )
 
   return (
@@ -131,7 +148,12 @@ const ModuleForm = ({ open, data, onClose }) => {
                 </div>
               </div>
 
-              <Input name={FORM_INFO.TAG} label="タグ:" placeholder="タグを入力してください。" />
+              <Input 
+                name={FORM_INFO.TAG} 
+                label="タグ:" 
+                placeholder="タグを入力してください。" 
+                disabled={(!data || (singleFileList.length > 0 || arm64FileList.length > 0 || amd64FileList.length > 0)) ? false : true}
+              />
 
               <InputTextArea
                 rows={4}

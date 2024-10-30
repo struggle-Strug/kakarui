@@ -28,10 +28,17 @@ export const API = {
     DELETE: '/users/{user_id}',
   },
 
+  SITELISTS: {
+    LIST: '/sites',
+    SITEDATA: '/sites/{site_id}/site-data', //GET
+    CREATE: '/sites/{site_id}/site-data', //POST
+    UPDATA: '/sites/{site_id}/site-data/{data_id}' //PUT
+  },
+
   MODULE: {
     LIST: '/organizations/{organization_id}/modules',
     CREATEURL: '/organizations/{organization_id}/modules', // POST
-    CREATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}', // PUT
+    CREATEUPLOAD: '{baseUrl}/{module_upload_id}_{architecture}.tar?{queryParams}', // PUT
     UPDATEURL: '/organizations/{organization_id}/modules/{module_id}', // PUT
     UPDATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}/{module_id}', // PUT
     DELETE: '/organizations/{organization_id}/modules/{module_id}', // DELETE
@@ -44,6 +51,10 @@ export const API = {
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // PUT
     DELETE:
       '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}', // DELETE
+  },
+
+  MODULE_SEQUENCES_CONFIG: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences', // POST
   },
 
   MODULE_SET: {
@@ -70,6 +81,13 @@ export const API = {
     DELETE: '/organizations/{organization_id}/projects/{project_id}',
   },
 
+  PROJECTDATA: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/project-data',
+    CREATE: '/organizations/{organization_id}/projects/{project_id}/project-data', // POST
+    UPDATE: '/organizations/{organization_id}/projects/{project_id}/project-data/{data_id}', // PUT
+    DELETE: '/organizations/{organization_id}/projects/{project_id}',
+  },
+
   PERMISSION: {
     CREATE: '/organizations/{organization_id}/users/{user_id}/permission', // POST
     UPDATE: '/organizations/{organization_id}/users/{user_id}/permission/{organization_user_id}', // PUT
@@ -83,7 +101,22 @@ export const API = {
   FILE: {
     URL_CREATE: '/storages/{storage_name}/url', // POST
   },
+  NOTIFICATION: "/users/{entra_id}/notification", //PUT
+  SKILL: {
+    LIST: '/organizations/{organization_id}/skills',
+  },
 
+  SEQUENCE: {
+    CREATE:
+      '/organizations/{organization_id}/projects/{project_id}/module-configs/{module_config_id}/sequences',
+  },
+
+  PROJECT_DATA: {
+    LIST: '/organizations/{organization_id}/projects/{project_id}/project-data',
+  },
+  SITE_DATA: {
+    LIST: '/sites/{site_id}/site-data',
+  },
   // -- END --
 }
 

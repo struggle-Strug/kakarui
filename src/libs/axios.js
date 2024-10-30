@@ -9,6 +9,10 @@ const instance = axios.create({
   timeout: TIMEOUT,
 })
 
+const azureInstance = axios.create({
+  timeout: TIMEOUT,
+})
+
 instance.interceptors.request.use(async (request) => {
   const session = await getSession()
 
@@ -49,4 +53,4 @@ instance.interceptors.response.use(
   }
 )
 
-export { instance as Axios }
+export { instance as Axios , azureInstance as azureInstance}

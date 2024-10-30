@@ -14,16 +14,16 @@ import '@/styles/index.css'
 
 export default function MyApp({ Component, pageProps }) {
   const { session, ...restPageProps } = pageProps
-
   const router = useRouter()
 
   const isAuthPage = router.pathname === Routes.AUTH.LOGIN
-
   const isPublicPage = router.pathname === Routes.CHECK
+  const idLowCodeEditorPage = router.pathname === Routes.LOW_CODE_EDITOR
+  const idLowCodeEditorEditPage = router.pathname === Routes.LOW_CODE_EDITOR_EDIT
 
   const layout = useCallback(
     (children) => {
-      if (isPublicPage) {
+      if (isPublicPage || idLowCodeEditorPage || idLowCodeEditorEditPage) {
         return children
       }
 
@@ -33,7 +33,7 @@ export default function MyApp({ Component, pageProps }) {
 
       return <DashboardLayout>{children}</DashboardLayout>
     },
-    [isAuthPage, isPublicPage, router.pathname]
+    [isAuthPage, isPublicPage, idLowCodeEditorPage, idLowCodeEditorEditPage]
   )
 
   return (
@@ -48,6 +48,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       <AppProviders locale={router.locale || 'ja'} pageProps={restPageProps}>
         <Progressbar />
+        {/* <ServiceWorker /> */}
         {layout(<Component {...restPageProps} />)}
       </AppProviders>
     </>

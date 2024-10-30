@@ -182,14 +182,6 @@
   @apply cursor-pointer;
 }
 
-.setting svg{
-  @apply fill-white w-10 h-10 
-}
-
-.setting{
-  @apply ml-2
-}
-
 /* INPUT  */
 .ant-input,
 .ant-input-affix-wrapper {
@@ -429,6 +421,10 @@
   @apply text-base;
 }
 
+/* ERRORMESSAGE */
+.module .ant-form-item .ant-form-item-explain-error{
+  @apply w-[13rem]
+}
 /* SELECT */
 .ant-select-single.ant-select-lg {
   height: 40px;

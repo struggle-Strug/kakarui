@@ -7,11 +7,13 @@ const FORM_INFO = {
   NAME: 'name',
   DESCRIPTION: 'description',
   TAG: 'tag',
-  FILE: 'file',
+  SINGLEFILE: 'singlefile',
+  ARM64FILE: 'arm64file',
+  AMD64FILE: 'amd64file',
   CONFIG_DATA: 'config_data',
 }
 
-const moduleFormSchema = (isEdit) =>
+const moduleFormSchema = (isEdit, initialValue) =>
   isEdit
     ? Yup.object().shape({
         [FORM_INFO.ID]: Yup.string().trim().required(),
@@ -31,7 +33,6 @@ const moduleFormSchema = (isEdit) =>
             new RegExp(`^(?!.*${JapaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
             '日本語は含めないでください。'
           ),
-        [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
       })
     : Yup.object().shape({
         [FORM_INFO.NAME]: Yup.string()
@@ -50,7 +51,9 @@ const moduleFormSchema = (isEdit) =>
             new RegExp(`^(?!.*${JapaneseRegex.source}).*$`), // Negative lookahead to reject Japanese characters
             '日本語は含めないでください。'
           ),
-        [FORM_INFO.FILE]: Yup.mixed().required('ファイルを入力してください。'),
+          [FORM_INFO.SINGLEFILE]: initialValue == "single" && Yup.mixed().required('ファイルを入力してください。'),
+          [FORM_INFO.ARM64FILE] : initialValue == "multi" && Yup.mixed().required('ファイルを入力してください。'),
+          [FORM_INFO.AMD64FILE] : initialValue == "multi" && Yup.mixed().required('ファイルを入力してください。'),
       })
 
 const moduleSettingSchema = Yup.object().shape({
