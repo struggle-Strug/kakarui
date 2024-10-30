@@ -16,7 +16,6 @@ const ModuleConfigTable = ({ data, total, loading }) => {
   const { isSystemAdmin, isOrgAdmin } = useGetMe()
   const { userActiveId } = useUserActive()
   const { projectActiveId } = useProjectActive();
-  console.log("data", data);
   
   const columns = [
     {
