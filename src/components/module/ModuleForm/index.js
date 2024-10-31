@@ -45,12 +45,12 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
   useEffect(() => {
     const defaultValue = data
       ? {
-          id: data.id,
-          name: data.name,
-          description: data.description,
-          tag: data.latest_tag,
-          architectures: {},
-        }
+        id: data.id,
+        name: data.name,
+        description: data.description,
+        tag: data.latest_tag,
+        architectures: {},
+      }
       : { ...initValue }
     methods.reset(defaultValue)
   }, [data])
@@ -84,7 +84,7 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
 
   const onSubmit = useCallback(
     async (values) => {
-      
+
       if (isEdit) {
         const sasUrlDetail = await doUpdateModuleUrl(values)
         const detail = sasUrlDetail?.data
@@ -128,21 +128,21 @@ const ModuleForm = ({ open, data, onClose, onRefetch, initialValue, setInitialVa
               />
 
               <Radio.Group className='flex justify-center gap-8 w-full pl-36' defaultValue={initialValue} >
-                <Radio value="single" autoFocus={true} className='text-sm' onChange={() => setInitialValue("single")}>シングルアーキテクチャ</Radio>
-                <Radio value="multi" onChange={() => setInitialValue("multi")}>マルチアーキテクチャ</Radio>
-              </Radio.Group> 
+                <Radio value={"single"} autoFocus={true} className='text-sm' onChange={() => setInitialValue("single")}>シングルアーキテクチャ</Radio>
+                <Radio value={"multi"} onChange={() => setInitialValue("multi")}>マルチアーキテクチャ</Radio>
+              </Radio.Group>
 
               <div className='module flex w-full' >
                 <div className='flex pt-4 w-[50%]' disabled={initialValue == "multi" && true}>
-                 <InputTarFile name={FORM_INFO.SINGLEFILE} label="モジュール: " disabled={initialValue == "multi" && true} fileList={singleFileList} setFileList={setSingleFileList}/>
+                  <InputTarFile name={FORM_INFO.SINGLEFILE} label="モジュール: " disabled={initialValue == "multi" && true} />
                 </div>
                 <div className='flex justify-center gap-4 items-center w-[50%] pl-36' disabled={initialValue == "single" && true}>
                   <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
-                    <InputTarFile name={FORM_INFO.ARM64FILE} disabled={initialValue == "single" && true} fileList={arm64FileList} setFileList={setArm64FileList}/>
+                    <InputTarFile name={FORM_INFO.ARM64FILE} disabled={initialValue == "single" && true} />
                     <p className='pr-14'>Arm64</p>
                   </div>
                   <div className='flex flex-col items-center pt-4 rounded-md w-[7rem]'>
-                    <InputTarFile name={FORM_INFO.AMD64FILE} disabled={initialValue == "single" && true} fileList={amd64FileList} setFileList={setAmd64FileList}/>
+                    <InputTarFile name={FORM_INFO.AMD64FILE} disabled={initialValue == "single" && true} />
                     <p className='pr-14'>Amd64</p>
                   </div>
                 </div>

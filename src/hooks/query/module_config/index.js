@@ -101,6 +101,74 @@ export const useModuleConfigQuery = ({ search, sort, options = {} } = {}) => {
   return { ...query, data, filteredData, getModuleConfigDetail, getModuleConfigOptions }
 }
 
+export const useSkillConfigQuery = ({ search, sort, options = {} } = {}) => {
+  const { organizationId } = useOrganizationQuery()
+  const { projectActiveId } = useProjectActive()
+  const { stubEnabled } = useStubEnabled()
+  console.log(organizationId, 'organizationId')
+  const query = useQuery({
+    queryKey: [MODULE_CONFIG_LIST_KEY, organizationId, projectActiveId, stubEnabled],
+    queryFn: async () => {
+      if (stubEnabled) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        return mockData.module_config
+      }
+      const response = await Axios.get(
+        buildApiURL(API.SKILL_CONFIG.LIST, {
+          organization_id: organizationId
+        })
+      )
+
+      return response.data
+    },
+    enabled: Boolean(!isServer && organizationId && projectActiveId),
+    staleTime: Infinity,
+    ...options,
+  })
+
+  useShowErrorOnce(query, API_ERRORS.SKILL_CONFIG_LIST)
+
+  const data = query.data?.skills || []
+
+  // -- search and sort --
+  const filteredData = useMemo(() => {
+    let result = [...(data || [])]
+
+    if (search) {
+      const lowerSearchTerm = toLower(search)
+
+      result = result.filter(
+        (item) =>
+          includes(toLower(item.name), lowerSearchTerm) ||
+          includes(toLower(item.description), lowerSearchTerm)
+      )
+    }
+
+    if (sort) {
+      try {
+        const sortObject = tryParseJson(sort)?.[0]
+
+        const sortBy = get(sortObject, 'field')
+        const sortOrder = get(sortObject, 'value', 'asc')
+
+        return orderBy(data, [sortBy], [sortOrder])
+      } catch (error) {
+        // handle error
+        // eslint-disable-next-line no-console
+        console.error('Error sorting data:', error)
+        return data
+      }
+    } else {
+      // sort default
+      result = orderBy(result, ['update_date', 'name'], ['desc', 'asc'])
+    }
+
+    return result
+  }, [data, search, sort])
+
+  return { ...query, data, filteredData }
+}
+
 export const useModuleConfigCreate = ({ onSuccess } = {}) => {
   const { organizationId } = useOrganizationQuery()
   const { projectActiveId } = useProjectActive()

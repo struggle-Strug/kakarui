@@ -40,7 +40,7 @@ export const API = {
     CREATEURL: '/organizations/{organization_id}/modules', // POST
     CREATEUPLOAD: '{baseUrl}/{module_upload_id}_{architecture}.tar?{queryParams}', // PUT
     UPDATEURL: '/organizations/{organization_id}/modules/{module_id}', // PUT
-    UPDATEUPLOAD: '{baseUrl}/{module_upload_id}-{architecture}.tar?{queryParams}/{module_id}', // PUT
+    UPDATEUPLOAD: '{baseUrl}/{module_upload_id}_{architecture}.tar?{queryParams}/{module_id}', // PUT
     DELETE: '/organizations/{organization_id}/modules/{module_id}', // DELETE
   },
 
@@ -62,6 +62,11 @@ export const API = {
     DETAIL: '/organizations/{organization_id}/module-sets/{module_set_id}', // GET
     CREATE: '/organizations/{organization_id}/module-sets', // POST
     UPDATE: '/organizations/{organization_id}/module-sets/{module_set_id}', // PUT
+  },
+
+  SKILL_CONFIG: {
+    LIST: "/organizations/{organization_id}/skills",
+    CREATE: '/organizations/{organization_id}/skills', // POST
   },
 
   DEPLOY: {
