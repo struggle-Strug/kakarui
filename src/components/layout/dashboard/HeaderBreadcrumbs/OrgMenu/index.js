@@ -75,13 +75,18 @@ const OrgMenu = ({ organizationDetail, isMember }) => {
       key: '3',
     },
     {
+      label: <div className="border-bottom-gray mx-3 flex w-[400px] px-3 py-4 text-black">スキル管理</div>,
+      onClick: () => router.push(Routes.SKILL_SET),
+      key: '4',
+    },
+    {
       label: <OrgSubMenu data={organizations} loading={isLoading} onClose={onClose} />,
       onClick: ({ domEvent: event }) => {
         event.preventDefault()
       },
       disabled: true,
       className: '!pointer-events-auto !cursor-pointer !rounded-l-[24px] !rounded-r-[24px]',
-      key: '4',
+      key: '5',
     },
   ]
 
