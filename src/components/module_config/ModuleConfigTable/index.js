@@ -20,13 +20,7 @@ const ModuleConfigTable = ({ data, total, loading }) => {
   const columns = [
     {
       title: (
-        <div className='pl-4'> {/* Apply padding to the entire div */}
-          モジュール配置名
-          <br />
-          <span className='pl-4'>
-            /シーケンス名
-          </span>
-        </div>
+        <ColumnSorter title={<div>モジュール配置名<br /><span className='pl-6'>/シーケンス名</span></div>} field="name" />
       ),
       dataIndex: 'name',
       className: 'min-w-[164px]',
@@ -44,10 +38,16 @@ const ModuleConfigTable = ({ data, total, loading }) => {
       ),
     },
     {
+      title: <ColumnSorter title="区分" field="description" />,
+      dataIndex: 'description',
+      className: 'min-w-[200px]',
+      render: (id, row) => <RowContent item={row?.config_data ? "モジュール配置" : "シーケンス"} className="max-w-[200px]" />,
+    },
+    {
       title: <ColumnSorter title="説明" field="description" />,
       dataIndex: 'description',
-      className: 'min-w-[400px]',
-      render: (item) => <RowContent item={item} className="max-w-[500px]" />,
+      className: 'min-w-[200px]',
+      render: (item) => <RowContent item={item} className="max-w-[200px]" />,
     },
     {
       title: <ColumnSorter title="登録日" field="create_date" />,
@@ -112,17 +112,20 @@ const ModuleConfigTable = ({ data, total, loading }) => {
             </DeployAddEditModal>
           }
 
-          <RowTextLink
+          {
+            row?.config_data && 
+            <RowTextLink
             pathname={Routes.MODULE_CONFIG_DELETE}
             query={{ module_config_id: id }}
             disabled={!id || (!isSystemAdmin && !isOrgAdmin && row.create_user !== userActiveId)}
-          >
-            <ButtonIcon
-              icon={<DeleteIcon size={32} />}
-              onClick={noop}
-              disabled={!id || (!isSystemAdmin && !isOrgAdmin && row.create_user !== userActiveId)}
-            />
-          </RowTextLink>
+            >
+              <ButtonIcon
+                icon={<DeleteIcon size={32} />}
+                onClick={noop}
+                disabled={!id || (!isSystemAdmin && !isOrgAdmin && row.create_user !== userActiveId)}
+              />
+            </RowTextLink>
+          }
         </Space>
       ),
       className: 'min-w-[150px]',
