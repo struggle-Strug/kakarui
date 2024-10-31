@@ -94,7 +94,7 @@ const SkillForm = ({ isEdit, onClose }) => {
                     render={({ field }) => (
                         <Input
                             {...field}
-                            label="可視性"
+                            label="タグ"
                             placeholder=""
                         />
                     )}
