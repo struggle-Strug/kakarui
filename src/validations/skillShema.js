@@ -21,7 +21,7 @@ const skillSchema = () =>
             .required('スキーマを入力してください。'),
         [FORM_SKILL.VISIBILITY]: Yup.string()
             .trim()
-            .required('可視性を入力してください。'),
+            .required('タグを入力してください。'),
         [FORM_SKILL.TAG]: Yup.string()
             .trim()
             .required('タグを入力してください。'),
